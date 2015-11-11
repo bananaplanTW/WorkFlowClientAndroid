@@ -75,11 +75,64 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/working_time_container"
             android:layout_width="match_parent"
             android:layout_height="@dimen/working_time_container_height"
+            android:paddingLeft="@dimen/working_time_container_padding_left_right"
+            android:paddingRight="@dimen/working_time_container_padding_left_right"
             android:layout_gravity="bottom"
+            android:gravity="center_vertical"
             android:background="@color/working_time_container_background_color"
             android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textColor="@color/working_time_container_text_color"
+                android:textSize="@dimen/working_time_container_working_time_text_size"
+                android:text="@string/working_time"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/working_time_container_text_color"
+                    android:textSize="@dimen/working_time_container_check_in_time_text_size"
+                    android:text="@string/check_in_time"/>
+
+                <TextView
+                    android:id="@+id/start_working_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/working_time_container_text_color"
+                    android:textSize="@dimen/working_time_container_start_working_time_text_size"
+                    android:text="07:30"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:src="@drawable/ic_arrow_forward"/>
+
+            <TextView
+                android:id="@+id/check_in_out_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:textColor="@color/working_time_container_text_color"
+                android:textSize="@dimen/working_time_container_check_in_out_button_text_size"
+                android:text="@string/check_out"/>
 
         </LinearLayout>
 

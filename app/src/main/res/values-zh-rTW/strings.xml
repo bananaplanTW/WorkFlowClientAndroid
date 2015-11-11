@@ -2,4 +2,9 @@
 
     <string name="action_settings">設定</string>
 
+    <string name="working_time">工作時間</string>
+    <string name="check_out">下班打卡</string>
+    <string name="check_in">上班打卡</string>
+    <string name="check_in_time">上班時間</string>
+
 </resources>
