@@ -14,5 +14,7 @@
     <color name="task_container_card_background_color">#FFFFFFFF</color>
     <color name="wip_task_card_task_name_text_color">#FF000000</color>
     <color name="wip_task_card_button_text_color">#FF696969</color>
+    <color name="scheduled_task_card_content_text_color">#FF000000</color>
+    <color name="scheduled_task_card_index_stroke_color">#FF979797</color>
 
 </resources>
