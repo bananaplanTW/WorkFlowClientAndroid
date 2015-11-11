@@ -6,4 +6,7 @@
     <color name="action_bar_title_text_color">#FF000000</color>
     <color name="main_window_background_color">#FF4E92DF</color>
 
+    <!-- Main -->
+    <color name="working_time_container_background_color">#FFFFFFFF</color>
+
 </resources>
