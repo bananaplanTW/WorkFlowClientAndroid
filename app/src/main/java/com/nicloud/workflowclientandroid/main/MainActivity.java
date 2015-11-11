@@ -3,6 +3,7 @@ package com.nicloud.workflowclientandroid.main;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.nicloud.workflowclientandroid.R;
 
@@ -34,5 +35,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return mUIController.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return mUIController.onOptionsItemSelected(item);
     }
 }

@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.nicloud.workflowclientandroid.R;
 
@@ -38,7 +39,18 @@ public class UIController {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        return false;
+        mMainActivity.getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+
+            default:
+                return false;
+        }
     }
 
     private void initialize() {
