@@ -13,6 +13,46 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         android:background="?attr/colorPrimary">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/action_bar_worker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_action_bar_worker" />
+
+            <LinearLayout
+                android:id="@+id/action_bar_title_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/action_bar_title_container_margin_left"
+                android:layout_toRightOf="@+id/action_bar_worker"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/action_bar_worker_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/action_bar_title_text_color"
+                    android:textSize="@dimen/action_bar_worker_name_text_size"
+                    android:text="Danny Lin"/>
+
+                <TextView
+                    android:id="@+id/action_bar_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/action_bar_title_text_color"
+                    android:text="nicloud"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout

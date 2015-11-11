@@ -3,6 +3,7 @@
 
     <color name="action_bar_color_primary">#FFFFFFFF</color>
     <color name="action_bar_color_primary_dark">#FF224366</color>
+    <color name="action_bar_title_text_color">#FF000000</color>
     <color name="main_window_background_color">#FF4E92DF</color>
 
 </resources>
