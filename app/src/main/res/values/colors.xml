@@ -5,9 +5,14 @@
     <color name="action_bar_color_primary_dark">#FF224366</color>
     <color name="action_bar_title_text_color">#FF000000</color>
     <color name="main_window_background_color">#FF4E92DF</color>
+    <color name="divider_color">#FFE1E1E1</color>
 
     <!-- Main -->
-    <color name="working_time_container_background_color">#FFFFFFFF</color>
     <color name="working_time_container_text_color">#FF000000</color>
+    <color name="working_time_container_background_color">#FFFFFFFF</color>
+    <color name="task_container_wip_next_text_color">#FFFFFFFF</color>
+    <color name="task_container_card_background_color">#FFFFFFFF</color>
+    <color name="wip_task_card_task_name_text_color">#FF000000</color>
+    <color name="wip_task_card_button_text_color">#FF696969</color>
 
 </resources>

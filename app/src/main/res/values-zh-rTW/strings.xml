@@ -6,5 +6,9 @@
     <string name="check_out">下班打卡</string>
     <string name="check_in">上班打卡</string>
     <string name="check_in_time">上班時間</string>
+    <string name="wip_task">現正工作</string>
+    <string name="next_task">下個工作</string>
+    <string name="pause">暫停</string>
+    <string name="complete">完成</string>
 
 </resources>

@@ -7,5 +7,9 @@
     <string name="check_out">Check out</string>
     <string name="check_in">Check in</string>
     <string name="check_in_time">Check in time</string>
+    <string name="wip_task">WIP task</string>
+    <string name="next_task">Next task</string>
+    <string name="pause">Pause</string>
+    <string name="complete">Complete</string>
 
 </resources>

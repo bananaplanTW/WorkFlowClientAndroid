@@ -63,14 +63,98 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:padding="@dimen/task_container_padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/task_container_wip_next_text_margin_left"
+                android:textColor="@color/task_container_wip_next_text_color"
+                android:text="@string/wip_task"/>
+
+            <LinearLayout
+                android:id="@+id/wip_task_card"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/task_container_content_margin_top"
+                android:orientation="vertical"
+                android:background="@drawable/wip_task_card_background">
+
+                <LinearLayout
+                    android:id="@+id/wip_task_card_information_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:padding="@dimen/wip_task_card_information_container_padding"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/wip_task_card_task_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/wip_task_card_task_name_text_color"
+                        android:textSize="@dimen/wip_task_card_information_text_size"
+                        android:text="伺服器服務開發"/>
+
+                    <TextView
+                        android:id="@+id/wip_task_card_case_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/wip_task_card_information_text_size"
+                        android:text="流程管理專案"/>
+
+                </LinearLayout>
+
+                <include layout="@layout/horizontal_divider" />
+
+                <TextView
+                    android:id="@+id/wip_task_card_working_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textSize="@dimen/wip_task_card_working_time_text_size"
+                    android:text="02:51:33"/>
+
+                <include layout="@layout/horizontal_divider" />
+
+                <LinearLayout
+                    android:id="@+id/wip_task_card_button_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/wip_task_card_button_container_height"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/WipTaskCardButtonStyle"
+                        android:text="@string/pause" />
+
+                    <include layout="@layout/vertical_divider" />
+
+                    <TextView
+                        style="@style/WipTaskCardButtonStyle"
+                        android:text="@string/complete" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/scheduled_tasks_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:padding="@dimen/task_container_padding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/task_container_wip_next_text_margin_left"
+                android:textColor="@color/task_container_wip_next_text_color"
+                android:text="@string/next_task"/>
 
         </LinearLayout>
 

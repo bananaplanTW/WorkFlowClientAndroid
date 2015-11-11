@@ -7,6 +7,15 @@
     <!-- Main -->
     <dimen name="action_bar_title_container_margin_left">8dp</dimen>
     <dimen name="action_bar_worker_name_text_size">18dp</dimen>
+    <dimen name="task_container_padding">10dp</dimen>
+    <dimen name="task_container_wip_next_text_margin_left">8dp</dimen>
+    <dimen name="task_container_content_margin_top">10dp</dimen>
+    <dimen name="wip_task_card_background_corners_radius">5dp</dimen>
+    <dimen name="wip_task_card_information_container_padding">8dp</dimen>
+    <dimen name="wip_task_card_information_text_size">17dp</dimen>
+    <dimen name="wip_task_card_working_time_text_size">30dp</dimen>
+    <dimen name="wip_task_card_button_container_height">55dp</dimen>
+    <dimen name="wip_task_card_button_text_size">17dp</dimen>
     <dimen name="working_time_container_height">60dp</dimen>
     <dimen name="working_time_container_padding_left_right">17dp</dimen>
     <dimen name="working_time_container_working_time_text_size">16dp</dimen>
