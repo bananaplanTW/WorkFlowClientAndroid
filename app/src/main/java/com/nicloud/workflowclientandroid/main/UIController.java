@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
 
@@ -17,11 +19,15 @@ import com.nicloud.workflowclientandroid.R;
  * @since 2015.05.28
  *
  */
-public class UIController {
+public class UIController implements View.OnClickListener {
 
     private AppCompatActivity mMainActivity;
     private ActionBar mActionBar;
     private Toolbar mToolbar;
+
+    private View mWipTaskCard;
+    private TextView mWipTaskPauseButton;
+    private TextView mWipTaskCompleteButton;
 
 
     public UIController(AppCompatActivity activity) {
@@ -55,14 +61,18 @@ public class UIController {
 
     private void initialize() {
         findViews();
-        initActionbar();
+        setupActionbar();
+        setupViews();
     }
 
     private void findViews() {
         mToolbar = (Toolbar) mMainActivity.findViewById(R.id.tool_bar);
+        mWipTaskCard = mMainActivity.findViewById(R.id.wip_task_card);
+        mWipTaskPauseButton = (TextView) mMainActivity.findViewById(R.id.wip_task_card_pause_button);
+        mWipTaskCompleteButton = (TextView) mMainActivity.findViewById(R.id.wip_task_card_complete_button);
     }
 
-    private void initActionbar() {
+    private void setupActionbar() {
         mMainActivity.setSupportActionBar(mToolbar);
         mActionBar = mMainActivity.getSupportActionBar();
 
@@ -70,5 +80,16 @@ public class UIController {
             mActionBar.setDisplayHomeAsUpEnabled(false);
             mActionBar.setDisplayShowTitleEnabled(false);
         }
+    }
+
+    private void setupViews() {
+        mWipTaskCard.setOnClickListener(this);
+        mWipTaskPauseButton.setOnClickListener(this);
+        mWipTaskCompleteButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
