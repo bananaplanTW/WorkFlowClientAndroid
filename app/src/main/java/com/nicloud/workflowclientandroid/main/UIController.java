@@ -103,11 +103,11 @@ public class UIController implements View.OnClickListener {
 
     private void setScheduledTasksData() {
         // WIP task
-        mTasksDataSet.add(new TasksListItem(new Task("WIP task"), ItemViewType.TITLE));
+        mTasksDataSet.add(new TasksListItem(new Task(mMainActivity.getString(R.string.wip_task)), ItemViewType.TITLE));
         mTasksDataSet.add(new TasksListItem(new Task("寫手機版"), ItemViewType.WIP_TASK));
 
         // Scheduled task
-        mTasksDataSet.add(new TasksListItem(new Task("Next task"), ItemViewType.TITLE));
+        mTasksDataSet.add(new TasksListItem(new Task(mMainActivity.getString(R.string.next_task)), ItemViewType.TITLE));
         mTasksDataSet.add(new TasksListItem(new Task("檢查伺服器"), ItemViewType.SCHEDULED_TASK));
         mTasksDataSet.add(new TasksListItem(new Task("開發Android"), ItemViewType.SCHEDULED_TASK));
         mTasksDataSet.add(new TasksListItem(new Task("開發iOS"), ItemViewType.SCHEDULED_TASK));

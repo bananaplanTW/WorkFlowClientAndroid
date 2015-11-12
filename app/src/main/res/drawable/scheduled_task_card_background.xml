@@ -4,7 +4,6 @@
 
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="@dimen/task_card_background_corners_radius" />
             <solid android:color="@color/task_container_card_background_color" />
         </shape>
     </item>
