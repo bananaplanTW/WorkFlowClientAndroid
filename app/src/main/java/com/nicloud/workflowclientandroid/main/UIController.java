@@ -12,10 +12,10 @@ import android.view.View;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.Task;
-import com.nicloud.workflowclientandroid.main.tasklist.TasksListItemDecoration;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter.ItemViewType;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListItem;
+import com.nicloud.workflowclientandroid.utility.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +97,8 @@ public class UIController implements View.OnClickListener {
         mTasksListAdapter = new TasksListAdapter(mMainActivity, mTasksDataSet);
 
         mTasksList.setLayoutManager(mTasksListManager);
-        //mTasksList.addItemDecoration(new TasksListItemDecoration(mMainActivity));
+        mTasksList.addItemDecoration(
+                new DividerItemDecoration(mMainActivity.getResources().getDrawable(R.drawable.list_divider), false, true));
         mTasksList.setAdapter(mTasksListAdapter);
     }
 
