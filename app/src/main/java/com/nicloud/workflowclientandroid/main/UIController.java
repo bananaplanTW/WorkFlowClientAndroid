@@ -9,10 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.Task;
+import com.nicloud.workflowclientandroid.main.tasklist.TasksListItemDecoration;
+import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter;
+import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter.ItemViewType;
+import com.nicloud.workflowclientandroid.main.tasklist.TasksListItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +34,10 @@ public class UIController implements View.OnClickListener {
     private ActionBar mActionBar;
     private Toolbar mToolbar;
 
-    private View mWipTaskCard;
-    private TextView mWipTaskPauseButton;
-    private TextView mWipTaskCompleteButton;
-
-    private RecyclerView mScheduledTasksList;
-    private LinearLayoutManager mScheduledTasksListManager;
-    private ScheduledTasksAdapter mScheduledTasksAdapter;
-    private List<Task> mScheduledTasksDataSet = new ArrayList<>();
+    private RecyclerView mTasksList;
+    private LinearLayoutManager mTasksListManager;
+    private TasksListAdapter mTasksListAdapter;
+    private List<TasksListItem> mTasksDataSet = new ArrayList<>();
 
 
 
@@ -74,16 +73,12 @@ public class UIController implements View.OnClickListener {
     private void initialize() {
         findViews();
         setupActionbar();
-        setupViews();
-        setupScheduledTasksList();
+        setupTasksList();
     }
 
     private void findViews() {
         mToolbar = (Toolbar) mMainActivity.findViewById(R.id.tool_bar);
-        mWipTaskCard = mMainActivity.findViewById(R.id.wip_task_card);
-        mWipTaskPauseButton = (TextView) mMainActivity.findViewById(R.id.wip_task_card_pause_button);
-        mWipTaskCompleteButton = (TextView) mMainActivity.findViewById(R.id.wip_task_card_complete_button);
-        mScheduledTasksList = (RecyclerView) mMainActivity.findViewById(R.id.scheduled_tasks_list);
+        mTasksList = (RecyclerView) mMainActivity.findViewById(R.id.tasks_list);
     }
 
     private void setupActionbar() {
@@ -96,28 +91,42 @@ public class UIController implements View.OnClickListener {
         }
     }
 
-    private void setupViews() {
-        mWipTaskCard.setOnClickListener(this);
-        mWipTaskPauseButton.setOnClickListener(this);
-        mWipTaskCompleteButton.setOnClickListener(this);
-    }
-
-    private void setupScheduledTasksList() {
+    private void setupTasksList() {
         setScheduledTasksData();
-        mScheduledTasksListManager = new LinearLayoutManager(mMainActivity);
-        mScheduledTasksAdapter = new ScheduledTasksAdapter(mMainActivity, mScheduledTasksDataSet);
+        mTasksListManager = new LinearLayoutManager(mMainActivity);
+        mTasksListAdapter = new TasksListAdapter(mMainActivity, mTasksDataSet);
 
-        mScheduledTasksList.setLayoutManager(mScheduledTasksListManager);
-        mScheduledTasksList.addItemDecoration(new ScheduledTaskCardDecoration(mMainActivity));
-        mScheduledTasksList.setAdapter(mScheduledTasksAdapter);
+        mTasksList.setLayoutManager(mTasksListManager);
+        mTasksList.addItemDecoration(new TasksListItemDecoration(mMainActivity));
+        mTasksList.setAdapter(mTasksListAdapter);
     }
 
     private void setScheduledTasksData() {
-        mScheduledTasksDataSet.add(new Task("檢查伺服器"));
-        mScheduledTasksDataSet.add(new Task("開發Android"));
-        mScheduledTasksDataSet.add(new Task("開發iOS"));
-        mScheduledTasksDataSet.add(new Task("設計UI"));
-        mScheduledTasksDataSet.add(new Task("跑客戶"));
+        // WIP task
+        mTasksDataSet.add(new TasksListItem(new Task("WIP task"), ItemViewType.TITLE));
+        mTasksDataSet.add(new TasksListItem(new Task("寫手機版"), ItemViewType.WIP_TASK));
+
+        // Scheduled task
+        mTasksDataSet.add(new TasksListItem(new Task("Next task"), ItemViewType.TITLE));
+        mTasksDataSet.add(new TasksListItem(new Task("檢查伺服器"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("開發Android"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("開發iOS"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("設計UI"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
     }
 
     @Override

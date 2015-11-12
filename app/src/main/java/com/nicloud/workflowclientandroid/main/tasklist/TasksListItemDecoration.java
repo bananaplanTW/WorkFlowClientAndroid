@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.main;
+package com.nicloud.workflowclientandroid.main.tasklist;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -12,12 +12,12 @@ import com.nicloud.workflowclientandroid.R;
  * @author Danny Lin
  * @since 2015/7/28.
  */
-public class ScheduledTaskCardDecoration extends RecyclerView.ItemDecoration {
+public class TasksListItemDecoration extends RecyclerView.ItemDecoration {
 
     private Context mContext;
 
 
-    public ScheduledTaskCardDecoration(Context context) {
+    public TasksListItemDecoration(Context context) {
         mContext = context;
     }
 

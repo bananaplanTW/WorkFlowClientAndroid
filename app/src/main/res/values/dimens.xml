@@ -10,7 +10,9 @@
     <dimen name="task_container_padding">10dp</dimen>
     <dimen name="task_container_wip_next_text_margin_left">8dp</dimen>
     <dimen name="task_container_content_margin_top">10dp</dimen>
+    <dimen name="tasks_list_padding">10dp</dimen>
     <dimen name="task_card_background_corners_radius">5dp</dimen>
+    <dimen name="wip_task_card_height">200dp</dimen>
     <dimen name="wip_task_card_information_container_padding">8dp</dimen>
     <dimen name="wip_task_card_information_text_size">17dp</dimen>
     <dimen name="wip_task_card_working_time_text_size">30dp</dimen>

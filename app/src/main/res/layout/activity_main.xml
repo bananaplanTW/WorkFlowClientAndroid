@@ -55,180 +55,72 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/tasks_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:padding="@dimen/tasks_list_padding"
+        android:scrollbars="vertical" />
+
+    <LinearLayout
+        android:id="@+id/working_time_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/working_time_container_height"
+        android:layout_gravity="bottom"
+        android:background="@color/working_time_container_background_color"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/working_time_container_padding_left_right"
+        android:paddingRight="@dimen/working_time_container_padding_left_right">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/working_time"
+            android:textColor="@color/working_time_container_text_color"
+            android:textSize="@dimen/working_time_container_working_time_text_size" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="@dimen/task_container_padding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/task_container_wip_next_text_margin_left"
-                android:textColor="@color/task_container_wip_next_text_color"
-                android:text="@string/wip_task"/>
-
-            <LinearLayout
-                android:id="@+id/wip_task_card"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/task_container_content_margin_top"
-                android:orientation="vertical"
-                android:background="@drawable/wip_task_card_background">
-
-                <LinearLayout
-                    android:id="@+id/wip_task_card_information_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:padding="@dimen/wip_task_card_information_container_padding"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/wip_task_card_task_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/wip_task_card_task_name_text_color"
-                        android:textSize="@dimen/wip_task_card_information_text_size"
-                        android:text="伺服器服務開發"/>
-
-                    <TextView
-                        android:id="@+id/wip_task_card_case_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/wip_task_card_information_text_size"
-                        android:text="流程管理專案"/>
-
-                </LinearLayout>
-
-                <include layout="@layout/horizontal_divider" />
-
-                <TextView
-                    android:id="@+id/wip_task_card_working_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="@dimen/wip_task_card_working_time_text_size"
-                    android:text="02:51:33"/>
-
-                <include layout="@layout/horizontal_divider" />
-
-                <LinearLayout
-                    android:id="@+id/wip_task_card_button_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/wip_task_card_button_container_height"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/wip_task_card_pause_button"
-                        style="@style/WipTaskCardButtonStyle"
-                        android:text="@string/pause" />
-
-                    <include layout="@layout/vertical_divider" />
-
-                    <TextView
-                        android:id="@+id/wip_task_card_complete_button"
-                        style="@style/WipTaskCardButtonStyle"
-                        android:text="@string/complete" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/scheduled_tasks_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="@dimen/task_container_padding"
-            android:orientation="vertical">
+                android:text="@string/check_in_time"
+                android:textColor="@color/working_time_container_text_color"
+                android:textSize="@dimen/working_time_container_check_in_time_text_size" />
 
             <TextView
+                android:id="@+id/start_working_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/task_container_wip_next_text_margin_left"
-                android:textColor="@color/task_container_wip_next_text_color"
-                android:text="@string/next_task"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/scheduled_tasks_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/task_container_content_margin_top"
-                android:scrollbars="vertical"/>
+                android:text="07:30"
+                android:textColor="@color/working_time_container_text_color"
+                android:textSize="@dimen/working_time_container_start_working_time_text_size" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/working_time_container"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/working_time_container_height"
-            android:paddingLeft="@dimen/working_time_container_padding_left_right"
-            android:paddingRight="@dimen/working_time_container_padding_left_right"
-            android:layout_gravity="bottom"
-            android:gravity="center_vertical"
-            android:background="@color/working_time_container_background_color"
-            android:orientation="horizontal">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:src="@drawable/ic_arrow_forward" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:textColor="@color/working_time_container_text_color"
-                android:textSize="@dimen/working_time_container_working_time_text_size"
-                android:text="@string/working_time"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/working_time_container_text_color"
-                    android:textSize="@dimen/working_time_container_check_in_time_text_size"
-                    android:text="@string/check_in_time"/>
-
-                <TextView
-                    android:id="@+id/start_working_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/working_time_container_text_color"
-                    android:textSize="@dimen/working_time_container_start_working_time_text_size"
-                    android:text="07:30"/>
-
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:src="@drawable/ic_arrow_forward"/>
-
-            <TextView
-                android:id="@+id/check_in_out_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:textColor="@color/working_time_container_text_color"
-                android:textSize="@dimen/working_time_container_check_in_out_button_text_size"
-                android:text="@string/check_out"/>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/check_in_out_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="@string/check_out"
+            android:textColor="@color/working_time_container_text_color"
+            android:textSize="@dimen/working_time_container_check_in_out_button_text_size" />
 
     </LinearLayout>
 
