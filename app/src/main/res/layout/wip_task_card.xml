@@ -10,7 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="@dimen/wip_task_card_information_container_padding"
+        android:paddingLeft="@dimen/wip_task_card_information_container_padding_left_right"
+        android:paddingRight="@dimen/wip_task_card_information_container_padding_left_right"
+        android:paddingTop="@dimen/wip_task_card_information_container_padding_top_bottom"
+        android:paddingBottom="@dimen/wip_task_card_information_container_padding_top_bottom"
+        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
