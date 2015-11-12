@@ -43,8 +43,8 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public TextView wipTaskName;
         public TextView wipCaseName;
         public TextView wipWorkingTime;
-        public TextView pauseButton;
-        public TextView completeButton;
+        public View pauseButton;
+        public View completeButton;
 
         public WipTaskViewHolder(View view) {
             super(view);
@@ -57,8 +57,8 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             wipTaskName = (TextView) view.findViewById(R.id.wip_task_card_task_name);
             wipCaseName = (TextView) view.findViewById(R.id.wip_task_card_case_name);
             wipWorkingTime = (TextView) view.findViewById(R.id.wip_task_card_working_time);
-            pauseButton = (TextView) view.findViewById(R.id.wip_task_card_pause_button);
-            completeButton = (TextView) view.findViewById(R.id.wip_task_card_complete_button);
+            pauseButton = view.findViewById(R.id.wip_task_card_pause_button);
+            completeButton = view.findViewById(R.id.wip_task_card_complete_button);
         }
 
         private void setupViews() {

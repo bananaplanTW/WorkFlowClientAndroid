@@ -50,17 +50,29 @@
         android:layout_height="@dimen/wip_task_card_button_container_height"
         android:orientation="horizontal">
 
-        <TextView
+        <LinearLayout
             android:id="@+id/wip_task_card_pause_button"
-            style="@style/WipTaskCardButtonStyle"
-            android:text="@string/pause" />
+            style="@style/WipTaskCardButtonStyle">
+
+            <TextView
+                style="@style/WipTaskCardButtonTextStyle"
+                android:text="@string/pause"
+                android:drawableLeft="@drawable/ic_pause" />
+
+        </LinearLayout>
 
         <include layout="@layout/vertical_divider" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/wip_task_card_complete_button"
-            style="@style/WipTaskCardButtonStyle"
-            android:text="@string/complete" />
+            style="@style/WipTaskCardButtonStyle">
+
+            <TextView
+                style="@style/WipTaskCardButtonTextStyle"
+                android:text="@string/complete"
+                android:drawableLeft="@drawable/ic_complete" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
