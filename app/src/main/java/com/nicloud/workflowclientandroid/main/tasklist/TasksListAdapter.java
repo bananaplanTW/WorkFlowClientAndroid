@@ -1,6 +1,7 @@
 package com.nicloud.workflowclientandroid.main.tasklist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.Task;
+import com.nicloud.workflowclientandroid.record.RecordTaskActivity;
 
 import java.util.List;
 
@@ -67,7 +69,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    goToRecordTaskActivity();
                 }
             });
         }
@@ -106,10 +108,14 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    goToRecordTaskActivity();
                 }
             });
         }
+    }
+
+    private void goToRecordTaskActivity() {
+        mContext.startActivity(new Intent(mContext, RecordTaskActivity.class));
     }
 
     public TasksListAdapter(Context context, List<TasksListItem> dataSet) {
