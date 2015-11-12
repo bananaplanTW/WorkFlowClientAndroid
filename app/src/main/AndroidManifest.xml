@@ -20,6 +20,7 @@
         </activity>
         <activity
             android:name=".record.RecordTaskActivity"
+            android:theme="@style/AppTheme.WhiteBackground"
             android:screenOrientation="portrait"/>
     </application>
 

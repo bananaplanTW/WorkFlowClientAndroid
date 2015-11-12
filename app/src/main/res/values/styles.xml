@@ -14,6 +14,9 @@
         <item name="android:windowBackground">@color/main_window_background_color</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+    <style name="AppTheme.WhiteBackground">
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
         <!-- Customize color of navigation drawer icon and back arrow -->
         <item name="colorControlNormal">@color/action_bar_up_button_color</item>
