@@ -3,4 +3,10 @@
     android:id="@+id/task_list_title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textColor="@color/task_container_wip_next_text_color" />
+    android:paddingLeft="@dimen/tasks_list_title_padding_left_right"
+    android:paddingRight="@dimen/tasks_list_title_padding_left_right"
+    android:paddingTop="@dimen/tasks_list_title_padding_top"
+    android:paddingBottom="@dimen/tasks_list_title_padding_bottom"
+    android:textColor="@color/tasks_list_title_text_color"
+    android:textSize="@dimen/tasks_list_title_text_size"
+    android:textStyle="bold"/>

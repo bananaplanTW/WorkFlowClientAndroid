@@ -97,7 +97,7 @@ public class UIController implements View.OnClickListener {
         mTasksListAdapter = new TasksListAdapter(mMainActivity, mTasksDataSet);
 
         mTasksList.setLayoutManager(mTasksListManager);
-        mTasksList.addItemDecoration(new TasksListItemDecoration(mMainActivity));
+        //mTasksList.addItemDecoration(new TasksListItemDecoration(mMainActivity));
         mTasksList.setAdapter(mTasksListAdapter);
     }
 
