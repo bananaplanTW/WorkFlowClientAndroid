@@ -7,9 +7,10 @@
     <!-- Main application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Action bar color -->
-        <item name="colorPrimary">@color/action_bar_color_primary</item>
+        <item name="colorPrimary">@color/color_primary</item>
         <!-- Status bar color -->
-        <item name="colorPrimaryDark">@color/action_bar_color_primary_dark</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="android:colorAccent">@color/color_accent</item>
         <item name="android:windowBackground">@color/main_window_background_color</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>

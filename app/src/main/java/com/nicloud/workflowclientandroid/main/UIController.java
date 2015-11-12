@@ -1,6 +1,7 @@
 package com.nicloud.workflowclientandroid.main;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ public class UIController implements View.OnClickListener {
     private AppCompatActivity mMainActivity;
     private ActionBar mActionBar;
     private Toolbar mToolbar;
+    private FloatingActionButton mFab;
 
     private RecyclerView mTasksList;
     private LinearLayoutManager mTasksListManager;
@@ -72,12 +74,18 @@ public class UIController implements View.OnClickListener {
 
     private void initialize() {
         findViews();
+        setupViews();
         setupActionbar();
         setupTasksList();
     }
 
+    private void setupViews() {
+        mFab.setOnClickListener(this);
+    }
+
     private void findViews() {
         mToolbar = (Toolbar) mMainActivity.findViewById(R.id.tool_bar);
+        mFab = (FloatingActionButton) mMainActivity.findViewById(R.id.fab);
         mTasksList = (RecyclerView) mMainActivity.findViewById(R.id.tasks_list);
     }
 
@@ -132,6 +140,9 @@ public class UIController implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.fab:
+                break;
+        }
     }
 }

@@ -1,126 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tool_bar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        android:background="?attr/colorPrimary">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tool_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <ImageView
-                android:id="@+id/action_bar_worker"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/action_bar_worker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_action_bar_worker" />
+
+                <LinearLayout
+                    android:id="@+id/action_bar_title_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/action_bar_title_container_margin_left"
+                    android:layout_toRightOf="@+id/action_bar_worker"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/action_bar_worker_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Danny Lin"
+                        android:textColor="@color/action_bar_title_text_color"
+                        android:textSize="@dimen/action_bar_worker_name_text_size" />
+
+                    <TextView
+                        android:id="@+id/action_bar_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="nicloud"
+                        android:textColor="@color/action_bar_title_text_color" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/tasks_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+        <!--
+        <LinearLayout
+            android:id="@+id/working_time_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/working_time_container_height"
+            android:layout_gravity="bottom"
+            android:background="@color/working_time_container_background_color"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/working_time_container_padding_left_right"
+            android:paddingRight="@dimen/working_time_container_padding_left_right">
+
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_action_bar_worker" />
+                android:layout_weight="2"
+                android:text="@string/working_time"
+                android:textColor="@color/working_time_container_text_color"
+                android:textSize="@dimen/working_time_container_working_time_text_size" />
 
             <LinearLayout
-                android:id="@+id/action_bar_title_container"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/action_bar_title_container_margin_left"
-                android:layout_toRightOf="@+id/action_bar_worker"
-                android:layout_centerVertical="true"
+                android:layout_weight="2"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/action_bar_worker_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/action_bar_title_text_color"
-                    android:textSize="@dimen/action_bar_worker_name_text_size"
-                    android:text="Danny Lin"/>
+                    android:text="@string/check_in_time"
+                    android:textColor="@color/working_time_container_text_color"
+                    android:textSize="@dimen/working_time_container_check_in_time_text_size" />
 
                 <TextView
-                    android:id="@+id/action_bar_subtitle"
+                    android:id="@+id/start_working_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/action_bar_title_text_color"
-                    android:text="nicloud"/>
+                    android:text="07:30"
+                    android:textColor="@color/working_time_container_text_color"
+                    android:textSize="@dimen/working_time_container_start_working_time_text_size" />
 
             </LinearLayout>
 
-        </RelativeLayout>
-
-    </android.support.v7.widget.Toolbar>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/tasks_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />
-
-    <LinearLayout
-        android:id="@+id/working_time_container"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/working_time_container_height"
-        android:layout_gravity="bottom"
-        android:background="@color/working_time_container_background_color"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/working_time_container_padding_left_right"
-        android:paddingRight="@dimen/working_time_container_padding_left_right">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/working_time"
-            android:textColor="@color/working_time_container_text_color"
-            android:textSize="@dimen/working_time_container_working_time_text_size" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:orientation="vertical">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:src="@drawable/ic_arrow_forward" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/check_in_out_button"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/check_in_time"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/check_out"
                 android:textColor="@color/working_time_container_text_color"
-                android:textSize="@dimen/working_time_container_check_in_time_text_size" />
-
-            <TextView
-                android:id="@+id/start_working_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="07:30"
-                android:textColor="@color/working_time_container_text_color"
-                android:textSize="@dimen/working_time_container_start_working_time_text_size" />
+                android:textSize="@dimen/working_time_container_check_in_out_button_text_size" />
 
         </LinearLayout>
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:src="@drawable/ic_arrow_forward" />
-
-        <TextView
-            android:id="@+id/check_in_out_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:text="@string/check_out"
-            android:textColor="@color/working_time_container_text_color"
-            android:textSize="@dimen/working_time_container_check_in_out_button_text_size" />
+        -->
 
     </LinearLayout>
 
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_check_in_out"
+        app:fabSize="normal"
+        app:layout_anchor="@id/tasks_list"
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_behavior="com.nicloud.workflowclientandroid.main.ScrollAwareFABBehavior"/>
+
+</android.support.design.widget.CoordinatorLayout>

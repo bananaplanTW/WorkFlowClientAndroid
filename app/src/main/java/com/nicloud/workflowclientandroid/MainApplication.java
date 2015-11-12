@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.main;
+package com.nicloud.workflowclientandroid;
 
 import android.app.Application;
 
