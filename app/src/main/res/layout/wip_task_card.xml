@@ -21,14 +21,15 @@
             android:id="@+id/wip_task_card_task_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/wip_task_card_task_name_text_color"
-            android:textSize="@dimen/wip_task_card_information_text_size" />
+            android:textColor="@color/title_task_name_text_color"
+            android:textSize="@dimen/title_information_text_size" />
 
         <TextView
             android:id="@+id/wip_task_card_case_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/wip_task_card_information_text_size" />
+            android:textColor="@color/title_case_name_text_color"
+            android:textSize="@dimen/title_information_text_size" />
 
     </LinearLayout>
 
