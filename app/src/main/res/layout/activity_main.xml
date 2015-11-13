@@ -24,8 +24,8 @@
 
                 <ImageView
                     android:id="@+id/action_bar_worker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/worker_icon_width_height"
+                    android:layout_height="@dimen/worker_icon_width_height"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_action_bar_worker" />
