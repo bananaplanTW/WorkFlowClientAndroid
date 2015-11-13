@@ -51,19 +51,18 @@
 
     <include layout="@layout/horizontal_divider" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/record_task_action_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/record_task_action_container_height"
         android:paddingLeft="@dimen/record_task_action_container_padding_left_right"
-        android:paddingRight="@dimen/record_task_action_container_padding_left_right"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:paddingRight="@dimen/record_task_action_container_padding_left_right">
 
         <ImageView
             android:id="@+id/record_task_camera_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_camera"
             android:background="?selectableItemBackgroundBorderless"/>
 
@@ -71,11 +70,19 @@
             android:id="@+id/record_task_upload_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/record_task_camera_button"
             android:layout_marginLeft="@dimen/record_task_upload_button_margin_left"
             android:src="@drawable/ic_upload"
             android:background="?selectableItemBackgroundBorderless"/>
 
+        <TextView
+            android:id="@+id/record_task_record_button"
+            style="@style/ButtonStyle.Green"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="@string/record"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

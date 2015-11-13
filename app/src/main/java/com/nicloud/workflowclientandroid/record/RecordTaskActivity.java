@@ -22,7 +22,7 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
 
     private ImageView mRecordCameraButton;
     private ImageView mRecordUploadButton;
-
+    private TextView mRecordButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,7 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
         mRecordCaseName = (TextView) findViewById(R.id.record_task_case_name);
         mRecordCameraButton = (ImageView) findViewById(R.id.record_task_camera_button);
         mRecordUploadButton = (ImageView) findViewById(R.id.record_task_upload_button);
+        mRecordButton = (TextView) findViewById(R.id.record_task_record_button);
     }
 
     private void setupActionBar() {
@@ -60,6 +61,7 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
         mRecordCaseName.setText("流程管理專案");
         mRecordCameraButton.setOnClickListener(this);
         mRecordUploadButton.setOnClickListener(this);
+        mRecordButton.setOnClickListener(this);
     }
 
     @Override
@@ -86,6 +88,9 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
                 break;
 
             case R.id.record_task_upload_button:
+                break;
+
+            case R.id.record_task_record_button:
                 break;
         }
     }
