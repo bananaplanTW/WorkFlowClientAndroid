@@ -53,6 +53,15 @@
             android:layout_height="@dimen/worker_icon_width_height"
             android:src="@drawable/ic_action_bar_worker"/>
 
+        <EditText
+            android:id="@+id/record_task_edit_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/record_task_edit_content_margin_top"
+            android:gravity="top|left"
+            android:hint="@string/record_task_edit_content_hint"
+            android:background="@android:color/transparent"/>
+
     </LinearLayout>
 
     <include layout="@layout/horizontal_divider" />
