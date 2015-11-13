@@ -20,14 +20,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/record_task_name"
+                android:id="@+id/record_task_task_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_task_name_text_color"
                 android:textSize="@dimen/title_information_text_size" />
 
             <TextView
-                android:id="@+id/record_case_name"
+                android:id="@+id/record_task_case_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_case_name_text_color"
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_camera"
-            android:background="?selectableItemBackground"/>
+            android:background="?selectableItemBackgroundBorderless"/>
 
         <ImageView
             android:id="@+id/record_task_upload_button"
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/record_task_upload_button_margin_left"
             android:src="@drawable/ic_upload"
-            android:background="?selectableItemBackground"/>
+            android:background="?selectableItemBackgroundBorderless"/>
 
 
     </LinearLayout>
