@@ -39,13 +39,12 @@
 
     <include layout="@layout/horizontal_divider" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/record_task_content_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="@dimen/record_task_content_container_padding"
-        android:orientation="vertical">
+        android:padding="@dimen/record_task_content_container_padding">
 
         <ImageView
             android:id="@+id/record_task_worker_photo"
@@ -58,11 +57,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/record_task_edit_content_margin_top"
+            android:layout_below="@+id/record_task_worker_photo"
+            android:layout_above="@+id/record_task_location"
             android:gravity="top|left"
             android:hint="@string/record_task_edit_content_hint"
             android:background="@android:color/transparent"/>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/record_task_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:drawableLeft="@drawable/ic_location"
+            android:drawablePadding="@dimen/record_task_location_drawable_padding"/>
+
+    </RelativeLayout>
 
     <include layout="@layout/horizontal_divider" />
 

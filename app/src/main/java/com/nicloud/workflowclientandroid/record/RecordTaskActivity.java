@@ -1,5 +1,9 @@
 package com.nicloud.workflowclientandroid.record;
 
+import android.content.Intent;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,12 +11,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.nicloud.workflowclientandroid.R;
+import com.nicloud.workflowclientandroid.address.AddressResultReceiver;
+import com.nicloud.workflowclientandroid.address.FetchAddressIntentService;
 
-public class RecordTaskActivity extends AppCompatActivity implements View.OnClickListener {
+public class RecordTaskActivity extends AppCompatActivity implements View.OnClickListener,
+        AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private ActionBar mActionBar;
     private Toolbar mToolbar;
@@ -20,9 +32,17 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
     private TextView mRecordTaskName;
     private TextView mRecordCaseName;
 
+    private EditText mRecordEditContent;
+    private TextView mRecordLocation;
+
     private ImageView mRecordCameraButton;
     private ImageView mRecordUploadButton;
     private TextView mRecordButton;
+
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private AddressResultReceiver mReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +55,15 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
         findViews();
         setupActionBar();
         setupViews();
+        setupFetchingAddress();
     }
 
     private void findViews() {
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
         mRecordTaskName = (TextView) findViewById(R.id.record_task_task_name);
         mRecordCaseName = (TextView) findViewById(R.id.record_task_case_name);
+        mRecordEditContent = (EditText) findViewById(R.id.record_task_edit_content);
+        mRecordLocation = (TextView) findViewById(R.id.record_task_location);
         mRecordCameraButton = (ImageView) findViewById(R.id.record_task_camera_button);
         mRecordUploadButton = (ImageView) findViewById(R.id.record_task_upload_button);
         mRecordButton = (TextView) findViewById(R.id.record_task_record_button);
@@ -62,6 +85,33 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
         mRecordCameraButton.setOnClickListener(this);
         mRecordUploadButton.setOnClickListener(this);
         mRecordButton.setOnClickListener(this);
+    }
+
+    private void setupFetchingAddress() {
+        buildGoogleApiClient();
+        mReceiver = new AddressResultReceiver(new Handler(), this);
+    }
+
+    private synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
     }
 
     @Override
@@ -93,5 +143,44 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
             case R.id.record_task_record_button:
                 break;
         }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if (!Geocoder.isPresent()) return;
+
+        if (mLastLocation != null) {
+            startFetchAddressIntentService();
+        }
+    }
+
+    private void startFetchAddressIntentService() {
+        Intent intent = new Intent(this, FetchAddressIntentService.class);
+        intent.putExtra(FetchAddressIntentService.Constants.RECEIVER, mReceiver);
+        intent.putExtra(FetchAddressIntentService.Constants.EXTRA_LOCATION_DATA, mLastLocation);
+        startService(intent);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+
+    @Override
+    public void onReceiveSuccessful(String message) {
+        mRecordLocation.setText(message);
+    }
+
+    @Override
+    public void onReceiveFailed(String message) {
+
     }
 }

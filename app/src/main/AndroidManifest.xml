@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nicloud.workflowclientandroid">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -9,6 +11,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".main.MainActivity"
             android:screenOrientation="portrait">
@@ -18,10 +24,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".record.RecordTaskActivity"
             android:theme="@style/AppTheme.WhiteBackground"
             android:screenOrientation="portrait"/>
+
+        <service
+            android:name=".address.FetchAddressIntentService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
