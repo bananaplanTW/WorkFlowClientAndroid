@@ -11,8 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -34,6 +37,7 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
 
     private EditText mRecordEditContent;
     private TextView mRecordLocation;
+    private ProgressBar mRecordLocationProgressBar;
 
     private ImageView mRecordCameraButton;
     private ImageView mRecordUploadButton;
@@ -42,6 +46,9 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private AddressResultReceiver mReceiver;
+
+    private Animation mFadeInAnimation;
+    private Animation mFadeOutAnimation;
 
 
     @Override
@@ -52,6 +59,8 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void initialize() {
+        mFadeInAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+        mFadeOutAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
         findViews();
         setupActionBar();
         setupViews();
@@ -63,7 +72,8 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
         mRecordTaskName = (TextView) findViewById(R.id.record_task_task_name);
         mRecordCaseName = (TextView) findViewById(R.id.record_task_case_name);
         mRecordEditContent = (EditText) findViewById(R.id.record_task_edit_content);
-        mRecordLocation = (TextView) findViewById(R.id.record_task_location);
+        mRecordLocation = (TextView) findViewById(R.id.location_text);
+        mRecordLocationProgressBar = (ProgressBar) findViewById(R.id.location_progress_bar);
         mRecordCameraButton = (ImageView) findViewById(R.id.record_task_camera_button);
         mRecordUploadButton = (ImageView) findViewById(R.id.record_task_upload_button);
         mRecordButton = (TextView) findViewById(R.id.record_task_record_button);
@@ -176,6 +186,12 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onReceiveSuccessful(String message) {
+        mRecordLocationProgressBar.startAnimation(mFadeOutAnimation);
+        mRecordLocation.startAnimation(mFadeInAnimation);
+
+        mRecordLocationProgressBar.setVisibility(View.GONE);
+        mRecordLocation.setVisibility(View.VISIBLE);
+
         mRecordLocation.setText(message);
     }
 
