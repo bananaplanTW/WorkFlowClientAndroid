@@ -32,9 +32,6 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     private ActionBar mActionBar;
     private Toolbar mToolbar;
 
-    private TextView mRecordTaskName;
-    private TextView mRecordCaseName;
-
     private EditText mRecordEditContent;
     private TextView mRecordLocation;
     private ProgressBar mRecordLocationProgressBar;
@@ -69,8 +66,6 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
 
     private void findViews() {
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        mRecordTaskName = (TextView) findViewById(R.id.add_record_task_name);
-        mRecordCaseName = (TextView) findViewById(R.id.add_record_case_name);
         mRecordEditContent = (EditText) findViewById(R.id.add_record_edit_content);
         mRecordLocation = (TextView) findViewById(R.id.location_text);
         mRecordLocationProgressBar = (ProgressBar) findViewById(R.id.location_progress_bar);
@@ -90,8 +85,6 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void setupViews() {
-        mRecordTaskName.setText("伺服器服務開發");
-        mRecordCaseName.setText("流程管理專案");
         mRecordCameraButton.setOnClickListener(this);
         mRecordUploadButton.setOnClickListener(this);
         mRecordButton.setOnClickListener(this);
