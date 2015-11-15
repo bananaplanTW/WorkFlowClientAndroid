@@ -12,7 +12,7 @@
     <string name="complete">完成</string>
     <string name="record">記錄</string>
 
-    <!-- Record Task -->
-    <string name="record_task_edit_content_hint">輸入紀錄...</string>
+    <!-- Add Record -->
+    <string name="add_record_edit_content_hint">輸入紀錄...</string>
 
 </resources>

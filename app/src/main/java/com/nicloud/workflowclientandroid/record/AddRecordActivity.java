@@ -25,7 +25,7 @@ import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.address.AddressResultReceiver;
 import com.nicloud.workflowclientandroid.address.FetchAddressIntentService;
 
-public class RecordTaskActivity extends AppCompatActivity implements View.OnClickListener,
+public class AddRecordActivity extends AppCompatActivity implements View.OnClickListener,
         AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
@@ -54,7 +54,7 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_task);
+        setContentView(R.layout.activity_add_record);
         initialize();
     }
 
@@ -69,14 +69,14 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
 
     private void findViews() {
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        mRecordTaskName = (TextView) findViewById(R.id.record_task_task_name);
-        mRecordCaseName = (TextView) findViewById(R.id.record_task_case_name);
-        mRecordEditContent = (EditText) findViewById(R.id.record_task_edit_content);
+        mRecordTaskName = (TextView) findViewById(R.id.add_record_task_name);
+        mRecordCaseName = (TextView) findViewById(R.id.add_record_case_name);
+        mRecordEditContent = (EditText) findViewById(R.id.add_record_edit_content);
         mRecordLocation = (TextView) findViewById(R.id.location_text);
         mRecordLocationProgressBar = (ProgressBar) findViewById(R.id.location_progress_bar);
-        mRecordCameraButton = (ImageView) findViewById(R.id.record_task_camera_button);
-        mRecordUploadButton = (ImageView) findViewById(R.id.record_task_upload_button);
-        mRecordButton = (TextView) findViewById(R.id.record_task_record_button);
+        mRecordCameraButton = (ImageView) findViewById(R.id.add_record_camera_button);
+        mRecordUploadButton = (ImageView) findViewById(R.id.add_record_upload_button);
+        mRecordButton = (TextView) findViewById(R.id.add_record_record_button);
     }
 
     private void setupActionBar() {
@@ -144,13 +144,13 @@ public class RecordTaskActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.record_task_camera_button:
+            case R.id.add_record_camera_button:
                 break;
 
-            case R.id.record_task_upload_button:
+            case R.id.add_record_upload_button:
                 break;
 
-            case R.id.record_task_record_button:
+            case R.id.add_record_record_button:
                 break;
         }
     }

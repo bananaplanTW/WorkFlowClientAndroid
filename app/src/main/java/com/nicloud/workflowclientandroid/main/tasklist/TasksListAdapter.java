@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.Task;
-import com.nicloud.workflowclientandroid.record.RecordTaskActivity;
+import com.nicloud.workflowclientandroid.record.AddRecordActivity;
 
 import java.util.List;
 
@@ -115,7 +115,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void goToRecordTaskActivity() {
-        mContext.startActivity(new Intent(mContext, RecordTaskActivity.class));
+        mContext.startActivity(new Intent(mContext, AddRecordActivity.class));
     }
 
     public TasksListAdapter(Context context, List<TasksListItem> dataSet) {
