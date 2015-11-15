@@ -20,6 +20,11 @@
     <string name="complete">Complete</string>
     <string name="record">Record</string>
 
+    <!-- Record Log -->
+    <string name="record_log_tab_text">Text</string>
+    <string name="record_log_tab_photo">Photo</string>
+    <string name="record_log_tab_file">File</string>
+
     <!-- Add Record -->
     <string name="add_record_edit_content_hint">Input record...</string>
 

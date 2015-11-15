@@ -20,14 +20,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/add_record_task_name"
+                android:id="@+id/record_log_task_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_task_name_text_color"
                 android:textSize="@dimen/title_information_text_size" />
 
             <TextView
-                android:id="@+id/add_record_case_name"
+                android:id="@+id/record_log_case_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_case_name_text_color"
@@ -38,5 +38,38 @@
     </android.support.v7.widget.Toolbar>
 
     <include layout="@layout/horizontal_divider" />
+
+    <TabHost
+        android:id="@+id/record_log_tab_host"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/record_log_tab_height"
+                android:orientation="horizontal" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+            <include layout="@layout/horizontal_divider" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/record_log_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </TabHost>
 
 </LinearLayout>

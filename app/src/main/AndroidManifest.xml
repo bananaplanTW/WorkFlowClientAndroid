@@ -30,7 +30,8 @@
             android:theme="@style/AppTheme.WhiteBackground" />
         <activity
             android:name=".record.RecordLogActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.WhiteBackground" />
 
         <service
             android:name=".address.FetchAddressIntentService"

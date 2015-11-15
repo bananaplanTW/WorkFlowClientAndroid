@@ -13,6 +13,11 @@
     <string name="complete">完成</string>
     <string name="record">記錄</string>
 
+    <!-- Record Log -->
+    <string name="record_log_tab_text">文字</string>
+    <string name="record_log_tab_photo">照片</string>
+    <string name="record_log_tab_file">檔案</string>
+
     <!-- Add Record -->
     <string name="add_record_edit_content_hint">輸入紀錄...</string>
 

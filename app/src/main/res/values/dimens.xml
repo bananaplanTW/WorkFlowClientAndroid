@@ -41,6 +41,9 @@
     <dimen name="working_time_container_start_working_time_text_size">20dp</dimen>
     <dimen name="working_time_container_check_in_time_text_size">10dp</dimen>
 
+    <!-- Record log -->
+    <dimen name="record_log_tab_height">35dp</dimen>
+
     <!-- Add Record -->
     <dimen name="add_record_action_container_height">55dp</dimen>
     <dimen name="add_record_action_container_padding_left_right">15dp</dimen>
