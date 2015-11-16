@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dialog_width"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dialog_padding"
+    android:gravity="center"
+    android:background="@color/dialog_background_color"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_dialog_complete"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dialog_text_padding_top_bottom"
+        android:paddingBottom="@dimen/dialog_text_padding_top_bottom"
+        android:textSize="@dimen/dialog_text_text_size"
+        android:textStyle="bold"
+        android:text="@string/dialog_complete_task_text"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView style="@style/DialogButtonStyle.Gray"
+            android:id="@+id/complete_task_dialog_cancel_button"
+            android:text="@string/cancel" />
+
+        <TextView style="@style/DialogButtonStyle.Green"
+            android:id="@+id/complete_task_dialog_ok_button"
+            android:text="@string/complete" />
+
+    </LinearLayout>
+
+</LinearLayout>

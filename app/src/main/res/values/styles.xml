@@ -51,7 +51,30 @@
         <item name="android:textSize">@dimen/button_text_size</item>
     </style>
     <style name="ButtonStyle.Green">
-        <item name="android:background">@drawable/green_button_background</item>
+        <item name="android:background">@drawable/dialog_green_button_background</item>
+    </style>
+
+
+    <style name="DialogButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/dialog_button_padding_left_right</item>
+        <item name="android:paddingRight">@dimen/dialog_button_padding_left_right</item>
+        <item name="android:paddingTop">@dimen/dialog_button_padding_top_bottom</item>
+        <item name="android:paddingBottom">@dimen/dialog_button_padding_top_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/dialog_button_margin_left_right</item>
+        <item name="android:layout_marginRight">@dimen/dialog_button_margin_left_right</item>
+        <item name="android:textSize">@dimen/dialog_button_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="DialogButtonStyle.Green">
+        <item name="android:textColor">@color/dialog_green_button_text_color</item>
+        <item name="android:background">@drawable/dialog_green_button_background</item>
+    </style>
+    <style name="DialogButtonStyle.Gray">
+        <item name="android:textColor">@color/dialog_gray_button_text_color</item>
+        <item name="android:background">@drawable/dialog_gray_button_background</item>
     </style>
 
 </resources>

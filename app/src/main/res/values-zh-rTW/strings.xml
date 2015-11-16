@@ -12,6 +12,7 @@
     <string name="pause">暫停</string>
     <string name="complete">完成</string>
     <string name="record">記錄</string>
+    <string name="cancel">取消</string>
 
     <!-- Record Log -->
     <string name="record_log_tab_text">文字</string>
@@ -20,5 +21,8 @@
 
     <!-- Add Record -->
     <string name="add_record_edit_content_hint">輸入紀錄...</string>
+
+    <!-- Dialog -->
+    <string name="dialog_complete_task_text">確定要完成工作？</string>
 
 </resources>

@@ -19,6 +19,7 @@
     <string name="pause">Pause</string>
     <string name="complete">Complete</string>
     <string name="record">Record</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Record Log -->
     <string name="record_log_tab_text">Text</string>
@@ -27,5 +28,8 @@
 
     <!-- Add Record -->
     <string name="add_record_edit_content_hint">Input record...</string>
+
+    <!-- Dialog -->
+    <string name="dialog_complete_task_text">Do you want to complete the task?</string>
 
 </resources>

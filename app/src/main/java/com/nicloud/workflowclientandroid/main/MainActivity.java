@@ -6,8 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.nicloud.workflowclientandroid.R;
+import com.nicloud.workflowclientandroid.dialog.completetask.CompleteTaskDialogFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CompleteTaskDialogFragment.OnCompleteTaskActionListener {
 
     private UIController mUIController;
 
@@ -40,5 +41,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return mUIController.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCompleteTaskCancel() {
+        mUIController.onCompleteTaskCancel();
+    }
+
+    @Override
+    public void onCompleteTaskOk() {
+        mUIController.onCompleteTaskOk();
     }
 }

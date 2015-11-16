@@ -2,6 +2,7 @@ package com.nicloud.workflowclientandroid.main.tasklist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.Task;
-import com.nicloud.workflowclientandroid.record.AddRecordActivity;
+import com.nicloud.workflowclientandroid.dialog.completetask.CompleteTaskDialogFragment;
 import com.nicloud.workflowclientandroid.record.RecordLogActivity;
 
 import java.util.List;
@@ -21,7 +22,11 @@ import java.util.List;
 public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
+    private FragmentManager mFragmentManager;
     private List<TasksListItem> mDataSet;
+
+    private CompleteTaskDialogFragment mCompleteTaskDialogFragment;
+
 
     public static class ItemViewType {
         public static final int TITLE = 0;
@@ -82,6 +87,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     break;
 
                 case R.id.wip_task_card_complete_button:
+                    showCompleteTaskDialog();
                     break;
             }
         }
@@ -119,8 +125,25 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mContext.startActivity(new Intent(mContext, RecordLogActivity.class));
     }
 
-    public TasksListAdapter(Context context, List<TasksListItem> dataSet) {
+    private void showCompleteTaskDialog() {
+        mCompleteTaskDialogFragment =
+                (CompleteTaskDialogFragment) mFragmentManager.findFragmentByTag(CompleteTaskDialogFragment.TAG_COMPLETE_TASK_DIALOG);
+
+        if (mCompleteTaskDialogFragment == null) {
+            mCompleteTaskDialogFragment = new CompleteTaskDialogFragment();
+        }
+
+        mCompleteTaskDialogFragment.show(mFragmentManager, CompleteTaskDialogFragment.TAG_COMPLETE_TASK_DIALOG);
+    }
+
+    private void dismissCompleteTaskDialog() {
+        mCompleteTaskDialogFragment.dismiss();
+        mCompleteTaskDialogFragment = null;
+    }
+
+    public TasksListAdapter(Context context, FragmentManager fm, List<TasksListItem> dataSet) {
         mContext = context;
+        mFragmentManager = fm;
         mDataSet = dataSet;
     }
 
@@ -196,5 +219,13 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         return mDataSet.size();
+    }
+
+    public void onCompleteTaskOk() {
+        dismissCompleteTaskDialog();
+    }
+
+    public void onCompleteTaskCancel() {
+        dismissCompleteTaskDialog();
     }
 }

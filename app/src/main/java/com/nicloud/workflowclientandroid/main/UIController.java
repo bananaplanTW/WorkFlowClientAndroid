@@ -42,7 +42,6 @@ public class UIController implements View.OnClickListener {
     private List<TasksListItem> mTasksDataSet = new ArrayList<>();
 
 
-
     public UIController(AppCompatActivity activity) {
         mMainActivity = activity;
     }
@@ -70,6 +69,14 @@ public class UIController implements View.OnClickListener {
             default:
                 return false;
         }
+    }
+
+    public void onCompleteTaskOk() {
+        mTasksListAdapter.onCompleteTaskOk();
+    }
+
+    public void onCompleteTaskCancel() {
+        mTasksListAdapter.onCompleteTaskCancel();
     }
 
     private void initialize() {
@@ -102,7 +109,7 @@ public class UIController implements View.OnClickListener {
     private void setupTasksList() {
         setScheduledTasksData();
         mTasksListManager = new LinearLayoutManager(mMainActivity);
-        mTasksListAdapter = new TasksListAdapter(mMainActivity, mTasksDataSet);
+        mTasksListAdapter = new TasksListAdapter(mMainActivity, mMainActivity.getSupportFragmentManager(), mTasksDataSet);
 
         mTasksList.setLayoutManager(mTasksListManager);
         mTasksList.addItemDecoration(
