@@ -27,13 +27,11 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private CompleteTaskDialogFragment mCompleteTaskDialogFragment;
 
-
     public static class ItemViewType {
         public static final int TITLE = 0;
         public static final int WIP_TASK = 1;
         public static final int SCHEDULED_TASK = 2;
     }
-
 
     private class TitleViewHolder extends RecyclerView.ViewHolder {
 
@@ -121,6 +119,13 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+
+    public TasksListAdapter(Context context, FragmentManager fm, List<TasksListItem> dataSet) {
+        mContext = context;
+        mFragmentManager = fm;
+        mDataSet = dataSet;
+    }
+
     private void goToRecordLogActivity() {
         mContext.startActivity(new Intent(mContext, RecordLogActivity.class));
     }
@@ -139,12 +144,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void dismissCompleteTaskDialog() {
         mCompleteTaskDialogFragment.dismiss();
         mCompleteTaskDialogFragment = null;
-    }
-
-    public TasksListAdapter(Context context, FragmentManager fm, List<TasksListItem> dataSet) {
-        mContext = context;
-        mFragmentManager = fm;
-        mDataSet = dataSet;
     }
 
     @Override
