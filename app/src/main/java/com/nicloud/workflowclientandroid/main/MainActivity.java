@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 
-public class MainActivity extends AppCompatActivity implements DisplayDialogFragment.OnCompleteTaskActionListener {
+public class MainActivity extends AppCompatActivity implements DisplayDialogFragment.OnDialogActionListener {
 
     private UIController mUIController;
 
@@ -51,5 +51,20 @@ public class MainActivity extends AppCompatActivity implements DisplayDialogFrag
     @Override
     public void onCompleteTaskOk() {
         mUIController.onCompleteTaskOk();
+    }
+
+    @Override
+    public void onChooseTaskCancel() {
+        mUIController.onChooseTaskCancel();
+    }
+
+    @Override
+    public void onChooseTaskStartWork() {
+        mUIController.onChooseTaskStartWork();
+    }
+
+    @Override
+    public void onChooseTaskLog() {
+        mUIController.onChooseTaskLog();
     }
 }

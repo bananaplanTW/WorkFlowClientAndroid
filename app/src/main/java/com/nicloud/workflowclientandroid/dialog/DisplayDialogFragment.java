@@ -7,8 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 
 /**
- * Use this class to display CompleteTaskDialog,
- * don't forget to pass OnConfirmDialogActionListener.
+ * Use this class to display each dialog,
+ * don't forget to pass OnDialogActionListener.
  *
  * @author Danny Lin
  * @since 2015/11/4.
@@ -24,44 +24,25 @@ public class DisplayDialogFragment extends DialogFragment {
         public static final int CHECK_IN_OUT = 2;
     }
 
-    public interface OnCompleteTaskActionListener {
+    public interface OnDialogActionListener {
         void onCompleteTaskCancel();
         void onCompleteTaskOk();
+        void onChooseTaskCancel();
+        void onChooseTaskStartWork();
+        void onChooseTaskLog();
     }
 
-    private OnCompleteTaskActionListener mOnCompleteTaskActionListener;
+    private OnDialogActionListener mOnDialogActionListener;
 
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        switch (getArguments().getInt(EXTRA_DIALOG_TYPE)) {
-            case DialogType.COMPLETE_TASK:
-                if (activity instanceof OnCompleteTaskActionListener) {
-                    mOnCompleteTaskActionListener = (OnCompleteTaskActionListener) activity;
+        if (activity instanceof OnDialogActionListener) {
+            mOnDialogActionListener = (OnDialogActionListener) activity;
 
-                } else if (getTargetFragment() instanceof OnCompleteTaskActionListener) {
-                    mOnCompleteTaskActionListener = (OnCompleteTaskActionListener) getTargetFragment();
-                }
-                break;
-
-            case DialogType.CHOOSE_TASK:
-                if (activity instanceof OnCompleteTaskActionListener) {
-                    mOnCompleteTaskActionListener = (OnCompleteTaskActionListener) activity;
-
-                } else if (getTargetFragment() instanceof OnCompleteTaskActionListener) {
-                    mOnCompleteTaskActionListener = (OnCompleteTaskActionListener) getTargetFragment();
-                }
-                break;
-
-            case DialogType.CHECK_IN_OUT:
-                if (activity instanceof OnCompleteTaskActionListener) {
-                    mOnCompleteTaskActionListener = (OnCompleteTaskActionListener) activity;
-
-                } else if (getTargetFragment() instanceof OnCompleteTaskActionListener) {
-                    mOnCompleteTaskActionListener = (OnCompleteTaskActionListener) getTargetFragment();
-                }
-                break;
+        } else if (getTargetFragment() instanceof OnDialogActionListener) {
+            mOnDialogActionListener = (OnDialogActionListener) getTargetFragment();
         }
     }
 
@@ -70,16 +51,16 @@ public class DisplayDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         switch (getArguments().getInt(EXTRA_DIALOG_TYPE)) {
             case DialogType.COMPLETE_TASK:
-                return new CompleteTaskDialog(getActivity(), mOnCompleteTaskActionListener);
+                return new CompleteTaskDialog(getActivity(), mOnDialogActionListener);
 
             case DialogType.CHOOSE_TASK:
-                return null;
+                return new ChooseTaskDialog(getActivity(), mOnDialogActionListener);
 
             case DialogType.CHECK_IN_OUT:
                 return null;
 
             default:
-                return new CompleteTaskDialog(getActivity(), mOnCompleteTaskActionListener);
+                return new CompleteTaskDialog(getActivity(), mOnDialogActionListener);
         }
     }
 }

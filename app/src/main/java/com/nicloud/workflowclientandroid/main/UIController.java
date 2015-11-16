@@ -79,6 +79,18 @@ public class UIController implements View.OnClickListener {
         mTasksListAdapter.onCompleteTaskCancel();
     }
 
+    public void onChooseTaskCancel() {
+        mTasksListAdapter.onChooseTaskCancel();
+    }
+
+    public void onChooseTaskStartWork() {
+        mTasksListAdapter.onChooseTaskStartWork();
+    }
+
+    public void onChooseTaskLog() {
+        mTasksListAdapter.onChooseTaskLog();
+    }
+
     private void initialize() {
         findViews();
         setupViews();

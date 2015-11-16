@@ -115,7 +115,8 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    goToRecordLogActivity();
+                    //goToRecordLogActivity();
+                    showDialog(DialogType.CHOOSE_TASK);
                 }
             });
         }
@@ -159,6 +160,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void dismissCompleteTaskDialog() {
+        if (mDisplayDialogFragment == null) return;
         mDisplayDialogFragment.dismiss();
         mDisplayDialogFragment = null;
     }
@@ -242,6 +244,18 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void onCompleteTaskCancel() {
+        dismissCompleteTaskDialog();
+    }
+
+    public void onChooseTaskCancel() {
+        dismissCompleteTaskDialog();
+    }
+
+    public void onChooseTaskStartWork() {
+        dismissCompleteTaskDialog();
+    }
+
+    public void onChooseTaskLog() {
         dismissCompleteTaskDialog();
     }
 }

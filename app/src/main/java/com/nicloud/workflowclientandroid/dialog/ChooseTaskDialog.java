@@ -16,15 +16,17 @@ import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.OnDialogAc
  * @author Danny Lin
  * @since 2015/11/4.
  */
-public class CompleteTaskDialog extends Dialog implements View.OnClickListener {
+public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
 
-    private TextView mOkButton;
+    private TextView mTaskName;
+
+    private TextView mStartWorkButton;
     private TextView mCancelButton;
 
     private OnDialogActionListener mOnDialogActionListener;
 
 
-    public CompleteTaskDialog(Context context, OnDialogActionListener listener) {
+    public ChooseTaskDialog(Context context, OnDialogActionListener listener) {
         super(context);
         mOnDialogActionListener = listener;
     }
@@ -33,22 +35,28 @@ public class CompleteTaskDialog extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dialog_complete_task);
+        setContentView(R.layout.dialog_choose_task);
         initialize();
     }
 
     private void initialize() {
         findViews();
+        setupViews();
         setupButton();
     }
 
     private void findViews() {
-        mOkButton = (TextView) findViewById(R.id.complete_task_dialog_ok_button);
-        mCancelButton = (TextView) findViewById(R.id.complete_task_dialog_cancel_button);
+        mTaskName = (TextView) findViewById(R.id.dialog_choose_task_task_name);
+        mStartWorkButton = (TextView) findViewById(R.id.dialog_choose_task_start_work_button);
+        mCancelButton = (TextView) findViewById(R.id.dialog_choose_task_cancel_button);
+    }
+
+    private void setupViews() {
+        mTaskName.setText("Develop Android");
     }
 
     private void setupButton() {
-        mOkButton.setOnClickListener(this);
+        mStartWorkButton.setOnClickListener(this);
         mCancelButton.setOnClickListener(this);
     }
 
@@ -57,12 +65,12 @@ public class CompleteTaskDialog extends Dialog implements View.OnClickListener {
         if (mOnDialogActionListener == null) return;
 
         switch (v.getId()) {
-            case R.id.complete_task_dialog_ok_button:
-                mOnDialogActionListener.onCompleteTaskOk();
+            case R.id.dialog_choose_task_start_work_button:
+                mOnDialogActionListener.onChooseTaskStartWork();
                 break;
 
-            case R.id.complete_task_dialog_cancel_button:
-                mOnDialogActionListener.onCompleteTaskCancel();
+            case R.id.dialog_choose_task_cancel_button:
+                mOnDialogActionListener.onChooseTaskCancel();
                 break;
         }
     }

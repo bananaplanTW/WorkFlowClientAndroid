@@ -20,6 +20,7 @@
     <string name="complete">Complete</string>
     <string name="record">Record</string>
     <string name="cancel">Cancel</string>
+    <string name="start_work">Start work</string>
 
     <!-- Record Log -->
     <string name="record_log_tab_text">Text</string>
