@@ -2,6 +2,7 @@ package com.nicloud.workflowclientandroid.main.tasklist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +12,8 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.Task;
-import com.nicloud.workflowclientandroid.dialog.completetask.CompleteTaskDialogFragment;
+import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.DialogType;
 import com.nicloud.workflowclientandroid.record.RecordLogActivity;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private FragmentManager mFragmentManager;
     private List<TasksListItem> mDataSet;
 
-    private CompleteTaskDialogFragment mCompleteTaskDialogFragment;
+    private DisplayDialogFragment mDisplayDialogFragment;
 
     public static class ItemViewType {
         public static final int TITLE = 0;
@@ -85,7 +87,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     break;
 
                 case R.id.wip_task_card_complete_button:
-                    showCompleteTaskDialog();
+                    showDialog(DialogType.COMPLETE_TASK);
                     break;
             }
         }
@@ -130,20 +132,35 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mContext.startActivity(new Intent(mContext, RecordLogActivity.class));
     }
 
-    private void showCompleteTaskDialog() {
-        mCompleteTaskDialogFragment =
-                (CompleteTaskDialogFragment) mFragmentManager.findFragmentByTag(CompleteTaskDialogFragment.TAG_COMPLETE_TASK_DIALOG);
-
-        if (mCompleteTaskDialogFragment == null) {
-            mCompleteTaskDialogFragment = new CompleteTaskDialogFragment();
+    private void showDialog(int type) {
+        mDisplayDialogFragment =
+                (DisplayDialogFragment) mFragmentManager.findFragmentByTag(DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
+        if (mDisplayDialogFragment == null) {
+            mDisplayDialogFragment = new DisplayDialogFragment();
         }
 
-        mCompleteTaskDialogFragment.show(mFragmentManager, CompleteTaskDialogFragment.TAG_COMPLETE_TASK_DIALOG);
+        Bundle bundle = new Bundle();
+        switch (type) {
+            case DialogType.COMPLETE_TASK:
+                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DialogType.COMPLETE_TASK);
+                break;
+
+            case DialogType.CHOOSE_TASK:
+                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DialogType.CHOOSE_TASK);
+                break;
+
+            case DialogType.CHECK_IN_OUT:
+                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DialogType.CHECK_IN_OUT);
+                break;
+        }
+
+        mDisplayDialogFragment.setArguments(bundle);
+        mDisplayDialogFragment.show(mFragmentManager, DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
     }
 
     private void dismissCompleteTaskDialog() {
-        mCompleteTaskDialogFragment.dismiss();
-        mCompleteTaskDialogFragment = null;
+        mDisplayDialogFragment.dismiss();
+        mDisplayDialogFragment = null;
     }
 
     @Override

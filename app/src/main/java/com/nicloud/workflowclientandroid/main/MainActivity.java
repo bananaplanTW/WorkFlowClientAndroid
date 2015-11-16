@@ -6,9 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.nicloud.workflowclientandroid.R;
-import com.nicloud.workflowclientandroid.dialog.completetask.CompleteTaskDialogFragment;
+import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 
-public class MainActivity extends AppCompatActivity implements CompleteTaskDialogFragment.OnCompleteTaskActionListener {
+public class MainActivity extends AppCompatActivity implements DisplayDialogFragment.OnCompleteTaskActionListener {
 
     private UIController mUIController;
 

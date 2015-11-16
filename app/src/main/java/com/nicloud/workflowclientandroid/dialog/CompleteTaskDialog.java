@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.dialog.completetask;
+package com.nicloud.workflowclientandroid.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
-import com.nicloud.workflowclientandroid.dialog.completetask.CompleteTaskDialogFragment.OnCompleteTaskActionListener;
+import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.OnCompleteTaskActionListener;
 
 /**
  * Do not use this class directly, if you want to display the dialog, use ConfirmDialogFragment.
