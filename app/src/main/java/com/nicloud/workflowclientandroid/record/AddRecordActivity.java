@@ -20,14 +20,17 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.address.AddressResultReceiver;
 import com.nicloud.workflowclientandroid.address.FetchAddressIntentService;
 
+
 public class AddRecordActivity extends AppCompatActivity implements View.OnClickListener,
         AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private ActionBar mActionBar;
     private Toolbar mToolbar;
@@ -41,11 +44,14 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     private TextView mRecordButton;
 
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
+    private Location mCurrentLocation;
     private AddressResultReceiver mReceiver;
+    private LocationRequest mLocationRequest;
 
     private Animation mFadeInAnimation;
     private Animation mFadeOutAnimation;
+
+    private boolean mFirstReceiveLocation = true;
 
 
     @Override
@@ -92,6 +98,7 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
 
     private void setupFetchingAddress() {
         buildGoogleApiClient();
+        createLocationRequest();
         mReceiver = new AddressResultReceiver(new Handler(), this);
     }
 
@@ -101,6 +108,13 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+    }
+
+    private void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(60000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     @Override
@@ -115,6 +129,20 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mGoogleApiClient.isConnected()) {
+            startLocationUpdates();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
     }
 
     @Override
@@ -150,19 +178,21 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onConnected(Bundle bundle) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        startLocationUpdates();
+    }
 
-        if (!Geocoder.isPresent()) return;
+    private void startLocationUpdates() {
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
 
-        if (mLastLocation != null) {
-            startFetchAddressIntentService();
-        }
+    private void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
     private void startFetchAddressIntentService() {
         Intent intent = new Intent(this, FetchAddressIntentService.class);
         intent.putExtra(FetchAddressIntentService.Constants.RECEIVER, mReceiver);
-        intent.putExtra(FetchAddressIntentService.Constants.EXTRA_LOCATION_DATA, mLastLocation);
+        intent.putExtra(FetchAddressIntentService.Constants.EXTRA_LOCATION_DATA, mCurrentLocation);
         startService(intent);
     }
 
@@ -176,14 +206,26 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        mCurrentLocation = location;
+
+        if (!Geocoder.isPresent()) return;
+
+        startFetchAddressIntentService();
+    }
 
     @Override
     public void onReceiveSuccessful(String message) {
-        mRecordLocationProgressBar.startAnimation(mFadeOutAnimation);
-        mRecordLocation.startAnimation(mFadeInAnimation);
+        if (mFirstReceiveLocation) {
+            mRecordLocationProgressBar.startAnimation(mFadeOutAnimation);
+            mRecordLocation.startAnimation(mFadeInAnimation);
 
-        mRecordLocationProgressBar.setVisibility(View.GONE);
-        mRecordLocation.setVisibility(View.VISIBLE);
+            mRecordLocationProgressBar.setVisibility(View.GONE);
+            mRecordLocation.setVisibility(View.VISIBLE);
+
+            mFirstReceiveLocation = false;
+        }
 
         mRecordLocation.setText(message);
     }
