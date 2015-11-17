@@ -98,6 +98,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public View view;
         public TextView taskIndex;
         public TextView taskName;
+        public TextView caseName;
 
         public ScheduledTaskViewHolder(View view) {
             super(view);
@@ -108,7 +109,8 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private void findViews(View view) {
             this.view = view;
             taskIndex = (TextView) view.findViewById(R.id.scheduled_task_index);
-            taskName = (TextView) view.findViewById(R.id.scheduled_task_name);
+            taskName = (TextView) view.findViewById(R.id.scheduled_task_task_name);
+            caseName = (TextView) view.findViewById(R.id.scheduled_task_case_name);
         }
 
         private void setupViews() {
@@ -205,18 +207,19 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void bindTitleViewHolder(TitleViewHolder holder, Task task) {
-        holder.title.setText(task.name);
+        holder.title.setText(task.taskName);
     }
 
     private void bindWipTaskViewHolder(WipTaskViewHolder holder, Task task) {
-        holder.wipTaskName.setText(task.name);
-        holder.wipCaseName.setText("流程管理專案");
+        holder.wipTaskName.setText(task.taskName);
+        holder.wipCaseName.setText(task.caseName);
         holder.wipWorkingTime.setText("02:51:33");
     }
 
     private void bindScheduledTaskViewHolder(ScheduledTaskViewHolder holder, Task task, int position) {
         holder.taskIndex.setText(String.valueOf(position - 2));
-        holder.taskName.setText(task.name);
+        holder.taskName.setText(task.taskName);
+        holder.caseName.setText(task.caseName);
     }
 
     @Override

@@ -5,15 +5,15 @@ package com.nicloud.workflowclientandroid.data.data;
  */
 public class Task {
 
-    public String name;
+    public String taskName;
+    public String caseName;
 
+    public Task(String title) {
+        this.taskName = title;
+    }
 
-    /**
-     * Use for title item in scheduled list
-     *
-     * @param name
-     */
-    public Task(String name) {
-        this.name = name;
+    public Task(String taskName, String caseName) {
+        this.taskName = taskName;
+        this.caseName = caseName;
     }
 }

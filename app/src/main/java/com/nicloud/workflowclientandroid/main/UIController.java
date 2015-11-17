@@ -135,29 +135,29 @@ public class UIController implements View.OnClickListener {
     private void setScheduledTasksData() {
         // WIP task
         mTasksDataSet.add(new TasksListItem(new Task(mMainActivity.getString(R.string.wip_task)), ItemViewType.TITLE));
-        mTasksDataSet.add(new TasksListItem(new Task("伺服器服務開發"), ItemViewType.WIP_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("伺服器服務開發", "流程管理專案"), ItemViewType.WIP_TASK));
 
         // Scheduled task
         mTasksDataSet.add(new TasksListItem(new Task(mMainActivity.getString(R.string.next_task)), ItemViewType.TITLE));
-        mTasksDataSet.add(new TasksListItem(new Task("檢查伺服器"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("開發Android"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("開發iOS"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("設計UI"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("檢查伺服器", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("報表處理", "會計系統專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("開發iOS", "手機開發專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("設計UI", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
     }
 
     @Override

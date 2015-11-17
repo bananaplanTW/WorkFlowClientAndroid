@@ -52,7 +52,7 @@ public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
     }
 
     private void setupViews() {
-        mTaskName.setText("Develop Android");
+        mTaskName.setText("開發iOS");
     }
 
     private void setupButton() {
