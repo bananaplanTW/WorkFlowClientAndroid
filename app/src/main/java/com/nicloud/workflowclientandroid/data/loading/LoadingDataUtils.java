@@ -76,6 +76,8 @@ public class LoadingDataUtils {
             public static final String LOGIN = "/api/login";
 
             public static final String TIME_CARD_BY_RESOURCE = "/api/resource/timecards";
+
+            public static final String CHECKIN_OUT = "/api/checkin-out/employee";
         }
     }
 
