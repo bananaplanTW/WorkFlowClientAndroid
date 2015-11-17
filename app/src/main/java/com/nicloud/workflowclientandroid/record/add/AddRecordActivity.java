@@ -23,6 +23,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.nicloud.workflowclientandroid.MainApplication;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.address.AddressResultReceiver;
 import com.nicloud.workflowclientandroid.address.FetchAddressIntentService;
@@ -48,9 +49,6 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     private AddressResultReceiver mReceiver;
     private LocationRequest mLocationRequest;
 
-    private Animation mFadeInAnimation;
-    private Animation mFadeOutAnimation;
-
     private boolean mFirstReceiveLocation = true;
 
 
@@ -62,8 +60,6 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initialize() {
-        mFadeInAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
-        mFadeOutAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
         findViews();
         setupActionBar();
         setupViews();
@@ -218,8 +214,8 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onReceiveSuccessful(String message) {
         if (mFirstReceiveLocation) {
-            mRecordLocationProgressBar.startAnimation(mFadeOutAnimation);
-            mRecordLocation.startAnimation(mFadeInAnimation);
+            mRecordLocationProgressBar.startAnimation(MainApplication.sFadeOutAnimation);
+            mRecordLocation.startAnimation(MainApplication.sFadeInAnimation);
 
             mRecordLocationProgressBar.setVisibility(View.GONE);
             mRecordLocation.setVisibility(View.VISIBLE);

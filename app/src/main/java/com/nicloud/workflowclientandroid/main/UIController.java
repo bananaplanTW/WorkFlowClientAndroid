@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.nicloud.workflowclientandroid.MainApplication;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.data.loading.LoadingDataTask;
@@ -39,6 +40,8 @@ public class UIController implements View.OnClickListener {
     private AppCompatActivity mMainActivity;
     private ActionBar mActionBar;
     private Toolbar mToolbar;
+    private View mActionBarTitleContainer;
+
     private FloatingActionButton mFab;
 
     private RecyclerView mTasksList;
@@ -53,7 +56,12 @@ public class UIController implements View.OnClickListener {
         public void onFinishLoadingData() {
             if (mFirstLaunch) {
                 forceHideRefreshSpinner();
+
+                mActionBarTitleContainer.startAnimation(MainApplication.sFadeInAnimation);
+                mActionBarTitleContainer.setVisibility(View.VISIBLE);
+
                 mFab.show();
+
                 mFirstLaunch = false;
             } else {
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -136,6 +144,7 @@ public class UIController implements View.OnClickListener {
 
     private void findViews() {
         mToolbar = (Toolbar) mMainActivity.findViewById(R.id.tool_bar);
+        mActionBarTitleContainer = mMainActivity.findViewById(R.id.action_bar_title_container);
         mFab = (FloatingActionButton) mMainActivity.findViewById(R.id.fab);
         mTasksList = (RecyclerView) mMainActivity.findViewById(R.id.tasks_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mMainActivity.findViewById(R.id.swipe_refresh_container);

@@ -37,7 +37,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/action_bar_title_container_margin_left"
                     android:layout_toRightOf="@+id/action_bar_worker"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/action_bar_worker_name"
