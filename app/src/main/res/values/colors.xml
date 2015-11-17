@@ -39,5 +39,8 @@
     <color name="dialog_gray_button_background_color">#FFFFFFFF</color>
     <color name="dialog_gray_button_stroke_color">#FF979797</color>
     <color name="dialog_gray_button_text_color">#FF979797</color>
+    <color name="dialog_check_date_text_color">#FF696969</color>
+    <color name="dialog_check_time_text_color">#FF000000</color>
+    <color name="dialog_uncheck_time_text_color">#FF9B9B9B</color>
 
 </resources>

@@ -1,18 +1,14 @@
-package com.nicloud.workflowclientandroid.record.add;
+package com.nicloud.workflowclientandroid.dialog;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Handler;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Handler;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,22 +21,26 @@ import com.nicloud.workflowclientandroid.MainApplication;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.address.AddressResultReceiver;
 import com.nicloud.workflowclientandroid.address.FetchAddressIntentService;
+import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.OnDialogActionListener;
 
-
-public class AddRecordActivity extends AppCompatActivity implements View.OnClickListener,
+/**
+ * Dialog for checking in/out
+ *
+ * Do not use this class directly, if you want to display the dialog, use DisplayDialogFragment.
+ *
+ * @author Danny Lin
+ * @since 2015/11/4.
+ */
+public class CheckDialog extends Dialog implements View.OnClickListener,
         AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private ActionBar mActionBar;
-    private Toolbar mToolbar;
+    private Context mContext;
 
-    private EditText mRecordEditContent;
+    private OnDialogActionListener mOnDialogActionListener;
+
     private TextView mRecordLocation;
     private ProgressBar mRecordLocationProgressBar;
-
-    private ImageView mRecordCameraButton;
-    private ImageView mRecordUploadButton;
-    private TextView mRecordButton;
 
     private GoogleApiClient mGoogleApiClient;
     private Location mCurrentLocation;
@@ -50,44 +50,32 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     private boolean mFirstReceiveLocation = true;
 
 
+    public CheckDialog(Context context, OnDialogActionListener listener) {
+        super(context);
+        mContext = context;
+        mOnDialogActionListener = listener;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_record);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.dialog_check);
         initialize();
     }
 
     private void initialize() {
         findViews();
-        setupActionBar();
-        setupViews();
+        setupButton();
         setupFetchingAddress();
     }
 
     private void findViews() {
-        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        mRecordEditContent = (EditText) findViewById(R.id.add_record_edit_content);
         mRecordLocation = (TextView) findViewById(R.id.location_text);
         mRecordLocationProgressBar = (ProgressBar) findViewById(R.id.location_progress_bar);
-        mRecordCameraButton = (ImageView) findViewById(R.id.add_record_camera_button);
-        mRecordUploadButton = (ImageView) findViewById(R.id.add_record_upload_button);
-        mRecordButton = (TextView) findViewById(R.id.add_record_record_button);
     }
 
-    private void setupActionBar() {
-        setSupportActionBar(mToolbar);
-        mActionBar = getSupportActionBar();
-
-        if (mActionBar != null) {
-            mActionBar.setDisplayShowTitleEnabled(false);
-            mActionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    private void setupViews() {
-        mRecordCameraButton.setOnClickListener(this);
-        mRecordUploadButton.setOnClickListener(this);
-        mRecordButton.setOnClickListener(this);
+    private void setupButton() {
     }
 
     private void setupFetchingAddress() {
@@ -97,7 +85,7 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     }
 
     private synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -115,58 +103,25 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         if (mGoogleApiClient.isConnected()) {
             startLocationUpdates();
         }
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         stopLocationUpdates();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-
-            default:
-                return false;
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
         }
     }
 
     @Override
     public void onClick(View v) {
+        if (mOnDialogActionListener == null) return;
+
         switch (v.getId()) {
-            case R.id.add_record_camera_button:
-                break;
-
-            case R.id.add_record_upload_button:
-                break;
-
-            case R.id.add_record_record_button:
-                break;
         }
     }
 
@@ -184,10 +139,10 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void startFetchAddressIntentService() {
-        Intent intent = new Intent(this, FetchAddressIntentService.class);
+        Intent intent = new Intent(mContext, FetchAddressIntentService.class);
         intent.putExtra(FetchAddressIntentService.Constants.RECEIVER, mReceiver);
         intent.putExtra(FetchAddressIntentService.Constants.EXTRA_LOCATION_DATA, mCurrentLocation);
-        startService(intent);
+        mContext.startService(intent);
     }
 
     @Override

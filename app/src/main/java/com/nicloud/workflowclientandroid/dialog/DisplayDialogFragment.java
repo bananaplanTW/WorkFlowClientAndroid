@@ -21,7 +21,7 @@ public class DisplayDialogFragment extends DialogFragment {
     public static final class DialogType {
         public static final int COMPLETE_TASK = 0;
         public static final int CHOOSE_TASK = 1;
-        public static final int CHECK_IN_OUT = 2;
+        public static final int CHECK = 2;
     }
 
     public interface OnDialogActionListener {
@@ -30,6 +30,7 @@ public class DisplayDialogFragment extends DialogFragment {
         void onChooseTaskCancel();
         void onChooseTaskStartWork();
         void onChooseTaskLog();
+        void onCheck();
     }
 
     private OnDialogActionListener mOnDialogActionListener;
@@ -56,8 +57,8 @@ public class DisplayDialogFragment extends DialogFragment {
             case DialogType.CHOOSE_TASK:
                 return new ChooseTaskDialog(getActivity(), mOnDialogActionListener);
 
-            case DialogType.CHECK_IN_OUT:
-                return null;
+            case DialogType.CHECK:
+                return new CheckDialog(getActivity(), mOnDialogActionListener);
 
             default:
                 return new CompleteTaskDialog(getActivity(), mOnDialogActionListener);

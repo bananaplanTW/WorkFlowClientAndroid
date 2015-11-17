@@ -152,8 +152,8 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DialogType.CHOOSE_TASK);
                 break;
 
-            case DialogType.CHECK_IN_OUT:
-                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DialogType.CHECK_IN_OUT);
+            case DialogType.CHECK:
+                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DialogType.CHECK);
                 break;
         }
 
@@ -161,7 +161,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mDisplayDialogFragment.show(mFragmentManager, DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
     }
 
-    private void dismissCompleteTaskDialog() {
+    private void dismissDialog() {
         if (mDisplayDialogFragment == null) return;
         mDisplayDialogFragment.dismiss();
         mDisplayDialogFragment = null;
@@ -243,22 +243,22 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void onCompleteTaskOk() {
-        dismissCompleteTaskDialog();
+        dismissDialog();
     }
 
     public void onCompleteTaskCancel() {
-        dismissCompleteTaskDialog();
+        dismissDialog();
     }
 
     public void onChooseTaskCancel() {
-        dismissCompleteTaskDialog();
+        dismissDialog();
     }
 
     public void onChooseTaskStartWork() {
-        dismissCompleteTaskDialog();
+        dismissDialog();
     }
 
     public void onChooseTaskLog() {
-        dismissCompleteTaskDialog();
+        dismissDialog();
     }
 }

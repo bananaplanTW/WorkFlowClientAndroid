@@ -67,4 +67,9 @@ public class MainActivity extends AppCompatActivity implements DisplayDialogFrag
     public void onChooseTaskLog() {
         mUIController.onChooseTaskLog();
     }
+
+    @Override
+    public void onCheck() {
+        mUIController.onCheck();
+    }
 }

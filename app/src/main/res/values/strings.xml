@@ -42,5 +42,9 @@
 
     <!-- Dialog -->
     <string name="dialog_complete_task_text">Do you want to complete the task?</string>
+    <string name="dialog_check_in_time">Check in time</string>
+    <string name="dialog_check_out_time">Check out time</string>
+    <string name="dialog_have_not_check_out">Have not check out</string>
+    <string name="dialog_check_out">Check out</string>
 
 </resources>

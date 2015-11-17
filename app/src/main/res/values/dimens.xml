@@ -81,5 +81,11 @@
     <dimen name="dialog_button_corner_radius">2dp</dimen>
     <dimen name="dialog_button_margin_left_right">25dp</dimen>
     <dimen name="dialog_button_text_size">15dp</dimen>
+    <dimen name="dialog_check_date_text_size">25dp</dimen>
+    <dimen name="dialog_check_time_container_padding_top_bottom">25dp</dimen>
+    <dimen name="dialog_check_time_text_size">23dp</dimen>
+    <dimen name="dialog_check_time_margin_top">8dp</dimen>
+    <dimen name="dialog_check_current_time_location_padding_top_bottom">8dp</dimen>
+    <dimen name="dialog_check_current_time_drawable_padding">5dp</dimen>
 
 </resources>

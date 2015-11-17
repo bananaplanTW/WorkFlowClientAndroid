@@ -35,5 +35,9 @@
 
     <!-- Dialog -->
     <string name="dialog_complete_task_text">確定要完成工作？</string>
+    <string name="dialog_check_in_time">上班時間</string>
+    <string name="dialog_check_out_time">下班時間</string>
+    <string name="dialog_have_not_check_out">尚未下班</string>
+    <string name="dialog_check_out">打卡下班</string>
 
 </resources>

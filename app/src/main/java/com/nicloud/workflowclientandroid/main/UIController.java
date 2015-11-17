@@ -2,6 +2,7 @@ package com.nicloud.workflowclientandroid.main;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,14 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.MainApplication;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.data.loading.LoadingDataTask;
 import com.nicloud.workflowclientandroid.data.loading.LoadingDataTask.OnFinishLoadingDataListener;
-import com.nicloud.workflowclientandroid.data.worker.CheckinCommand;
+import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter.ItemViewType;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListItem;
@@ -48,6 +48,9 @@ public class UIController implements View.OnClickListener {
     private LinearLayoutManager mTasksListManager;
     private TasksListAdapter mTasksListAdapter;
     private List<TasksListItem> mTasksDataSet = new ArrayList<>();
+
+    private FragmentManager mFragmentManager;
+    private DisplayDialogFragment mDisplayDialogFragment;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -129,7 +132,23 @@ public class UIController implements View.OnClickListener {
         mTasksListAdapter.onChooseTaskLog();
     }
 
+    public void onCheck() {
+//        CheckinCommand checkinCommand = new CheckinCommand(mMainActivity, new CheckinCommand.OnFinishCheckinStatusListener() {
+//            @Override
+//            public void onFinished() {
+//                Toast.makeText(mMainActivity, "Success!", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onFailed() {
+//                Toast.makeText(mMainActivity, "fail!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        checkinCommand.execute();
+    }
+
     private void initialize() {
+        mFragmentManager = mMainActivity.getSupportFragmentManager();
         findViews();
         setupViews();
         setupActionbar();
@@ -162,7 +181,7 @@ public class UIController implements View.OnClickListener {
 
     private void setupTasksList() {
         mTasksListManager = new LinearLayoutManager(mMainActivity);
-        mTasksListAdapter = new TasksListAdapter(mMainActivity, mMainActivity.getSupportFragmentManager(), mTasksDataSet);
+        mTasksListAdapter = new TasksListAdapter(mMainActivity, mFragmentManager, mTasksDataSet);
 
         mTasksList.setLayoutManager(mTasksListManager);
         mTasksList.addItemDecoration(
@@ -250,19 +269,40 @@ public class UIController implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                CheckinCommand checkinCommand = new CheckinCommand(mMainActivity, new CheckinCommand.OnFinishCheckinStatusListener() {
-                    @Override
-                    public void onFinished() {
-                        Toast.makeText(mMainActivity, "Success!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailed() {
-                        Toast.makeText(mMainActivity, "fail!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                checkinCommand.execute();
+                showDialog(DisplayDialogFragment.DialogType.CHECK);
                 break;
         }
+    }
+
+    private void showDialog(int type) {
+        mDisplayDialogFragment =
+                (DisplayDialogFragment) mFragmentManager.findFragmentByTag(DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
+        if (mDisplayDialogFragment == null) {
+            mDisplayDialogFragment = new DisplayDialogFragment();
+        }
+
+        Bundle bundle = new Bundle();
+        switch (type) {
+            case DisplayDialogFragment.DialogType.COMPLETE_TASK:
+                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.COMPLETE_TASK);
+                break;
+
+            case DisplayDialogFragment.DialogType.CHOOSE_TASK:
+                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.CHOOSE_TASK);
+                break;
+
+            case DisplayDialogFragment.DialogType.CHECK:
+                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.CHECK);
+                break;
+        }
+
+        mDisplayDialogFragment.setArguments(bundle);
+        mDisplayDialogFragment.show(mFragmentManager, DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
+    }
+
+    private void dismissDialog() {
+        if (mDisplayDialogFragment == null) return;
+        mDisplayDialogFragment.dismiss();
+        mDisplayDialogFragment = null;
     }
 }
