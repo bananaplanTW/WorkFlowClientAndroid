@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nicloud.workflowclientandroid.R;
-import com.nicloud.workflowclientandroid.data.Task;
+import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter.ItemViewType;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListItem;

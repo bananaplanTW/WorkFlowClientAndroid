@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.data;
+package com.nicloud.workflowclientandroid.data.data;
 
 /**
  * Created by logicmelody on 2015/11/11.
