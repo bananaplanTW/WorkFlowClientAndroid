@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/no_internet_connection_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/no_internet_connection_text_size"
+            android:textColor="@color/no_internet_connection_text_color"
+            android:text="@string/no_internet_connection"/>
+
+        <Button
+            android:id="@+id/no_internet_connection_retry_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/no_internet_connection_retry_button_margin_top"
+            android:text="@string/retry"
+            android:textSize="@dimen/no_internet_connection_retry_button_text_size"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/no_internet_connection_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

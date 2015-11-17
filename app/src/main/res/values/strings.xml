@@ -21,6 +21,16 @@
     <string name="record">Record</string>
     <string name="cancel">Cancel</string>
     <string name="start_work">Start work</string>
+    <string name="no_internet_connection">Check your connection and try again.</string>
+    <string name="no_internet_connection_information">Some information can not display normally. Check your connection and try again.</string>
+    <string name="error_account_password">Account or password is not correct.</string>
+    <string name="retry">Retry</string>
+
+    <!-- Login -->
+    <string name="login_account">Account</string>
+    <string name="login_password">Password</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
 
     <!-- Record Log -->
     <string name="record_log_tab_text">Text</string>

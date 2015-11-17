@@ -14,6 +14,16 @@
     <string name="record">記錄</string>
     <string name="cancel">取消</string>
     <string name="start_work">開始工作</string>
+    <string name="no_internet_connection">請檢查您的連線狀態，然後再試一次。</string>
+    <string name="no_internet_connection_information">有些資訊無法正常顯示，請檢查您的連線狀態，然後再試一次。</string>
+    <string name="error_account_password">帳號密碼錯誤。</string>
+    <string name="retry">重試</string>
+
+    <!-- Login -->
+    <string name="login_account">帳號</string>
+    <string name="login_password">密碼</string>
+    <string name="login">登入</string>
+    <string name="logout">登出</string>
 
     <!-- Record Log -->
     <string name="record_log_tab_text">文字</string>
