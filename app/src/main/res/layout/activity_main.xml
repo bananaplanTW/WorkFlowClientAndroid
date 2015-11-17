@@ -60,75 +60,18 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/tasks_list"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            android:layout_height="match_parent">
 
-        <!--
-        <LinearLayout
-            android:id="@+id/working_time_container"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/working_time_container_height"
-            android:layout_gravity="bottom"
-            android:background="@color/working_time_container_background_color"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/working_time_container_padding_left_right"
-            android:paddingRight="@dimen/working_time_container_padding_left_right">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/tasks_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="@string/working_time"
-                android:textColor="@color/working_time_container_text_color"
-                android:textSize="@dimen/working_time_container_working_time_text_size" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/check_in_time"
-                    android:textColor="@color/working_time_container_text_color"
-                    android:textSize="@dimen/working_time_container_check_in_time_text_size" />
-
-                <TextView
-                    android:id="@+id/start_working_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="07:30"
-                    android:textColor="@color/working_time_container_text_color"
-                    android:textSize="@dimen/working_time_container_start_working_time_text_size" />
-
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:src="@drawable/ic_arrow_forward" />
-
-            <TextView
-                android:id="@+id/check_in_out_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:text="@string/check_out"
-                android:textColor="@color/working_time_container_text_color"
-                android:textSize="@dimen/working_time_container_check_in_out_button_text_size" />
-
-        </LinearLayout>
-        -->
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 
@@ -142,6 +85,7 @@
         app:fabSize="normal"
         app:layout_anchor="@id/tasks_list"
         app:layout_anchorGravity="bottom|right|end"
-        app:layout_behavior="com.nicloud.workflowclientandroid.main.ScrollAwareFabBehavior"/>
+        app:layout_behavior="com.nicloud.workflowclientandroid.main.ScrollAwareFabBehavior"
+        android:visibility="gone"/>
 
 </android.support.design.widget.CoordinatorLayout>
