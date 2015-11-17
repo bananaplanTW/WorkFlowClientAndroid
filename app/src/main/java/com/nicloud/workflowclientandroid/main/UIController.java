@@ -11,9 +11,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
+import com.nicloud.workflowclientandroid.data.worker.CheckinCommand;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter.ItemViewType;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListItem;
@@ -162,7 +164,18 @@ public class UIController implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                Log.d("DAZZZZ", "2341");
+                CheckinCommand checkinCommand = new CheckinCommand(mMainActivity, new CheckinCommand.OnFinishCheckinStatusListener() {
+                    @Override
+                    public void onFinished() {
+                        Toast.makeText(mMainActivity, "Success!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        Toast.makeText(mMainActivity, "fail!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                checkinCommand.execute();
                 break;
         }
     }

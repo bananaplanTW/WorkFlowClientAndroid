@@ -2,6 +2,7 @@ package com.nicloud.workflowclientandroid.data.worker;
 
 import android.util.Log;
 
+import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.loading.LoadingDataUtils;
 import com.nicloud.workflowclientandroid.data.restful.IPostRequestStrategy;
 import com.nicloud.workflowclientandroid.data.utility.RestfulUtils;
@@ -26,10 +27,8 @@ public class CheckinStrategy implements IPostRequestStrategy {
     public JSONObject post() {
         try {
             HashMap<String, String> headers = new HashMap<>();
-//            headers.put("x-user-id", WorkingData.getUserId());
-//            headers.put("x-auth-token", WorkingData.getAuthToken());
-            headers.put("x-user-id", "fake user id");
-            headers.put("x-auth-token", "fake user token");
+            headers.put("x-user-id", WorkingData.getUserId());
+            headers.put("x-auth-token", WorkingData.getAuthToken());
 
 
             HashMap<String, String> bodies = new HashMap<>();
