@@ -1,20 +1,26 @@
-package com.nicloud.workflowclientandroid.record;
+package com.nicloud.workflowclientandroid.record.log;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
+import com.nicloud.workflowclientandroid.record.add.AddRecordActivity;
+import com.nicloud.workflowclientandroid.utility.DividerItemDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTabChangeListener {
 
@@ -32,6 +38,11 @@ public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTa
 
     private TabHost mRecordLogTabHost;
 
+    private RecyclerView mRecordLogListView;
+    private LinearLayoutManager mRecordLogListViewLayoutManager;
+    private RecordLogListAdapter mRecordLogListAdapter;
+    private List<Record> mRecordLogListDataSet = new ArrayList<>();
+
     private class RecordLogTabContentFactory implements TabHost.TabContentFactory {
 
         private Context mContext;
@@ -48,7 +59,6 @@ public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTa
             v.setVisibility(View.GONE);
             return v;
         }
-
     }
 
 
@@ -63,6 +73,7 @@ public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTa
         findViews();
         setupActionBar();
         setupTabs();
+        setupRecordLog();
     }
 
     private void findViews() {
@@ -70,6 +81,7 @@ public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTa
         mRecordTaskName = (TextView) findViewById(R.id.record_log_task_name);
         mRecordCaseName = (TextView) findViewById(R.id.record_log_case_name);
         mRecordLogTabHost = (TabHost) findViewById(R.id.record_log_tab_host);
+        mRecordLogListView = (RecyclerView) findViewById(R.id.record_log_list);
     }
 
     private void setupActionBar() {
@@ -91,6 +103,22 @@ public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTa
         addTab(TabTag.PHOTO);
         addTab(TabTag.FILE);
         mRecordLogTabHost.setOnTabChangedListener(this);
+    }
+
+    private void setupRecordLog() {
+        setRecordLogData();
+
+        mRecordLogListViewLayoutManager = new LinearLayoutManager(this);
+        mRecordLogListAdapter = new RecordLogListAdapter(this, mRecordLogListDataSet);
+
+        mRecordLogListView.setLayoutManager(mRecordLogListViewLayoutManager);
+        mRecordLogListView.addItemDecoration(
+                new DividerItemDecoration(getResources().getDrawable(R.drawable.list_divider), false, true));
+        mRecordLogListView.setAdapter(mRecordLogListAdapter);
+    }
+
+    private void setRecordLogData() {
+        mRecordLogListDataSet.add(new Record("Danny", "多益公司的進項與之前不同 下次審查要注意", "2015/11/12 12:06 pm"));
     }
 
     private void addTab(String tag) {

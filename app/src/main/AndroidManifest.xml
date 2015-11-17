@@ -27,11 +27,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".record.AddRecordActivity"
+            android:name=".record.add.AddRecordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.WhiteBackground" />
         <activity
-            android:name=".record.RecordLogActivity"
+            android:name=".record.log.RecordLogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.WhiteBackground" />
 

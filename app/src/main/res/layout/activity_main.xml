@@ -28,7 +28,7 @@
                     android:layout_height="@dimen/worker_icon_width_height"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_action_bar_worker" />
+                    android:src="@drawable/ic_worker" />
 
                 <LinearLayout
                     android:id="@+id/action_bar_title_container"

@@ -14,7 +14,7 @@ import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.DialogType;
-import com.nicloud.workflowclientandroid.record.RecordLogActivity;
+import com.nicloud.workflowclientandroid.record.log.RecordLogActivity;
 
 import java.util.List;
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/record_log_list_item_min_height"
+    android:padding="@dimen/record_log_list_item_padding" >
+
+    <ImageView
+        android:id="@+id/record_user_icon"
+        android:layout_width="@dimen/worker_icon_width_height"
+        android:layout_height="@dimen/worker_icon_width_height"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_worker" />
+
+    <RelativeLayout
+        android:id="@+id/record_title_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/record_log_list_item_title_container_margin_left"
+        android:layout_toRightOf="@+id/record_user_icon"
+        android:layout_alignTop="@+id/record_user_icon">
+
+        <TextView
+            android:id="@+id/record_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textSize="@dimen/record_log_list_item_user_name_text_size"
+            android:textColor="@color/record_log_list_item_content_text_color"/>
+
+        <TextView
+            android:id="@+id/record_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/record_log_list_item_timestamp_text_size"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/record_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/record_log_list_item_content_margin_top"
+        android:layout_below="@+id/record_title_container"
+        android:layout_alignLeft="@+id/record_title_container"
+        android:textSize="@dimen/record_log_list_item_content_text_size"
+        android:textColor="@color/record_log_list_item_content_text_color"/>
+
+</RelativeLayout>

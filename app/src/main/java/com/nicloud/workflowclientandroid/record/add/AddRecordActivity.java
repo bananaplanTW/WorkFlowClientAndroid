@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.record;
+package com.nicloud.workflowclientandroid.record.add;
 
 import android.content.Intent;
 import android.location.Geocoder;
