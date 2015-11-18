@@ -15,6 +15,7 @@ import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.DialogType;
 import com.nicloud.workflowclientandroid.record.log.RecordLogActivity;
+import com.nicloud.workflowclientandroid.utility.Utilities;
 
 import java.util.List;
 
@@ -47,7 +48,9 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private class WipTaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public View view;
+        public View wipTaskCardView;
+        public View noWipTaskCardView;
+        public TextView chooseTaskText;
         public TextView wipTaskName;
         public TextView wipCaseName;
         public TextView wipWorkingTime;
@@ -61,7 +64,9 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         private void findViews(View view) {
-            this.view = view;
+            wipTaskCardView = view.findViewById(R.id.wip_task_card_view);
+            noWipTaskCardView = view.findViewById(R.id.no_wip_task_card_view);
+            chooseTaskText = (TextView) view.findViewById(R.id.no_wip_task_card_choose_task_text);
             wipTaskName = (TextView) view.findViewById(R.id.wip_task_card_task_name);
             wipCaseName = (TextView) view.findViewById(R.id.wip_task_card_case_name);
             wipWorkingTime = (TextView) view.findViewById(R.id.wip_task_card_working_time);
@@ -70,14 +75,9 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         private void setupViews() {
+            wipTaskCardView.setOnClickListener(this);
             pauseButton.setOnClickListener(this);
             completeButton.setOnClickListener(this);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goToRecordLogActivity();
-                }
-            });
         }
 
         @Override
@@ -88,6 +88,10 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 case R.id.wip_task_card_complete_button:
                     showDialog(DialogType.COMPLETE_TASK);
+                    break;
+
+                case R.id.wip_task_card_view:
+                    goToRecordLogActivity();
                     break;
             }
         }
@@ -211,9 +215,20 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void bindWipTaskViewHolder(WipTaskViewHolder holder, Task task) {
-        holder.wipTaskName.setText(task.name);
-        holder.wipCaseName.setText(task.caseId);
-        holder.wipWorkingTime.setText("02:51:33");
+        if (task == null) {
+            holder.wipTaskCardView.setVisibility(View.GONE);
+            holder.noWipTaskCardView.setVisibility(View.VISIBLE);
+
+            holder.chooseTaskText.setVisibility(View.VISIBLE);
+
+        } else {
+            holder.wipTaskCardView.setVisibility(View.VISIBLE);
+            holder.noWipTaskCardView.setVisibility(View.GONE);
+
+            holder.wipTaskName.setText(task.name);
+            holder.wipCaseName.setText(task.caseId);
+            holder.wipWorkingTime.setText(Utilities.millisecondsToTimeString(task.getWorkingTime()));
+        }
     }
 
     private void bindScheduledTaskViewHolder(ScheduledTaskViewHolder holder, Task task, int position) {

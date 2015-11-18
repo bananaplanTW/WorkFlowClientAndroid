@@ -1,80 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/wip_task_card_height"
-    android:orientation="vertical"
-    android:background="@drawable/wip_task_card_background">
+    android:layout_height="@dimen/wip_task_card_height">
 
-    <LinearLayout
-        android:id="@+id/wip_task_card_information_container"
+    <RelativeLayout
+        android:id="@+id/no_wip_task_card_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingLeft="@dimen/wip_task_card_information_container_padding_left_right"
-        android:paddingRight="@dimen/wip_task_card_information_container_padding_left_right"
-        android:paddingTop="@dimen/wip_task_card_information_container_padding_top_bottom"
-        android:paddingBottom="@dimen/wip_task_card_information_container_padding_top_bottom"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:background="@color/no_wip_task_card_background_color"
+        android:visibility="gone">
 
         <TextView
-            android:id="@+id/wip_task_card_task_name"
+            android:id="@+id/no_wip_task_card_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/title_task_name_text_color"
-            android:textSize="@dimen/title_information_text_size" />
+            android:layout_centerInParent="true"
+            android:textStyle="bold"
+            android:textColor="@color/wip_task_card_no_wip_task_text_color"
+            android:textSize="@dimen/wip_task_card_no_wip_task_text_size"
+            android:text="@string/wip_task_card_prepare_for_next_task"/>
 
         <TextView
-            android:id="@+id/wip_task_card_case_name"
+            android:id="@+id/no_wip_task_card_choose_task_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/title_case_name_text_color"
-            android:textSize="@dimen/title_information_text_size" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/wip_task_card_choose_task_text_margin_top"
+            android:layout_below="@+id/no_wip_task_card_text"
+            android:gravity="center_vertical"
+            android:textColor="@color/wip_task_card_no_wip_task_text_color"
+            android:drawableLeft="@drawable/ic_arrow_down"
+            android:drawablePadding="@dimen/wip_task_card_choose_task_drawable_padding"
+            android:text="@string/wip_task_card_choose_task"/>
 
-    </LinearLayout>
-
-    <include layout="@layout/horizontal_divider" />
-
-    <TextView
-        android:id="@+id/wip_task_card_working_time"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textSize="@dimen/wip_task_card_working_time_text_size" />
-
-    <include layout="@layout/horizontal_divider" />
+    </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/wip_task_card_button_container"
+        android:id="@+id/wip_task_card_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/wip_task_card_button_container_height"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/wip_task_card_background">
 
         <LinearLayout
-            android:id="@+id/wip_task_card_pause_button"
-            style="@style/WipTaskCardButtonStyle">
+            android:id="@+id/wip_task_card_information_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/wip_task_card_information_container_padding_left_right"
+            android:paddingRight="@dimen/wip_task_card_information_container_padding_left_right"
+            android:paddingTop="@dimen/wip_task_card_information_container_padding_top_bottom"
+            android:paddingBottom="@dimen/wip_task_card_information_container_padding_top_bottom"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
             <TextView
-                style="@style/WipTaskCardButtonTextStyle"
-                android:text="@string/pause"
-                android:drawableLeft="@drawable/ic_pause" />
+                android:id="@+id/wip_task_card_task_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/title_task_name_text_color"
+                android:textSize="@dimen/title_information_text_size" />
+
+            <TextView
+                android:id="@+id/wip_task_card_case_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/title_case_name_text_color"
+                android:textSize="@dimen/title_information_text_size" />
 
         </LinearLayout>
 
-        <include layout="@layout/vertical_divider" />
+        <include layout="@layout/horizontal_divider" />
+
+        <TextView
+            android:id="@+id/wip_task_card_working_time"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="@dimen/wip_task_card_working_time_text_size" />
+
+        <include layout="@layout/horizontal_divider" />
 
         <LinearLayout
-            android:id="@+id/wip_task_card_complete_button"
-            style="@style/WipTaskCardButtonStyle">
+            android:id="@+id/wip_task_card_button_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/wip_task_card_button_container_height"
+            android:orientation="horizontal">
 
-            <TextView
-                style="@style/WipTaskCardButtonTextStyle"
-                android:text="@string/complete"
-                android:drawableLeft="@drawable/ic_complete" />
+            <LinearLayout
+                android:id="@+id/wip_task_card_pause_button"
+                style="@style/WipTaskCardButtonStyle">
+
+                <TextView
+                    style="@style/WipTaskCardButtonTextStyle"
+                    android:text="@string/pause"
+                    android:drawableLeft="@drawable/ic_pause" />
+
+            </LinearLayout>
+
+            <include layout="@layout/vertical_divider" />
+
+            <LinearLayout
+                android:id="@+id/wip_task_card_complete_button"
+                style="@style/WipTaskCardButtonStyle">
+
+                <TextView
+                    style="@style/WipTaskCardButtonTextStyle"
+                    android:text="@string/complete"
+                    android:drawableLeft="@drawable/ic_complete" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

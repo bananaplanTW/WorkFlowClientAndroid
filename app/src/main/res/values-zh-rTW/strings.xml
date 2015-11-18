@@ -19,6 +19,10 @@
     <string name="retry">重試</string>
     <string name="date_format_mm_dd">%1$s月%2$s日</string>
 
+    <!-- Main -->
+    <string name="wip_task_card_prepare_for_next_task">準備下一項工作中</string>
+    <string name="wip_task_card_choose_task">點取下方工作開始工作</string>
+
     <!-- Login -->
     <string name="login_account">帳號</string>
     <string name="login_password">密碼</string>

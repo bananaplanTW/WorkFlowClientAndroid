@@ -304,15 +304,18 @@ public class LoadingDataUtils {
             String taskJsonString = RestfulUtils.restfulGetRequest(getTasksByWorkerUrl(workerId), headers);
 
             JSONObject taskJson = new JSONObject(taskJsonString).getJSONObject("result");
-            JSONObject wipTaskJson = taskJson.getJSONObject("WIPTask");
-            JSONArray scheduledTaskJsonList = taskJson.getJSONArray("scheduledTasks");
+            JSONObject wipTaskJson = getJsonObjectFromJson(taskJson, "WIPTask");
+            JSONArray scheduledTaskJsonList = getJsonArrayFromJson(taskJson, "scheduledTasks");
 
-            WorkingData.getInstance(context).setWipTask(retrieveTaskFromJson(context, wipTaskJson));
+            WorkingData.getInstance(context)
+                    .setWipTask(wipTaskJson != null ? retrieveTaskFromJson(context, wipTaskJson) : null);
 
             WorkingData.getInstance(context).clearScheduledTasks();
-            for (int i = 0 ; i < scheduledTaskJsonList.length() ; i++) {
-                JSONObject scheduledTaskJson = scheduledTaskJsonList.getJSONObject(i);
-                WorkingData.getInstance(context).addScheduledTask(retrieveTaskFromJson(context, scheduledTaskJson));
+            if (scheduledTaskJsonList != null) {
+                for (int i = 0; i < scheduledTaskJsonList.length(); i++) {
+                    JSONObject scheduledTaskJson = scheduledTaskJsonList.getJSONObject(i);
+                    WorkingData.getInstance(context).addScheduledTask(retrieveTaskFromJson(context, scheduledTaskJson));
+                }
             }
 
         } catch (JSONException e) {
@@ -1215,5 +1218,8 @@ public class LoadingDataUtils {
     }
     private static JSONObject getJsonObjectFromJson(JSONObject jsonObject, String key) throws JSONException {
         return jsonObject.has(key) ? jsonObject.getJSONObject(key) : null;
+    }
+    private static JSONArray getJsonArrayFromJson(JSONObject jsonObject, String key) throws JSONException {
+        return jsonObject.has(key) ? jsonObject.getJSONArray(key) : null;
     }
 }
