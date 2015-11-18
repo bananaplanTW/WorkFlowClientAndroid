@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.nicloud.workflowclientandroid.data.data.Task;
+import com.nicloud.workflowclientandroid.data.data.Worker;
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.utility.RestfulUtils;
 
@@ -11,8 +12,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -44,6 +47,7 @@ public class LoadingDataUtils {
         public static final String WORKER_ATTENDANCE = BASE_URL + "/api/employee/leaves?employeeId=%s&startDate=%d&endDate=%d";
 
         public static final class EndPoints {
+            public static final String LOGIN_WORKER = "/api/self";
             public static final String EMPLOYEES = "/api/employees";
             public static final String WARNINGS = "/api/exceptions";
             public static final String TASK_WARNINGS = "/api/task-exceptions";
@@ -863,63 +867,63 @@ public class LoadingDataUtils {
 //
 //        return null;
 //    }
-//    private static Worker retrieveWorkerFromJson(Context context, JSONObject workerJson) {
-//        try {
-//            JSONObject paymentJson = workerJson.getJSONObject("paymentClassification");
-//            JSONObject equipmentJson = getJsonObjectFromJson(workerJson, "resource");
-//            JSONArray scheduledTaskJsonList = workerJson.getJSONArray("scheduledTaskIds");
-//
-//            String id = workerJson.getString("_id");
-//            String name = workerJson.getJSONObject("profile").getString("name");
-//            String factoryId = getStringFromJson(workerJson, "groupId");
-//            String equipmentId = "";
-//            String wipTaskId = getStringFromJson(workerJson, "WIPTaskId");
-//            String address = getStringFromJson(workerJson, "address");
-//            String phone = getStringFromJson(workerJson, "phone");
-//
-//            if (equipmentJson != null) {
-//                equipmentId = equipmentJson.getString("_id");
-//                addEquipmentToWorkingData(context, equipmentJson);
-//            }
-//
-//            int score = workerJson.getInt("score");
-//            long lastUpdatedTime = workerJson.getLong("updatedAt");
-//            boolean isOvertime = workerJson.getBoolean("overwork");
-//
-//            Worker.Status status = Worker.convertStringToStatus(workerJson.getString("status"));
-//
-//            Worker.PaymentClassification payment =
-//                    new Worker.PaymentClassification(paymentJson.getString("type"),
-//                                                     paymentJson.getDouble("base"),
-//                                                     paymentJson.getDouble("hourlyPayment"),
-//                                                     paymentJson.getDouble("overtimeBase"));
-//
-//            List<String> scheduledTaskIds = new ArrayList<>();
-//            for (int st = 0 ; st < scheduledTaskJsonList.length() ; st++) {
-//                scheduledTaskIds.add(scheduledTaskJsonList.getString(st));
-//            }
-//
-//            return new Worker(
-//                    context,
-//                    id,
-//                    name,
-//                    factoryId,
-//                    wipTaskId,
-//                    address,
-//                    phone,score,
-//                    isOvertime,
-//                    status,
-//                    payment,
-//                    scheduledTaskIds,
-//                    lastUpdatedTime);
-//
-//        } catch (JSONException e) {
-//            Log.e(TAG, "Exception in retrieveWorkerFromJson()");
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
+    public static Worker retrieveWorkerFromJson(Context context, JSONObject workerJson) {
+        try {
+            JSONObject paymentJson = workerJson.getJSONObject("paymentClassification");
+            JSONObject equipmentJson = getJsonObjectFromJson(workerJson, "resource");
+            JSONArray scheduledTaskJsonList = workerJson.getJSONArray("scheduledTaskIds");
+
+            String id = workerJson.getString("_id");
+            String name = workerJson.getJSONObject("profile").getString("name");
+            String factoryId = getStringFromJson(workerJson, "groupId");
+            String equipmentId = "";
+            String wipTaskId = getStringFromJson(workerJson, "WIPTaskId");
+            String address = getStringFromJson(workerJson, "address");
+            String phone = getStringFromJson(workerJson, "phone");
+
+            if (equipmentJson != null) {
+                equipmentId = equipmentJson.getString("_id");
+                //addEquipmentToWorkingData(context, equipmentJson);
+            }
+
+            int score = workerJson.getInt("score");
+            long lastUpdatedTime = workerJson.getLong("updatedAt");
+            boolean isOvertime = workerJson.getBoolean("overwork");
+
+            Worker.Status status = Worker.convertStringToStatus(workerJson.getString("status"));
+
+            Worker.PaymentClassification payment =
+                    new Worker.PaymentClassification(paymentJson.getString("type"),
+                                                     paymentJson.getDouble("base"),
+                                                     paymentJson.getDouble("hourlyPayment"),
+                                                     paymentJson.getDouble("overtimeBase"));
+
+            List<String> scheduledTaskIds = new ArrayList<>();
+            for (int st = 0 ; st < scheduledTaskJsonList.length() ; st++) {
+                scheduledTaskIds.add(scheduledTaskJsonList.getString(st));
+            }
+
+            return new Worker(
+                    context,
+                    id,
+                    name,
+                    factoryId,
+                    wipTaskId,
+                    address,
+                    phone,score,
+                    isOvertime,
+                    status,
+                    payment,
+                    scheduledTaskIds,
+                    lastUpdatedTime);
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Exception in retrieveWorkerFromJson()");
+            e.printStackTrace();
+        }
+
+        return null;
+    }
     private static Task retrieveTaskFromJson(Context context, JSONObject taskJson) {
         try {
             JSONArray warningJsonList = taskJson.getJSONArray("taskExceptions");

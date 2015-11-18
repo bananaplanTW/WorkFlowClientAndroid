@@ -16,13 +16,14 @@ import android.widget.Toast;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.worker.CheckLoggedInStatusCommand;
+import com.nicloud.workflowclientandroid.data.worker.LoadingLoginWorkerCommand;
 import com.nicloud.workflowclientandroid.data.worker.UserLoggingInCommand;
 import com.nicloud.workflowclientandroid.main.MainActivity;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
         CheckLoggedInStatusCommand.OnFinishCheckingLoggedInStatusListener,
-        UserLoggingInCommand.OnFinishLoggedInListener {
+        UserLoggingInCommand.OnFinishLoggedInListener, LoadingLoginWorkerCommand.OnLoadingLoginWorker {
 
     public static final long NICLOUD_LOGO_DISPLAYING_INTERVAL = 1000L;
 
@@ -113,19 +114,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.no_internet_connection_retry_button:
-                mNICContainer.startAnimation(mFadeOutAnimation);
-                mNiCloudImage.startAnimation(mFadeInAnimation);
-                mNICContainer.setVisibility(View.GONE);
-                mNiCloudImage.setVisibility(View.VISIBLE);
+                showNiCloudImage(true);
                 checkLoggedInStatus();
 
                 break;
         }
     }
 
+    private void showNiCloudImage(boolean isDisplayed) {
+        if (isDisplayed) {
+            mNICContainer.startAnimation(mFadeOutAnimation);
+            mNiCloudImage.startAnimation(mFadeInAnimation);
+            mNICContainer.setVisibility(View.GONE);
+            mNiCloudImage.setVisibility(View.VISIBLE);
+        } else {
+            mNICContainer.startAnimation(mFadeInAnimation);
+            mNiCloudImage.startAnimation(mFadeOutAnimation);
+            mNICContainer.setVisibility(View.VISIBLE);
+            mNiCloudImage.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public void onLoggedIn() {
-        goToMainActivity();
+        loadingLoginWorker();
     }
 
     private void goToMainActivity() {
@@ -138,10 +150,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onLoggedOut(boolean isFailCausedByInternet) {
         if (isFailCausedByInternet) {
-            mNICContainer.startAnimation(mFadeInAnimation);
-            mNiCloudImage.startAnimation(mFadeOutAnimation);
-            mNICContainer.setVisibility(View.VISIBLE);
-            mNiCloudImage.setVisibility(View.GONE);
+            showNiCloudImage(false);
         } else {
             showAllViews();
         }
@@ -155,7 +164,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         //ParsePush.subscribeInBackground("user_" + userId);
 
-        goToMainActivity();
+        loadingLoginWorker();
+    }
+
+    private void loadingLoginWorker() {
+        LoadingLoginWorkerCommand loadingLoginWorkerCommand = new LoadingLoginWorkerCommand(this, this);
+        loadingLoginWorkerCommand.execute();
     }
 
     @Override
@@ -165,5 +179,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else {
             Toast.makeText(this, getString(R.string.error_account_password), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onLoadingLoginWorkerSuccessful() {
+        goToMainActivity();
+    }
+
+    @Override
+    public void onLoadingLoginWorkerFailed(boolean isFailCausedByInternet) {
+        showNiCloudImage(false);
     }
 }

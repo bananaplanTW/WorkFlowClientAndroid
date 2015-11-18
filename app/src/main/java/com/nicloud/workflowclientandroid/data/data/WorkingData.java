@@ -46,6 +46,8 @@ public final class WorkingData implements DataSubject {
     private static String sUserId;
     private static String sAuthToken;
 
+    private Worker mLoginWorker;
+
     private Task mWipTask;
     private List<Task> mScheduledTasks = new ArrayList<>();
 
@@ -93,6 +95,14 @@ public final class WorkingData implements DataSubject {
     }
     public static String getAuthToken() {
         return sAuthToken;
+    }
+
+
+    public void setLoginWorker(Worker worker) {
+        mLoginWorker = worker;
+    }
+    public Worker getLoginWorker() {
+        return mLoginWorker;
     }
 
 

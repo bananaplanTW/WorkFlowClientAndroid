@@ -37,14 +37,12 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/action_bar_title_container_margin_left"
                     android:layout_toRightOf="@+id/action_bar_worker"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/action_bar_worker_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Danny Lin"
                         android:textColor="@color/action_bar_title_text_color"
                         android:textSize="@dimen/action_bar_worker_name_text_size" />
 
@@ -52,7 +50,6 @@
                         android:id="@+id/action_bar_subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="nicloud"
                         android:textColor="@color/action_bar_title_text_color" />
 
                 </LinearLayout>

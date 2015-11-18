@@ -12,8 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
-import com.nicloud.workflowclientandroid.MainApplication;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
@@ -41,7 +41,9 @@ public class UIController implements View.OnClickListener {
     private AppCompatActivity mMainActivity;
     private ActionBar mActionBar;
     private Toolbar mToolbar;
-    private View mActionBarTitleContainer;
+
+    private TextView mActionBarWorkerName;
+    private TextView mActionBarSubtitle;
 
     private FloatingActionButton mFab;
 
@@ -60,10 +62,6 @@ public class UIController implements View.OnClickListener {
         public void onFinishLoadingData() {
             if (mFirstLaunch) {
                 forceHideRefreshSpinner();
-
-                mActionBarTitleContainer.startAnimation(MainApplication.sFadeInAnimation);
-                mActionBarTitleContainer.setVisibility(View.VISIBLE);
-
                 mFab.show();
 
                 mFirstLaunch = false;
@@ -159,12 +157,15 @@ public class UIController implements View.OnClickListener {
     }
 
     private void setupViews() {
+        mActionBarWorkerName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().name);
+        mActionBarSubtitle.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().address);
         mFab.setOnClickListener(this);
     }
 
     private void findViews() {
         mToolbar = (Toolbar) mMainActivity.findViewById(R.id.tool_bar);
-        mActionBarTitleContainer = mMainActivity.findViewById(R.id.action_bar_title_container);
+        mActionBarWorkerName = (TextView) mMainActivity.findViewById(R.id.action_bar_worker_name);
+        mActionBarSubtitle = (TextView) mMainActivity.findViewById(R.id.action_bar_subtitle);
         mFab = (FloatingActionButton) mMainActivity.findViewById(R.id.fab);
         mTasksList = (RecyclerView) mMainActivity.findViewById(R.id.tasks_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mMainActivity.findViewById(R.id.swipe_refresh_container);
