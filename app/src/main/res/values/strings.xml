@@ -47,4 +47,22 @@
     <string name="dialog_have_not_check_out">Have not check out</string>
     <string name="dialog_check_out">Check out</string>
 
+    <!-- Task status -->
+    <string name="task_status_unclaimed">Not start</string>
+    <string name="task_status_pending">In schedule</string>
+    <string name="task_status_wip">Working</string>
+    <string name="task_status_pause">Pause</string>
+    <string name="task_status_finished">Finish</string>
+    <string name="task_status_in_review">In Review</string>
+    <string name="task_status_warning">Warning</string>
+    <string name="task_status_stop">Stop</string>
+    <string name="task_status_cancel">Cancel</string>
+
+    <!-- Worker status -->
+    <string name="worker_status_off">Off</string>
+    <string name="worker_status_stop">Stop</string>
+    <string name="worker_status_pause">Pause</string>
+    <string name="worker_status_pending">Pending</string>
+    <string name="worker_status_wip">WIP</string>
+
 </resources>

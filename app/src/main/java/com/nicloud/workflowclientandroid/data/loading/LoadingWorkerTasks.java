@@ -3,14 +3,17 @@ package com.nicloud.workflowclientandroid.data.loading;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.nicloud.workflowclientandroid.data.data.WorkingData;
+import com.nicloud.workflowclientandroid.data.utility.RestfulUtils;
+
 
 /**
- * Async task to load data from server
+ * Async task to load tasks data from server
  *
  * @author Danny Lin
- * @since 2015/10/1.
+ * @since 2015/11/18.
  */
-public class LoadingDataTask extends AsyncTask<Void, Void, Void> {
+public class LoadingWorkerTasks extends AsyncTask<Void, Void, Void> {
 
     // [TODO] should move out to be a identical interface from here
     public interface OnFinishLoadingDataListener {
@@ -24,25 +27,20 @@ public class LoadingDataTask extends AsyncTask<Void, Void, Void> {
     private boolean isFailCausedByInternet = false;
 
 
-    public LoadingDataTask(Context context, OnFinishLoadingDataListener listener) {
+    public LoadingWorkerTasks(Context context, OnFinishLoadingDataListener listener) {
         mContext = context;
         mOnFinishLoadingDataListener = listener;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        if (RestfulUtils.isConnectToInternet(mContext)) {
+            LoadingDataUtils.loadTasksByWorker(mContext, WorkingData.getUserId());
 
-//        if (RestfulUtils.isConnectToInternet(mContext)) {
-//
-//        } else {
-//            isFailCausedByInternet = true;
-//            cancel(true);
-//        }
+        } else {
+            isFailCausedByInternet = true;
+            cancel(true);
+        }
 
         return null;
     }

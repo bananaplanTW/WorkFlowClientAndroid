@@ -5,16 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.nicloud.workflowclientandroid.MainApplication;
 import com.nicloud.workflowclientandroid.data.data.observer.DataObserver;
 import com.nicloud.workflowclientandroid.data.data.observer.DataSubject;
 import com.nicloud.workflowclientandroid.main.MinuteReceiver;
+import com.nicloud.workflowclientandroid.utility.Utilities;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -49,6 +45,9 @@ public final class WorkingData implements DataSubject {
 
     private static String sUserId;
     private static String sAuthToken;
+
+    private Task mWipTask;
+    private List<Task> mScheduledTasks = new ArrayList<>();
 
 
     public static WorkingData getInstance(Context context) {
@@ -95,6 +94,29 @@ public final class WorkingData implements DataSubject {
     public static String getAuthToken() {
         return sAuthToken;
     }
+
+
+    public void setWipTask(Task task) {
+        mWipTask = task;
+    }
+    public Task getWipTask() {
+        return mWipTask;
+    }
+
+
+    public void addScheduledTask(Task task) {
+        mScheduledTasks.add(task);
+    }
+    public void addAllScheduledTasks(List<Task> scheduledTasks) {
+        mScheduledTasks.addAll(scheduledTasks);
+    }
+    public void clearScheduledTasks() {
+        mScheduledTasks.clear();
+    }
+    public List<Task> getScheduledTasks() {
+        return mScheduledTasks;
+    }
+
 
     public void updateData() {
         notifyDataObservers();

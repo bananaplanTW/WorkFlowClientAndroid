@@ -16,8 +16,9 @@ import android.view.View;
 import com.nicloud.workflowclientandroid.MainApplication;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
-import com.nicloud.workflowclientandroid.data.loading.LoadingDataTask;
-import com.nicloud.workflowclientandroid.data.loading.LoadingDataTask.OnFinishLoadingDataListener;
+import com.nicloud.workflowclientandroid.data.data.WorkingData;
+import com.nicloud.workflowclientandroid.data.loading.LoadingWorkerTasks;
+import com.nicloud.workflowclientandroid.data.loading.LoadingWorkerTasks.OnFinishLoadingDataListener;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter.ItemViewType;
@@ -154,7 +155,7 @@ public class UIController implements View.OnClickListener {
         setupActionbar();
         setupTasksList();
         setupSwipeRefresh();
-        loadData();
+        loadDataInFirstLaunch();
     }
 
     private void setupViews() {
@@ -194,19 +195,20 @@ public class UIController implements View.OnClickListener {
 
             @Override
             public void onRefresh() {
-                //fetchTimelineAsync(0);
-                new LoadingDataTask(mMainActivity, mOnFinishLoadingDataListener).execute();
+                new LoadingWorkerTasks(mMainActivity, mOnFinishLoadingDataListener).execute();
             }
+
         });
+
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
     }
 
-    private void loadData() {
+    private void loadDataInFirstLaunch() {
         forceShowRefreshSpinner();
-        new LoadingDataTask(mMainActivity, mOnFinishLoadingDataListener).execute();
+        new LoadingWorkerTasks(mMainActivity, mOnFinishLoadingDataListener).execute();
     }
 
     /**
@@ -240,29 +242,13 @@ public class UIController implements View.OnClickListener {
 
         // WIP task
         mTasksDataSet.add(new TasksListItem(new Task(mMainActivity.getString(R.string.wip_task)), ItemViewType.TITLE));
-        mTasksDataSet.add(new TasksListItem(new Task("伺服器服務開發", "流程管理專案"), ItemViewType.WIP_TASK));
+        mTasksDataSet.add(new TasksListItem(WorkingData.getInstance(mMainActivity).getWipTask(), ItemViewType.WIP_TASK));
 
         // Scheduled task
         mTasksDataSet.add(new TasksListItem(new Task(mMainActivity.getString(R.string.next_task)), ItemViewType.TITLE));
-        mTasksDataSet.add(new TasksListItem(new Task("檢查伺服器", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("報表處理", "會計系統專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("開發iOS", "手機開發專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("設計UI", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
-        mTasksDataSet.add(new TasksListItem(new Task("跑客戶", "流程管理專案"), ItemViewType.SCHEDULED_TASK));
+        for (Task scheduledTask : WorkingData.getInstance(mMainActivity).getScheduledTasks()) {
+            mTasksDataSet.add(new TasksListItem(scheduledTask, ItemViewType.SCHEDULED_TASK));
+        }
     }
 
     @Override

@@ -207,19 +207,19 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void bindTitleViewHolder(TitleViewHolder holder, Task task) {
-        holder.title.setText(task.taskName);
+        holder.title.setText(task.name);
     }
 
     private void bindWipTaskViewHolder(WipTaskViewHolder holder, Task task) {
-        holder.wipTaskName.setText(task.taskName);
-        holder.wipCaseName.setText(task.caseName);
+        holder.wipTaskName.setText(task.name);
+        holder.wipCaseName.setText(task.caseId);
         holder.wipWorkingTime.setText("02:51:33");
     }
 
     private void bindScheduledTaskViewHolder(ScheduledTaskViewHolder holder, Task task, int position) {
         holder.taskIndex.setText(String.valueOf(position - 2));
-        holder.taskName.setText(task.taskName);
-        holder.caseName.setText(task.caseName);
+        holder.taskName.setText(task.name);
+        holder.caseName.setText(task.caseId);
     }
 
     @Override

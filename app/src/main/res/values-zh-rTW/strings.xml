@@ -40,4 +40,22 @@
     <string name="dialog_have_not_check_out">尚未下班</string>
     <string name="dialog_check_out">打卡下班</string>
 
+    <!-- Task status -->
+    <string name="task_status_unclaimed">尚無排程</string>
+    <string name="task_status_pending">已排程</string>
+    <string name="task_status_wip">正常工作中</string>
+    <string name="task_status_pause">暫停</string>
+    <string name="task_status_finished">已完成</string>
+    <string name="task_status_in_review">檢驗中</string>
+    <string name="task_status_warning">發生警訊</string>
+    <string name="task_status_stop">停止</string>
+    <string name="task_status_cancel">取消</string>
+
+    <!-- Worker status -->
+    <string name="worker_status_off">休假中</string>
+    <string name="worker_status_stop">非上班時段</string>
+    <string name="worker_status_pause">暫停工作</string>
+    <string name="worker_status_pending">無工作</string>
+    <string name="worker_status_wip">工作中</string>
+
 </resources>
