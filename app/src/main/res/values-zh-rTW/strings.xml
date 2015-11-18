@@ -2,7 +2,6 @@
 
     <string name="action_settings">設定</string>
     <string name="add_record">新增紀錄</string>
-
     <string name="working_time">工作時間</string>
     <string name="check_out">下班打卡</string>
     <string name="check_in">上班打卡</string>
@@ -18,6 +17,7 @@
     <string name="no_internet_connection_information">有些資訊無法正常顯示，請檢查您的連線狀態，然後再試一次。</string>
     <string name="error_account_password">帳號密碼錯誤。</string>
     <string name="retry">重試</string>
+    <string name="date_format_mm_dd">%1$s月%2$s日</string>
 
     <!-- Login -->
     <string name="login_account">帳號</string>

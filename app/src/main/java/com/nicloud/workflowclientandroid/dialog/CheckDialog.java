@@ -22,6 +22,7 @@ import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.address.AddressResultReceiver;
 import com.nicloud.workflowclientandroid.address.FetchAddressIntentService;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.OnDialogActionListener;
+import com.nicloud.workflowclientandroid.utility.Utilities;
 
 /**
  * Dialog for checking in/out
@@ -39,7 +40,13 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
 
     private OnDialogActionListener mOnDialogActionListener;
 
-    private TextView mRecordLocation;
+    private TextView mCheckDate;
+    private TextView mCheckInTime;
+    private TextView mCheckOutTime;
+    private TextView mCheckButton;
+    private TextView mCurrentTime;
+    private TextView mLocation;
+
     private ProgressBar mRecordLocationProgressBar;
 
     private GoogleApiClient mGoogleApiClient;
@@ -66,16 +73,28 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
 
     private void initialize() {
         findViews();
-        setupButton();
+        setupViews();
+        setupCheckButton();
         setupFetchingAddress();
     }
 
     private void findViews() {
-        mRecordLocation = (TextView) findViewById(R.id.location_text);
+        mCheckDate = (TextView) findViewById(R.id.check_date);
+        mCheckInTime = (TextView) findViewById(R.id.check_in_time);
+        mCheckOutTime = (TextView) findViewById(R.id.check_out_time);
+        mCheckButton = (TextView) findViewById(R.id.check_button);
+        mCurrentTime = (TextView) findViewById(R.id.check_current_time);
+        mLocation = (TextView) findViewById(R.id.location_text);
         mRecordLocationProgressBar = (ProgressBar) findViewById(R.id.location_progress_bar);
     }
 
-    private void setupButton() {
+    private void setupViews() {
+        mCheckDate.setText(Utilities.millisecondsToMMDD(mContext, System.currentTimeMillis()));
+        mCurrentTime.setText(Utilities.millisecondsToHHMMA(System.currentTimeMillis()));
+    }
+
+    private void setupCheckButton() {
+        mCheckButton.setOnClickListener(this);
     }
 
     private void setupFetchingAddress() {
@@ -122,6 +141,10 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
         if (mOnDialogActionListener == null) return;
 
         switch (v.getId()) {
+            case R.id.check_button:
+                mOnDialogActionListener.onCheck();
+
+                break;
         }
     }
 
@@ -168,15 +191,15 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
     public void onReceiveSuccessful(String message) {
         if (mFirstReceiveLocation) {
             mRecordLocationProgressBar.startAnimation(MainApplication.sFadeOutAnimation);
-            mRecordLocation.startAnimation(MainApplication.sFadeInAnimation);
+            mLocation.startAnimation(MainApplication.sFadeInAnimation);
 
             mRecordLocationProgressBar.setVisibility(View.GONE);
-            mRecordLocation.setVisibility(View.VISIBLE);
+            mLocation.setVisibility(View.VISIBLE);
 
             mFirstReceiveLocation = false;
         }
 
-        mRecordLocation.setText(message);
+        mLocation.setText(message);
     }
 
     @Override
