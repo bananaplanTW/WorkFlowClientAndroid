@@ -226,7 +226,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.noWipTaskCardView.setVisibility(View.GONE);
 
             holder.wipTaskName.setText(task.name);
-            holder.wipCaseName.setText(task.caseId);
+            holder.wipCaseName.setText(task.caseName);
             holder.wipWorkingTime.setText(Utilities.millisecondsToTimeString(task.getWorkingTime()));
         }
     }
@@ -234,7 +234,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private void bindScheduledTaskViewHolder(ScheduledTaskViewHolder holder, Task task, int position) {
         holder.taskIndex.setText(String.valueOf(position - 2));
         holder.taskName.setText(task.name);
-        holder.caseName.setText(task.caseId);
+        holder.caseName.setText(task.caseName);
     }
 
     @Override

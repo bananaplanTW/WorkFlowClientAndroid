@@ -23,6 +23,7 @@ public class Task extends IdData {
     }
 
     public String caseId;
+    public String caseName;
     public String workerId;
     public String equipmentId;
 
@@ -54,6 +55,7 @@ public class Task extends IdData {
 
     public Task(String id,
                 String name,
+                String caseName,
                 String caseId,
                 String workerId,
                 String equipmentId,
@@ -68,6 +70,7 @@ public class Task extends IdData {
                 boolean isDelayed) {
         this.id = id;
         this.name = name;
+        this.caseName = caseName;
         this.caseId = caseId;
         this.workerId = workerId;
         this.equipmentId = equipmentId;
@@ -105,6 +108,7 @@ public class Task extends IdData {
 
     public void update(Task task) {
         this.name = task.name;
+        this.caseName = task.caseName;
         this.caseId = task.caseId;
         this.workerId = task.workerId;
         this.equipmentId = task.equipmentId;

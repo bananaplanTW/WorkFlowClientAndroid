@@ -928,6 +928,7 @@ public class LoadingDataUtils {
 
             String id = taskJson.getString("_id");
             String name = taskJson.getString("name");
+            String caseName = taskJson.getString("caseName");
             String caseId = taskJson.getString("caseId");
             String workerId = getStringFromJson(taskJson, "employeeId");
             String equipmentId = "";
@@ -967,6 +968,7 @@ public class LoadingDataUtils {
             Task task = new Task(
                     id,
                     name,
+                    caseName,
                     caseId,
                     workerId,
                     equipmentId,
