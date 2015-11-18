@@ -87,7 +87,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     break;
 
                 case R.id.wip_task_card_complete_button:
-                    showDialog(DialogType.COMPLETE_TASK);
+                    showDialog(DialogType.COMPLETE_TASK, mDataSet.get(getAdapterPosition()).task.id);
                     break;
 
                 case R.id.wip_task_card_view:
@@ -122,7 +122,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View v) {
                     //goToRecordLogActivity();
-                    showDialog(DialogType.CHOOSE_TASK);
+                    showDialog(DialogType.CHOOSE_TASK, mDataSet.get(getAdapterPosition()).task.id);
                 }
             });
         }
@@ -139,7 +139,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mContext.startActivity(new Intent(mContext, RecordLogActivity.class));
     }
 
-    private void showDialog(int type) {
+    private void showDialog(int type, String taskId) {
         mDisplayDialogFragment =
                 (DisplayDialogFragment) mFragmentManager.findFragmentByTag(DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
         if (mDisplayDialogFragment == null) {
@@ -153,6 +153,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
 
             case DialogType.CHOOSE_TASK:
+                bundle.putString(DisplayDialogFragment.EXTRA_TASK_ID, taskId);
                 bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DialogType.CHOOSE_TASK);
                 break;
 

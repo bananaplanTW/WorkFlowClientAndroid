@@ -17,6 +17,7 @@ public class DisplayDialogFragment extends DialogFragment {
 
     public static final String TAG_DISPLAY_DIALOG_FRAGMENT = "tag_display_dialog_dialog_fragment";
     public static final String EXTRA_DIALOG_TYPE = "extra_dialog_type";
+    public static final String EXTRA_TASK_ID = "extra_task_id";
 
     public static final class DialogType {
         public static final int COMPLETE_TASK = 0;
@@ -55,7 +56,7 @@ public class DisplayDialogFragment extends DialogFragment {
                 return new CompleteTaskDialog(getActivity(), mOnDialogActionListener);
 
             case DialogType.CHOOSE_TASK:
-                return new ChooseTaskDialog(getActivity(), mOnDialogActionListener);
+                return new ChooseTaskDialog(getActivity(), getArguments().getString(EXTRA_TASK_ID), mOnDialogActionListener);
 
             case DialogType.CHECK:
                 return new CheckDialog(getActivity(), mOnDialogActionListener);

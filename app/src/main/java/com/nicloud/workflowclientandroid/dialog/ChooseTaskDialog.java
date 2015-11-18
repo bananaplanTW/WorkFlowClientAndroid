@@ -8,6 +8,8 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
+import com.nicloud.workflowclientandroid.data.data.Task;
+import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.OnDialogActionListener;
 
 /**
@@ -25,10 +27,13 @@ public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
 
     private OnDialogActionListener mOnDialogActionListener;
 
+    private Task mTask;
 
-    public ChooseTaskDialog(Context context, OnDialogActionListener listener) {
+
+    public ChooseTaskDialog(Context context, String taskId, OnDialogActionListener listener) {
         super(context);
         mOnDialogActionListener = listener;
+        mTask = WorkingData.getInstance(context).getScheduledTask(taskId);
     }
 
     @Override
@@ -52,7 +57,9 @@ public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
     }
 
     private void setupViews() {
-        mTaskName.setText("開發iOS");
+        if (mTask == null) return;
+
+        mTaskName.setText(mTask.name);
     }
 
     private void setupButton() {
