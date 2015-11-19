@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
+import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.DialogType;
 import com.nicloud.workflowclientandroid.tasklog.log.TaskLogActivity;
@@ -223,15 +225,14 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return mDataSet.size();
     }
 
-    public void onCompleteTaskOk() {
+    public void onCompleteTaskOk(String taskId) {
+        // Complete task here
+        Toast.makeText(mContext,
+                "Complete task " + WorkingData.getInstance(mContext).getTask(taskId).name, Toast.LENGTH_SHORT).show();
         Utilities.dismissDialog(mFragmentManager);
     }
 
     public void onCompleteTaskCancel() {
-        Utilities.dismissDialog(mFragmentManager);
-    }
-
-    public void onChooseTaskCancel() {
         Utilities.dismissDialog(mFragmentManager);
     }
 

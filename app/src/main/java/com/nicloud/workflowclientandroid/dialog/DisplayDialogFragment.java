@@ -27,7 +27,7 @@ public class DisplayDialogFragment extends DialogFragment {
 
     public interface OnDialogActionListener {
         void onCompleteTaskCancel();
-        void onCompleteTaskOk();
+        void onCompleteTaskOk(String taskId);
         void onChooseTaskStartWork();
         void onChooseTaskLog(String taskId);
         void onCheck();
@@ -52,7 +52,7 @@ public class DisplayDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         switch (getArguments().getInt(EXTRA_DIALOG_TYPE)) {
             case DialogType.COMPLETE_TASK:
-                return new CompleteTaskDialog(getActivity(), mOnDialogActionListener);
+                return new CompleteTaskDialog(getActivity(), getArguments().getString(EXTRA_TASK_ID), mOnDialogActionListener);
 
             case DialogType.CHOOSE_TASK:
                 return new ChooseTaskDialog(getActivity(), getArguments().getString(EXTRA_TASK_ID), mOnDialogActionListener);
@@ -61,7 +61,7 @@ public class DisplayDialogFragment extends DialogFragment {
                 return new CheckDialog(getActivity(), mOnDialogActionListener);
 
             default:
-                return new CompleteTaskDialog(getActivity(), mOnDialogActionListener);
+                return new CompleteTaskDialog(getActivity(), getArguments().getString(EXTRA_TASK_ID), mOnDialogActionListener);
         }
     }
 }

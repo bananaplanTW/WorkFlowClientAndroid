@@ -126,7 +126,13 @@ public final class WorkingData implements DataSubject {
     public List<Task> getScheduledTasks() {
         return mScheduledTasks;
     }
-    public Task getScheduledTask(String taskId) {
+
+
+    public Task getTask(String taskId) {
+        if (Utilities.isSameId(mWipTask.id, taskId)) {
+            return mWipTask;
+        }
+
         for (Task scheduledTask : mScheduledTasks) {
             if (Utilities.isSameId(scheduledTask.id, taskId)) {
                 return scheduledTask;

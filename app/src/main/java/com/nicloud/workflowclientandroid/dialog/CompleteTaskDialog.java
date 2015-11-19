@@ -23,9 +23,12 @@ public class CompleteTaskDialog extends Dialog implements View.OnClickListener {
 
     private OnDialogActionListener mOnDialogActionListener;
 
+    private String mCompletedTaskId;
 
-    public CompleteTaskDialog(Context context, OnDialogActionListener listener) {
+
+    public CompleteTaskDialog(Context context, String completedTaskId, OnDialogActionListener listener) {
         super(context);
+        mCompletedTaskId = completedTaskId;
         mOnDialogActionListener = listener;
     }
 
@@ -58,7 +61,7 @@ public class CompleteTaskDialog extends Dialog implements View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.complete_task_dialog_ok_button:
-                mOnDialogActionListener.onCompleteTaskOk();
+                mOnDialogActionListener.onCompleteTaskOk(mCompletedTaskId);
                 break;
 
             case R.id.complete_task_dialog_cancel_button:

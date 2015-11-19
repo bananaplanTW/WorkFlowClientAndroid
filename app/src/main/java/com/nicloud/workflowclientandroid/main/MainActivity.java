@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity implements DisplayDialogFrag
     }
 
     @Override
-    public void onCompleteTaskOk() {
-        mUIController.onCompleteTaskOk();
+    public void onCompleteTaskOk(String taskId) {
+        mUIController.onCompleteTaskOk(taskId);
     }
 
     @Override

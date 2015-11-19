@@ -127,16 +127,12 @@ public class UIController implements View.OnClickListener {
         }
     }
 
-    public void onCompleteTaskOk() {
-        mTasksListAdapter.onCompleteTaskOk();
+    public void onCompleteTaskOk(String taskId) {
+        mTasksListAdapter.onCompleteTaskOk(taskId);
     }
 
     public void onCompleteTaskCancel() {
         mTasksListAdapter.onCompleteTaskCancel();
-    }
-
-    public void onChooseTaskCancel() {
-        mTasksListAdapter.onChooseTaskCancel();
     }
 
     public void onChooseTaskStartWork() {

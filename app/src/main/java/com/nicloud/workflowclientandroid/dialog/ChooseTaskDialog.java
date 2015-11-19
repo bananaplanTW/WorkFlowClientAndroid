@@ -33,7 +33,7 @@ public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
     public ChooseTaskDialog(Context context, String taskId, OnDialogActionListener listener) {
         super(context);
         mOnDialogActionListener = listener;
-        mTask = WorkingData.getInstance(context).getScheduledTask(taskId);
+        mTask = WorkingData.getInstance(context).getTask(taskId);
     }
 
     @Override

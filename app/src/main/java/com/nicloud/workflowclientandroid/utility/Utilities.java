@@ -386,6 +386,7 @@ public class Utilities {
         Bundle bundle = new Bundle();
         switch (type) {
             case DisplayDialogFragment.DialogType.COMPLETE_TASK:
+                bundle.putString(DisplayDialogFragment.EXTRA_TASK_ID, taskId);
                 bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.COMPLETE_TASK);
                 break;
 
