@@ -16,6 +16,8 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
+import com.nicloud.workflowclientandroid.data.data.Task;
+import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.tasklog.add.AddLogActivity;
 import com.nicloud.workflowclientandroid.utility.DividerItemDecoration;
 
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabChangeListener {
+
+    public static final String EXTRA_TASK_ID = "TaskLogActivity_extra_task_id";
 
     private static final class TabTag {
         public static final String TEXT = "tag_tab_text";
@@ -42,6 +46,8 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     private LinearLayoutManager mTaskLogListViewLayoutManager;
     private TaskLogListAdapter mTaskLogListAdapter;
     private List<LogItem> mLogListDataSet = new ArrayList<>();
+
+    private Task mTask;
 
     private class LogTabContentFactory implements TabHost.TabContentFactory {
 
@@ -70,6 +76,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     }
 
     private void initialize() {
+        mTask = WorkingData.getInstance(this).getTask(getIntent().getStringExtra(EXTRA_TASK_ID));
         findViews();
         setupActionBar();
         setupTabs();
@@ -93,8 +100,8 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mLogTaskName.setText("伺服器服務開發");
-        mLogCaseName.setText("流程管理專案");
+        mLogTaskName.setText(mTask.name);
+        mLogCaseName.setText(mTask.caseName);
     }
 
     private void setupTabs() {

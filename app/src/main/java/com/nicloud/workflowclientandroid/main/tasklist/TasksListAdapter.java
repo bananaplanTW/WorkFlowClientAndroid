@@ -92,7 +92,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     break;
 
                 case R.id.wip_task_card_view:
-                    goToTaskLogActivity();
+                    goToTaskLogActivity(mDataSet.get(getAdapterPosition()).task.id);
                     break;
             }
         }
@@ -135,8 +135,11 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mDataSet = dataSet;
     }
 
-    private void goToTaskLogActivity() {
-        mContext.startActivity(new Intent(mContext, TaskLogActivity.class));
+    private void goToTaskLogActivity(String taskId) {
+        Intent intent = new Intent(mContext, TaskLogActivity.class);
+        intent.putExtra(TaskLogActivity.EXTRA_TASK_ID, taskId);
+
+        mContext.startActivity(intent);
     }
 
     @Override
@@ -241,7 +244,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void onChooseTaskLog(String taskId) {
-        goToTaskLogActivity();
+        goToTaskLogActivity(taskId);
         Utilities.dismissDialog(mFragmentManager);
     }
 }
