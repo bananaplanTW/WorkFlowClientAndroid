@@ -15,10 +15,10 @@ import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
-import com.nicloud.workflowclientandroid.data.worker.CheckLoggedInStatusCommand;
-import com.nicloud.workflowclientandroid.data.worker.LoadingLoginWorkerCommand;
-import com.nicloud.workflowclientandroid.data.worker.UserLoggingInCommand;
-import com.nicloud.workflowclientandroid.main.MainActivity;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.CheckLoggedInStatusCommand;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.LoadingLoginWorkerCommand;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.UserLoggingInCommand;
+import com.nicloud.workflowclientandroid.main.main.MainActivity;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,

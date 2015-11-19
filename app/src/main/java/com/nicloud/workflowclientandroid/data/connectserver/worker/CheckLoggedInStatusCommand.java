@@ -1,8 +1,8 @@
-package com.nicloud.workflowclientandroid.data.worker;
+package com.nicloud.workflowclientandroid.data.connectserver.worker;
 
 import android.content.Context;
 
-import com.nicloud.workflowclientandroid.data.restful.GetRequestAsyncTask;
+import com.nicloud.workflowclientandroid.data.connectserver.restful.GetRequestAsyncTask;
 import com.nicloud.workflowclientandroid.login.LoginActivity;
 
 import org.json.JSONException;

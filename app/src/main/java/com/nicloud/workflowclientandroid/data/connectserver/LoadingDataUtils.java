@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.data.loading;
+package com.nicloud.workflowclientandroid.data.connectserver;
 
 import android.content.Context;
 import android.util.Log;

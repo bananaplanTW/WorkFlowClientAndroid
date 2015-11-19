@@ -17,10 +17,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.nicloud.workflowclientandroid.MainApplication;
+import com.nicloud.workflowclientandroid.main.main.MainApplication;
 import com.nicloud.workflowclientandroid.R;
-import com.nicloud.workflowclientandroid.address.AddressResultReceiver;
-import com.nicloud.workflowclientandroid.address.FetchAddressIntentService;
+import com.nicloud.workflowclientandroid.googlelocation.AddressResultReceiver;
+import com.nicloud.workflowclientandroid.googlelocation.FetchAddressIntentService;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.OnDialogActionListener;
 import com.nicloud.workflowclientandroid.utility.Utilities;
 

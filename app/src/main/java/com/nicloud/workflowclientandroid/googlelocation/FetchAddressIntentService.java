@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.address;
+package com.nicloud.workflowclientandroid.googlelocation;
 
 import android.app.IntentService;
 import android.content.Intent;

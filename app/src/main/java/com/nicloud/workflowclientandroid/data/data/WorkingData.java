@@ -7,7 +7,7 @@ import android.content.IntentFilter;
 
 import com.nicloud.workflowclientandroid.data.data.observer.DataObserver;
 import com.nicloud.workflowclientandroid.data.data.observer.DataSubject;
-import com.nicloud.workflowclientandroid.main.MinuteReceiver;
+import com.nicloud.workflowclientandroid.main.receiver.MinuteReceiver;
 import com.nicloud.workflowclientandroid.utility.Utilities;
 
 import java.util.ArrayList;

@@ -1,10 +1,10 @@
-package com.nicloud.workflowclientandroid.address;
+package com.nicloud.workflowclientandroid.googlelocation;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 
-import com.nicloud.workflowclientandroid.address.FetchAddressIntentService.Constants;
+import com.nicloud.workflowclientandroid.googlelocation.FetchAddressIntentService.Constants;
 
 
 /**

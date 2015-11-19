@@ -1,9 +1,9 @@
-package com.nicloud.workflowclientandroid.data.worker;
+package com.nicloud.workflowclientandroid.data.connectserver.worker;
 
 import android.util.Log;
 
-import com.nicloud.workflowclientandroid.data.loading.LoadingDataUtils;
-import com.nicloud.workflowclientandroid.data.restful.IPostRequestStrategy;
+import com.nicloud.workflowclientandroid.data.connectserver.LoadingDataUtils;
+import com.nicloud.workflowclientandroid.data.connectserver.restful.IPostRequestStrategy;
 import com.nicloud.workflowclientandroid.data.utility.RestfulUtils;
 import com.nicloud.workflowclientandroid.data.utility.URLUtils;
 

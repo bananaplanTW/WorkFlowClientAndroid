@@ -1,13 +1,11 @@
-package com.nicloud.workflowclientandroid.data.worker;
+package com.nicloud.workflowclientandroid.data.connectserver.worker;
 
 import android.content.Context;
 
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
-import com.nicloud.workflowclientandroid.data.loading.LoadingDataUtils;
-import com.nicloud.workflowclientandroid.data.restful.GetRequestAsyncTask;
-import com.nicloud.workflowclientandroid.login.LoginActivity;
+import com.nicloud.workflowclientandroid.data.connectserver.LoadingDataUtils;
+import com.nicloud.workflowclientandroid.data.connectserver.restful.GetRequestAsyncTask;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**

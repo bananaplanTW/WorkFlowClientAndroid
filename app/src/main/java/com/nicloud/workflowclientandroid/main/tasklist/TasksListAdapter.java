@@ -1,21 +1,16 @@
 package com.nicloud.workflowclientandroid.main.tasklist;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
-import com.nicloud.workflowclientandroid.data.data.WorkingData;
-import com.nicloud.workflowclientandroid.data.worker.CompleteTaskForWorkerCommand;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.DialogType;
-import com.nicloud.workflowclientandroid.tasklog.log.TaskLogActivity;
 import com.nicloud.workflowclientandroid.utility.Utilities;
 
 import java.util.List;

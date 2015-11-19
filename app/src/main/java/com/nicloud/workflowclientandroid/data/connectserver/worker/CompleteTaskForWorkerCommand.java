@@ -1,8 +1,8 @@
-package com.nicloud.workflowclientandroid.data.worker;
+package com.nicloud.workflowclientandroid.data.connectserver.worker;
 
 import android.content.Context;
 
-import com.nicloud.workflowclientandroid.data.restful.PostRequestAsyncTask;
+import com.nicloud.workflowclientandroid.data.connectserver.restful.PostRequestAsyncTask;
 
 
 /**

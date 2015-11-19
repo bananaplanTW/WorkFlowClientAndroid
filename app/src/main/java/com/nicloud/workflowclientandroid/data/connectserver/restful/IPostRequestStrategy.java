@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.data.restful;
+package com.nicloud.workflowclientandroid.data.connectserver.restful;
 
 import org.json.JSONObject;
 

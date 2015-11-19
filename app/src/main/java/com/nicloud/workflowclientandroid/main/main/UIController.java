@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.main;
+package com.nicloud.workflowclientandroid.main.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,9 +21,9 @@ import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.data.observer.DataObserver;
-import com.nicloud.workflowclientandroid.data.loading.LoadingWorkerTasks;
-import com.nicloud.workflowclientandroid.data.loading.LoadingWorkerTasks.OnFinishLoadingDataListener;
-import com.nicloud.workflowclientandroid.data.worker.CompleteTaskForWorkerCommand;
+import com.nicloud.workflowclientandroid.data.connectserver.LoadingWorkerTasks;
+import com.nicloud.workflowclientandroid.data.connectserver.LoadingWorkerTasks.OnFinishLoadingDataListener;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.CompleteTaskForWorkerCommand;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclientandroid.login.LoginActivity;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter;
