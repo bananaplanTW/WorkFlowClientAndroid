@@ -1,5 +1,7 @@
 package com.nicloud.workflowclientandroid.main;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +22,7 @@ import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.loading.LoadingWorkerTasks;
 import com.nicloud.workflowclientandroid.data.loading.LoadingWorkerTasks.OnFinishLoadingDataListener;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclientandroid.login.LoginActivity;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter.ItemViewType;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListItem;
@@ -103,6 +106,18 @@ public class UIController implements View.OnClickListener {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_logout:
+                //ParsePush.unsubscribeInBackground("user_" + WorkingData.getUserId());
+
+                WorkingData.resetAccount();
+                SharedPreferences sharedPreferences = mMainActivity.getSharedPreferences(WorkingData.SHARED_PREFERENCE_KEY, 0);
+                sharedPreferences.edit().remove(WorkingData.USER_ID).remove(WorkingData.AUTH_TOKEN).commit();
+
+                mMainActivity.startActivity(new Intent(mMainActivity, LoginActivity.class));
+                mMainActivity.finish();
+
+                return true;
+
             case R.id.action_settings:
                 return true;
 
