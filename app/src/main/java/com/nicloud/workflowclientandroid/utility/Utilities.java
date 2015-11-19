@@ -428,16 +428,21 @@ public class Utilities {
 
     public static Bitmap scaleBitmap(Context context, String filePath) {
         if (TextUtils.isEmpty(filePath)) return null;
+
         int targetW = (int) context.getResources().getDimension(R.dimen.photo_thumbnail_max_width);
         int targetH = (int) context.getResources().getDimension(R.dimen.photo_thumbnail_max_height);
+
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, bmOptions);
+
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
         int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor < 1 ? 1 : scaleFactor;
+
         return BitmapFactory.decodeFile(filePath, bmOptions);
     }
 

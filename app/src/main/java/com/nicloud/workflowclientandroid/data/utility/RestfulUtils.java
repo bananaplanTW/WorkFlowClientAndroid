@@ -5,9 +5,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.nicloud.workflowclientandroid.data.utility.URLUtils;
+import com.nicloud.workflowclientandroid.utility.Utilities;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -136,42 +142,42 @@ public class RestfulUtils {
         }
         return result;
     }
-//
-//    private static final String IMGUR_CLIENT_ID = "...";
-//    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
-//    private static final OkHttpClient client = new OkHttpClient();
-//    public static String restfulPostFileRequest(String urlString, HashMap<String, String> headerPairs, String filePath) {
-//        String responseString = "";
-//
-//        String mimeType = Utils.getMimeType(filePath);
-//Log.d(TAG, "uploading file mimeType : " + mimeType);
-//        File f = new File(filePath);
-//        Request.Builder builder = new Request.Builder();
-//        builder.header("Content-Type", mimeType)
-//                .header("s", "" + f.length())
-//                .header("fn", f.getName());
-//        if (headerPairs != null) {
-//            Iterator iter = headerPairs.entrySet().iterator();
-//            while (iter.hasNext()) {
-//                Map.Entry entry = (Map.Entry) iter.next();
-//                builder.header((String) entry.getKey(), (String) entry.getValue());
-//            }
-//        }
-//        Request request = builder.url(urlString)
-//                .post(RequestBody.create(MediaType.parse(mimeType), new File(filePath)))
-//                .build();
-//
-//        try {
-//            Response response = client.newCall(request).execute();
-//            if (!response.isSuccessful()) {
-//                throw new IOException("Unexpected code " + response);
-//            }
-//            responseString = response.body().string();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return responseString;
-//    }
+
+    private static final String IMGUR_CLIENT_ID = "...";
+    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+    private static final OkHttpClient client = new OkHttpClient();
+    public static String restfulPostFileRequest(String urlString, HashMap<String, String> headerPairs, String filePath) {
+        String responseString = "";
+
+        String mimeType = Utilities.getMimeType(filePath);
+Log.d(TAG, "uploading file mimeType : " + mimeType);
+        File f = new File(filePath);
+        Request.Builder builder = new Request.Builder();
+        builder.header("Content-Type", mimeType)
+                .header("s", "" + f.length())
+                .header("fn", f.getName());
+        if (headerPairs != null) {
+            Iterator iter = headerPairs.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                builder.header((String) entry.getKey(), (String) entry.getValue());
+            }
+        }
+        Request request = builder.url(urlString)
+                .post(RequestBody.create(MediaType.parse(mimeType), new File(filePath)))
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected code " + response);
+            }
+            responseString = response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return responseString;
+    }
 
 
     public static String restfulGetRequest (String urlString, HashMap<String, String> headerPairs) {

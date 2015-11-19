@@ -1,14 +1,20 @@
 package com.nicloud.workflowclientandroid.tasklog.add;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,27 +22,37 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.nicloud.workflowclientandroid.data.connectserver.tasklog.LeaveAPhotoCommentToTaskCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.tasklog.LeaveATextCommentToTaskCommand;
+import com.nicloud.workflowclientandroid.data.connectserver.tasklog.OnLeaveCommentListener;
 import com.nicloud.workflowclientandroid.main.main.MainApplication;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.googlelocation.AddressResultReceiver;
 import com.nicloud.workflowclientandroid.googlelocation.FetchAddressIntentService;
 import com.nicloud.workflowclientandroid.utility.Utilities;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class AddLogActivity extends AppCompatActivity implements View.OnClickListener,
         AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener,
-        LeaveATextCommentToTaskCommand.OnLeaveATextCommentListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, OnLeaveCommentListener {
+
+    private static final String TAG = "AddLogActivity";
 
     public static final String EXTRA_TASK_ID = "AddLogActivity_extra_task_id";
+
+    private static final int REQUEST_IMAGE_CAPTURE = 10001;
+    private static final int REQUEST_PICK_FILE = 10002;
 
     private ActionBar mActionBar;
     private Toolbar mToolbar;
@@ -55,6 +71,8 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     private LocationRequest mLocationRequest;
 
     private String mTaskId;
+
+    private String mCurrentPhotoPath;
 
     private boolean mFirstReceiveLocation = true;
 
@@ -170,6 +188,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_log_camera_button:
+                capturePhoto();
                 break;
 
             case R.id.add_log_upload_button:
@@ -188,6 +207,42 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
                 break;
         }
+    }
+
+    private void capturePhoto() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) == null) {
+            Log.d(TAG, "No Activity to handle ACTION_IMAGE_CAPTURE intent");
+        }
+
+        File photoFile = null;
+
+        try {
+            photoFile = createImageFile();
+
+        } catch (IOException ex) {
+            Log.d(TAG, "Create image file failed");
+            ex.printStackTrace();
+        }
+
+        if (photoFile != null) {
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = new File(storageDir + "/" + timeStamp + ".jpg");
+
+        if (!image.createNewFile()) throw new IOException();
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+
+        return image;
     }
 
     @Override
@@ -250,13 +305,97 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onFinishLeaveATextComment() {
+    public void onFinishLeaveComment() {
         setResult(RESULT_OK);
-        Toast.makeText(this, getString(R.string.add_log_complete_text), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onFailLeaveATextComment(boolean isFailCausedByInternet) {
+    public void onFailLeaveComment(boolean isFailCausedByInternet) {
 
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) return;
+
+        switch (requestCode) {
+            case REQUEST_IMAGE_CAPTURE:
+                onPhotoCaptured();
+                break;
+
+            case REQUEST_PICK_FILE:
+                //onFilePicked(data);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void onPhotoCaptured() {
+        // compress photo
+        File photoFile = new File(mCurrentPhotoPath.replace("file:", ""));
+        Bitmap bitmap = Utilities.scaleBitmap(this, photoFile.getAbsolutePath());
+        if (bitmap == null) return;
+
+//        String ownerId = WorkingData.getUserId();
+//        PhotoData photo = (PhotoData) DataFactory.genData(ownerId, BaseData.TYPE.PHOTO);
+//
+//        photo.time = Calendar.getInstance().getTime();
+//        photo.uploader = ownerId;
+//        photo.fileName = mCurrentPhotoPath.substring(mCurrentPhotoPath.lastIndexOf('/') + 1);
+//        photo.photo = new BitmapDrawable(getResources(), bitmap);
+//        photo.filePath = Uri.parse(mCurrentPhotoPath);
+//        addRecord(getSelectedWorker(), photo);
+
+        scanPhotoToGallery();
+        syncingPhotoActivity();
+    }
+
+    private void scanPhotoToGallery() {
+        if (!TextUtils.isEmpty(mCurrentPhotoPath)) {  // trigger media scanner
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+
+            File f = new File(mCurrentPhotoPath);
+            Uri contentUri = Uri.fromFile(f);
+
+            mediaScanIntent.setData(contentUri);
+            sendBroadcast(mediaScanIntent);
+        }
+    }
+
+    private void syncingPhotoActivity() {
+        String realPath = mCurrentPhotoPath.substring(mCurrentPhotoPath.indexOf(':') + 1);
+
+        LeaveAPhotoCommentToTaskCommand leaveAPhotoCommentToTaskCommand =
+                new LeaveAPhotoCommentToTaskCommand(this, mTaskId, realPath, this);
+        leaveAPhotoCommentToTaskCommand.execute();
+
+        mCurrentPhotoPath = null;
+    }
+
+//    private void onFilePicked(Intent intent) {
+//        Uri uri = intent.getData();
+//        String path = null;
+//        try {
+//            path = Utils.getPath(getActivity(), uri);
+//        } catch (URISyntaxException e) {
+//            Toast.makeText(getActivity(), "File attach failed", Toast.LENGTH_SHORT).show();
+//            e.printStackTrace();
+//        }
+//        if (TextUtils.isEmpty(path)) return;
+//
+//        String ownerId = WorkingData.getUserId();
+//        FileData file = (FileData) DataFactory.genData(ownerId, BaseData.TYPE.FILE);
+//
+//        file.uploader = ownerId;
+//        file.time = Calendar.getInstance().getTime();
+//        file.fileName = path.substring(path.lastIndexOf('/') + 1);
+//        file.filePath = uri;
+//        addRecord(getSelectedWorker(), file);
+//
+//        mCurrentFilePath = path;
+//        syncingFileActivity();
+//        //onItemSelected(getSelectedWorker()); // force notify adapter data changed
+//    }
 }

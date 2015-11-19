@@ -11,23 +11,23 @@ import com.nicloud.workflowclientandroid.utility.Utilities;
 import java.util.HashMap;
 
 /**
- * Created by daz on 10/18/15.
+ * Created by daz on 10/17/15.
  */
-public class LeaveATextCommentToTaskCommand implements ICreateActivityCommand, PostRequestAsyncTask.OnFinishPostingDataListener {
+public class LeaveAPhotoCommentToTaskCommand implements ICreateActivityCommand, PostRequestAsyncTask.OnFinishPostingDataListener {
 
     private PostRequestAsyncTask mPostRequestAsyncTask;
     private Context mContext;
     private String mTaskId;
-    private String mComment;
+    private String mFilePath;
 
     private OnLeaveCommentListener mOnLeaveCommentListener;
 
 
-    public LeaveATextCommentToTaskCommand(Context context, String taskId, String comment,
-                                          OnLeaveCommentListener listener) {
+    public LeaveAPhotoCommentToTaskCommand(Context context, String taskId, String filePath,
+                                           OnLeaveCommentListener listener) {
         mContext = context;
         mTaskId = taskId;
-        mComment = comment;
+        mFilePath = filePath;
         mOnLeaveCommentListener = listener;
     }
 
@@ -36,20 +36,16 @@ public class LeaveATextCommentToTaskCommand implements ICreateActivityCommand, P
         HashMap<String, String> headers = new HashMap<>();
         headers.put("x-user-id", WorkingData.getUserId());
         headers.put("x-auth-token", WorkingData.getAuthToken());
+        headers.put("td", mTaskId);
 
-        HashMap<String, String> bodies = new HashMap<>();
-        bodies.put("td", mTaskId);
-        bodies.put("msg", mComment);
-
-        PostLogStrategy uploadingCommentStrategy = new PostLogStrategy(LoadingDataUtils.WorkingDataUrl.EndPoints.COMMENT_TEXT_ACTIVITY_TO_TASK, headers, bodies);
-        mPostRequestAsyncTask = new PostRequestAsyncTask(mContext, uploadingCommentStrategy, this);
+        UploadingFileStrategy uploadingFileStrategy = new UploadingFileStrategy(mFilePath, LoadingDataUtils.WorkingDataUrl.EndPoints.COMMENT_IMAGE_ACTIVITY_TO_TASK, headers);
+        mPostRequestAsyncTask = new PostRequestAsyncTask(mContext, uploadingFileStrategy, this);
         mPostRequestAsyncTask.execute();
     }
 
-
     @Override
     public void onFinishPostingData() {
-        Utilities.showToastInNonUiThread(mContext, mContext.getString(R.string.add_log_complete_text));
+        Utilities.showToastInNonUiThread(mContext, mContext.getString(R.string.add_log_complete_photo));
         mOnLeaveCommentListener.onFinishLeaveComment();
     }
 

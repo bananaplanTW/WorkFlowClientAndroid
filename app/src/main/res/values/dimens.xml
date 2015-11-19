@@ -76,6 +76,8 @@
     <dimen name="add_log_upload_button_margin_left">25dp</dimen>
     <dimen name="add_log_content_container_padding">15dp</dimen>
     <dimen name="add_log_edit_content_margin_top">10dp</dimen>
+    <dimen name="add_log_photo_thumbnail_max_width">300dp</dimen>
+    <dimen name="add_log_photo_thumbnail_max_height">300dp</dimen>
 
     <!-- Dialog -->
     <dimen name="dialog_width">320dp</dimen>
