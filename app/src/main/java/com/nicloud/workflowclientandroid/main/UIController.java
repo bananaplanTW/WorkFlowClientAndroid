@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
+import com.nicloud.workflowclientandroid.data.data.observer.DataObserver;
 import com.nicloud.workflowclientandroid.data.loading.LoadingWorkerTasks;
 import com.nicloud.workflowclientandroid.data.loading.LoadingWorkerTasks.OnFinishLoadingDataListener;
 import com.nicloud.workflowclientandroid.data.worker.CompleteTaskForWorkerCommand;
@@ -42,7 +43,7 @@ import java.util.List;
  * @since 2015.05.28
  *
  */
-public class UIController implements View.OnClickListener {
+public class UIController implements View.OnClickListener, DataObserver {
 
     private AppCompatActivity mMainActivity;
     private ActionBar mActionBar;
@@ -59,7 +60,6 @@ public class UIController implements View.OnClickListener {
     private List<TasksListItem> mTasksDataSet = new ArrayList<>();
 
     private FragmentManager mFragmentManager;
-    private DisplayDialogFragment mDisplayDialogFragment;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -75,8 +75,7 @@ public class UIController implements View.OnClickListener {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
 
-            setScheduledTasksData();
-            mTasksListAdapter.notifyDataSetChanged();
+            WorkingData.getInstance(mMainActivity).updateData();
         }
 
         @Override
@@ -97,9 +96,13 @@ public class UIController implements View.OnClickListener {
     }
 
     public void onStart() {
+        WorkingData.getInstance(mMainActivity).registerMinuteReceiver(mMainActivity);
+        WorkingData.getInstance(mMainActivity).registerDataObserver(this);
     }
 
     public void onStop() {
+        WorkingData.getInstance(mMainActivity).unregisterMinuteReceiver(mMainActivity);
+        WorkingData.getInstance(mMainActivity).removeDataObserver(this);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -305,5 +308,11 @@ public class UIController implements View.OnClickListener {
                 Utilities.showDialog(mFragmentManager, DisplayDialogFragment.DialogType.CHECK, null);
                 break;
         }
+    }
+
+    @Override
+    public void updateData() {
+        setScheduledTasksData();
+        mTasksListAdapter.notifyDataSetChanged();
     }
 }
