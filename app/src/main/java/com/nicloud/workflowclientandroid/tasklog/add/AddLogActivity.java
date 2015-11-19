@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.record.add;
+package com.nicloud.workflowclientandroid.tasklog.add;
 
 import android.content.Intent;
 import android.location.Geocoder;
@@ -27,19 +27,19 @@ import com.nicloud.workflowclientandroid.address.AddressResultReceiver;
 import com.nicloud.workflowclientandroid.address.FetchAddressIntentService;
 
 
-public class AddRecordActivity extends AppCompatActivity implements View.OnClickListener,
+public class AddLogActivity extends AppCompatActivity implements View.OnClickListener,
         AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private ActionBar mActionBar;
     private Toolbar mToolbar;
 
-    private EditText mRecordEditContent;
-    private TextView mRecordLocation;
-    private ProgressBar mRecordLocationProgressBar;
+    private EditText mEditContent;
+    private TextView mLocation;
+    private ProgressBar mLocationProgressBar;
 
-    private ImageView mRecordCameraButton;
-    private ImageView mRecordUploadButton;
+    private ImageView mCameraButton;
+    private ImageView mUploadButton;
     private TextView mRecordButton;
 
     private GoogleApiClient mGoogleApiClient;
@@ -53,7 +53,7 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_record);
+        setContentView(R.layout.activity_add_log);
         initialize();
     }
 
@@ -66,12 +66,12 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
 
     private void findViews() {
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        mRecordEditContent = (EditText) findViewById(R.id.add_record_edit_content);
-        mRecordLocation = (TextView) findViewById(R.id.location_text);
-        mRecordLocationProgressBar = (ProgressBar) findViewById(R.id.location_progress_bar);
-        mRecordCameraButton = (ImageView) findViewById(R.id.add_record_camera_button);
-        mRecordUploadButton = (ImageView) findViewById(R.id.add_record_upload_button);
-        mRecordButton = (TextView) findViewById(R.id.add_record_record_button);
+        mEditContent = (EditText) findViewById(R.id.add_log_edit_content);
+        mLocation = (TextView) findViewById(R.id.location_text);
+        mLocationProgressBar = (ProgressBar) findViewById(R.id.location_progress_bar);
+        mCameraButton = (ImageView) findViewById(R.id.add_log_camera_button);
+        mUploadButton = (ImageView) findViewById(R.id.add_log_upload_button);
+        mRecordButton = (TextView) findViewById(R.id.add_log_button);
     }
 
     private void setupActionBar() {
@@ -85,8 +85,8 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void setupViews() {
-        mRecordCameraButton.setOnClickListener(this);
-        mRecordUploadButton.setOnClickListener(this);
+        mCameraButton.setOnClickListener(this);
+        mUploadButton.setOnClickListener(this);
         mRecordButton.setOnClickListener(this);
     }
 
@@ -159,13 +159,13 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.add_record_camera_button:
+            case R.id.add_log_camera_button:
                 break;
 
-            case R.id.add_record_upload_button:
+            case R.id.add_log_upload_button:
                 break;
 
-            case R.id.add_record_record_button:
+            case R.id.add_log_button:
                 break;
         }
     }
@@ -212,16 +212,16 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onReceiveSuccessful(String message) {
         if (mFirstReceiveLocation) {
-            mRecordLocationProgressBar.startAnimation(MainApplication.sFadeOutAnimation);
-            mRecordLocation.startAnimation(MainApplication.sFadeInAnimation);
+            mLocationProgressBar.startAnimation(MainApplication.sFadeOutAnimation);
+            mLocation.startAnimation(MainApplication.sFadeInAnimation);
 
-            mRecordLocationProgressBar.setVisibility(View.GONE);
-            mRecordLocation.setVisibility(View.VISIBLE);
+            mLocationProgressBar.setVisibility(View.GONE);
+            mLocation.setVisibility(View.VISIBLE);
 
             mFirstReceiveLocation = false;
         }
 
-        mRecordLocation.setText(message);
+        mLocation.setText(message);
     }
 
     @Override

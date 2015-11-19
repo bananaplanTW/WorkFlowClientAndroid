@@ -25,31 +25,31 @@
     <include layout="@layout/horizontal_divider" />
 
     <RelativeLayout
-        android:id="@+id/add_record_content_container"
+        android:id="@+id/add_log_content_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="@dimen/add_record_content_container_padding">
+        android:padding="@dimen/add_log_content_container_padding">
 
         <ImageView
-            android:id="@+id/add_record_worker_photo"
+            android:id="@+id/add_log_worker_photo"
             android:layout_width="@dimen/worker_icon_width_height"
             android:layout_height="@dimen/worker_icon_width_height"
             android:src="@drawable/ic_worker"/>
 
         <EditText
-            android:id="@+id/add_record_edit_content"
+            android:id="@+id/add_log_edit_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/add_record_edit_content_margin_top"
-            android:layout_below="@+id/add_record_worker_photo"
-            android:layout_above="@+id/add_record_location_container"
+            android:layout_marginTop="@dimen/add_log_edit_content_margin_top"
+            android:layout_below="@+id/add_log_worker_photo"
+            android:layout_above="@+id/add_log_location_container"
             android:gravity="top|left"
             android:hint="@string/add_record_edit_content_hint"
             android:background="@android:color/transparent"/>
 
         <include layout="@layout/location_view"
-            android:id="@+id/add_record_location_container"
+            android:id="@+id/add_log_location_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true" />
@@ -59,14 +59,14 @@
     <include layout="@layout/horizontal_divider" />
 
     <RelativeLayout
-        android:id="@+id/add_record_action_container"
+        android:id="@+id/add_log_action_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/add_record_action_container_height"
-        android:paddingLeft="@dimen/add_record_action_container_padding_left_right"
-        android:paddingRight="@dimen/add_record_action_container_padding_left_right">
+        android:layout_height="@dimen/add_log_action_container_height"
+        android:paddingLeft="@dimen/add_log_action_container_padding_left_right"
+        android:paddingRight="@dimen/add_log_action_container_padding_left_right">
 
         <ImageView
-            android:id="@+id/add_record_camera_button"
+            android:id="@+id/add_log_camera_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -74,17 +74,17 @@
             android:background="?selectableItemBackgroundBorderless"/>
 
         <ImageView
-            android:id="@+id/add_record_upload_button"
+            android:id="@+id/add_log_upload_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/add_record_camera_button"
-            android:layout_marginLeft="@dimen/add_record_upload_button_margin_left"
+            android:layout_toRightOf="@+id/add_log_camera_button"
+            android:layout_marginLeft="@dimen/add_log_upload_button_margin_left"
             android:src="@drawable/ic_upload"
             android:background="?selectableItemBackgroundBorderless"/>
 
         <TextView
-            android:id="@+id/add_record_record_button"
+            android:id="@+id/add_log_button"
             style="@style/ButtonStyle.Green"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"

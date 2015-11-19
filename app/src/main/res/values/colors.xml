@@ -30,11 +30,11 @@
     <color name="scheduled_task_card_content_text_color">#FF000000</color>
     <color name="scheduled_task_card_index_stroke_color">#FF979797</color>
 
-    <!-- Record log -->
-    <color name="record_log_tab_selected_color">#FF009789</color>
-    <color name="record_log_tab_text_color">#FF9B9B9B</color>
-    <color name="record_log_tab_text_selected_color">#FFFFFFFF</color>
-    <color name="record_log_list_item_content_text_color">#FF000000</color>
+    <!-- Task log -->
+    <color name="task_log_tab_selected_color">#FF009789</color>
+    <color name="task_log_tab_text_color">#FF9B9B9B</color>
+    <color name="task_log_tab_text_selected_color">#FFFFFFFF</color>
+    <color name="task_log_list_item_content_text_color">#FF000000</color>
 
     <!-- Dialog -->
     <color name="dialog_background_color">#FFFFFFFF</color>

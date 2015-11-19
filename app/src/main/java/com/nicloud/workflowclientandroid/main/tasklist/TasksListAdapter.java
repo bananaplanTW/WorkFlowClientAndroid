@@ -2,7 +2,6 @@ package com.nicloud.workflowclientandroid.main.tasklist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.DialogType;
-import com.nicloud.workflowclientandroid.record.log.RecordLogActivity;
+import com.nicloud.workflowclientandroid.tasklog.log.TaskLogActivity;
 import com.nicloud.workflowclientandroid.utility.Utilities;
 
 import java.util.List;
@@ -136,7 +135,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void goToRecordLogActivity() {
-        mContext.startActivity(new Intent(mContext, RecordLogActivity.class));
+        mContext.startActivity(new Intent(mContext, TaskLogActivity.class));
     }
 
     @Override

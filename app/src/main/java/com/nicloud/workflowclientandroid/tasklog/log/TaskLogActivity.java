@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.record.log;
+package com.nicloud.workflowclientandroid.tasklog.log;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,13 +16,13 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
-import com.nicloud.workflowclientandroid.record.add.AddRecordActivity;
+import com.nicloud.workflowclientandroid.tasklog.add.AddLogActivity;
 import com.nicloud.workflowclientandroid.utility.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTabChangeListener {
+public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabChangeListener {
 
     private static final class TabTag {
         public static final String TEXT = "tag_tab_text";
@@ -33,21 +33,21 @@ public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTa
     private ActionBar mActionBar;
     private Toolbar mToolbar;
 
-    private TextView mRecordTaskName;
-    private TextView mRecordCaseName;
+    private TextView mLogTaskName;
+    private TextView mLogCaseName;
 
-    private TabHost mRecordLogTabHost;
+    private TabHost mTaskLogTabHost;
 
-    private RecyclerView mRecordLogListView;
-    private LinearLayoutManager mRecordLogListViewLayoutManager;
-    private RecordLogListAdapter mRecordLogListAdapter;
-    private List<Record> mRecordLogListDataSet = new ArrayList<>();
+    private RecyclerView mTaskLogListView;
+    private LinearLayoutManager mTaskLogListViewLayoutManager;
+    private TaskLogListAdapter mTaskLogListAdapter;
+    private List<LogItem> mLogListDataSet = new ArrayList<>();
 
-    private class RecordLogTabContentFactory implements TabHost.TabContentFactory {
+    private class LogTabContentFactory implements TabHost.TabContentFactory {
 
         private Context mContext;
 
-        public RecordLogTabContentFactory(Context context) {
+        public LogTabContentFactory(Context context) {
             mContext = context;
         }
 
@@ -65,7 +65,7 @@ public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_log);
+        setContentView(R.layout.activity_task_log);
         initialize();
     }
 
@@ -78,10 +78,10 @@ public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTa
 
     private void findViews() {
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        mRecordTaskName = (TextView) findViewById(R.id.record_log_task_name);
-        mRecordCaseName = (TextView) findViewById(R.id.record_log_case_name);
-        mRecordLogTabHost = (TabHost) findViewById(R.id.record_log_tab_host);
-        mRecordLogListView = (RecyclerView) findViewById(R.id.record_log_list);
+        mLogTaskName = (TextView) findViewById(R.id.task_log_task_name);
+        mLogCaseName = (TextView) findViewById(R.id.task_log_case_name);
+        mTaskLogTabHost = (TabHost) findViewById(R.id.task_log_tab_host);
+        mTaskLogListView = (RecyclerView) findViewById(R.id.task_log_list);
     }
 
     private void setupActionBar() {
@@ -93,42 +93,42 @@ public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTa
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mRecordTaskName.setText("伺服器服務開發");
-        mRecordCaseName.setText("流程管理專案");
+        mLogTaskName.setText("伺服器服務開發");
+        mLogCaseName.setText("流程管理專案");
     }
 
     private void setupTabs() {
-        mRecordLogTabHost.setup();
+        mTaskLogTabHost.setup();
         addTab(TabTag.TEXT);
         addTab(TabTag.PHOTO);
         addTab(TabTag.FILE);
-        mRecordLogTabHost.setOnTabChangedListener(this);
+        mTaskLogTabHost.setOnTabChangedListener(this);
     }
 
     private void setupRecordLog() {
         setRecordLogData();
 
-        mRecordLogListViewLayoutManager = new LinearLayoutManager(this);
-        mRecordLogListAdapter = new RecordLogListAdapter(this, mRecordLogListDataSet);
+        mTaskLogListViewLayoutManager = new LinearLayoutManager(this);
+        mTaskLogListAdapter = new TaskLogListAdapter(this, mLogListDataSet);
 
-        mRecordLogListView.setLayoutManager(mRecordLogListViewLayoutManager);
-        mRecordLogListView.addItemDecoration(
+        mTaskLogListView.setLayoutManager(mTaskLogListViewLayoutManager);
+        mTaskLogListView.addItemDecoration(
                 new DividerItemDecoration(getResources().getDrawable(R.drawable.list_divider), false, true));
-        mRecordLogListView.setAdapter(mRecordLogListAdapter);
+        mTaskLogListView.setAdapter(mTaskLogListAdapter);
     }
 
     private void setRecordLogData() {
-        mRecordLogListDataSet.add(new Record("Danny", "多益公司的進項與之前不同 下次審查要注意", "2015/11/12 12:06 pm"));
+        mLogListDataSet.add(new LogItem("Danny", "多益公司的進項與之前不同 下次審查要注意", "2015/11/12 12:06 pm"));
     }
 
     private void addTab(String tag) {
         View tabView = getTabView(tag);
-        mRecordLogTabHost.addTab(mRecordLogTabHost.newTabSpec(tag).setIndicator(getTabView(tag))
-                         .setContent(new RecordLogTabContentFactory(this)));
+        mTaskLogTabHost.addTab(mTaskLogTabHost.newTabSpec(tag).setIndicator(getTabView(tag))
+                .setContent(new LogTabContentFactory(this)));
     }
 
     private View getTabView(String tag) {
-        View tabView = LayoutInflater.from(this).inflate(R.layout.record_log_tab, null);
+        View tabView = LayoutInflater.from(this).inflate(R.layout.task_log_tab, null);
         TextView tabText = (TextView) tabView.findViewById(R.id.record_log_tab_text);
 
         String text = "";
@@ -168,7 +168,7 @@ public class RecordLogActivity extends AppCompatActivity implements TabHost.OnTa
     }
 
     private void goToAddRecordActivity() {
-        startActivity(new Intent(this, AddRecordActivity.class));
+        startActivity(new Intent(this, AddLogActivity.class));
     }
 
     @Override

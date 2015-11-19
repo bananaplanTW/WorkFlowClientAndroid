@@ -32,11 +32,11 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
-            android:name=".record.add.AddRecordActivity"
+            android:name=".tasklog.add.AddLogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.WhiteBackground" />
         <activity
-            android:name=".record.log.RecordLogActivity"
+            android:name=".tasklog.log.TaskLogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.WhiteBackground" />
 

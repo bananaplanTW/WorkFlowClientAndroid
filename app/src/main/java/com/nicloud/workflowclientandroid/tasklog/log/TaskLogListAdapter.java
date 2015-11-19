@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.record.log;
+package com.nicloud.workflowclientandroid.tasklog.log;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +15,10 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/11/17.
  */
-public class RecordLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private List<Record> mDataSet;
+    private List<LogItem> mDataSet;
 
     private class RecordViewHolder extends RecyclerView.ViewHolder {
 
@@ -29,22 +29,22 @@ public class RecordLogListAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         public RecordViewHolder(View itemView) {
             super(itemView);
-            userIcon = (ImageView) itemView.findViewById(R.id.record_user_icon);
-            userName = (TextView) itemView.findViewById(R.id.record_user_name);
-            content = (TextView) itemView.findViewById(R.id.record_content);
-            timestamp = (TextView) itemView.findViewById(R.id.record_timestamp);
+            userIcon = (ImageView) itemView.findViewById(R.id.log_user_icon);
+            userName = (TextView) itemView.findViewById(R.id.log_user_name);
+            content = (TextView) itemView.findViewById(R.id.log_content);
+            timestamp = (TextView) itemView.findViewById(R.id.log_timestamp);
         }
     }
 
 
-    public RecordLogListAdapter(Context context, List<Record> dataSet) {
+    public TaskLogListAdapter(Context context, List<LogItem> dataSet) {
         mContext = context;
         mDataSet = dataSet;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new RecordViewHolder(LayoutInflater.from(mContext).inflate(R.layout.record_log_list_item, parent, false));
+        return new RecordViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_list_item, parent, false));
     }
 
     @Override
