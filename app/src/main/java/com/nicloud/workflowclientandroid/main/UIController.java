@@ -283,6 +283,8 @@ public class UIController implements View.OnClickListener {
             mDisplayDialogFragment = new DisplayDialogFragment();
         }
 
+        if (mDisplayDialogFragment.isAdded()) return;
+
         Bundle bundle = new Bundle();
         switch (type) {
             case DisplayDialogFragment.DialogType.COMPLETE_TASK:

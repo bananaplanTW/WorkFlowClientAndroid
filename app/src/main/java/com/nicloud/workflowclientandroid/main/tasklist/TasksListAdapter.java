@@ -146,6 +146,8 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             mDisplayDialogFragment = new DisplayDialogFragment();
         }
 
+        if (mDisplayDialogFragment.isAdded()) return;
+
         Bundle bundle = new Bundle();
         switch (type) {
             case DialogType.COMPLETE_TASK:
