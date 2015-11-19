@@ -5,10 +5,12 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
+import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -370,4 +373,42 @@ public class Utilities {
 //                break;
 //        }
 //    }
+
+    public static void showDialog(FragmentManager fm, int type, String taskId) {
+        DisplayDialogFragment fragment =
+                (DisplayDialogFragment) fm.findFragmentByTag(DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
+        if (fragment == null) {
+            fragment = new DisplayDialogFragment();
+        }
+
+        if (fragment.isAdded()) return;
+
+        Bundle bundle = new Bundle();
+        switch (type) {
+            case DisplayDialogFragment.DialogType.COMPLETE_TASK:
+                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.COMPLETE_TASK);
+                break;
+
+            case DisplayDialogFragment.DialogType.CHOOSE_TASK:
+                bundle.putString(DisplayDialogFragment.EXTRA_TASK_ID, taskId);
+                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.CHOOSE_TASK);
+                break;
+
+            case DisplayDialogFragment.DialogType.CHECK:
+                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.CHECK);
+                break;
+        }
+
+        fragment.setArguments(bundle);
+        fragment.show(fm, DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
+    }
+
+    public static void dismissDialog(FragmentManager fm) {
+        DisplayDialogFragment fragment =
+                (DisplayDialogFragment) fm.findFragmentByTag(DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
+
+        if (fragment == null) return;
+
+        fragment.dismiss();
+    }
 }

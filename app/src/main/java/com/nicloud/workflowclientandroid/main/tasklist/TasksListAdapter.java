@@ -87,7 +87,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     break;
 
                 case R.id.wip_task_card_complete_button:
-                    showDialog(DialogType.COMPLETE_TASK, mDataSet.get(getAdapterPosition()).task.id);
+                    Utilities.showDialog(mFragmentManager, DialogType.COMPLETE_TASK, mDataSet.get(getAdapterPosition()).task.id);
                     break;
 
                 case R.id.wip_task_card_view:
@@ -122,7 +122,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View v) {
                     //goToRecordLogActivity();
-                    showDialog(DialogType.CHOOSE_TASK, mDataSet.get(getAdapterPosition()).task.id);
+                    Utilities.showDialog(mFragmentManager, DialogType.CHOOSE_TASK, mDataSet.get(getAdapterPosition()).task.id);
                 }
             });
         }
@@ -137,41 +137,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private void goToRecordLogActivity() {
         mContext.startActivity(new Intent(mContext, RecordLogActivity.class));
-    }
-
-    private void showDialog(int type, String taskId) {
-        mDisplayDialogFragment =
-                (DisplayDialogFragment) mFragmentManager.findFragmentByTag(DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
-        if (mDisplayDialogFragment == null) {
-            mDisplayDialogFragment = new DisplayDialogFragment();
-        }
-
-        if (mDisplayDialogFragment.isAdded()) return;
-
-        Bundle bundle = new Bundle();
-        switch (type) {
-            case DialogType.COMPLETE_TASK:
-                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DialogType.COMPLETE_TASK);
-                break;
-
-            case DialogType.CHOOSE_TASK:
-                bundle.putString(DisplayDialogFragment.EXTRA_TASK_ID, taskId);
-                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DialogType.CHOOSE_TASK);
-                break;
-
-            case DialogType.CHECK:
-                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DialogType.CHECK);
-                break;
-        }
-
-        mDisplayDialogFragment.setArguments(bundle);
-        mDisplayDialogFragment.show(mFragmentManager, DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
-    }
-
-    private void dismissDialog() {
-        if (mDisplayDialogFragment == null) return;
-        mDisplayDialogFragment.dismiss();
-        mDisplayDialogFragment = null;
     }
 
     @Override
@@ -261,22 +226,22 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void onCompleteTaskOk() {
-        dismissDialog();
+        Utilities.dismissDialog(mFragmentManager);
     }
 
     public void onCompleteTaskCancel() {
-        dismissDialog();
+        Utilities.dismissDialog(mFragmentManager);
     }
 
     public void onChooseTaskCancel() {
-        dismissDialog();
+        Utilities.dismissDialog(mFragmentManager);
     }
 
     public void onChooseTaskStartWork() {
-        dismissDialog();
+        Utilities.dismissDialog(mFragmentManager);
     }
 
     public void onChooseTaskLog() {
-        dismissDialog();
+        Utilities.dismissDialog(mFragmentManager);
     }
 }

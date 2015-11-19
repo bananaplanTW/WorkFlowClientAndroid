@@ -27,6 +27,7 @@ import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter.ItemViewType;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListItem;
 import com.nicloud.workflowclientandroid.utility.DividerItemDecoration;
+import com.nicloud.workflowclientandroid.utility.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -271,42 +272,8 @@ public class UIController implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                showDialog(DisplayDialogFragment.DialogType.CHECK);
+                Utilities.showDialog(mFragmentManager, DisplayDialogFragment.DialogType.CHECK, null);
                 break;
         }
-    }
-
-    private void showDialog(int type) {
-        mDisplayDialogFragment =
-                (DisplayDialogFragment) mFragmentManager.findFragmentByTag(DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
-        if (mDisplayDialogFragment == null) {
-            mDisplayDialogFragment = new DisplayDialogFragment();
-        }
-
-        if (mDisplayDialogFragment.isAdded()) return;
-
-        Bundle bundle = new Bundle();
-        switch (type) {
-            case DisplayDialogFragment.DialogType.COMPLETE_TASK:
-                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.COMPLETE_TASK);
-                break;
-
-            case DisplayDialogFragment.DialogType.CHOOSE_TASK:
-                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.CHOOSE_TASK);
-                break;
-
-            case DisplayDialogFragment.DialogType.CHECK:
-                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.CHECK);
-                break;
-        }
-
-        mDisplayDialogFragment.setArguments(bundle);
-        mDisplayDialogFragment.show(mFragmentManager, DisplayDialogFragment.TAG_DISPLAY_DIALOG_FRAGMENT);
-    }
-
-    private void dismissDialog() {
-        if (mDisplayDialogFragment == null) return;
-        mDisplayDialogFragment.dismiss();
-        mDisplayDialogFragment = null;
     }
 }
