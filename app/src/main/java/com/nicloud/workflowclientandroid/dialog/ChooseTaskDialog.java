@@ -23,7 +23,7 @@ public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
     private TextView mTaskName;
 
     private TextView mStartWorkButton;
-    private TextView mCancelButton;
+    private TextView mTaskLogButton;
 
     private OnDialogActionListener mOnDialogActionListener;
 
@@ -53,7 +53,7 @@ public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
     private void findViews() {
         mTaskName = (TextView) findViewById(R.id.dialog_choose_task_task_name);
         mStartWorkButton = (TextView) findViewById(R.id.dialog_choose_task_start_work_button);
-        mCancelButton = (TextView) findViewById(R.id.dialog_choose_task_cancel_button);
+        mTaskLogButton = (TextView) findViewById(R.id.dialog_choose_task_log_button);
     }
 
     private void setupViews() {
@@ -64,7 +64,7 @@ public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
 
     private void setupButton() {
         mStartWorkButton.setOnClickListener(this);
-        mCancelButton.setOnClickListener(this);
+        mTaskLogButton.setOnClickListener(this);
     }
 
     @Override
@@ -76,8 +76,8 @@ public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
                 mOnDialogActionListener.onChooseTaskStartWork();
                 break;
 
-            case R.id.dialog_choose_task_cancel_button:
-                mOnDialogActionListener.onChooseTaskCancel();
+            case R.id.dialog_choose_task_log_button:
+                mOnDialogActionListener.onChooseTaskLog(mTask.id);
                 break;
         }
     }

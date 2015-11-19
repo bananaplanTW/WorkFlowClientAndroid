@@ -54,18 +54,13 @@ public class MainActivity extends AppCompatActivity implements DisplayDialogFrag
     }
 
     @Override
-    public void onChooseTaskCancel() {
-        mUIController.onChooseTaskCancel();
-    }
-
-    @Override
     public void onChooseTaskStartWork() {
         mUIController.onChooseTaskStartWork();
     }
 
     @Override
-    public void onChooseTaskLog() {
-        mUIController.onChooseTaskLog();
+    public void onChooseTaskLog(String taskId) {
+        mUIController.onChooseTaskLog(taskId);
     }
 
     @Override

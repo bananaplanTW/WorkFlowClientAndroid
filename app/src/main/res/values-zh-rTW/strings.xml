@@ -13,6 +13,7 @@
     <string name="complete">完成</string>
     <string name="record">記錄</string>
     <string name="cancel">取消</string>
+    <string name="task_log">工作記錄</string>
     <string name="start_work">開始工作</string>
     <string name="no_internet_connection">請檢查您的連線狀態，然後再試一次。</string>
     <string name="no_internet_connection_information">有些資訊無法正常顯示，請檢查您的連線狀態，然後再試一次。</string>

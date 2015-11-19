@@ -28,9 +28,8 @@ public class DisplayDialogFragment extends DialogFragment {
     public interface OnDialogActionListener {
         void onCompleteTaskCancel();
         void onCompleteTaskOk();
-        void onChooseTaskCancel();
         void onChooseTaskStartWork();
-        void onChooseTaskLog();
+        void onChooseTaskLog(String taskId);
         void onCheck();
     }
 

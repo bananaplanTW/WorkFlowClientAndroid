@@ -143,8 +143,8 @@ public class UIController implements View.OnClickListener {
         mTasksListAdapter.onChooseTaskStartWork();
     }
 
-    public void onChooseTaskLog() {
-        mTasksListAdapter.onChooseTaskLog();
+    public void onChooseTaskLog(String taskId) {
+        mTasksListAdapter.onChooseTaskLog(taskId);
     }
 
     public void onCheck() {
