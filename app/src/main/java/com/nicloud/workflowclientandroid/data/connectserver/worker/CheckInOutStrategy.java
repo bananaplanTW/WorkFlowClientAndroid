@@ -1,5 +1,6 @@
 package com.nicloud.workflowclientandroid.data.connectserver.worker;
 
+import android.location.Location;
 import android.util.Log;
 
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
@@ -16,12 +17,16 @@ import java.util.HashMap;
 /**
  * Created by daz on 11/17/15.
  */
-public class CheckinStrategy implements IPostRequestStrategy {
+public class CheckInOutStrategy implements IPostRequestStrategy {
 
-    private static final String TAG = CheckinStrategy.class.toString();
+    private static final String TAG = CheckInOutStrategy.class.toString();
 
-    // [TODO] should pass in location or photo...
-    public CheckinStrategy () {}
+    private Location mCurrentLocation;
+
+
+    public CheckInOutStrategy(Location currentLocation) {
+        mCurrentLocation = currentLocation;
+    }
 
     @Override
     public JSONObject post() {
@@ -30,8 +35,9 @@ public class CheckinStrategy implements IPostRequestStrategy {
             headers.put("x-user-id", WorkingData.getUserId());
             headers.put("x-auth-token", WorkingData.getAuthToken());
 
-
             HashMap<String, String> bodies = new HashMap<>();
+            bodies.put("lat", String.valueOf(mCurrentLocation.getLatitude()));
+            bodies.put("lng", String.valueOf(mCurrentLocation.getLongitude()));
 
             String urlString = URLUtils.buildURLString(LoadingDataUtils.WorkingDataUrl.BASE_URL, LoadingDataUtils.WorkingDataUrl.EndPoints.CHECKIN_OUT, null);
             String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);

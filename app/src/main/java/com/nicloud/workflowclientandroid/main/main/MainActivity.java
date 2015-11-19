@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.location.Location;
+
 import com.nicloud.workflowclientandroid.R;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.CheckInOutCommand;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements DisplayDialogFragment.OnDialogActionListener {
@@ -64,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements DisplayDialogFrag
     }
 
     @Override
-    public void onCheck() {
-        mUIController.onCheck();
+    public void onCheck(Location currentLocation, CheckInOutCommand.OnFinishCheckinStatusListener onFinishCheckinStatusListener) {
+        mUIController.onCheck(currentLocation, onFinishCheckinStatusListener);
     }
 }

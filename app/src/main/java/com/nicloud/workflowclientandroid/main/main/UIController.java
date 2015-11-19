@@ -2,6 +2,7 @@ package com.nicloud.workflowclientandroid.main.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.CheckInOutCommand;
 import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.data.observer.DataObserver;
@@ -44,6 +46,8 @@ import java.util.List;
  *
  */
 public class UIController implements View.OnClickListener, DataObserver {
+
+    private static final String TAG = "UIController";
 
     private AppCompatActivity mMainActivity;
     private ActionBar mActionBar;
@@ -180,19 +184,9 @@ public class UIController implements View.OnClickListener, DataObserver {
         Utilities.dismissDialog(mFragmentManager);
     }
 
-    public void onCheck() {
-//        CheckinCommand checkinCommand = new CheckinCommand(mMainActivity, new CheckinCommand.OnFinishCheckinStatusListener() {
-//            @Override
-//            public void onFinished() {
-//                Toast.makeText(mMainActivity, "Success!", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onFailed() {
-//                Toast.makeText(mMainActivity, "fail!", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        checkinCommand.execute();
+    public void onCheck(Location currentLocation, CheckInOutCommand.OnFinishCheckinStatusListener onFinishCheckinStatusListener) {
+        CheckInOutCommand checkInOutCommand = new CheckInOutCommand(mMainActivity, currentLocation, onFinishCheckinStatusListener);
+        checkInOutCommand.execute();
     }
 
     private void initialize() {
@@ -305,7 +299,7 @@ public class UIController implements View.OnClickListener, DataObserver {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                Utilities.showDialog(mFragmentManager, DisplayDialogFragment.DialogType.CHECK, null);
+                Utilities.showDialog(mFragmentManager, DisplayDialogFragment.DialogType.CHECK_IN_OUT, null);
                 break;
         }
     }

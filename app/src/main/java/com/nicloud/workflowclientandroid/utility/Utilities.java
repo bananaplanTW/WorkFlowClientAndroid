@@ -397,8 +397,8 @@ public class Utilities {
                 bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.CHOOSE_TASK);
                 break;
 
-            case DisplayDialogFragment.DialogType.CHECK:
-                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.CHECK);
+            case DisplayDialogFragment.DialogType.CHECK_IN_OUT:
+                bundle.putInt(DisplayDialogFragment.EXTRA_DIALOG_TYPE, DisplayDialogFragment.DialogType.CHECK_IN_OUT);
                 break;
         }
 

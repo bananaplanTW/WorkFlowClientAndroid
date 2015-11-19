@@ -17,6 +17,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.CheckInOutCommand;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.LoadingLoginWorkerCommand;
+import com.nicloud.workflowclientandroid.data.data.Worker;
+import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.main.main.MainApplication;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.googlelocation.AddressResultReceiver;
@@ -32,9 +36,10 @@ import com.nicloud.workflowclientandroid.utility.Utilities;
  * @author Danny Lin
  * @since 2015/11/4.
  */
-public class CheckDialog extends Dialog implements View.OnClickListener,
+public class CheckInOutDialog extends Dialog implements View.OnClickListener,
         AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, CheckInOutCommand.OnFinishCheckinStatusListener,
+        LoadingLoginWorkerCommand.OnLoadingLoginWorker {
 
     private Context mContext;
 
@@ -43,7 +48,8 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
     private TextView mCheckDate;
     private TextView mCheckInTime;
     private TextView mCheckOutTime;
-    private TextView mCheckButton;
+    private TextView mCheckInOutButton;
+    private TextView mThanksForWorking;
     private TextView mCurrentTime;
     private TextView mLocation;
 
@@ -54,10 +60,12 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
     private AddressResultReceiver mReceiver;
     private LocationRequest mLocationRequest;
 
+    private Worker mWorker;
+
     private boolean mFirstReceiveLocation = true;
 
 
-    public CheckDialog(Context context, OnDialogActionListener listener) {
+    public CheckInOutDialog(Context context, OnDialogActionListener listener) {
         super(context);
         mContext = context;
         mOnDialogActionListener = listener;
@@ -67,14 +75,16 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dialog_check);
+        setContentView(R.layout.dialog_check_in_out);
         initialize();
     }
 
     private void initialize() {
+        mWorker = WorkingData.getInstance(mContext).getLoginWorker();
         findViews();
         setupViews();
-        setupCheckButton();
+        setupCheckInOutTime();
+        setupCheckInOutButton();
         setupFetchingAddress();
     }
 
@@ -82,7 +92,8 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
         mCheckDate = (TextView) findViewById(R.id.check_date);
         mCheckInTime = (TextView) findViewById(R.id.check_in_time);
         mCheckOutTime = (TextView) findViewById(R.id.check_out_time);
-        mCheckButton = (TextView) findViewById(R.id.check_button);
+        mCheckInOutButton = (TextView) findViewById(R.id.check_button);
+        mThanksForWorking = (TextView) findViewById(R.id.check_in_out_thanks_for_working);
         mCurrentTime = (TextView) findViewById(R.id.check_current_time);
         mLocation = (TextView) findViewById(R.id.location_text);
         mRecordLocationProgressBar = (ProgressBar) findViewById(R.id.location_progress_bar);
@@ -93,8 +104,50 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
         mCurrentTime.setText(Utilities.millisecondsToHHMMA(System.currentTimeMillis()));
     }
 
-    private void setupCheckButton() {
-        mCheckButton.setOnClickListener(this);
+    private void setupCheckInOutTime() {
+        if (mWorker.status != Worker.Status.STOP && mWorker.status != Worker.Status.OFF) {
+            mCheckInTime.setTextColor(mContext.getResources().getColor(R.color.dialog_check_time_text_color));
+            mCheckInTime.setText(Utilities.millisecondsToHHMMA(mWorker.checkInTime));
+        }
+    }
+
+    private void setupCheckInOutButton() {
+        if (mWorker.status == Worker.Status.OFF || mWorker.status == Worker.Status.STOP) {
+            mCheckInOutButton.setText(mContext.getString(R.string.check_in));
+
+        } else {
+            mCheckInOutButton.setText(mContext.getString(R.string.check_out));
+        }
+
+        mCheckInOutButton.setOnClickListener(this);
+    }
+
+    private void setCheckInOutButtonView(Worker.Status status) {
+        switch (status) {
+            case OFF:
+                mCheckInOutButton.setEnabled(false);
+                mCheckInOutButton.setTextColor(mContext.getResources().getColor(R.color.dialog_disabled_button_text_color));
+                mCheckInOutButton.setText(mContext.getString(R.string.check_in));
+                mCheckInOutButton.setBackgroundResource(R.drawable.dialog_disable_button_background);
+                break;
+
+            case STOP:
+                mCheckInOutButton.setEnabled(true);
+                mCheckInOutButton.setTextColor(mContext.getResources().getColor(R.color.dialog_green_button_text_color));
+                mCheckInOutButton.setText(mContext.getString(R.string.check_in));
+                mCheckInOutButton.setBackgroundResource(R.drawable.dialog_green_button_background);
+
+                break;
+
+            default:
+                mCheckInOutButton.setEnabled(true);
+                mCheckInOutButton.setTextColor(mContext.getResources().getColor(R.color.dialog_green_button_text_color));
+                mCheckInOutButton.setText(mContext.getString(R.string.check_out));
+                mCheckInOutButton.setBackgroundResource(R.drawable.dialog_green_button_background);
+
+                break;
+        }
+
     }
 
     private void setupFetchingAddress() {
@@ -142,7 +195,7 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
 
         switch (v.getId()) {
             case R.id.check_button:
-                mOnDialogActionListener.onCheck();
+                mOnDialogActionListener.onCheck(mCurrentLocation, this);
 
                 break;
         }
@@ -196,6 +249,8 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
             mRecordLocationProgressBar.setVisibility(View.GONE);
             mLocation.setVisibility(View.VISIBLE);
 
+            setCheckInOutButtonView(mWorker.status);
+
             mFirstReceiveLocation = false;
         }
 
@@ -204,6 +259,39 @@ public class CheckDialog extends Dialog implements View.OnClickListener,
 
     @Override
     public void onReceiveFailed(String message) {
+
+    }
+
+    @Override
+    public void onCheckInOutFinished() {
+        new LoadingLoginWorkerCommand(mContext, this).execute();
+    }
+
+    @Override
+    public void onCheckInOutFailed() {
+
+    }
+
+    @Override
+    public void onLoadingLoginWorkerSuccessful() {
+        if (WorkingData.getInstance(mContext).getLoginWorker().status == Worker.Status.STOP) {
+            mCheckOutTime.setTextColor(mContext.getResources().getColor(R.color.dialog_check_time_text_color));
+            mCheckOutTime.setText(Utilities.millisecondsToHHMMA(System.currentTimeMillis()));
+
+            mCheckInOutButton.setVisibility(View.GONE);
+            mThanksForWorking.startAnimation(MainApplication.sFadeInAnimation);
+            mThanksForWorking.setVisibility(View.VISIBLE);
+
+        } else {
+            mCheckInTime.setTextColor(mContext.getResources().getColor(R.color.dialog_check_time_text_color));
+            mCheckInTime.setText(Utilities.millisecondsToHHMMA(System.currentTimeMillis()));
+        }
+
+        setCheckInOutButtonView(WorkingData.getInstance(mContext).getLoginWorker().status);
+    }
+
+    @Override
+    public void onLoadingLoginWorkerFailed(boolean isFailCausedByInternet) {
 
     }
 }

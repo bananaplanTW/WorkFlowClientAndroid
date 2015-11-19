@@ -2,9 +2,12 @@ package com.nicloud.workflowclientandroid.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+
+import com.nicloud.workflowclientandroid.data.connectserver.worker.CheckInOutCommand;
 
 /**
  * Use this class to display each dialog,
@@ -22,7 +25,7 @@ public class DisplayDialogFragment extends DialogFragment {
     public static final class DialogType {
         public static final int COMPLETE_TASK = 0;
         public static final int CHOOSE_TASK = 1;
-        public static final int CHECK = 2;
+        public static final int CHECK_IN_OUT = 2;
     }
 
     public interface OnDialogActionListener {
@@ -30,7 +33,7 @@ public class DisplayDialogFragment extends DialogFragment {
         void onCompleteTaskOk(String taskId);
         void onChooseTaskStartWork();
         void onChooseTaskLog(String taskId);
-        void onCheck();
+        void onCheck(Location currentLocation, CheckInOutCommand.OnFinishCheckinStatusListener onFinishCheckinStatusListener);
     }
 
     private OnDialogActionListener mOnDialogActionListener;
@@ -57,8 +60,8 @@ public class DisplayDialogFragment extends DialogFragment {
             case DialogType.CHOOSE_TASK:
                 return new ChooseTaskDialog(getActivity(), getArguments().getString(EXTRA_TASK_ID), mOnDialogActionListener);
 
-            case DialogType.CHECK:
-                return new CheckDialog(getActivity(), mOnDialogActionListener);
+            case DialogType.CHECK_IN_OUT:
+                return new CheckInOutDialog(getActivity(), mOnDialogActionListener);
 
             default:
                 return new CompleteTaskDialog(getActivity(), getArguments().getString(EXTRA_TASK_ID), mOnDialogActionListener);

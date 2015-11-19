@@ -44,6 +44,8 @@ public class Worker extends IdData {
     public Status status = Status.WIP;
     public PaymentClassification paymentClassification;
 
+    public long checkInTime = 0L;
+
     public String wipTaskId;
     private Task wipTask;
 
@@ -63,13 +65,13 @@ public class Worker extends IdData {
 
 
     public Worker(
-            Context context,
             String id,
             String name,
             String factoryId,
             String wipTaskId,
             String address,
             String phone,
+            long checkInTime,
             int score,
             boolean isOvertime,
             Status status,
@@ -82,6 +84,7 @@ public class Worker extends IdData {
         this.wipTaskId = wipTaskId;
         this.address = address;
         this.phone = phone;
+        this.checkInTime = checkInTime;
         this.score = score;
         this.isOvertime = isOvertime;
         this.status = status;
@@ -107,6 +110,7 @@ public class Worker extends IdData {
         this.wipTaskId = worker.wipTaskId;
         this.address = worker.address;
         this.phone = worker.phone;
+        this.checkInTime = worker.checkInTime;
         this.score = worker.score;
         this.isOvertime = worker.isOvertime;
         this.status = worker.status;

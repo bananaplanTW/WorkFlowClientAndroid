@@ -143,7 +143,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void goToMainActivity() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
-        //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }
 

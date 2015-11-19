@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/dialog_width"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/dialog_check_in_out_height"
     android:padding="@dimen/dialog_padding"
     android:gravity="center_horizontal"
     android:background="@color/dialog_background_color"
@@ -42,10 +42,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dialog_check_time_margin_top"
-                android:textColor="@color/dialog_check_time_text_color"
+                android:textColor="@color/dialog_uncheck_time_text_color"
                 android:textSize="@dimen/dialog_check_time_text_size"
                 android:textStyle="bold"
-                android:text="07:30"/>
+                android:text="@string/dialog_have_not_check_in"/>
 
         </LinearLayout>
 
@@ -82,9 +82,23 @@
 
     </LinearLayout>
 
-    <TextView style="@style/DialogButtonStyle.Green"
-        android:id="@+id/check_button"
-        android:text="@string/dialog_check_out"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dialog_button_height">
+
+        <TextView style="@style/DialogButtonStyle.Disabled"
+            android:id="@+id/check_button"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/check_in_out_thanks_for_working"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/dialog_thanks_for_working"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/check_current_time"
@@ -93,8 +107,7 @@
         android:paddingTop="@dimen/dialog_check_current_time_location_padding_top_bottom"
         android:paddingBottom="@dimen/dialog_check_current_time_location_padding_top_bottom"
         android:drawableLeft="@drawable/ic_current_time"
-        android:drawablePadding="@dimen/dialog_check_current_time_drawable_padding"
-        android:text="12:39 pm"/>
+        android:drawablePadding="@dimen/dialog_check_current_time_drawable_padding"/>
 
     <include layout="@layout/location_view"
         android:layout_width="wrap_content"

@@ -871,6 +871,7 @@ public class LoadingDataUtils {
         try {
             JSONObject paymentJson = workerJson.getJSONObject("paymentClassification");
             JSONObject equipmentJson = getJsonObjectFromJson(workerJson, "resource");
+            JSONObject timeCardJson = getJsonObjectFromJson(workerJson, "timecard");
             JSONArray scheduledTaskJsonList = workerJson.getJSONArray("scheduledTaskIds");
 
             String id = workerJson.getString("_id");
@@ -886,6 +887,7 @@ public class LoadingDataUtils {
                 //addEquipmentToWorkingData(context, equipmentJson);
             }
 
+            long checkInTime = timeCardJson == null ? 0L : timeCardJson.getLong("startDate");
             int score = workerJson.getInt("score");
             long lastUpdatedTime = workerJson.getLong("updatedAt");
             boolean isOvertime = workerJson.getBoolean("overwork");
@@ -904,13 +906,14 @@ public class LoadingDataUtils {
             }
 
             return new Worker(
-                    context,
                     id,
                     name,
                     factoryId,
                     wipTaskId,
                     address,
-                    phone,score,
+                    phone,
+                    checkInTime,
+                    score,
                     isOvertime,
                     status,
                     payment,

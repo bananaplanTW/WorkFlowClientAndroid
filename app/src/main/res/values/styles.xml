@@ -76,5 +76,9 @@
         <item name="android:textColor">@color/dialog_gray_button_text_color</item>
         <item name="android:background">@drawable/dialog_gray_button_background</item>
     </style>
+    <style name="DialogButtonStyle.Disabled">
+        <item name="android:textColor">@color/dialog_disabled_button_text_color</item>
+        <item name="android:background">@drawable/dialog_disable_button_background</item>
+    </style>
 
 </resources>
