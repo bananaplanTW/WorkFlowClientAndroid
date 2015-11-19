@@ -175,7 +175,10 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     }
 
     private void goToAddRecordActivity() {
-        startActivity(new Intent(this, AddLogActivity.class));
+        Intent intent = new Intent(this, AddLogActivity.class);
+        intent.putExtra(AddLogActivity.EXTRA_TASK_ID, mTask.id);
+
+        startActivity(intent);
     }
 
     @Override

@@ -37,8 +37,9 @@
     <string name="record_log_tab_photo">照片</string>
     <string name="record_log_tab_file">檔案</string>
 
-    <!-- Add Record -->
-    <string name="add_record_edit_content_hint">輸入紀錄...</string>
+    <!-- Add Log -->
+    <string name="add_log_edit_content_hint">輸入紀錄...</string>
+    <string name="add_log_complete_text">訊息記錄完成</string>
 
     <!-- Dialog -->
     <string name="dialog_complete_task_text">確定要完成工作？</string>

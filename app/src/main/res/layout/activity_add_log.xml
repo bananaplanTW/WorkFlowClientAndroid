@@ -45,7 +45,7 @@
             android:layout_below="@+id/add_log_worker_photo"
             android:layout_above="@+id/add_log_location_container"
             android:gravity="top|left"
-            android:hint="@string/add_record_edit_content_hint"
+            android:hint="@string/add_log_edit_content_hint"
             android:background="@android:color/transparent"/>
 
         <include layout="@layout/location_view"

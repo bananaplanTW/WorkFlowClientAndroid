@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.nicloud.workflowclientandroid.data.connectserver.tasklog.LeaveATextCommentToTaskCommand;
 import com.nicloud.workflowclientandroid.main.main.MainApplication;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.googlelocation.AddressResultReceiver;
@@ -30,6 +32,8 @@ import com.nicloud.workflowclientandroid.googlelocation.FetchAddressIntentServic
 public class AddLogActivity extends AppCompatActivity implements View.OnClickListener,
         AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+    public static final String EXTRA_TASK_ID = "AddLogActivity_extra_task_id";
 
     private ActionBar mActionBar;
     private Toolbar mToolbar;
@@ -47,6 +51,8 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     private AddressResultReceiver mReceiver;
     private LocationRequest mLocationRequest;
 
+    private String mTaskId;
+
     private boolean mFirstReceiveLocation = true;
 
 
@@ -58,6 +64,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initialize() {
+        mTaskId = getIntent().getStringExtra(EXTRA_TASK_ID);
         findViews();
         setupActionBar();
         setupViews();
@@ -166,6 +173,16 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.add_log_button:
+                String editContent = mEditContent.getText().toString();
+
+                if (TextUtils.isEmpty(editContent)) break;
+
+                LeaveATextCommentToTaskCommand leaveATextCommentToTaskCommand =
+                        new LeaveATextCommentToTaskCommand(this, mTaskId, editContent);
+                leaveATextCommentToTaskCommand.execute();
+
+                mEditContent.setText("");
+
                 break;
         }
     }

@@ -132,7 +132,7 @@ public final class WorkingData implements DataSubject {
 
 
     public Task getTask(String taskId) {
-        if (Utilities.isSameId(mWipTask.id, taskId)) {
+        if (mWipTask != null && Utilities.isSameId(mWipTask.id, taskId)) {
             return mWipTask;
         }
 
