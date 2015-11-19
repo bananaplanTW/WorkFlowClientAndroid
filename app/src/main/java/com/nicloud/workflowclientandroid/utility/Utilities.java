@@ -3,6 +3,7 @@ package com.nicloud.workflowclientandroid.utility;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclientandroid.tasklog.log.TaskLogActivity;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -411,5 +413,12 @@ public class Utilities {
         if (fragment == null) return;
 
         fragment.dismiss();
+    }
+
+    public static void goToTaskLogActivity(Context context, String taskId) {
+        Intent intent = new Intent(context, TaskLogActivity.class);
+        intent.putExtra(TaskLogActivity.EXTRA_TASK_ID, taskId);
+
+        context.startActivity(intent);
     }
 }

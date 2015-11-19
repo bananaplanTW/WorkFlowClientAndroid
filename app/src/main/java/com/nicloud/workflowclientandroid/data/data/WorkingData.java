@@ -123,6 +123,9 @@ public final class WorkingData implements DataSubject {
     public void clearScheduledTasks() {
         mScheduledTasks.clear();
     }
+    public void removeScheduledTask(int position) {
+        mScheduledTasks.remove(position);
+    }
     public List<Task> getScheduledTasks() {
         return mScheduledTasks;
     }

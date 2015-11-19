@@ -21,6 +21,7 @@ import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.loading.LoadingWorkerTasks;
 import com.nicloud.workflowclientandroid.data.loading.LoadingWorkerTasks.OnFinishLoadingDataListener;
+import com.nicloud.workflowclientandroid.data.worker.CompleteTaskForWorkerCommand;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclientandroid.login.LoginActivity;
 import com.nicloud.workflowclientandroid.main.tasklist.TasksListAdapter;
@@ -128,19 +129,45 @@ public class UIController implements View.OnClickListener {
     }
 
     public void onCompleteTaskOk(String taskId) {
-        mTasksListAdapter.onCompleteTaskOk(taskId);
+        CompleteTaskForWorkerCommand completeTaskForWorkerCommand =
+                new CompleteTaskForWorkerCommand(mMainActivity, WorkingData.getUserId(), taskId, new CompleteTaskForWorkerCommand.OnCompleteTaskForWorkerListener() {
+                    @Override
+                    public void onFinishCompleteTask() {
+                        if (WorkingData.getInstance(mMainActivity).getScheduledTasks().size() > 0) {
+                            WorkingData.getInstance(mMainActivity)
+                                    .setWipTask(WorkingData.getInstance(mMainActivity).getScheduledTasks().get(0));
+                            WorkingData.getInstance(mMainActivity).removeScheduledTask(0);
+
+                        } else {
+                            WorkingData.getInstance(mMainActivity).setWipTask(null);
+                        }
+
+                        setScheduledTasksData();
+                        mTasksListAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailCompleteTask() {
+
+                    }
+                });
+
+        completeTaskForWorkerCommand.execute();
+
+        Utilities.dismissDialog(mFragmentManager);
     }
 
     public void onCompleteTaskCancel() {
-        mTasksListAdapter.onCompleteTaskCancel();
+        Utilities.dismissDialog(mFragmentManager);
     }
 
     public void onChooseTaskStartWork() {
-        mTasksListAdapter.onChooseTaskStartWork();
+        Utilities.dismissDialog(mFragmentManager);
     }
 
     public void onChooseTaskLog(String taskId) {
-        mTasksListAdapter.onChooseTaskLog(taskId);
+        Utilities.goToTaskLogActivity(mMainActivity, taskId);
+        Utilities.dismissDialog(mFragmentManager);
     }
 
     public void onCheck() {

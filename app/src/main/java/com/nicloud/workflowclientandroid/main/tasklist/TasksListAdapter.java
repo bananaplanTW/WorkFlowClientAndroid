@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
-import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclientandroid.data.worker.CompleteTaskForWorkerCommand;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.DialogType;
 import com.nicloud.workflowclientandroid.tasklog.log.TaskLogActivity;
 import com.nicloud.workflowclientandroid.utility.Utilities;
@@ -29,7 +29,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private FragmentManager mFragmentManager;
     private List<TasksListItem> mDataSet;
 
-    private DisplayDialogFragment mDisplayDialogFragment;
 
     public static class ItemViewType {
         public static final int TITLE = 0;
@@ -92,7 +91,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     break;
 
                 case R.id.wip_task_card_view:
-                    goToTaskLogActivity(mDataSet.get(getAdapterPosition()).task.id);
+                    Utilities.goToTaskLogActivity(mContext, mDataSet.get(getAdapterPosition()).task.id);
                     break;
             }
         }
@@ -133,13 +132,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mContext = context;
         mFragmentManager = fm;
         mDataSet = dataSet;
-    }
-
-    private void goToTaskLogActivity(String taskId) {
-        Intent intent = new Intent(mContext, TaskLogActivity.class);
-        intent.putExtra(TaskLogActivity.EXTRA_TASK_ID, taskId);
-
-        mContext.startActivity(intent);
     }
 
     @Override
@@ -226,25 +218,5 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         return mDataSet.size();
-    }
-
-    public void onCompleteTaskOk(String taskId) {
-        // Complete task here
-        Toast.makeText(mContext,
-                "Complete task " + WorkingData.getInstance(mContext).getTask(taskId).name, Toast.LENGTH_SHORT).show();
-        Utilities.dismissDialog(mFragmentManager);
-    }
-
-    public void onCompleteTaskCancel() {
-        Utilities.dismissDialog(mFragmentManager);
-    }
-
-    public void onChooseTaskStartWork() {
-        Utilities.dismissDialog(mFragmentManager);
-    }
-
-    public void onChooseTaskLog(String taskId) {
-        goToTaskLogActivity(taskId);
-        Utilities.dismissDialog(mFragmentManager);
     }
 }
