@@ -27,6 +27,7 @@
     <string name="retry">Retry</string>
     <string name="date_format_mm_dd_yyyy">%1$s/%2$s/%3$s</string>
     <string name="date_format_mm_dd">%1$s/%2$s</string>
+    <string name="complete_task">Complete Task: %1$s</string>
 
     <!-- Main -->
     <string name="wip_task_card_prepare_for_next_task">Prepare for next task</string>

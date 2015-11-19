@@ -20,6 +20,7 @@
     <string name="error_account_password">帳號密碼錯誤。</string>
     <string name="retry">重試</string>
     <string name="date_format_mm_dd">%1$s月%2$s日</string>
+    <string name="complete_task">已完成工作: %1$s</string>
 
     <!-- Main -->
     <string name="wip_task_card_prepare_for_next_task">準備下一項工作中</string>

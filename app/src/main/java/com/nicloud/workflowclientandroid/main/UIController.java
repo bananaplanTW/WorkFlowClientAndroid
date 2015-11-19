@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.Task;
@@ -129,6 +130,8 @@ public class UIController implements View.OnClickListener {
     }
 
     public void onCompleteTaskOk(String taskId) {
+        final String completedTaskName = WorkingData.getInstance(mMainActivity).getWipTask().name;
+
         CompleteTaskForWorkerCommand completeTaskForWorkerCommand =
                 new CompleteTaskForWorkerCommand(mMainActivity, WorkingData.getUserId(), taskId, new CompleteTaskForWorkerCommand.OnCompleteTaskForWorkerListener() {
                     @Override
@@ -141,6 +144,10 @@ public class UIController implements View.OnClickListener {
                         } else {
                             WorkingData.getInstance(mMainActivity).setWipTask(null);
                         }
+
+                        Toast.makeText(mMainActivity,
+                                String.format(mMainActivity.getString(R.string.complete_task), completedTaskName),
+                                Toast.LENGTH_SHORT).show();
 
                         setScheduledTasksData();
                         mTasksListAdapter.notifyDataSetChanged();
