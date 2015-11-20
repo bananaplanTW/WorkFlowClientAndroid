@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.CheckInOutCommand;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.PauseTaskForWorkerCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.ShiftTaskCommand;
 import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
@@ -46,7 +47,9 @@ import java.util.List;
  * @since 2015.05.28
  *
  */
-public class UIController implements View.OnClickListener, DataObserver, ShiftTaskCommand.OnFinishShiftTaskListener {
+public class UIController implements View.OnClickListener, DataObserver,
+        ShiftTaskCommand.OnFinishShiftTaskListener, TasksListAdapter.OnPauseWipTaskListener,
+        PauseTaskForWorkerCommand.OnPauseTaskForWorkerListener {
 
     private static final String TAG = "UIController";
 
@@ -220,7 +223,7 @@ public class UIController implements View.OnClickListener, DataObserver, ShiftTa
 
     private void setupTasksList() {
         mTasksListManager = new LinearLayoutManager(mMainActivity);
-        mTasksListAdapter = new TasksListAdapter(mMainActivity, mFragmentManager, mTasksDataSet);
+        mTasksListAdapter = new TasksListAdapter(mMainActivity, mFragmentManager, mTasksDataSet, this);
 
         mTasksList.setLayoutManager(mTasksListManager);
         mTasksList.addItemDecoration(
@@ -315,6 +318,22 @@ public class UIController implements View.OnClickListener, DataObserver, ShiftTa
 
     @Override
     public void onShiftTaskFailed() {
+
+    }
+
+    @Override
+    public void onPauseWipTask(String taskId) {
+        PauseTaskForWorkerCommand pauseTaskForWorkerCommand = new PauseTaskForWorkerCommand(mMainActivity, taskId, this);
+        pauseTaskForWorkerCommand.execute();
+    }
+
+    @Override
+    public void onFinishPauseTask() {
+        loadWorkerTasks();
+    }
+
+    @Override
+    public void onFailPauseTask() {
 
     }
 }

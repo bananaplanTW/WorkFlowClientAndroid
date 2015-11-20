@@ -20,16 +20,21 @@ import java.util.List;
  */
 public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
-    private FragmentManager mFragmentManager;
-    private List<TasksListItem> mDataSet;
-
+    public interface OnPauseWipTaskListener {
+        void onPauseWipTask(String taskId);
+    }
 
     public static class ItemViewType {
         public static final int TITLE = 0;
         public static final int WIP_TASK = 1;
         public static final int SCHEDULED_TASK = 2;
     }
+
+    private Context mContext;
+    private FragmentManager mFragmentManager;
+    private List<TasksListItem> mDataSet;
+
+    private OnPauseWipTaskListener mOnPauseWipTaskListener;
 
     private class TitleViewHolder extends RecyclerView.ViewHolder {
 
@@ -79,6 +84,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.wip_task_card_pause_button:
+                    mOnPauseWipTaskListener.onPauseWipTask(mDataSet.get(getAdapterPosition()).task.id);
                     break;
 
                 case R.id.wip_task_card_complete_button:
@@ -123,10 +129,11 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
 
-    public TasksListAdapter(Context context, FragmentManager fm, List<TasksListItem> dataSet) {
+    public TasksListAdapter(Context context, FragmentManager fm, List<TasksListItem> dataSet, OnPauseWipTaskListener listener) {
         mContext = context;
         mFragmentManager = fm;
         mDataSet = dataSet;
+        mOnPauseWipTaskListener = listener;
     }
 
     @Override

@@ -49,6 +49,7 @@ public class LoadingDataUtils {
         public static final class EndPoints {
             public static final String LOGIN_WORKER = "/api/self";
             public static final String SHIFT_TASK = "/api/v2/shift-task";
+            public static final String PAUSE_TASK = "/api/v2/suspend-task";
             public static final String EMPLOYEES = "/api/employees";
             public static final String WARNINGS = "/api/exceptions";
             public static final String TASK_WARNINGS = "/api/task-exceptions";
