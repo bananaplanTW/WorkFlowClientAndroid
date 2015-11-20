@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.CheckInOutCommand;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.ShiftTaskCommand;
 import com.nicloud.workflowclientandroid.data.data.Task;
 import com.nicloud.workflowclientandroid.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.data.observer.DataObserver;
@@ -45,7 +46,7 @@ import java.util.List;
  * @since 2015.05.28
  *
  */
-public class UIController implements View.OnClickListener, DataObserver {
+public class UIController implements View.OnClickListener, DataObserver, ShiftTaskCommand.OnFinishShiftTaskListener {
 
     private static final String TAG = "UIController";
 
@@ -175,7 +176,10 @@ public class UIController implements View.OnClickListener, DataObserver {
         Utilities.dismissDialog(mFragmentManager);
     }
 
-    public void onChooseTaskStartWork() {
+    public void onChooseTaskStartWork(String taskId) {
+        ShiftTaskCommand shiftTaskCommand = new ShiftTaskCommand(mMainActivity, taskId, this);
+        shiftTaskCommand.execute();
+
         Utilities.dismissDialog(mFragmentManager);
     }
 
@@ -308,5 +312,15 @@ public class UIController implements View.OnClickListener, DataObserver {
     public void updateData() {
         setScheduledTasksData();
         mTasksListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onShiftTaskFinished() {
+        new LoadingWorkerTasks(mMainActivity, mOnFinishLoadingDataListener).execute();
+    }
+
+    @Override
+    public void onShiftTaskFailed() {
+
     }
 }

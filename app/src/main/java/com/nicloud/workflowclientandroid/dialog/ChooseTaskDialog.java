@@ -73,7 +73,7 @@ public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.dialog_choose_task_start_work_button:
-                mOnDialogActionListener.onChooseTaskStartWork();
+                mOnDialogActionListener.onChooseTaskStartWork(mTask.id);
                 break;
 
             case R.id.dialog_choose_task_log_button:
