@@ -144,21 +144,11 @@ public class UIController implements View.OnClickListener, DataObserver, ShiftTa
                 new CompleteTaskForWorkerCommand(mMainActivity, WorkingData.getUserId(), taskId, new CompleteTaskForWorkerCommand.OnCompleteTaskForWorkerListener() {
                     @Override
                     public void onFinishCompleteTask() {
-                        if (WorkingData.getInstance(mMainActivity).getScheduledTasks().size() > 0) {
-                            WorkingData.getInstance(mMainActivity)
-                                    .setWipTask(WorkingData.getInstance(mMainActivity).getScheduledTasks().get(0));
-                            WorkingData.getInstance(mMainActivity).removeScheduledTask(0);
-
-                        } else {
-                            WorkingData.getInstance(mMainActivity).setWipTask(null);
-                        }
+                        loadWorkerTasks();
 
                         Toast.makeText(mMainActivity,
                                 String.format(mMainActivity.getString(R.string.complete_task), completedTaskName),
                                 Toast.LENGTH_SHORT).show();
-
-                        setScheduledTasksData();
-                        mTasksListAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -243,7 +233,7 @@ public class UIController implements View.OnClickListener, DataObserver, ShiftTa
 
             @Override
             public void onRefresh() {
-                new LoadingWorkerTasks(mMainActivity, mOnFinishLoadingDataListener).execute();
+                loadWorkerTasks();
             }
 
         });
@@ -256,6 +246,10 @@ public class UIController implements View.OnClickListener, DataObserver, ShiftTa
 
     private void loadDataInFirstLaunch() {
         forceShowRefreshSpinner();
+        loadWorkerTasks();
+    }
+
+    private void loadWorkerTasks() {
         new LoadingWorkerTasks(mMainActivity, mOnFinishLoadingDataListener).execute();
     }
 
@@ -316,7 +310,7 @@ public class UIController implements View.OnClickListener, DataObserver, ShiftTa
 
     @Override
     public void onShiftTaskFinished() {
-        new LoadingWorkerTasks(mMainActivity, mOnFinishLoadingDataListener).execute();
+        loadWorkerTasks();
     }
 
     @Override

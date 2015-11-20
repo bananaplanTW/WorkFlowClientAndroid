@@ -57,7 +57,7 @@ public class LoadingDataUtils {
             public static final String TASK_ACTIVITIES = "/api/task/activities";
             public static final String TASK_WARNING_ACTIVITIES = "/api/task-exception/activities";
             public static final String DISPATCH = "/api/dispatch";
-            public static final String COMPLETE_TASK = "/api/complete-task";
+            public static final String COMPLETE_TASK = "/api/v2/complete-task/";
             public static final String SCORE_EMPLOYEE = "/api/score/employee";
             public static final String INCREMENT_TASK_ALERT = "/api/increment-task-alert";
             public static final String PASS_TASK = "/api/pass-task";
