@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.nicloud.workflowclientandroid.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclientandroid.data.connectserver.restful.IPostRequestStrategy;
-import com.nicloud.workflowclientandroid.data.data.WorkingData;
+import com.nicloud.workflowclientandroid.data.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.utility.RestfulUtils;
 import com.nicloud.workflowclientandroid.data.utility.URLUtils;
 

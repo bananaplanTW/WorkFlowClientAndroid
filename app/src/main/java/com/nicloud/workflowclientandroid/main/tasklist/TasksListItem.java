@@ -1,6 +1,6 @@
 package com.nicloud.workflowclientandroid.main.tasklist;
 
-import com.nicloud.workflowclientandroid.data.data.Task;
+import com.nicloud.workflowclientandroid.data.data.data.Task;
 
 /**
  * Created by logicmelody on 2015/11/12.

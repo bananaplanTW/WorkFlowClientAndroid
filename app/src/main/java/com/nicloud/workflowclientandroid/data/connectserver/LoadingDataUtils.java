@@ -3,9 +3,9 @@ package com.nicloud.workflowclientandroid.data.connectserver;
 import android.content.Context;
 import android.util.Log;
 
-import com.nicloud.workflowclientandroid.data.data.Task;
-import com.nicloud.workflowclientandroid.data.data.Worker;
-import com.nicloud.workflowclientandroid.data.data.WorkingData;
+import com.nicloud.workflowclientandroid.data.data.data.Task;
+import com.nicloud.workflowclientandroid.data.data.data.Worker;
+import com.nicloud.workflowclientandroid.data.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.utility.RestfulUtils;
 
 import org.json.JSONArray;

@@ -16,6 +16,9 @@
     <dimen name="no_internet_connection_retry_button_text_size">20dp</dimen>
     <dimen name="no_internet_connection_retry_button_margin_top">20dp</dimen>
 
+    <dimen name="photo_thumbnail_max_width">300dp</dimen>
+    <dimen name="photo_thumbnail_max_height">300dp</dimen>
+
     <!-- Record log -->
     <dimen name="login_nicloud_image_margin_bottom">10dp</dimen>
     <dimen name="login_container_width">300dp</dimen>

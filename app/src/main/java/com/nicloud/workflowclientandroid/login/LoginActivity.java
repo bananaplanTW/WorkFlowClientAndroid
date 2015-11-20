@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
-import com.nicloud.workflowclientandroid.data.data.WorkingData;
+import com.nicloud.workflowclientandroid.data.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.CheckLoggedInStatusCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.LoadingLoginWorkerCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.UserLoggingInCommand;

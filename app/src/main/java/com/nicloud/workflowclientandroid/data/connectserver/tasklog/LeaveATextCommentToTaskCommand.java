@@ -5,7 +5,7 @@ import android.content.Context;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclientandroid.data.connectserver.restful.PostRequestAsyncTask;
-import com.nicloud.workflowclientandroid.data.data.WorkingData;
+import com.nicloud.workflowclientandroid.data.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.utility.Utilities;
 
 import java.util.HashMap;

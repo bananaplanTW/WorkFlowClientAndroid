@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.data.data;
+package com.nicloud.workflowclientandroid.data.data.data;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -6,8 +6,6 @@ import android.graphics.drawable.Drawable;
 import com.nicloud.workflowclientandroid.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 

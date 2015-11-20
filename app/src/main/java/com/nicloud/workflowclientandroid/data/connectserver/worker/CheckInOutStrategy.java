@@ -3,7 +3,7 @@ package com.nicloud.workflowclientandroid.data.connectserver.worker;
 import android.location.Location;
 import android.util.Log;
 
-import com.nicloud.workflowclientandroid.data.data.WorkingData;
+import com.nicloud.workflowclientandroid.data.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclientandroid.data.connectserver.restful.IPostRequestStrategy;
 import com.nicloud.workflowclientandroid.data.utility.RestfulUtils;

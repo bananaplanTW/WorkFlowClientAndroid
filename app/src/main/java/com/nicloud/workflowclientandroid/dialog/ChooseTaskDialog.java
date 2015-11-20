@@ -8,8 +8,8 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
-import com.nicloud.workflowclientandroid.data.data.Task;
-import com.nicloud.workflowclientandroid.data.data.WorkingData;
+import com.nicloud.workflowclientandroid.data.data.data.Task;
+import com.nicloud.workflowclientandroid.data.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.OnDialogActionListener;
 
 /**

@@ -5,6 +5,8 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,6 +14,7 @@ import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.view.animation.Animation;
@@ -333,13 +336,13 @@ public class Utilities {
         });
     }
 
-    /**
-     * Set the style of TextView according to the status of a task
-     *
-     * @param context
-     * @param status
-     * @param task
-     */
+//    /**
+//     * Set the style of TextView according to the status of a task
+//     *
+//     * @param context
+//     * @param status
+//     * @param task
+//     */
 //    public static void setTaskStatusForTextView(Context context, TextView status, Task task) {
 //        status.setText(Task.getTaskStatusString(context, task));
 //
@@ -420,5 +423,20 @@ public class Utilities {
         intent.putExtra(TaskLogActivity.EXTRA_TASK_ID, taskId);
 
         context.startActivity(intent);
+    }
+
+    public static Bitmap scaleBitmap(Context context, String filePath) {
+        if (TextUtils.isEmpty(filePath)) return null;
+        int targetW = (int) context.getResources().getDimension(R.dimen.photo_thumbnail_max_width);
+        int targetH = (int) context.getResources().getDimension(R.dimen.photo_thumbnail_max_height);
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor < 1 ? 1 : scaleFactor;
+        return BitmapFactory.decodeFile(filePath, bmOptions);
     }
 }

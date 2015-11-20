@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid.data.data;
+package com.nicloud.workflowclientandroid.data.data.data;
 
 /**
  * BasData has id and name for all data object

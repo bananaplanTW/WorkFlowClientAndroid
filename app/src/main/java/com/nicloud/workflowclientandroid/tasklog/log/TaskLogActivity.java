@@ -16,17 +16,35 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
-import com.nicloud.workflowclientandroid.data.data.Task;
-import com.nicloud.workflowclientandroid.data.data.WorkingData;
+import com.nicloud.workflowclientandroid.data.connectserver.activity.ILoadingActivitiesStrategy;
+import com.nicloud.workflowclientandroid.data.connectserver.activity.LoadingActivitiesAsyncTask;
+import com.nicloud.workflowclientandroid.data.connectserver.activity.LoadingTaskActivitiesStrategy;
+import com.nicloud.workflowclientandroid.data.data.activity.ActivityDataFactory;
+import com.nicloud.workflowclientandroid.data.data.activity.BaseData;
+import com.nicloud.workflowclientandroid.data.data.data.Task;
+import com.nicloud.workflowclientandroid.data.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.tasklog.add.AddLogActivity;
 import com.nicloud.workflowclientandroid.utility.DividerItemDecoration;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabChangeListener {
+public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
+        LoadingActivitiesAsyncTask.OnFinishLoadingDataListener {
 
     public static final String EXTRA_TASK_ID = "TaskLogActivity_extra_task_id";
+
+    private static final int TASK_LOG_LIMIT = 15;
+
+    private static final class TabPosition {
+        public static final int TEXT = 0;
+        public static final int PHOTO = 1;
+        public static final int FILE = 2;
+    }
 
     private static final class TabTag {
         public static final String TEXT = "tag_tab_text";
@@ -41,11 +59,15 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     private TextView mLogCaseName;
 
     private TabHost mTaskLogTabHost;
+    private int mSelectedTabPosition = TabPosition.TEXT;
 
     private RecyclerView mTaskLogListView;
     private LinearLayoutManager mTaskLogListViewLayoutManager;
     private TaskLogListAdapter mTaskLogListAdapter;
-    private List<LogItem> mLogListDataSet = new ArrayList<>();
+
+    private List<BaseData> mTextDataSet = new ArrayList<>();
+    private List<BaseData> mPhotoDataSet = new ArrayList<>();
+    private List<BaseData> mFileDataSet = new ArrayList<>();
 
     private Task mTask;
 
@@ -67,12 +89,12 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_log);
         initialize();
+        loadTaskActivities();
     }
 
     private void initialize() {
@@ -81,6 +103,14 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         setupActionBar();
         setupTabs();
         setupRecordLog();
+    }
+
+    private void loadTaskActivities() {
+        LoadingTaskActivitiesStrategy loadingTaskActivitiesStrategy =
+                new LoadingTaskActivitiesStrategy(mTask.id, TASK_LOG_LIMIT);
+        LoadingActivitiesAsyncTask loadingWorkerActivitiesTask =
+                new LoadingActivitiesAsyncTask(this, mTask.id, this, loadingTaskActivitiesStrategy);
+        loadingWorkerActivitiesTask.execute();
     }
 
     private void findViews() {
@@ -113,10 +143,8 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     }
 
     private void setupRecordLog() {
-        setRecordLogData();
-
         mTaskLogListViewLayoutManager = new LinearLayoutManager(this);
-        mTaskLogListAdapter = new TaskLogListAdapter(this, mLogListDataSet);
+        mTaskLogListAdapter = new TaskLogListAdapter(this);
 
         mTaskLogListView.setLayoutManager(mTaskLogListViewLayoutManager);
         mTaskLogListView.addItemDecoration(
@@ -124,12 +152,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         mTaskLogListView.setAdapter(mTaskLogListAdapter);
     }
 
-    private void setRecordLogData() {
-        mLogListDataSet.add(new LogItem("Danny", "多益公司的進項與之前不同 下次審查要注意", "2015/11/12 12:06 pm"));
-    }
-
     private void addTab(String tag) {
-        View tabView = getTabView(tag);
         mTaskLogTabHost.addTab(mTaskLogTabHost.newTabSpec(tag).setIndicator(getTabView(tag))
                 .setContent(new LogTabContentFactory(this)));
     }
@@ -183,6 +206,75 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
 
     @Override
     public void onTabChanged(String tabId) {
+        mSelectedTabPosition = mTaskLogTabHost.getCurrentTab();
+        updateTaskLogListAccordingToTab();
+    }
+
+    @Override
+    public void onFinishLoadingData(String id, ILoadingActivitiesStrategy.ActivityCategory category, JSONArray activities) {
+        if (activities == null) return;
+
+        setTaskLogData(parseActivityJSONArray(activities));
+    }
+
+    private void setTaskLogData(ArrayList<BaseData> logData) {
+        for (BaseData data : logData) {
+            switch (data.type) {
+                case RECORD:
+                    mTextDataSet.add(data);
+                    break;
+
+                case FILE:
+                    mFileDataSet.add(data);
+                    break;
+
+                case PHOTO:
+                    mPhotoDataSet.add(data);
+                    break;
+            }
+        }
+
+        updateTaskLogListAccordingToTab();
+    }
+
+    private void updateTaskLogListAccordingToTab() {
+        switch (mSelectedTabPosition) {
+            case TabPosition.TEXT:
+                mTaskLogListAdapter.swapDataSet(mTextDataSet);
+                break;
+
+            case TabPosition.PHOTO:
+                mTaskLogListAdapter.swapDataSet(mPhotoDataSet);
+                break;
+
+            case TabPosition.FILE:
+                mTaskLogListAdapter.swapDataSet(mFileDataSet);
+                break;
+        }
+    }
+
+    private ArrayList<BaseData> parseActivityJSONArray(JSONArray activities) {
+        ArrayList<BaseData> parsedActivities = new ArrayList<>();
+
+        int length = activities.length();
+
+        try {
+            for (int i = 0; i < length; i++) {
+                JSONObject activity = activities.getJSONObject(i);
+                BaseData activityData = ActivityDataFactory.genData(activity, this);
+                if (activityData != null) {
+                    parsedActivities.add(activityData);
+                }
+            }
+            return parsedActivities;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void onFailLoadingData(boolean isFailCausedByInternet) {
 
     }
 }

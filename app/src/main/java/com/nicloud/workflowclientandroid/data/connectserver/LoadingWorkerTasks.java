@@ -3,7 +3,7 @@ package com.nicloud.workflowclientandroid.data.connectserver;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.nicloud.workflowclientandroid.data.data.WorkingData;
+import com.nicloud.workflowclientandroid.data.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.utility.RestfulUtils;
 
 
