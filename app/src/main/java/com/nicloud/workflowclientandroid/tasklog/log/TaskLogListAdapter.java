@@ -30,19 +30,28 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private Context mContext;
     private List<BaseData> mDataSet = new ArrayList<>();
 
-    private class RecordViewHolder extends RecyclerView.ViewHolder {
+    private class BaseLogViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView userIcon;
         public TextView userName;
-        public TextView content;
+        public TextView description;
         public TextView timestamp;
 
-        public RecordViewHolder(View itemView) {
+
+        public BaseLogViewHolder(View itemView) {
             super(itemView);
-            userIcon = (ImageView) itemView.findViewById(R.id.log_user_icon);
             userName = (TextView) itemView.findViewById(R.id.log_user_name);
-            content = (TextView) itemView.findViewById(R.id.log_description);
+            description = (TextView) itemView.findViewById(R.id.log_description);
             timestamp = (TextView) itemView.findViewById(R.id.log_timestamp);
+        }
+    }
+
+    private class TextLogViewHolder extends BaseLogViewHolder {
+
+        public ImageView userIcon;
+
+        public TextLogViewHolder(View itemView) {
+            super(itemView);
+            userIcon = (ImageView) itemView.findViewById(R.id.log_file_icon);
         }
     }
 
@@ -59,42 +68,53 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new RecordViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_list_item, parent, false));
+        switch (viewType) {
+            case ItemViewType.RECORD:
+                return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_text_item, parent, false));
+
+            case ItemViewType.PHOTO:
+                return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_text_item, parent, false));
+
+            case ItemViewType.FILE:
+                return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_text_item, parent, false));
+
+            default:
+                return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_text_item, parent, false));
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (mDataSet.get(position).type) {
             case RECORD:
-                onBindTextLog((RecordViewHolder) holder, position);
-                break;
-
-            case FILE:
-                onBindFileLog((RecordViewHolder) holder, position);
+                onBindTextLog((TextLogViewHolder) holder, position);
                 break;
 
             case PHOTO:
-                onBindPhotoLog((RecordViewHolder) holder, position);
+                onBindPhotoLog((TextLogViewHolder) holder, position);
+
+            case FILE:
+                onBindFileLog((TextLogViewHolder) holder, position);
                 break;
         }
     }
 
-    private void onBindTextLog(RecordViewHolder holder, int position) {
+    private void onBindTextLog(TextLogViewHolder holder, int position) {
         RecordData recordData = (RecordData) mDataSet.get(position);
 
         holder.userName.setText(recordData.reporter);
-        holder.content.setText(recordData.description);
+        holder.description.setText(recordData.description);
         holder.timestamp.setText(Utilities.timestamp2Date(recordData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
     }
 
-    private void onBindFileLog(RecordViewHolder holder, int position) {
+    private void onBindFileLog(TextLogViewHolder holder, int position) {
 
 //        recordVH.userName.setText(mDataSet.get(position).userName);
 //        recordVH.content.setText(mDataSet.get(position).content);
 //        recordVH.timestamp.setText(mDataSet.get(position).timeStamp);
     }
 
-    private void onBindPhotoLog(RecordViewHolder holder, int position) {
+    private void onBindPhotoLog(TextLogViewHolder holder, int position) {
 
 //        recordVH.userName.setText(mDataSet.get(position).userName);
 //        recordVH.content.setText(mDataSet.get(position).content);
@@ -112,11 +132,11 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case RECORD:
                 return ItemViewType.RECORD;
 
-            case FILE:
-                return ItemViewType.FILE;
-
             case PHOTO:
                 return ItemViewType.PHOTO;
+
+            case FILE:
+                return ItemViewType.FILE;
         }
 
         return super.getItemViewType(position);

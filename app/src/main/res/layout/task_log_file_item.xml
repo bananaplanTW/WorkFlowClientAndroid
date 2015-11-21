@@ -6,7 +6,7 @@
     android:padding="@dimen/task_log_list_item_padding" >
 
     <ImageView
-        android:id="@+id/log_user_icon"
+        android:id="@+id/log_file_icon"
         android:layout_width="@dimen/worker_icon_width_height"
         android:layout_height="@dimen/worker_icon_width_height"
         android:layout_alignParentLeft="true"
@@ -18,8 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/task_log_list_item_title_container_margin_left"
-        android:layout_toRightOf="@+id/log_user_icon"
-        android:layout_alignTop="@+id/log_user_icon">
+        android:layout_toRightOf="@+id/log_file_icon"
+        android:layout_alignTop="@+id/log_file_icon">
 
         <TextView
             android:id="@+id/log_user_name"
