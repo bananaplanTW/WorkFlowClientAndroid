@@ -1,6 +1,5 @@
 package com.nicloud.workflowclientandroid.data.connectserver.worker;
 
-import android.location.Location;
 import android.util.Log;
 
 import com.nicloud.workflowclientandroid.data.connectserver.LoadingDataUtils;
@@ -47,7 +46,7 @@ public class ShiftTaskStrategy implements IPostRequestStrategy {
                 }
             }
         }  catch (JSONException e) {
-            Log.e(TAG, "Exception in AssigningTaskStrategy()");
+            Log.e(TAG, "Exception in ShiftTaskStrategy()");
             e.printStackTrace();
         }
         return null;

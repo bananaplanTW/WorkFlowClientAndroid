@@ -49,7 +49,7 @@ public class CheckInOutStrategy implements IPostRequestStrategy {
                 }
             }
         }  catch (JSONException e) {
-            Log.e(TAG, "Exception in AssigningTaskStrategy()");
+            Log.e(TAG, "Exception in CheckInOutStrategy()");
             e.printStackTrace();
         }
         return null;
