@@ -2,7 +2,6 @@ package com.nicloud.workflowclientandroid.tasklog.log;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,8 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.activity.BaseData;
+import com.nicloud.workflowclientandroid.data.data.activity.RecordData;
+import com.nicloud.workflowclientandroid.utility.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(itemView);
             userIcon = (ImageView) itemView.findViewById(R.id.log_user_icon);
             userName = (TextView) itemView.findViewById(R.id.log_user_name);
-            content = (TextView) itemView.findViewById(R.id.log_content);
+            content = (TextView) itemView.findViewById(R.id.log_description);
             timestamp = (TextView) itemView.findViewById(R.id.log_timestamp);
         }
     }
@@ -51,7 +52,6 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public void swapDataSet(List<BaseData> dataSet) {
-        Log.d("danny", "DataSet size = " + dataSet.size());
         mDataSet.clear();
         mDataSet.addAll(dataSet);
         notifyDataSetChanged();
@@ -64,7 +64,37 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        RecordViewHolder recordVH = (RecordViewHolder) holder;
+        switch (mDataSet.get(position).type) {
+            case RECORD:
+                onBindTextLog((RecordViewHolder) holder, position);
+                break;
+
+            case FILE:
+                onBindFileLog((RecordViewHolder) holder, position);
+                break;
+
+            case PHOTO:
+                onBindPhotoLog((RecordViewHolder) holder, position);
+                break;
+        }
+    }
+
+    private void onBindTextLog(RecordViewHolder holder, int position) {
+        RecordData recordData = (RecordData) mDataSet.get(position);
+
+        holder.userName.setText(recordData.reporter);
+        holder.content.setText(recordData.description);
+        holder.timestamp.setText(Utilities.timestamp2Date(recordData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
+    }
+
+    private void onBindFileLog(RecordViewHolder holder, int position) {
+
+//        recordVH.userName.setText(mDataSet.get(position).userName);
+//        recordVH.content.setText(mDataSet.get(position).content);
+//        recordVH.timestamp.setText(mDataSet.get(position).timeStamp);
+    }
+
+    private void onBindPhotoLog(RecordViewHolder holder, int position) {
 
 //        recordVH.userName.setText(mDataSet.get(position).userName);
 //        recordVH.content.setText(mDataSet.get(position).content);
