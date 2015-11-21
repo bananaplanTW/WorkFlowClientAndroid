@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.activity.BaseData;
+import com.nicloud.workflowclientandroid.data.data.activity.FileData;
 import com.nicloud.workflowclientandroid.data.data.activity.RecordData;
 import com.nicloud.workflowclientandroid.utility.Utilities;
 
@@ -23,8 +24,8 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private static final class ItemViewType {
         public static final int RECORD = 0;
-        public static final int FILE = 1;
-        public static final int PHOTO = 2;
+        public static final int PHOTO = 1;
+        public static final int FILE = 2;
     }
 
     private Context mContext;
@@ -55,6 +56,20 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    private class PhotoLogViewHolder extends BaseLogViewHolder {
+
+        public PhotoLogViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    private class FileLogViewHolder extends BaseLogViewHolder {
+
+        public FileLogViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
 
     public TaskLogListAdapter(Context context) {
         mContext = context;
@@ -73,10 +88,10 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_text_item, parent, false));
 
             case ItemViewType.PHOTO:
-                return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_text_item, parent, false));
+                return new PhotoLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_photo_item, parent, false));
 
             case ItemViewType.FILE:
-                return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_text_item, parent, false));
+                return new FileLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_file_item, parent, false));
 
             default:
                 return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_text_item, parent, false));
@@ -91,10 +106,11 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 break;
 
             case PHOTO:
-                onBindPhotoLog((TextLogViewHolder) holder, position);
+                onBindPhotoLog((PhotoLogViewHolder) holder, position);
+                break;
 
             case FILE:
-                onBindFileLog((TextLogViewHolder) holder, position);
+                onBindFileLog((FileLogViewHolder) holder, position);
                 break;
         }
     }
@@ -107,18 +123,19 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.timestamp.setText(Utilities.timestamp2Date(recordData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
     }
 
-    private void onBindFileLog(TextLogViewHolder holder, int position) {
+    private void onBindPhotoLog(PhotoLogViewHolder holder, int position) {
 
 //        recordVH.userName.setText(mDataSet.get(position).userName);
 //        recordVH.content.setText(mDataSet.get(position).content);
 //        recordVH.timestamp.setText(mDataSet.get(position).timeStamp);
     }
 
-    private void onBindPhotoLog(TextLogViewHolder holder, int position) {
+    private void onBindFileLog(FileLogViewHolder holder, int position) {
+        FileData fileData = (FileData) mDataSet.get(position);
 
-//        recordVH.userName.setText(mDataSet.get(position).userName);
-//        recordVH.content.setText(mDataSet.get(position).content);
-//        recordVH.timestamp.setText(mDataSet.get(position).timeStamp);
+        holder.userName.setText(fileData.uploader);
+        holder.description.setText(String.format(mContext.getString(R.string.task_log_upload_file), fileData.fileName));
+        holder.timestamp.setText(Utilities.timestamp2Date(fileData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
     }
 
     @Override

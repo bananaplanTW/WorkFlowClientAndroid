@@ -32,10 +32,11 @@
     <string name="login">登入</string>
     <string name="logout">登出</string>
 
-    <!-- Record Log -->
-    <string name="record_log_tab_text">文字</string>
-    <string name="record_log_tab_photo">照片</string>
-    <string name="record_log_tab_file">檔案</string>
+    <!-- Task Log -->
+    <string name="task_log_tab_text">文字</string>
+    <string name="task_log_tab_photo">照片</string>
+    <string name="task_log_tab_file">檔案</string>
+    <string name="task_log_upload_file">上傳了 %1$s</string>
 
     <!-- Add Log -->
     <string name="add_log_edit_content_hint">輸入紀錄...</string>

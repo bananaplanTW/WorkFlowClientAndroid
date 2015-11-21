@@ -39,10 +39,11 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
-    <!-- Record Log -->
-    <string name="record_log_tab_text">Text</string>
-    <string name="record_log_tab_photo">Photo</string>
-    <string name="record_log_tab_file">File</string>
+    <!-- Task Log -->
+    <string name="task_log_tab_text">Text</string>
+    <string name="task_log_tab_photo">Photo</string>
+    <string name="task_log_tab_file">File</string>
+    <string name="task_log_upload_file">Upload %1$s</string>
 
     <!-- Add Log -->
     <string name="add_log_edit_content_hint">Input log...</string>

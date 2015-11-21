@@ -163,11 +163,11 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
 
         String text = "";
         if(TabTag.TEXT.equals(tag)) {
-            text = getString(R.string.record_log_tab_text);
+            text = getString(R.string.task_log_tab_text);
         } else if(TabTag.PHOTO.equals(tag)) {
-            text = getString(R.string.record_log_tab_photo);
+            text = getString(R.string.task_log_tab_photo);
         } else if(TabTag.FILE.equals(tag)) {
-            text = getString(R.string.record_log_tab_file);
+            text = getString(R.string.task_log_tab_file);
         }
 
         tabText.setText(text);
@@ -224,12 +224,12 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
                     mTextDataSet.add(data);
                     break;
 
-                case FILE:
-                    mFileDataSet.add(data);
-                    break;
-
                 case PHOTO:
                     mPhotoDataSet.add(data);
+                    break;
+
+                case FILE:
+                    mFileDataSet.add(data);
                     break;
             }
         }
