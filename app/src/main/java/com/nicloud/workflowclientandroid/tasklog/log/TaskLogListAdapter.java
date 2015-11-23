@@ -1,6 +1,7 @@
 package com.nicloud.workflowclientandroid.tasklog.log;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,10 +59,12 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private class PhotoLogViewHolder extends BaseLogViewHolder {
 
+        public View view;
         public ImageView photo;
 
         public PhotoLogViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
             photo = (ImageView) itemView.findViewById(R.id.log_photo);
         }
     }
@@ -127,12 +130,22 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void onBindPhotoLog(PhotoLogViewHolder holder, int position) {
-        PhotoData photoData = (PhotoData) mDataSet.get(position);
+        final PhotoData photoData = (PhotoData) mDataSet.get(position);
 
         holder.userName.setText(photoData.uploader);
         holder.description.setText(String.format(mContext.getString(R.string.task_log_upload_photo), photoData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(photoData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
         holder.photo.setImageDrawable(photoData.photo);
+
+        if (Uri.EMPTY != photoData.filePath) {
+            holder.view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(DisplayImageActivity
+                            .launchDisplayImageActivity(mContext, photoData.fileName, photoData.filePath.toString()));
+                }
+            });
+        }
     }
 
     private void onBindFileLog(FileLogViewHolder holder, int position) {

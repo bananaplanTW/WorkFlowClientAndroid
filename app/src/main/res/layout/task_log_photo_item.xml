@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:minHeight="@dimen/task_log_list_item_min_height"
     android:padding="@dimen/task_log_list_item_padding"
+    android:background="?selectableItemBackground"
     android:orientation="vertical">
 
     <include layout="@layout/task_log_item" />

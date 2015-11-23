@@ -39,6 +39,9 @@
             android:name=".tasklog.log.TaskLogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.WhiteBackground" />
+        <activity
+            android:name=".tasklog.log.DisplayImageActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".googlelocation.FetchAddressIntentService"
