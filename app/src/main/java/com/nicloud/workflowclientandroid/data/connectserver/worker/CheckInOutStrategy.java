@@ -43,6 +43,8 @@ public class CheckInOutStrategy implements IPostRequestStrategy {
             String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
 
             if (responseString != null) {
+                Log.d(TAG, "CheckInOutStrategy responseString = " + responseString);
+
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
                     return jsonObject.getJSONObject("result");
