@@ -15,15 +15,25 @@ import java.util.HashMap;
  */
 public class LeaveATextCommentToTaskCommand implements ICreateActivityCommand, PostRequestAsyncTask.OnFinishPostingDataListener {
 
+    public interface OnLeaveATextCommentListener {
+        void onFinishLeaveATextComment();
+        void onFailLeaveATextComment(boolean isFailCausedByInternet);
+    }
+
     private PostRequestAsyncTask mPostRequestAsyncTask;
     private Context mContext;
     private String mTaskId;
     private String mComment;
 
-    public LeaveATextCommentToTaskCommand(Context context, String taskId, String comment) {
+    private OnLeaveATextCommentListener mOnLeaveATextCommentListener;
+
+
+    public LeaveATextCommentToTaskCommand(Context context, String taskId, String comment,
+                                          OnLeaveATextCommentListener listener) {
         mContext = context;
         mTaskId = taskId;
         mComment = comment;
+        mOnLeaveATextCommentListener = listener;
     }
 
     @Override
@@ -44,11 +54,11 @@ public class LeaveATextCommentToTaskCommand implements ICreateActivityCommand, P
 
     @Override
     public void onFinishPostingData() {
-        Utilities.showToastInNonUiThread(mContext, mContext.getString(R.string.add_log_complete_text));
+        mOnLeaveATextCommentListener.onFinishLeaveATextComment();
     }
 
     @Override
     public void onFailPostingData(boolean isFailCausedByInternet) {
-
+        mOnLeaveATextCommentListener.onFailLeaveATextComment(isFailCausedByInternet);
     }
 }

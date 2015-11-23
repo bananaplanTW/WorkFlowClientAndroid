@@ -38,6 +38,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
 
     public static final String EXTRA_TASK_ID = "TaskLogActivity_extra_task_id";
 
+    private static final int REQUEST_ADD_LOG = 32;
     private static final int TASK_LOG_LIMIT = 15;
 
     private static final class TabPosition {
@@ -201,7 +202,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         Intent intent = new Intent(this, AddLogActivity.class);
         intent.putExtra(AddLogActivity.EXTRA_TASK_ID, mTask.id);
 
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ADD_LOG);
     }
 
     @Override
@@ -218,6 +219,10 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     }
 
     private void setTaskLogData(ArrayList<BaseData> logData) {
+        mTextDataSet.clear();
+        mPhotoDataSet.clear();
+        mFileDataSet.clear();
+
         for (BaseData data : logData) {
             switch (data.type) {
                 case RECORD:
@@ -276,5 +281,17 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     @Override
     public void onFailLoadingData(boolean isFailCausedByInternet) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_ADD_LOG:
+                if (RESULT_OK != resultCode) return;
+                loadTaskActivities();
+
+                break;
+        }
     }
 }

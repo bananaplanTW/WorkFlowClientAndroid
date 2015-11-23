@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,11 +28,13 @@ import com.nicloud.workflowclientandroid.main.main.MainApplication;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.googlelocation.AddressResultReceiver;
 import com.nicloud.workflowclientandroid.googlelocation.FetchAddressIntentService;
+import com.nicloud.workflowclientandroid.utility.Utilities;
 
 
 public class AddLogActivity extends AppCompatActivity implements View.OnClickListener,
         AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener,
+        LeaveATextCommentToTaskCommand.OnLeaveATextCommentListener {
 
     public static final String EXTRA_TASK_ID = "AddLogActivity_extra_task_id";
 
@@ -178,7 +181,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
                 if (TextUtils.isEmpty(editContent)) break;
 
                 LeaveATextCommentToTaskCommand leaveATextCommentToTaskCommand =
-                        new LeaveATextCommentToTaskCommand(this, mTaskId, editContent);
+                        new LeaveATextCommentToTaskCommand(this, mTaskId, editContent, this);
                 leaveATextCommentToTaskCommand.execute();
 
                 mEditContent.setText("");
@@ -243,6 +246,17 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onReceiveFailed(String message) {
+
+    }
+
+    @Override
+    public void onFinishLeaveATextComment() {
+        setResult(RESULT_OK);
+        Toast.makeText(this, getString(R.string.add_log_complete_text), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFailLeaveATextComment(boolean isFailCausedByInternet) {
 
     }
 }
