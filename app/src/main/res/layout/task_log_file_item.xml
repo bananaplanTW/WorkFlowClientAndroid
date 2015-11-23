@@ -11,7 +11,7 @@
         android:layout_height="@dimen/worker_icon_width_height"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/ic_worker" />
+        android:src="@drawable/ic_insert_drive_file" />
 
     <RelativeLayout
         android:id="@+id/log_title_container"
