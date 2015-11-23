@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.nicloud.workflowclientandroid.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclientandroid.data.connectserver.activity.LoadingPhotoDataCommand;
+import com.nicloud.workflowclientandroid.data.connectserver.tasklog.OnLoadImageListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +16,7 @@ import java.util.Date;
  * Created by daz on 10/9/15.
  */
 public class ActivityDataFactory {
-    public static BaseData genData (JSONObject recordJSON, Context context) throws JSONException {
+    public static BaseData genData (JSONObject recordJSON, Context context, OnLoadImageListener listener) throws JSONException {
         String type = recordJSON.getString("type");
         switch (type) {
             case "checkIn":
@@ -67,7 +68,8 @@ public class ActivityDataFactory {
                     thumbBuilder.path(recordJSON.getString("thumbUrl"));
                     Uri thumbUri = thumbBuilder.build();
                     // TODO: DO NOT load all thumbnails into memory to avoid OOM
-                    LoadingPhotoDataCommand loadingPhotoDataCommand = new LoadingPhotoDataCommand(context, thumbUri, photoData);
+                    LoadingPhotoDataCommand loadingPhotoDataCommand
+                            = new LoadingPhotoDataCommand(context, thumbUri, photoData, listener);
                     loadingPhotoDataCommand.execute();
 
                     Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();

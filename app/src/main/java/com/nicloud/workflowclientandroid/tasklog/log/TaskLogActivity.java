@@ -20,6 +20,7 @@ import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.connectserver.activity.ILoadingActivitiesStrategy;
 import com.nicloud.workflowclientandroid.data.connectserver.activity.LoadingActivitiesAsyncTask;
 import com.nicloud.workflowclientandroid.data.connectserver.activity.LoadingTaskActivitiesStrategy;
+import com.nicloud.workflowclientandroid.data.connectserver.tasklog.OnLoadImageListener;
 import com.nicloud.workflowclientandroid.data.data.activity.ActivityDataFactory;
 import com.nicloud.workflowclientandroid.data.data.activity.BaseData;
 import com.nicloud.workflowclientandroid.data.data.data.Task;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
-        LoadingActivitiesAsyncTask.OnFinishLoadingDataListener {
+        LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnLoadImageListener {
 
     public static final String EXTRA_TASK_ID = "TaskLogActivity_extra_task_id";
 
@@ -267,14 +268,17 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         switch (mSelectedTabPosition) {
             case TabPosition.TEXT:
                 mTaskLogListAdapter.swapDataSet(mTextDataSet);
+
                 break;
 
             case TabPosition.PHOTO:
                 mTaskLogListAdapter.swapDataSet(mPhotoDataSet);
+
                 break;
 
             case TabPosition.FILE:
                 mTaskLogListAdapter.swapDataSet(mFileDataSet);
+
                 break;
         }
     }
@@ -287,7 +291,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         try {
             for (int i = 0; i < length; i++) {
                 JSONObject activity = activities.getJSONObject(i);
-                BaseData activityData = ActivityDataFactory.genData(activity, this);
+                BaseData activityData = ActivityDataFactory.genData(activity, this, this);
                 if (activityData != null) {
                     parsedActivities.add(activityData);
                 }
@@ -314,5 +318,10 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
 
                 break;
         }
+    }
+
+    @Override
+    public void onFinishLoadImage() {
+        mTaskLogListAdapter.notifyDataSetChanged();
     }
 }

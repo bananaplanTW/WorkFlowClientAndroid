@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import com.nicloud.workflowclientandroid.data.connectserver.tasklog.OnLoadImageListener;
 import com.nicloud.workflowclientandroid.data.data.activity.PhotoData;
 
 
@@ -17,10 +18,13 @@ public class LoadingPhotoDataCommand implements LoadingDrawableAsyncTask.OnFinis
     private Uri mUri;
     private PhotoData mPhotoData;
 
-    public LoadingPhotoDataCommand(Context context, Uri uri, PhotoData photoData) {
+    private OnLoadImageListener mOnLoadImageListener;
+
+    public LoadingPhotoDataCommand(Context context, Uri uri, PhotoData photoData, OnLoadImageListener listener) {
         mContext = context;
         mUri = uri;
         mPhotoData = photoData;
+        mOnLoadImageListener = listener;
     }
 
     public void execute () {
@@ -32,6 +36,7 @@ public class LoadingPhotoDataCommand implements LoadingDrawableAsyncTask.OnFinis
     @Override
     public void onFinishLoadingData() {
         mPhotoData.photo = mLoadingDrawableAsyncTask.getResult();
+        mOnLoadImageListener.onFinishLoadImage();
     }
 
     @Override

@@ -54,6 +54,7 @@ public class LoadingActivitiesAsyncTask extends AsyncTask<Void, Void, JSONArray>
     @Override
     protected void onPostExecute(JSONArray jsonArray) {
         super.onPostExecute(jsonArray);
+
         mOnFinishLoadingDataListener.onFinishLoadingData(mWorkerId, mLoadingActivitiesStrategy.getCategory(), jsonArray);
     }
 }
