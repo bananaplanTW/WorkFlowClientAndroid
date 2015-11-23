@@ -2,6 +2,7 @@ package com.nicloud.workflowclientandroid.tasklog.log;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -62,6 +63,8 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     private TabHost mTaskLogTabHost;
     private int mSelectedTabPosition = TabPosition.TEXT;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     private RecyclerView mTaskLogListView;
     private LinearLayoutManager mTaskLogListViewLayoutManager;
     private TaskLogListAdapter mTaskLogListAdapter;
@@ -104,6 +107,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         setupActionBar();
         setupTabs();
         setupRecordLog();
+        setupSwipeRefreshLayout();
     }
 
     private void loadTaskActivities() {
@@ -119,6 +123,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         mLogTaskName = (TextView) findViewById(R.id.task_log_task_name);
         mLogCaseName = (TextView) findViewById(R.id.task_log_case_name);
         mTaskLogTabHost = (TabHost) findViewById(R.id.task_log_tab_host);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_container);
         mTaskLogListView = (RecyclerView) findViewById(R.id.task_log_list);
     }
 
@@ -151,6 +156,21 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         mTaskLogListView.addItemDecoration(
                 new DividerItemDecoration(getResources().getDrawable(R.drawable.list_divider), false, true));
         mTaskLogListView.setAdapter(mTaskLogListAdapter);
+    }
+
+    private void setupSwipeRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                loadTaskActivities();
+            }
+        });
+
+        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     private void addTab(String tag) {
@@ -216,6 +236,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         if (activities == null) return;
 
         setTaskLogData(parseActivityJSONArray(activities));
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void setTaskLogData(ArrayList<BaseData> logData) {
