@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.activity.BaseData;
 import com.nicloud.workflowclientandroid.data.data.activity.FileData;
+import com.nicloud.workflowclientandroid.data.data.activity.PhotoData;
 import com.nicloud.workflowclientandroid.data.data.activity.RecordData;
 import com.nicloud.workflowclientandroid.utility.Utilities;
 
@@ -57,8 +58,11 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private class PhotoLogViewHolder extends BaseLogViewHolder {
 
+        public ImageView photo;
+
         public PhotoLogViewHolder(View itemView) {
             super(itemView);
+            photo = (ImageView) itemView.findViewById(R.id.log_photo);
         }
     }
 
@@ -123,10 +127,12 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void onBindPhotoLog(PhotoLogViewHolder holder, int position) {
+        PhotoData photoData = (PhotoData) mDataSet.get(position);
 
-//        recordVH.userName.setText(mDataSet.get(position).userName);
-//        recordVH.content.setText(mDataSet.get(position).content);
-//        recordVH.timestamp.setText(mDataSet.get(position).timeStamp);
+        holder.userName.setText(photoData.uploader);
+        holder.description.setText(String.format(mContext.getString(R.string.task_log_upload_photo), photoData.fileName));
+        holder.timestamp.setText(Utilities.timestamp2Date(photoData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
+        holder.photo.setImageDrawable(photoData.photo);
     }
 
     private void onBindFileLog(FileLogViewHolder holder, int position) {

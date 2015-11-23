@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/task_log_list_item_min_height"
-    android:padding="@dimen/task_log_list_item_padding" >
+    android:padding="@dimen/task_log_list_item_padding"
+    android:orientation="vertical">
 
     <include layout="@layout/task_log_item" />
 
-</RelativeLayout>
+    <ImageView
+        android:id="@+id/log_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/task_log_list_item_photo_margin_top"/>
+
+</LinearLayout>
