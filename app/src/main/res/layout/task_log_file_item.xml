@@ -3,8 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/task_log_list_item_min_height"
-    android:padding="@dimen/task_log_list_item_padding" >
+    android:padding="@dimen/task_log_list_item_padding"
+    android:background="?selectableItemBackground">
 
-    <include layout="@layout/task_log_item" />
+    <include
+        android:id="@+id/task_log_content_container"
+        layout="@layout/task_log_item" />
+
+    <TextView
+        android:id="@+id/log_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/task_log_list_item_timestamp_margin_top"
+        android:layout_below="@+id/task_log_content_container"
+        android:layout_alignParentRight="true"
+        android:textSize="@dimen/task_log_list_item_timestamp_text_size"/>
 
 </RelativeLayout>

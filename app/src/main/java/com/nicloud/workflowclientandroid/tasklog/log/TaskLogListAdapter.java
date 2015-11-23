@@ -35,6 +35,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private class BaseLogViewHolder extends RecyclerView.ViewHolder {
 
+        public View view;
         public ImageView icon;
         public TextView userName;
         public TextView description;
@@ -43,6 +44,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         public BaseLogViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
             icon = (ImageView) itemView.findViewById(R.id.log_icon);
             userName = (TextView) itemView.findViewById(R.id.log_user_name);
             description = (TextView) itemView.findViewById(R.id.log_description);
@@ -59,7 +61,6 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private class PhotoLogViewHolder extends BaseLogViewHolder {
 
-        public View view;
         public ImageView photo;
 
         public PhotoLogViewHolder(View itemView) {
@@ -149,12 +150,19 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void onBindFileLog(FileLogViewHolder holder, int position) {
-        FileData fileData = (FileData) mDataSet.get(position);
+        final FileData fileData = (FileData) mDataSet.get(position);
 
         holder.icon.setImageResource(R.drawable.ic_insert_drive_file);
         holder.userName.setText(fileData.uploader);
         holder.description.setText(String.format(mContext.getString(R.string.task_log_upload_file), fileData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(fileData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utilities.downloadFile(mContext, fileData.filePath.toString(), fileData.fileName);
+            }
+        });
     }
 
     @Override

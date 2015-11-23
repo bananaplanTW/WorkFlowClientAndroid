@@ -78,4 +78,9 @@
     <string name="worker_status_pending">Pending</string>
     <string name="worker_status_wip">WIP</string>
 
+    <!-- Download file -->
+    <string name="download_file">"Download File  %1$s"</string>
+    <string name="downloading">Downloading...</string>
+    <string name="download_completed">Download Completed</string>
+
 </resources>

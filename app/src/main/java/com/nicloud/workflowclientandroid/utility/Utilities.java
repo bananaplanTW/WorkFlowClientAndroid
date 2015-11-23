@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
+import com.nicloud.workflowclientandroid.data.connectserver.tasklog.DownloadFileFromURLCommand;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclientandroid.tasklog.log.TaskLogActivity;
 
@@ -438,5 +439,10 @@ public class Utilities {
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor < 1 ? 1 : scaleFactor;
         return BitmapFactory.decodeFile(filePath, bmOptions);
+    }
+
+    public static void downloadFile(Context context, String urlString, String fileName) {
+        DownloadFileFromURLCommand downloadFileFromURLCommand = new DownloadFileFromURLCommand(context, urlString, fileName);
+        downloadFileFromURLCommand.execute();
     }
 }
