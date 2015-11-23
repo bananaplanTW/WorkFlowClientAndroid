@@ -50,6 +50,7 @@
     <string name="add_log_edit_content_hint">Input log...</string>
     <string name="add_log_complete_text">Record message successfully</string>
     <string name="add_log_complete_photo">Record photo successfully</string>
+    <string name="add_log_complete_file">Record file successfully</string>
 
     <!-- Dialog -->
     <string name="dialog_complete_task_text">Do you want to complete the task?</string>

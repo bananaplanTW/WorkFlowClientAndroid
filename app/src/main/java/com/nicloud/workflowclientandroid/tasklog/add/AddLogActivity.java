@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.nicloud.workflowclientandroid.data.connectserver.activity.LeaveAFileCommentToTaskCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.tasklog.LeaveAPhotoCommentToTaskCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.tasklog.LeaveATextCommentToTaskCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.tasklog.OnLeaveCommentListener;
@@ -39,6 +40,7 @@ import com.nicloud.workflowclientandroid.utility.Utilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -73,6 +75,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     private String mTaskId;
 
     private String mCurrentPhotoPath;
+    private String mCurrentFilePath;
 
     private boolean mFirstReceiveLocation = true;
 
@@ -192,6 +195,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.add_log_upload_button:
+                pickupFile();
                 break;
 
             case R.id.add_log_button:
@@ -243,6 +247,19 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
 
         return image;
+    }
+
+    private void pickupFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"), REQUEST_PICK_FILE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Log.d(TAG, "No Activity to handle file");
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -324,7 +341,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case REQUEST_PICK_FILE:
-                //onFilePicked(data);
+                onFilePicked(data);
                 break;
 
             default:
@@ -374,15 +391,17 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
         mCurrentPhotoPath = null;
     }
 
-//    private void onFilePicked(Intent intent) {
-//        Uri uri = intent.getData();
-//        String path = null;
-//        try {
-//            path = Utils.getPath(getActivity(), uri);
-//        } catch (URISyntaxException e) {
-//            Toast.makeText(getActivity(), "File attach failed", Toast.LENGTH_SHORT).show();
-//            e.printStackTrace();
-//        }
+    private void onFilePicked(Intent intent) {
+        Uri uri = intent.getData();
+        String path = null;
+
+        try {
+            path = Utilities.getPath(this, uri);
+        } catch (URISyntaxException e) {
+            Log.d(TAG, "File attach failed");
+            e.printStackTrace();
+        }
+
 //        if (TextUtils.isEmpty(path)) return;
 //
 //        String ownerId = WorkingData.getUserId();
@@ -393,9 +412,22 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 //        file.fileName = path.substring(path.lastIndexOf('/') + 1);
 //        file.filePath = uri;
 //        addRecord(getSelectedWorker(), file);
-//
-//        mCurrentFilePath = path;
-//        syncingFileActivity();
-//        //onItemSelected(getSelectedWorker()); // force notify adapter data changed
-//    }
+
+        mCurrentFilePath = path;
+        syncingFileActivity();
+    }
+
+    private void syncingFileActivity() {
+        if (Utilities.isImage(mCurrentFilePath)) {
+            LeaveAPhotoCommentToTaskCommand leaveAPhotoCommentToTaskCommand =
+                    new LeaveAPhotoCommentToTaskCommand(this, mTaskId, mCurrentFilePath, this);
+            leaveAPhotoCommentToTaskCommand.execute();
+        } else {
+            LeaveAFileCommentToTaskCommand leaveAFileCommentToTaskCommand =
+                    new LeaveAFileCommentToTaskCommand(this, mTaskId, mCurrentFilePath, this);
+            leaveAFileCommentToTaskCommand.execute();
+        }
+
+        mCurrentFilePath = null;
+    }
 }
