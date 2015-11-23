@@ -76,13 +76,12 @@ public class UIController implements View.OnClickListener, DataObserver,
         public void onFinishLoadingData() {
             if (mFirstLaunch) {
                 forceHideRefreshSpinner();
-                mFab.show();
-
                 mFirstLaunch = false;
             } else {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
 
+            mFab.show();
             WorkingData.getInstance(mMainActivity).updateData();
         }
 
@@ -238,7 +237,6 @@ public class UIController implements View.OnClickListener, DataObserver,
             public void onRefresh() {
                 loadWorkerTasks();
             }
-
         });
 
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
