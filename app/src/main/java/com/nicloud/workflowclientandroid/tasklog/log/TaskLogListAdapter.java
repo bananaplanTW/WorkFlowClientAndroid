@@ -134,7 +134,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void onBindPhotoLog(PhotoLogViewHolder holder, int position) {
         final PhotoData photoData = (PhotoData) mDataSet.get(position);
 
-        holder.icon.setImageResource(R.drawable.ic_photo);
+        holder.icon.setImageDrawable(photoData.avatar);
         holder.userName.setText(photoData.uploaderName);
         holder.description.setText(String.format(mContext.getString(R.string.task_log_upload_photo), photoData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(photoData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
@@ -154,7 +154,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void onBindFileLog(FileLogViewHolder holder, int position) {
         final FileData fileData = (FileData) mDataSet.get(position);
 
-        holder.icon.setImageResource(R.drawable.ic_insert_drive_file);
+        holder.icon.setImageDrawable(fileData.avatar);
         holder.userName.setText(fileData.uploaderName);
         holder.description.setText(String.format(mContext.getString(R.string.task_log_upload_file), fileData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(fileData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));

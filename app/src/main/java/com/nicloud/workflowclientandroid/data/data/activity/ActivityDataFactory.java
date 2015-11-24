@@ -19,8 +19,12 @@ import java.util.Date;
  * Created by daz on 10/9/15.
  */
 public class ActivityDataFactory {
-    public static BaseData genData (JSONObject recordJSON, Context context, OnLoadImageListener listener) throws JSONException {
+
+    public static BaseData genData(JSONObject recordJSON, Context context, OnLoadImageListener listener)
+            throws JSONException {
+
         String type = recordJSON.getString("type");
+
         switch (type) {
             case "checkIn":
             case "checkOut":
@@ -36,7 +40,9 @@ public class ActivityDataFactory {
                 attendance.tag = type;
                 attendance.category = BaseData.CATEGORY.WORKER;
                 attendance.time = new Date(recordJSON.getLong("createdAt"));
+
                 return attendance;
+
             case "dispatchTask":
             case "startTask":
             case "suspendTask":
@@ -51,7 +57,9 @@ public class ActivityDataFactory {
                 task.category = BaseData.CATEGORY.WORKER;
                 task.time = new Date(recordJSON.getLong("createdAt"));
                 task.description = recordJSON.getString("taskName");
+
                 return task;
+
             case "comment":
                 RecordData comment = (RecordData) DataFactory.genData(recordJSON.getString("ownerId"), BaseData.TYPE.RECORD);
                 comment.tag = type;
@@ -60,21 +68,10 @@ public class ActivityDataFactory {
                 comment.time = new Date(recordJSON.getLong("createdAt"));
                 comment.description = recordJSON.getString("content");
 
-                String iconThumbUrl = LoadingDataUtils.getStringFromJson(recordJSON, "iconThumbUrl");
-                if (!TextUtils.isEmpty(iconThumbUrl)) {
-                    Uri.Builder userIconBuilder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();
-                    userIconBuilder.path(iconThumbUrl);
-                    Uri userIconUri = userIconBuilder.build();
-
-                    // TODO: DO NOT load all thumbnails into memory to avoid OOM
-                    LoadingActivityUserIconCommand loadingActivityUserIconCommand
-                            = new LoadingActivityUserIconCommand(context, userIconUri, comment, listener);
-                    loadingActivityUserIconCommand.execute();
-                } else {
-                    comment.avatar = context.getDrawable(R.drawable.ic_worker);
-                }
+                loadUserIcon(context, recordJSON, comment, listener);
 
                 return comment;
+
             case "attachment":
                 if (recordJSON.getString("contentType").equals("image")) {
                     PhotoData photoData = (PhotoData) DataFactory.genData(recordJSON.getString("ownerId"), BaseData.TYPE.PHOTO);
@@ -92,10 +89,14 @@ public class ActivityDataFactory {
                             = new LoadingPhotoDataCommand(context, thumbUri, photoData, listener);
                     loadingPhotoDataCommand.execute();
 
+                    loadUserIcon(context, recordJSON, photoData, listener);
+
                     Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();
                     imageBuilder.path(recordJSON.getString("imageUrl"));
                     photoData.filePath = imageBuilder.build();
+
                     return photoData;
+
                 } else if (recordJSON.getString("contentType").equals("file")) {
                     FileData fileData = (FileData) DataFactory.genData(recordJSON.getString("ownerId"), BaseData.TYPE.FILE);
                     fileData.uploader = recordJSON.getString("ownerId");
@@ -104,12 +105,14 @@ public class ActivityDataFactory {
                     fileData.time = new Date(recordJSON.getLong("createdAt"));
                     fileData.fileName = recordJSON.getString("name");
 
+                    loadUserIcon(context, recordJSON, fileData, listener);
+
                     Uri.Builder builder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();
                     builder.path(recordJSON.getString("fileUrl"));
                     fileData.filePath = builder.build();
+
                     return fileData;
                 }
-
 
                 // Task specific activities
             case "dispatch":
@@ -118,7 +121,9 @@ public class ActivityDataFactory {
                 dispatchTask.category = BaseData.CATEGORY.TASK;
                 dispatchTask.time = new Date(recordJSON.getLong("createdAt"));
                 dispatchTask.description = recordJSON.getString("employeeName");
+
                 return dispatchTask;
+
             case "start":
             case "pause":
             case "resume":
@@ -130,7 +135,9 @@ public class ActivityDataFactory {
                 taskStatus.tag = type;
                 taskStatus.category = BaseData.CATEGORY.TASK;
                 taskStatus.time = new Date(recordJSON.getLong("createdAt"));
+
                 return taskStatus;
+
             case "create_exception":
             case "complete_exception":
                 HistoryData taskException = (HistoryData) DataFactory.genData(recordJSON.getString("ownerId"), BaseData.TYPE.HISTORY);
@@ -138,6 +145,7 @@ public class ActivityDataFactory {
                 taskException.category = BaseData.CATEGORY.TASK;
                 taskException.time = new Date(recordJSON.getLong("createdAt"));
                 taskException.description = recordJSON.getString("exceptionName");
+
                 return taskException;
 
             // task warining specific activities
@@ -147,9 +155,35 @@ public class ActivityDataFactory {
                 taskWarningStatus.tag = type;
                 taskWarningStatus.category = BaseData.CATEGORY.WARNING;
                 taskWarningStatus.time = new Date(recordJSON.getLong("createdAt"));
+
                 return taskWarningStatus;
+
             default:
                 return null;
+        }
+    }
+
+    private static void loadUserIcon(Context context, JSONObject jsonObject, BaseData baseData, OnLoadImageListener listener) {
+        String iconThumbUrl = null;
+
+        try {
+            iconThumbUrl = LoadingDataUtils.getStringFromJson(jsonObject, "iconThumbUrl");
+
+            if (!TextUtils.isEmpty(iconThumbUrl)) {
+                Uri.Builder userIconBuilder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();
+                userIconBuilder.path(iconThumbUrl);
+                Uri userIconUri = userIconBuilder.build();
+
+                // TODO: DO NOT load all thumbnails into memory to avoid OOM
+                LoadingActivityUserIconCommand loadingActivityUserIconCommand
+                        = new LoadingActivityUserIconCommand(context, userIconUri, baseData, listener);
+                loadingActivityUserIconCommand.execute();
+            } else {
+                baseData.avatar = context.getDrawable(R.drawable.ic_worker);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }
