@@ -1217,22 +1217,22 @@ public class LoadingDataUtils {
 //    }
 //
 //
-    private static Date getDateFromJson(JSONObject jsonObject, String key) throws JSONException {
+    public static Date getDateFromJson(JSONObject jsonObject, String key) throws JSONException {
         return jsonObject.has(key) ? new Date(jsonObject.getLong(key)) : null;
     }
-    private static String getStringFromJson(JSONObject jsonObject, String key) throws JSONException {
+    public static String getStringFromJson(JSONObject jsonObject, String key) throws JSONException {
         return jsonObject.has(key) ? jsonObject.getString(key) : "";
     }
-    private static long getLongFromJson(JSONObject jsonObject, String key) throws JSONException {
+    public static long getLongFromJson(JSONObject jsonObject, String key) throws JSONException {
         return jsonObject.has(key) ? jsonObject.getLong(key) : 0L;
     }
-    private static boolean getBooleanFromJson(JSONObject jsonObject, String key) throws JSONException {
+    public static boolean getBooleanFromJson(JSONObject jsonObject, String key) throws JSONException {
         return jsonObject.has(key) ? jsonObject.getBoolean(key) : false;
     }
-    private static JSONObject getJsonObjectFromJson(JSONObject jsonObject, String key) throws JSONException {
+    public static JSONObject getJsonObjectFromJson(JSONObject jsonObject, String key) throws JSONException {
         return jsonObject.has(key) ? jsonObject.getJSONObject(key) : null;
     }
-    private static JSONArray getJsonArrayFromJson(JSONObject jsonObject, String key) throws JSONException {
+    public static JSONArray getJsonArrayFromJson(JSONObject jsonObject, String key) throws JSONException {
         return jsonObject.has(key) ? jsonObject.getJSONArray(key) : null;
     }
 }

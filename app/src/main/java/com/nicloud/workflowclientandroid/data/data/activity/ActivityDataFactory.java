@@ -2,8 +2,11 @@ package com.nicloud.workflowclientandroid.data.data.activity;
 
 import android.content.Context;
 import android.net.Uri;
+import android.text.TextUtils;
 
+import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.connectserver.LoadingDataUtils;
+import com.nicloud.workflowclientandroid.data.connectserver.activity.LoadingActivityUserIconCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.activity.LoadingPhotoDataCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.tasklog.OnLoadImageListener;
 
@@ -56,6 +59,21 @@ public class ActivityDataFactory {
                 comment.reporterName = recordJSON.getString("ownerName");
                 comment.time = new Date(recordJSON.getLong("createdAt"));
                 comment.description = recordJSON.getString("content");
+
+                String iconThumbUrl = LoadingDataUtils.getStringFromJson(recordJSON, "iconThumbUrl");
+                if (!TextUtils.isEmpty(iconThumbUrl)) {
+                    Uri.Builder userIconBuilder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();
+                    userIconBuilder.path(iconThumbUrl);
+                    Uri userIconUri = userIconBuilder.build();
+
+                    // TODO: DO NOT load all thumbnails into memory to avoid OOM
+                    LoadingActivityUserIconCommand loadingActivityUserIconCommand
+                            = new LoadingActivityUserIconCommand(context, userIconUri, comment, listener);
+                    loadingActivityUserIconCommand.execute();
+                } else {
+                    comment.avatar = context.getDrawable(R.drawable.ic_worker);
+                }
+
                 return comment;
             case "attachment":
                 if (recordJSON.getString("contentType").equals("image")) {

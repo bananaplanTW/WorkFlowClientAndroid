@@ -125,6 +125,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void onBindTextLog(TextLogViewHolder holder, int position) {
         RecordData recordData = (RecordData) mDataSet.get(position);
 
+        holder.icon.setImageDrawable(recordData.avatar);
         holder.userName.setText(recordData.reporterName);
         holder.description.setText(recordData.description);
         holder.timestamp.setText(Utilities.timestamp2Date(recordData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
@@ -133,6 +134,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void onBindPhotoLog(PhotoLogViewHolder holder, int position) {
         final PhotoData photoData = (PhotoData) mDataSet.get(position);
 
+        holder.icon.setImageResource(R.drawable.ic_photo);
         holder.userName.setText(photoData.uploaderName);
         holder.description.setText(String.format(mContext.getString(R.string.task_log_upload_photo), photoData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(photoData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
