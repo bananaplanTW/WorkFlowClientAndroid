@@ -65,7 +65,6 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     private int mSelectedTabPosition = TabPosition.TEXT;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
     private RecyclerView mTaskLogListView;
     private LinearLayoutManager mTaskLogListViewLayoutManager;
     private TaskLogListAdapter mTaskLogListAdapter;
@@ -73,6 +72,8 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     private List<BaseData> mTextDataSet = new ArrayList<>();
     private List<BaseData> mPhotoDataSet = new ArrayList<>();
     private List<BaseData> mFileDataSet = new ArrayList<>();
+
+    private TextView mNoLogText;
 
     private Task mTask;
 
@@ -126,6 +127,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         mTaskLogTabHost = (TabHost) findViewById(R.id.task_log_tab_host);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_container);
         mTaskLogListView = (RecyclerView) findViewById(R.id.task_log_list);
+        mNoLogText = (TextView) findViewById(R.id.task_log_no_log_text);
     }
 
     private void setupActionBar() {
@@ -280,6 +282,17 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
                 mTaskLogListAdapter.swapDataSet(mFileDataSet);
 
                 break;
+        }
+
+        setNoLogTextVisibility();
+    }
+
+    private void setNoLogTextVisibility() {
+        if (mTaskLogListAdapter.getItemCount() == 0) {
+            mNoLogText.setVisibility(View.VISIBLE);
+
+        } else {
+            mNoLogText.setVisibility(View.GONE);
         }
     }
 

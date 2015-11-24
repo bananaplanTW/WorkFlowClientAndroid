@@ -38,6 +38,7 @@
     <string name="task_log_tab_file">檔案</string>
     <string name="task_log_upload_file">上傳檔案 %1$s</string>
     <string name="task_log_upload_photo">上傳照片 %1$s</string>
+    <string name="task_log_no_log_text">無記錄</string>
 
     <!-- Add Log -->
     <string name="add_log_edit_content_hint">輸入紀錄...</string>
