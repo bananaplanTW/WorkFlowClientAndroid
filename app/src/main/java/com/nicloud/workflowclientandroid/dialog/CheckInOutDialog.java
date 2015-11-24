@@ -38,7 +38,7 @@ import com.nicloud.workflowclientandroid.utility.Utilities;
  */
 public class CheckInOutDialog extends Dialog implements View.OnClickListener,
         AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, CheckInOutCommand.OnFinishCheckinStatusListener,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, CheckInOutCommand.OnDialogCheckInOutStatusListener,
         LoadingLoginWorkerCommand.OnLoadingLoginWorker {
 
     private Context mContext;

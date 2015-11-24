@@ -32,6 +32,7 @@
     <!-- Main -->
     <string name="wip_task_card_prepare_for_next_task">Prepare for next task</string>
     <string name="wip_task_card_choose_task">Please choose a task from below</string>
+    <string name="wip_task_card_not_working_time">Not working time</string>
 
     <!-- Login -->
     <string name="login_account">Account</string>

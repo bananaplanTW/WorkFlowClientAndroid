@@ -54,7 +54,7 @@ import java.util.List;
  */
 public class UIController implements View.OnClickListener, DataObserver,
         ShiftTaskCommand.OnFinishShiftTaskListener, TasksListAdapter.OnPauseWipTaskListener,
-        PauseTaskForWorkerCommand.OnPauseTaskForWorkerListener {
+        PauseTaskForWorkerCommand.OnPauseTaskForWorkerListener, CheckInOutCommand.OnMainCheckInOutStatusListener {
 
     private static final String TAG = "UIController";
 
@@ -192,8 +192,9 @@ public class UIController implements View.OnClickListener, DataObserver,
         Utilities.dismissDialog(mFragmentManager);
     }
 
-    public void onCheck(Location currentLocation, CheckInOutCommand.OnFinishCheckinStatusListener onFinishCheckinStatusListener) {
-        CheckInOutCommand checkInOutCommand = new CheckInOutCommand(mMainActivity, currentLocation, onFinishCheckinStatusListener);
+    public void onCheck(Location currentLocation, CheckInOutCommand.OnDialogCheckInOutStatusListener onDialogCheckInOutStatusListener) {
+        CheckInOutCommand checkInOutCommand
+                = new CheckInOutCommand(mMainActivity, currentLocation, onDialogCheckInOutStatusListener, this);
         checkInOutCommand.execute();
     }
 
@@ -364,6 +365,16 @@ public class UIController implements View.OnClickListener, DataObserver,
 
     @Override
     public void onFailPauseTask() {
+
+    }
+
+    @Override
+    public void onCheckInOutFinished() {
+        loadWorkerTasks();
+    }
+
+    @Override
+    public void onCheckInOutFailed() {
 
     }
 }

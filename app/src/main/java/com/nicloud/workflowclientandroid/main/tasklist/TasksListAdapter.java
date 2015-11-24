@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.data.data.Task;
+import com.nicloud.workflowclientandroid.data.data.data.Worker;
+import com.nicloud.workflowclientandroid.data.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.dialog.DisplayDialogFragment.DialogType;
 import com.nicloud.workflowclientandroid.utility.Utilities;
 
@@ -54,6 +56,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public TextView wipTaskName;
         public TextView wipCaseName;
         public TextView wipWorkingTime;
+        public TextView noWipTaskText;
         public View pauseButton;
         public View completeButton;
 
@@ -70,6 +73,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             wipTaskName = (TextView) view.findViewById(R.id.wip_task_card_task_name);
             wipCaseName = (TextView) view.findViewById(R.id.wip_task_card_case_name);
             wipWorkingTime = (TextView) view.findViewById(R.id.wip_task_card_working_time);
+            noWipTaskText = (TextView) view.findViewById(R.id.no_wip_task_card_text);
             pauseButton = view.findViewById(R.id.wip_task_card_pause_button);
             completeButton = view.findViewById(R.id.wip_task_card_complete_button);
         }
@@ -180,11 +184,22 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void bindWipTaskViewHolder(WipTaskViewHolder holder, Task task) {
+        if (WorkingData.getInstance(mContext).getLoginWorker().status == Worker.Status.STOP) {
+            holder.wipTaskCardView.setVisibility(View.GONE);
+            holder.noWipTaskCardView.setVisibility(View.VISIBLE);
+            holder.chooseTaskText.setVisibility(View.GONE);
+
+            holder.noWipTaskText.setText(mContext.getString(R.string.wip_task_card_not_working_time));
+
+            return;
+        }
+
         if (task == null) {
             holder.wipTaskCardView.setVisibility(View.GONE);
             holder.noWipTaskCardView.setVisibility(View.VISIBLE);
-
             holder.chooseTaskText.setVisibility(View.VISIBLE);
+
+            holder.noWipTaskText.setText(mContext.getString(R.string.wip_task_card_prepare_for_next_task));
 
         } else {
             holder.wipTaskCardView.setVisibility(View.VISIBLE);

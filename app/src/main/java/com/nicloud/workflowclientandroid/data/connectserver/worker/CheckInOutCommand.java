@@ -12,7 +12,12 @@ import org.json.JSONObject;
  */
 public class CheckInOutCommand implements IWorkerActionCommand, PostRequestAsyncTask.OnFinishPostingDataListener {
 
-    public interface OnFinishCheckinStatusListener {
+    public interface OnDialogCheckInOutStatusListener {
+        void onCheckInOutFinished();
+        void onCheckInOutFailed();
+    }
+
+    public interface OnMainCheckInOutStatusListener {
         void onCheckInOutFinished();
         void onCheckInOutFailed();
     }
@@ -21,13 +26,17 @@ public class CheckInOutCommand implements IWorkerActionCommand, PostRequestAsync
     private Location mCurrentLocation;
 
     private PostRequestAsyncTask mPostRequestAsyncTask;
-    private OnFinishCheckinStatusListener mOnFinishCheckinStatusListener;
+    private OnDialogCheckInOutStatusListener mOnDialogCheckInOutStatusListener;
+    private OnMainCheckInOutStatusListener mOnMainCheckInOutStatusListener;
 
 
-    public CheckInOutCommand(Context context, Location currentLoaction, OnFinishCheckinStatusListener onFinishCheckinStatusListener) {
+    public CheckInOutCommand(Context context, Location currentLocation,
+                             OnDialogCheckInOutStatusListener onDialogCheckInOutStatusListener,
+                             OnMainCheckInOutStatusListener onMainCheckInOutStatusListener) {
         mContext = context;
-        mCurrentLocation = currentLoaction;
-        mOnFinishCheckinStatusListener = onFinishCheckinStatusListener;
+        mCurrentLocation = currentLocation;
+        mOnDialogCheckInOutStatusListener = onDialogCheckInOutStatusListener;
+        mOnMainCheckInOutStatusListener = onMainCheckInOutStatusListener;
     }
 
 
@@ -42,13 +51,16 @@ public class CheckInOutCommand implements IWorkerActionCommand, PostRequestAsync
     public void onFinishPostingData() {
         JSONObject result = mPostRequestAsyncTask.getResult();
         if (result != null) {
-            mOnFinishCheckinStatusListener.onCheckInOutFinished();
+            mOnDialogCheckInOutStatusListener.onCheckInOutFinished();
+            mOnMainCheckInOutStatusListener.onCheckInOutFinished();
         } else {
-            mOnFinishCheckinStatusListener.onCheckInOutFailed();
+            mOnDialogCheckInOutStatusListener.onCheckInOutFailed();
+            mOnMainCheckInOutStatusListener.onCheckInOutFailed();
         }
     }
     @Override
     public void onFailPostingData(boolean isFailCausedByInternet) {
-        mOnFinishCheckinStatusListener.onCheckInOutFailed();
+        mOnDialogCheckInOutStatusListener.onCheckInOutFailed();
+        mOnMainCheckInOutStatusListener.onCheckInOutFailed();
     }
 }
