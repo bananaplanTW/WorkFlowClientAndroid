@@ -169,8 +169,14 @@ public class UIController implements View.OnClickListener, DataObserver,
     }
 
     public void onChooseTaskStartWork(String taskId) {
-        ShiftTaskCommand shiftTaskCommand = new ShiftTaskCommand(mMainActivity, taskId, this);
-        shiftTaskCommand.execute();
+        if (WorkingData.getInstance(mMainActivity).getWipTask() == null) {
+            ShiftTaskCommand shiftTaskCommand = new ShiftTaskCommand(mMainActivity, taskId, this);
+            shiftTaskCommand.execute();
+
+        } else {
+            Toast.makeText(mMainActivity,
+                    mMainActivity.getString(R.string.dialog_complete_pause_task), Toast.LENGTH_SHORT).show();
+        }
 
         Utilities.dismissDialog(mFragmentManager);
     }

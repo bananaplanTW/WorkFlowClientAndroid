@@ -55,6 +55,7 @@
     <string name="dialog_have_not_check_out">尚未下班</string>
     <string name="dialog_check_in">打卡上班</string>
     <string name="dialog_check_out">打卡下班</string>
+    <string name="dialog_complete_pause_task">請先 完成/暫停 現在工作</string>
 
     <!-- Task status -->
     <string name="task_status_unclaimed">尚無排程</string>
