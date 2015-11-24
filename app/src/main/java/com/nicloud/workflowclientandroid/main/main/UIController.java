@@ -3,6 +3,7 @@ package com.nicloud.workflowclientandroid.main.main;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -12,14 +13,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
+import com.nicloud.workflowclientandroid.data.connectserver.LoadingDataUtils;
+import com.nicloud.workflowclientandroid.data.connectserver.activity.LoadingPhotoDataCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.CheckInOutCommand;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.LoadingWorkerAvatarCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.PauseTaskForWorkerCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.ShiftTaskCommand;
 import com.nicloud.workflowclientandroid.data.data.data.Task;
@@ -57,6 +63,7 @@ public class UIController implements View.OnClickListener, DataObserver,
     private ActionBar mActionBar;
     private Toolbar mToolbar;
 
+    private ImageView mActionBarWorkerAvatar;
     private TextView mActionBarWorkerName;
     private TextView mActionBarSubtitle;
 
@@ -209,6 +216,7 @@ public class UIController implements View.OnClickListener, DataObserver,
 
     private void findViews() {
         mToolbar = (Toolbar) mMainActivity.findViewById(R.id.tool_bar);
+        mActionBarWorkerAvatar = (ImageView) mMainActivity.findViewById(R.id.action_bar_worker);
         mActionBarWorkerName = (TextView) mMainActivity.findViewById(R.id.action_bar_worker_name);
         mActionBarSubtitle = (TextView) mMainActivity.findViewById(R.id.action_bar_subtitle);
         mFab = (FloatingActionButton) mMainActivity.findViewById(R.id.fab);
@@ -242,6 +250,7 @@ public class UIController implements View.OnClickListener, DataObserver,
             @Override
             public void onRefresh() {
                 loadWorkerTasks();
+                loadWorkerAvatar();
             }
         });
 
@@ -254,10 +263,28 @@ public class UIController implements View.OnClickListener, DataObserver,
     private void loadDataInFirstLaunch() {
         forceShowRefreshSpinner();
         loadWorkerTasks();
+        loadWorkerAvatar();
     }
 
     private void loadWorkerTasks() {
         new LoadingWorkerTasks(mMainActivity, mOnFinishLoadingDataListener).execute();
+    }
+
+    private void loadWorkerAvatar() {
+        String s = WorkingData.getInstance(mMainActivity).getLoginWorker().avatarUrl;
+
+        if (TextUtils.isEmpty(s)) {
+            mActionBarWorkerAvatar.setImageResource(R.drawable.ic_worker);
+            return;
+        }
+
+        Uri.Builder avatarBuilder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();
+        avatarBuilder.path(s);
+        Uri avatarUri = avatarBuilder.build();
+
+        LoadingWorkerAvatarCommand loadingWorkerAvatarCommand
+                = new LoadingWorkerAvatarCommand(mMainActivity, avatarUri, mActionBarWorkerAvatar);
+        loadingWorkerAvatarCommand.execute();
     }
 
     /**

@@ -883,6 +883,7 @@ public class LoadingDataUtils {
             String wipTaskId = getStringFromJson(workerJson, "WIPTaskId");
             String address = getStringFromJson(workerJson, "address");
             String phone = getStringFromJson(workerJson, "phone");
+            String avatarUrl = getStringFromJson(workerJson, "iconThumbUrl");
 
             if (equipmentJson != null) {
                 equipmentId = equipmentJson.getString("_id");
@@ -914,6 +915,7 @@ public class LoadingDataUtils {
                     wipTaskId,
                     address,
                     phone,
+                    avatarUrl,
                     checkInTime,
                     score,
                     isOvertime,

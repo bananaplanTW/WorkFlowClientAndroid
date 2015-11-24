@@ -59,6 +59,7 @@ public class Worker extends IdData {
 
     //private List<WorkerAttendance> attendanceList = new ArrayList<>();
 
+    public String avatarUrl;
     public Drawable avatar;
 
 
@@ -69,6 +70,7 @@ public class Worker extends IdData {
             String wipTaskId,
             String address,
             String phone,
+            String avatarUrl,
             long checkInTime,
             int score,
             boolean isOvertime,
@@ -82,6 +84,7 @@ public class Worker extends IdData {
         this.wipTaskId = wipTaskId;
         this.address = address;
         this.phone = phone;
+        this.avatarUrl = avatarUrl;
         this.checkInTime = checkInTime;
         this.score = score;
         this.isOvertime = isOvertime;
@@ -108,6 +111,7 @@ public class Worker extends IdData {
         this.wipTaskId = worker.wipTaskId;
         this.address = worker.address;
         this.phone = worker.phone;
+        this.avatarUrl = worker.avatarUrl;
         this.checkInTime = worker.checkInTime;
         this.score = worker.score;
         this.isOvertime = worker.isOvertime;
