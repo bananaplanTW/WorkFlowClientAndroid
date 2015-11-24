@@ -879,6 +879,7 @@ public class LoadingDataUtils {
             String id = workerJson.getString("_id");
             String name = workerJson.getJSONObject("profile").getString("name");
             String factoryId = getStringFromJson(workerJson, "groupId");
+            String factoryName = getStringFromJson(workerJson, "groupName");
             String equipmentId = "";
             String wipTaskId = getStringFromJson(workerJson, "WIPTaskId");
             String address = getStringFromJson(workerJson, "address");
@@ -912,6 +913,7 @@ public class LoadingDataUtils {
                     id,
                     name,
                     factoryId,
+                    factoryName,
                     wipTaskId,
                     address,
                     phone,
