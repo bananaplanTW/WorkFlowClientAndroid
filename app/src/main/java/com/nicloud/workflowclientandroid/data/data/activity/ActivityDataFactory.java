@@ -53,6 +53,7 @@ public class ActivityDataFactory {
                 RecordData comment = (RecordData) DataFactory.genData(recordJSON.getString("ownerId"), BaseData.TYPE.RECORD);
                 comment.tag = type;
                 comment.reporter = recordJSON.getString("ownerId");
+                comment.reporterName = recordJSON.getString("ownerName");
                 comment.time = new Date(recordJSON.getLong("createdAt"));
                 comment.description = recordJSON.getString("content");
                 return comment;
@@ -60,6 +61,7 @@ public class ActivityDataFactory {
                 if (recordJSON.getString("contentType").equals("image")) {
                     PhotoData photoData = (PhotoData) DataFactory.genData(recordJSON.getString("ownerId"), BaseData.TYPE.PHOTO);
                     photoData.uploader = recordJSON.getString("ownerId");
+                    photoData.uploaderName = recordJSON.getString("ownerName");
                     photoData.tag = type;
                     photoData.time = new Date(recordJSON.getLong("createdAt"));
                     photoData.fileName = recordJSON.getString("name");
@@ -79,6 +81,7 @@ public class ActivityDataFactory {
                 } else if (recordJSON.getString("contentType").equals("file")) {
                     FileData fileData = (FileData) DataFactory.genData(recordJSON.getString("ownerId"), BaseData.TYPE.FILE);
                     fileData.uploader = recordJSON.getString("ownerId");
+                    fileData.uploaderName = recordJSON.getString("ownerName");
                     fileData.tag = type;
                     fileData.time = new Date(recordJSON.getLong("createdAt"));
                     fileData.fileName = recordJSON.getString("name");

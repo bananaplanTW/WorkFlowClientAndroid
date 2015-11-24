@@ -8,6 +8,7 @@ import android.net.Uri;
  */
 public class PhotoData extends BaseData {
     public String uploader;
+    public String uploaderName;
 
     public Drawable photo;
     public String fileName;

@@ -7,6 +7,7 @@ import android.net.Uri;
  */
 public class FileData extends BaseData {
     public String uploader;
+    public String uploaderName;
 
     public String fileName;
     public Uri filePath;

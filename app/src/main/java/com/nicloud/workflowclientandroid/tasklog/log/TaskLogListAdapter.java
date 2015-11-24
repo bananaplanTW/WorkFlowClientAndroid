@@ -125,7 +125,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void onBindTextLog(TextLogViewHolder holder, int position) {
         RecordData recordData = (RecordData) mDataSet.get(position);
 
-        holder.userName.setText(recordData.reporter);
+        holder.userName.setText(recordData.reporterName);
         holder.description.setText(recordData.description);
         holder.timestamp.setText(Utilities.timestamp2Date(recordData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
     }
@@ -133,7 +133,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void onBindPhotoLog(PhotoLogViewHolder holder, int position) {
         final PhotoData photoData = (PhotoData) mDataSet.get(position);
 
-        holder.userName.setText(photoData.uploader);
+        holder.userName.setText(photoData.uploaderName);
         holder.description.setText(String.format(mContext.getString(R.string.task_log_upload_photo), photoData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(photoData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
         holder.photo.setImageDrawable(photoData.photo);
@@ -153,7 +153,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         final FileData fileData = (FileData) mDataSet.get(position);
 
         holder.icon.setImageResource(R.drawable.ic_insert_drive_file);
-        holder.userName.setText(fileData.uploader);
+        holder.userName.setText(fileData.uploaderName);
         holder.description.setText(String.format(mContext.getString(R.string.task_log_upload_file), fileData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(fileData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
 

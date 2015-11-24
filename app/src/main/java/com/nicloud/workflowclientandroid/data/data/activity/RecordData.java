@@ -5,6 +5,7 @@ package com.nicloud.workflowclientandroid.data.data.activity;
  */
 public class RecordData extends BaseData {
     public String reporter;
+    public String reporterName;
 
     public String description = "";
 
