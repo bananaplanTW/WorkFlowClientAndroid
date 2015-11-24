@@ -1,6 +1,7 @@
 package com.nicloud.workflowclientandroid.tasklog.add;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Geocoder;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -66,6 +68,8 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     private ImageView mCameraButton;
     private ImageView mUploadButton;
     private TextView mRecordButton;
+
+    private ProgressDialog mProgressDialog;
 
     private GoogleApiClient mGoogleApiClient;
     private Location mCurrentLocation;
@@ -209,8 +213,14 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
                 mEditContent.setText("");
 
+                displayProgressDialog(getString(R.string.add_log_uploading_text));
+
                 break;
         }
+    }
+
+    private void displayProgressDialog(String title) {
+        mProgressDialog = ProgressDialog.show(this, title, getString(R.string.add_log_wait));
     }
 
     private void capturePhoto() {
@@ -324,11 +334,13 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onFinishLeaveComment() {
         setResult(RESULT_OK);
+        mProgressDialog.dismiss();
+        mProgressDialog = null;
     }
 
     @Override
     public void onFailLeaveComment(boolean isFailCausedByInternet) {
-
+        Toast.makeText(this, getString(R.string.add_log_failed), Toast.LENGTH_SHORT).show();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -338,10 +350,14 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
         switch (requestCode) {
             case REQUEST_IMAGE_CAPTURE:
                 onPhotoCaptured();
+                displayProgressDialog(getString(R.string.add_log_uploading_photo));
+
                 break;
 
             case REQUEST_PICK_FILE:
                 onFilePicked(data);
+                displayProgressDialog(getString(R.string.add_log_uploading_file));
+
                 break;
 
             default:
