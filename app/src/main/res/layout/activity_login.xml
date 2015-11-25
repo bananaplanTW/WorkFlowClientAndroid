@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:background="@color/login_container_background_color"
+        android:background="@drawable/login_container_background"
         android:padding="@dimen/login_container_padding"
         android:orientation="vertical">
 
