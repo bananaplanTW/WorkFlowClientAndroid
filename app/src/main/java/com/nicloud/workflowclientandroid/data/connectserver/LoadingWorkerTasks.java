@@ -35,7 +35,13 @@ public class LoadingWorkerTasks extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         if (RestfulUtils.isConnectToInternet(mContext)) {
-            LoadingDataUtils.loadTasksByWorker(mContext, WorkingData.getUserId());
+            try {
+                LoadingDataUtils.loadTasksByWorker(mContext, WorkingData.getUserId());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                cancel(true);
+            }
 
         } else {
             isFailCausedByInternet = true;

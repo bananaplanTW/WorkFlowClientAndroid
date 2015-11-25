@@ -93,7 +93,9 @@ public class UIController implements View.OnClickListener, DataObserver,
 
         @Override
         public void onFailLoadingData(boolean isFailCausedByInternet) {
-
+            mSwipeRefreshLayout.setRefreshing(false);
+            Toast.makeText(mMainActivity,
+                    mMainActivity.getString(R.string.no_internet_connection_information), Toast.LENGTH_SHORT).show();
         }
     };
 

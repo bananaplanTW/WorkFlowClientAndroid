@@ -41,9 +41,9 @@ public class LoadingLoginWorkerCommand implements IWorkerActionCommand, GetReque
     @Override
     public void onFinishGettingData() {
         JSONObject result = mGetRequestAsyncTask.getResult();
-        WorkingData.getInstance(mContext).setLoginWorker(LoadingDataUtils.retrieveWorkerFromJson(mContext, result));
 
         if (result != null) {
+            WorkingData.getInstance(mContext).setLoginWorker(LoadingDataUtils.retrieveWorkerFromJson(mContext, result));
             mOnLoadingLoginWorker.onLoadingLoginWorkerSuccessful();
 
         } else {
