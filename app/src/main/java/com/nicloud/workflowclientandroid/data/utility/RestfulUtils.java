@@ -122,7 +122,10 @@ public class RestfulUtils {
                 } else {
                     inputStream = conn.getErrorStream();
                 }
-                result = getStringFromInputStream(inputStream);
+
+                if (inputStream != null) {
+                    result = getStringFromInputStream(inputStream);
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (ProtocolException e) {

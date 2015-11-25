@@ -33,7 +33,7 @@ public class LoadingTaskActivitiesStrategy implements ILoadingActivitiesStrategy
             HashMap<String, String> queries = new HashMap<>();
             queries.put("taskId", mTaskId);
             queries.put("limit", "" + mLimit);
-            String urlString = URLUtils.buildURLString(LoadingDataUtils.WorkingDataUrl.BASE_URL, LoadingDataUtils.WorkingDataUrl.EndPoints.TASK_ACTIVITIES, queries);
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, LoadingDataUtils.WorkingDataUrl.EndPoints.TASK_ACTIVITIES, queries);
             String responseJSONString = RestfulUtils.getJsonStringFromUrl(urlString);
             JSONObject responseJSON = new JSONObject(responseJSONString);
             if (responseJSON.getString("status").equals("success")) {

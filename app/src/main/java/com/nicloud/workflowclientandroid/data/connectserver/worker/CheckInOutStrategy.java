@@ -39,7 +39,7 @@ public class CheckInOutStrategy implements IPostRequestStrategy {
             bodies.put("lat", String.valueOf(mCurrentLocation.getLatitude()));
             bodies.put("lng", String.valueOf(mCurrentLocation.getLongitude()));
 
-            String urlString = URLUtils.buildURLString(LoadingDataUtils.WorkingDataUrl.BASE_URL, LoadingDataUtils.WorkingDataUrl.EndPoints.CHECKIN_OUT, null);
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, LoadingDataUtils.WorkingDataUrl.EndPoints.CHECKIN_OUT, null);
             String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
 
             if (responseString != null) {

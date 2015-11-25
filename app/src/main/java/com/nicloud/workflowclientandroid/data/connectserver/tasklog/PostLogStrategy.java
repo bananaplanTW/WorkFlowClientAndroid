@@ -32,7 +32,7 @@ public class PostLogStrategy implements IPostRequestStrategy {
     @Override
     public JSONObject post() {
         try {
-            String urlString = URLUtils.buildURLString(LoadingDataUtils.WorkingDataUrl.BASE_URL, mEndPoint, null);
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, mEndPoint, null);
             String responseString = RestfulUtils.restfulPostRequest(urlString, mHeaders, mBodies);
             if (responseString != null) {
                 JSONObject jsonObject = new JSONObject(responseString);

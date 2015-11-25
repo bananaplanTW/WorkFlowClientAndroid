@@ -27,7 +27,7 @@ public class LoadingLoginWorkerStrategy implements IGetRequestStrategy {
             headers.put("x-user-id", WorkingData.getUserId());
             headers.put("x-auth-token", WorkingData.getAuthToken());
 
-            String urlString = URLUtils.buildURLString(LoadingDataUtils.WorkingDataUrl.BASE_URL, LoadingDataUtils.WorkingDataUrl.EndPoints.LOGIN_WORKER, null);
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, LoadingDataUtils.WorkingDataUrl.EndPoints.LOGIN_WORKER, null);
             String responseJSONString = RestfulUtils.restfulGetRequest(urlString, headers);
             JSONObject responseJSON = new JSONObject(responseJSONString);
             if (responseJSON.getString("status").equals("success")) {

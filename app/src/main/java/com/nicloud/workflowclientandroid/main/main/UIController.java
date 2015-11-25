@@ -278,7 +278,7 @@ public class UIController implements View.OnClickListener, DataObserver,
             return;
         }
 
-        Uri.Builder avatarBuilder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();
+        Uri.Builder avatarBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
         avatarBuilder.path(s);
         Uri avatarUri = avatarBuilder.build();
 

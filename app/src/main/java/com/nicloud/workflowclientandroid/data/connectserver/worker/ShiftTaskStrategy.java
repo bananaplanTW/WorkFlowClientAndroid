@@ -36,7 +36,7 @@ public class ShiftTaskStrategy implements IPostRequestStrategy {
             HashMap<String, String> bodies = new HashMap<>();
             bodies.put("td", mShiftTaskId);
 
-            String urlString = URLUtils.buildURLString(LoadingDataUtils.WorkingDataUrl.BASE_URL, LoadingDataUtils.WorkingDataUrl.EndPoints.SHIFT_TASK, null);
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, LoadingDataUtils.WorkingDataUrl.EndPoints.SHIFT_TASK, null);
             String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
 
             if (responseString != null) {

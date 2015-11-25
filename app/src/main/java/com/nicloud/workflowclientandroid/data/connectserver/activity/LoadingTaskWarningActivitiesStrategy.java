@@ -35,7 +35,7 @@ public class LoadingTaskWarningActivitiesStrategy implements ILoadingActivitiesS
             HashMap<String, String> queries = new HashMap<>();
             queries.put("taskExceptionId", mTaskWarningId);
             queries.put("limit", "" + mLimit);
-            String urlString = URLUtils.buildURLString(LoadingDataUtils.WorkingDataUrl.BASE_URL, LoadingDataUtils.WorkingDataUrl.EndPoints.TASK_WARNING_ACTIVITIES, queries);
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, LoadingDataUtils.WorkingDataUrl.EndPoints.TASK_WARNING_ACTIVITIES, queries);
             String responseJSONString = RestfulUtils.getJsonStringFromUrl(urlString);
             JSONObject responseJSON = new JSONObject(responseJSONString);
             if (responseJSON.getString("status").equals("success")) {

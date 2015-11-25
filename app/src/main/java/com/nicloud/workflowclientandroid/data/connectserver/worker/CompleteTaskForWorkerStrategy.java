@@ -39,7 +39,7 @@ public class CompleteTaskForWorkerStrategy implements IPostRequestStrategy {
             bodies.put("ed", mWorkerId);
             bodies.put("td", mTaskId);
 
-            String urlString = URLUtils.buildURLString(LoadingDataUtils.WorkingDataUrl.BASE_URL, LoadingDataUtils.WorkingDataUrl.EndPoints.COMPLETE_TASK, null);
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, LoadingDataUtils.WorkingDataUrl.EndPoints.COMPLETE_TASK, null);
             String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
 
             if (responseString != null) {

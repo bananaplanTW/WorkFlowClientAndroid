@@ -27,7 +27,8 @@ public class UserLoggingInStrategy implements IPostRequestStrategy {
     @Override
     public JSONObject post() {
         try {
-            String urlString = URLUtils.buildURLString(LoadingDataUtils.WorkingDataUrl.BASE_URL, LoadingDataUtils.WorkingDataUrl.EndPoints.LOGIN, null);
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                                                       LoadingDataUtils.WorkingDataUrl.EndPoints.LOGIN, null);
             String responseString = RestfulUtils.restfulPostRequest(urlString, null, mBodies);
             if (responseString != null) {
                 JSONObject jsonObject = new JSONObject(responseString);

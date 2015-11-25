@@ -27,24 +27,28 @@ import java.util.List;
 public class LoadingDataUtils {
 
     private static final String TAG = "LoadDataUtils";
+
+    public static final String BASE_URL = "base_url";
+
+    public static String sBaseUrl;
+
     public static final class WorkingDataUrl {
 
         //public static final String BASE_URL = "http://128.199.198.169:3000";
-        public static final String BASE_URL = "http://188.166.248.171";
         // public static final String BASE_URL = "http://188.166.235.141";  // Released version
         public static final String DEBUG_BASE_URL = "http://128.199.198.169:3000";
 
-        public static final String WORKERS = BASE_URL + "/api/employees";
-        public static final String CASES = BASE_URL + "/api/cases";
-        public static final String FACTORIES = BASE_URL + "/api/groups";
-        public static final String EQUIPMENTS = BASE_URL + "/api/resources";
-        public static final String TASKS_BY_CASE = BASE_URL + "/api/tasks?caseId=";
-        public static final String TASKS_BY_WORKER = BASE_URL + "/api/employee/tasks?employeeId=";
-        public static final String WORKERS_BY_FACTORY = BASE_URL + "/api/group/employees?groupId=";
-        public static final String TIME_CARD_BY_CASE = BASE_URL + "/api/case/task-timecards?caseId=%s&startDate=%d&endDate=%d";
-        public static final String TIME_CARD_BY_WORKER = BASE_URL + "/api/employee/timecards?employeeId=%s&startDate=%d&endDate=%d";
-        public static final String LEAVE_WORKERS = BASE_URL + "/api/leaves?startDate=%s&endDate=%s";
-        public static final String WORKER_ATTENDANCE = BASE_URL + "/api/employee/leaves?employeeId=%s&startDate=%d&endDate=%d";
+        public static final String WORKERS = sBaseUrl + "/api/employees";
+        public static final String CASES = sBaseUrl + "/api/cases";
+        public static final String FACTORIES = sBaseUrl + "/api/groups";
+        public static final String EQUIPMENTS = sBaseUrl + "/api/resources";
+        public static final String TASKS_BY_CASE = sBaseUrl + "/api/tasks?caseId=";
+        public static final String TASKS_BY_WORKER = sBaseUrl + "/api/employee/tasks?employeeId=";
+        public static final String WORKERS_BY_FACTORY = sBaseUrl + "/api/group/employees?groupId=";
+        public static final String TIME_CARD_BY_CASE = sBaseUrl + "/api/case/task-timecards?caseId=%s&startDate=%d&endDate=%d";
+        public static final String TIME_CARD_BY_WORKER = sBaseUrl + "/api/employee/timecards?employeeId=%s&startDate=%d&endDate=%d";
+        public static final String LEAVE_WORKERS = sBaseUrl + "/api/leaves?startDate=%s&endDate=%s";
+        public static final String WORKER_ATTENDANCE = sBaseUrl + "/api/employee/leaves?employeeId=%s&startDate=%d&endDate=%d";
 
         public static final class EndPoints {
             public static final String LOGIN_WORKER = "/api/self";

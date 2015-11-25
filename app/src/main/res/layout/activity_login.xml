@@ -38,6 +38,19 @@
             android:layout_height="wrap_content">
 
             <EditText
+                android:id="@+id/login_company_domain"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_edit_text_height"
+                android:inputType="textEmailAddress"
+                android:hint="@string/login_company_domain"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
                 android:id="@+id/login_account_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_edit_text_height"

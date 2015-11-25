@@ -81,7 +81,7 @@ public class ActivityDataFactory {
                     photoData.time = new Date(recordJSON.getLong("createdAt"));
                     photoData.fileName = recordJSON.getString("name");
 
-                    Uri.Builder thumbBuilder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();
+                    Uri.Builder thumbBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
                     thumbBuilder.path(recordJSON.getString("thumbUrl"));
                     Uri thumbUri = thumbBuilder.build();
                     // TODO: DO NOT load all thumbnails into memory to avoid OOM
@@ -91,7 +91,7 @@ public class ActivityDataFactory {
 
                     loadUserIcon(context, recordJSON, photoData, listener);
 
-                    Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();
+                    Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
                     imageBuilder.path(recordJSON.getString("imageUrl"));
                     photoData.filePath = imageBuilder.build();
 
@@ -107,7 +107,7 @@ public class ActivityDataFactory {
 
                     loadUserIcon(context, recordJSON, fileData, listener);
 
-                    Uri.Builder builder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();
+                    Uri.Builder builder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
                     builder.path(recordJSON.getString("fileUrl"));
                     fileData.filePath = builder.build();
 
@@ -170,7 +170,7 @@ public class ActivityDataFactory {
             iconThumbUrl = LoadingDataUtils.getStringFromJson(jsonObject, "iconThumbUrl");
 
             if (!TextUtils.isEmpty(iconThumbUrl)) {
-                Uri.Builder userIconBuilder = Uri.parse(LoadingDataUtils.WorkingDataUrl.BASE_URL).buildUpon();
+                Uri.Builder userIconBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
                 userIconBuilder.path(iconThumbUrl);
                 Uri userIconUri = userIconBuilder.build();
 

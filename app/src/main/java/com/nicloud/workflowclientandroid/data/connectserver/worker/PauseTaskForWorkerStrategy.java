@@ -36,7 +36,7 @@ public class PauseTaskForWorkerStrategy implements IPostRequestStrategy {
             HashMap<String, String> bodies = new HashMap<>();
             bodies.put("td", mTaskId);
 
-            String urlString = URLUtils.buildURLString(LoadingDataUtils.WorkingDataUrl.BASE_URL, LoadingDataUtils.WorkingDataUrl.EndPoints.PAUSE_TASK, null);
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, LoadingDataUtils.WorkingDataUrl.EndPoints.PAUSE_TASK, null);
             String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
 
             if (responseString != null) {

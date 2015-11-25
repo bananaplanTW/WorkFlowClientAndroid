@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.nicloud.workflowclientandroid.R;
+import com.nicloud.workflowclientandroid.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclientandroid.data.data.data.WorkingData;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.CheckLoggedInStatusCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.LoadingLoginWorkerCommand;
@@ -31,6 +33,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private LinearLayout mLoginViewContainer;
 
+    private EditText mCompanyDomain;
     private EditText mAccountEditText;
     private EditText mPasswordEditText;
     private Button mLoginButton;
@@ -61,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void findViews () {
         mNiCloudImage = (ImageView) findViewById(R.id.login_nicloud_image);
         mLoginViewContainer = (LinearLayout) findViewById(R.id.login_container);
+        mCompanyDomain = (EditText) findViewById(R.id.login_company_domain);
         mAccountEditText = (EditText) findViewById(R.id.login_account_edit_text);
         mPasswordEditText = (EditText) findViewById(R.id.login_password_edit_text);
         mLoginButton = (Button) findViewById(R.id.login_button);
@@ -85,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onStart() {
         super.onStart();
 
+        LoadingDataUtils.sBaseUrl = mSharedPreferences.getString(LoadingDataUtils.BASE_URL, "");
         WorkingData.setUserId(mSharedPreferences.getString(WorkingData.USER_ID, ""));
         WorkingData.setAuthToken(mSharedPreferences.getString(WorkingData.AUTH_TOKEN, ""));
 
@@ -92,6 +97,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void checkLoggedInStatus() {
+        if (TextUtils.isEmpty(LoadingDataUtils.sBaseUrl)) {
+            showAllViews();
+            return;
+        }
+
         CheckLoggedInStatusCommand checkLoggedInStatusCommand = new CheckLoggedInStatusCommand(this, this);
         checkLoggedInStatusCommand.execute();
     }
@@ -99,15 +109,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onPause() {
         super.onPause();
-        overridePendingTransition(0, 0);
+        //overridePendingTransition(0, 0);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_button:
+                LoadingDataUtils.sBaseUrl = "http://" + mCompanyDomain.getText().toString();
                 String username = mAccountEditText.getText().toString();
                 String password = mPasswordEditText.getText().toString();
+
                 UserLoggingInCommand userLoggingInCommand = new UserLoggingInCommand(this, username, password, this);
                 userLoggingInCommand.execute();
 
@@ -141,7 +153,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void goToMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
@@ -157,7 +169,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onLoggedInSucceed(String userId, String authToken) {
-        mSharedPreferences.edit().putString(WorkingData.USER_ID, userId).putString(WorkingData.AUTH_TOKEN, authToken).commit();
+        mSharedPreferences.edit()
+                .putString(WorkingData.USER_ID, userId)
+                .putString(WorkingData.AUTH_TOKEN, authToken)
+                .putString(LoadingDataUtils.BASE_URL, LoadingDataUtils.sBaseUrl)
+                .apply();
+
         WorkingData.setUserId(userId);
         WorkingData.setAuthToken(authToken);
 

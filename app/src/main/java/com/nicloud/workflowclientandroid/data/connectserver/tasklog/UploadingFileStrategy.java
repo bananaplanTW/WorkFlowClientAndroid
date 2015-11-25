@@ -32,7 +32,7 @@ public class UploadingFileStrategy implements IPostRequestStrategy {
     @Override
     public JSONObject post() {
         try {
-            String urlString = URLUtils.buildURLString(LoadingDataUtils.WorkingDataUrl.BASE_URL, mEndPoint, null);
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, mEndPoint, null);
             String responseString = RestfulUtils.restfulPostFileRequest(urlString, mHeaders, mFilePath);
             JSONObject jsonObject = new JSONObject(responseString);
             if (jsonObject.getString("status").equals("success")) {
