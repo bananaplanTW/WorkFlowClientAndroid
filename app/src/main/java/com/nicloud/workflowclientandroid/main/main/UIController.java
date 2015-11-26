@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.nicloud.workflowclientandroid.R;
 import com.nicloud.workflowclientandroid.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.CheckInOutCommand;
+import com.nicloud.workflowclientandroid.data.connectserver.worker.LoadingLoginWorkerCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.LoadingWorkerAvatarCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.PauseTaskForWorkerCommand;
 import com.nicloud.workflowclientandroid.data.connectserver.worker.ShiftTaskCommand;
@@ -54,7 +55,8 @@ import java.util.List;
  */
 public class UIController implements View.OnClickListener, DataObserver,
         ShiftTaskCommand.OnFinishShiftTaskListener, TasksListAdapter.OnPauseWipTaskListener,
-        PauseTaskForWorkerCommand.OnPauseTaskForWorkerListener, CheckInOutCommand.OnMainCheckInOutStatusListener {
+        PauseTaskForWorkerCommand.OnPauseTaskForWorkerListener, CheckInOutCommand.OnMainCheckInOutStatusListener,
+        LoadingLoginWorkerCommand.OnLoadingLoginWorker {
 
     private static final String TAG = "UIController";
 
@@ -251,7 +253,7 @@ public class UIController implements View.OnClickListener, DataObserver,
 
             @Override
             public void onRefresh() {
-                loadWorkerTasks();
+                loadingLoginWorker();
                 loadWorkerAvatar();
             }
         });
@@ -287,6 +289,11 @@ public class UIController implements View.OnClickListener, DataObserver,
         LoadingWorkerAvatarCommand loadingWorkerAvatarCommand
                 = new LoadingWorkerAvatarCommand(mMainActivity, avatarUri, mActionBarWorkerAvatar);
         loadingWorkerAvatarCommand.execute();
+    }
+
+    private void loadingLoginWorker() {
+        LoadingLoginWorkerCommand loadingLoginWorkerCommand = new LoadingLoginWorkerCommand(mMainActivity, this);
+        loadingLoginWorkerCommand.execute();
     }
 
     /**
@@ -377,6 +384,18 @@ public class UIController implements View.OnClickListener, DataObserver,
 
     @Override
     public void onCheckInOutFailed() {
+
+    }
+
+    @Override
+    public void onLoadingLoginWorkerSuccessful() {
+        mActionBarWorkerName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().name);
+        mActionBarWorkerFactoryName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().factoryName);
+        loadWorkerTasks();
+    }
+
+    @Override
+    public void onLoadingLoginWorkerFailed(boolean isFailCausedByInternet) {
 
     }
 }
