@@ -1,4 +1,4 @@
-package com.nicloud.workflowclientandroid;
+package com.nicloud.workflowclient;
 
 import org.junit.Test;
 
