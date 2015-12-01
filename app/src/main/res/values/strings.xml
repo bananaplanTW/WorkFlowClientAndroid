@@ -29,6 +29,9 @@
     <string name="date_format_mm_dd">%1$s/%2$s</string>
     <string name="complete_task">Complete Task: %1$s</string>
 
+    <string name="parse_nicloud_application_id" translatable="false">ympLENaIwwMAb4kEGhbodL0HhOnCnzyS8XC1voKE</string>
+    <string name="parse_nicloud_application_client_key" translatable="false">q3j2FwlBY8pyS33yg0T7DsQ4JWK2LcFcdbtDGjl6</string>
+
     <!-- Main -->
     <string name="wip_task_card_prepare_for_next_task">Prepare for next task</string>
     <string name="wip_task_card_choose_task">Please choose a task from below</string>
