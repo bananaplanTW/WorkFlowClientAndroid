@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="?colorControlHighlight">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item>
+    <item android:state_pressed="true">
         <shape android:shape="rectangle">
+
             <corners android:radius="@dimen/dialog_button_corner_radius" />
-            <solid android:color="@color/dialog_green_button_background_color" />
+            <solid android:color="@color/dialog_green_button_pressed_background_color" />
+
         </shape>
     </item>
 
-</ripple>
+    <item>
+        <shape android:shape="rectangle">
+
+            <corners android:radius="@dimen/dialog_button_corner_radius" />
+            <solid android:color="@color/dialog_green_button_background_color" />
+
+        </shape>
+    </item>
+
+</selector>
