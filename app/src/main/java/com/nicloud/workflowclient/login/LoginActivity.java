@@ -61,6 +61,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setupViews();
         hideAllViews();
     }
+
     private void findViews () {
         mNiCloudImage = (ImageView) findViewById(R.id.login_nicloud_image);
         mLoginViewContainer = (LinearLayout) findViewById(R.id.login_container);

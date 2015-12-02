@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
@@ -16,12 +15,12 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.nicloud.workflowclient.data.connectserver.worker.CheckInOutCommand;
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingLoginWorkerCommand;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.googlelocation.CurrentAddress;
 import com.nicloud.workflowclient.googlelocation.GoogleLocationUtils;
 import com.nicloud.workflowclient.main.main.MainApplication;
 import com.nicloud.workflowclient.R;
@@ -57,10 +56,7 @@ public class CheckInOutDialog extends Dialog implements View.OnClickListener,
 
     private ProgressBar mRecordLocationProgressBar;
 
-    private GoogleApiClient mGoogleApiClient;
-    private Location mCurrentLocation;
-    private AddressResultReceiver mReceiver;
-    private LocationRequest mLocationRequest;
+    private CurrentAddress mCurrentAddress;
 
     private Worker mWorker;
 
@@ -153,32 +149,16 @@ public class CheckInOutDialog extends Dialog implements View.OnClickListener,
     }
 
     private void setupFetchingAddress() {
-        buildGoogleApiClient();
-        createLocationRequest();
-        GoogleLocationUtils.showLocationEnabledDialog((Activity) mContext, mLocationRequest, mGoogleApiClient);
-        mReceiver = new AddressResultReceiver(new Handler(), this);
-    }
-
-    private synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(mContext)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    private void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(60000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mCurrentAddress = new CurrentAddress(mContext, this, this, this);
+        GoogleLocationUtils.showLocationEnabledDialog((Activity) mContext,
+                mCurrentAddress.mLocationRequest, mCurrentAddress.mGoogleApiClient);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
-        if (mGoogleApiClient.isConnected()) {
+        mCurrentAddress.mGoogleApiClient.connect();
+        if (mCurrentAddress.mGoogleApiClient.isConnected()) {
             startLocationUpdates();
         }
     }
@@ -187,8 +167,8 @@ public class CheckInOutDialog extends Dialog implements View.OnClickListener,
     protected void onStop() {
         super.onStop();
         stopLocationUpdates();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
+        if (mCurrentAddress.mGoogleApiClient.isConnected()) {
+            mCurrentAddress.mGoogleApiClient.disconnect();
         }
     }
 
@@ -198,7 +178,7 @@ public class CheckInOutDialog extends Dialog implements View.OnClickListener,
 
         switch (v.getId()) {
             case R.id.check_button:
-                mOnDialogActionListener.onCheck(mCurrentLocation, this);
+                mOnDialogActionListener.onCheck(mCurrentAddress.mCurrentLocation, this);
 
                 break;
         }
@@ -210,23 +190,24 @@ public class CheckInOutDialog extends Dialog implements View.OnClickListener,
     }
 
     private void startLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        LocationServices.FusedLocationApi
+                .requestLocationUpdates(mCurrentAddress.mGoogleApiClient, mCurrentAddress.mLocationRequest, this);
     }
 
     private void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        LocationServices.FusedLocationApi.removeLocationUpdates(mCurrentAddress.mGoogleApiClient, this);
     }
 
     private void startFetchAddressIntentService() {
         Intent intent = new Intent(mContext, FetchAddressIntentService.class);
-        intent.putExtra(FetchAddressIntentService.Constants.RECEIVER, mReceiver);
-        intent.putExtra(FetchAddressIntentService.Constants.EXTRA_LOCATION_DATA, mCurrentLocation);
+        intent.putExtra(FetchAddressIntentService.Constants.RECEIVER, mCurrentAddress.mReceiver);
+        intent.putExtra(FetchAddressIntentService.Constants.EXTRA_LOCATION_DATA, mCurrentAddress.mCurrentLocation);
         mContext.startService(intent);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        mGoogleApiClient.connect();
+        mCurrentAddress.mGoogleApiClient.connect();
     }
 
     @Override
@@ -236,7 +217,7 @@ public class CheckInOutDialog extends Dialog implements View.OnClickListener,
 
     @Override
     public void onLocationChanged(Location location) {
-        mCurrentLocation = location;
+        mCurrentAddress.mCurrentLocation = location;
 
         if (!Geocoder.isPresent()) return;
 

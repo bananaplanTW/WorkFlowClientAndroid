@@ -34,6 +34,7 @@ import com.nicloud.workflowclient.data.connectserver.activity.LeaveAFileCommentT
 import com.nicloud.workflowclient.data.connectserver.tasklog.LeaveAPhotoCommentToTaskCommand;
 import com.nicloud.workflowclient.data.connectserver.tasklog.LeaveATextCommentToTaskCommand;
 import com.nicloud.workflowclient.data.connectserver.tasklog.OnLeaveCommentListener;
+import com.nicloud.workflowclient.googlelocation.CurrentAddress;
 import com.nicloud.workflowclient.googlelocation.GoogleLocationUtils;
 import com.nicloud.workflowclient.main.main.MainApplication;
 import com.nicloud.workflowclient.R;
@@ -72,10 +73,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
     private ProgressDialog mProgressDialog;
 
-    private GoogleApiClient mGoogleApiClient;
-    private Location mCurrentLocation;
-    private AddressResultReceiver mReceiver;
-    private LocationRequest mLocationRequest;
+    private CurrentAddress mCurrentAddress;
 
     private String mTaskId;
 
@@ -127,45 +125,29 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setupFetchingAddress() {
-        buildGoogleApiClient();
-        createLocationRequest();
-        GoogleLocationUtils.showLocationEnabledDialog(this, mLocationRequest, mGoogleApiClient);
-        mReceiver = new AddressResultReceiver(new Handler(), this);
-    }
-
-    private synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    private void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(60000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mCurrentAddress = new CurrentAddress(this, this, this, this);
+        GoogleLocationUtils.showLocationEnabledDialog(this,
+                mCurrentAddress.mLocationRequest, mCurrentAddress.mGoogleApiClient);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+        mCurrentAddress.mGoogleApiClient.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
+        if (mCurrentAddress.mGoogleApiClient.isConnected()) {
+            mCurrentAddress.mGoogleApiClient.disconnect();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mGoogleApiClient.isConnected()) {
+        if (mCurrentAddress.mGoogleApiClient.isConnected()) {
             startLocationUpdates();
         }
     }
@@ -280,23 +262,24 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void startLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        LocationServices.FusedLocationApi
+                .requestLocationUpdates(mCurrentAddress.mGoogleApiClient, mCurrentAddress.mLocationRequest, this);
     }
 
     private void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        LocationServices.FusedLocationApi.removeLocationUpdates(mCurrentAddress.mGoogleApiClient, this);
     }
 
     private void startFetchAddressIntentService() {
         Intent intent = new Intent(this, FetchAddressIntentService.class);
-        intent.putExtra(FetchAddressIntentService.Constants.RECEIVER, mReceiver);
-        intent.putExtra(FetchAddressIntentService.Constants.EXTRA_LOCATION_DATA, mCurrentLocation);
+        intent.putExtra(FetchAddressIntentService.Constants.RECEIVER, mCurrentAddress.mReceiver);
+        intent.putExtra(FetchAddressIntentService.Constants.EXTRA_LOCATION_DATA, mCurrentAddress.mCurrentLocation);
         startService(intent);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        mGoogleApiClient.connect();
+        mCurrentAddress.mGoogleApiClient.connect();
     }
 
     @Override
@@ -306,7 +289,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onLocationChanged(Location location) {
-        mCurrentLocation = location;
+        mCurrentAddress.mCurrentLocation = location;
 
         if (!Geocoder.isPresent()) return;
 
