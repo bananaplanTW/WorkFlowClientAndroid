@@ -50,7 +50,8 @@
         <activity
             android:name=".tasklog.add.AddLogActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.WhiteBackground" />
+            android:theme="@style/AppTheme.WhiteBackground"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".tasklog.log.TaskLogActivity"
             android:screenOrientation="portrait"
