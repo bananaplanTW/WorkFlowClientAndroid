@@ -184,7 +184,8 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void bindWipTaskViewHolder(WipTaskViewHolder holder, Task task) {
-        if (WorkingData.getInstance(mContext).getLoginWorker().status == Worker.Status.STOP) {
+        if (WorkingData.getInstance(mContext).getLoginWorker().status == Worker.Status.STOP ||
+            WorkingData.getInstance(mContext).getLoginWorker().status == Worker.Status.OFF) {
             holder.wipTaskCardView.setVisibility(View.GONE);
             holder.noWipTaskCardView.setVisibility(View.VISIBLE);
             holder.chooseTaskText.setVisibility(View.GONE);

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.Task;
+import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment.OnDialogActionListener;
 
@@ -19,6 +20,8 @@ import com.nicloud.workflowclient.dialog.DisplayDialogFragment.OnDialogActionLis
  * @since 2015/11/4.
  */
 public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
+
+    private Context mContext;
 
     private TextView mTaskName;
 
@@ -32,6 +35,7 @@ public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
 
     public ChooseTaskDialog(Context context, String taskId, OnDialogActionListener listener) {
         super(context);
+        mContext = context;
         mOnDialogActionListener = listener;
         mTask = WorkingData.getInstance(context).getTask(taskId);
     }
@@ -63,6 +67,11 @@ public class ChooseTaskDialog extends Dialog implements View.OnClickListener {
     }
 
     private void setupButton() {
+        if (WorkingData.getInstance(mContext).getLoginWorker().status == Worker.Status.STOP ||
+            WorkingData.getInstance(mContext).getLoginWorker().status == Worker.Status.OFF) {
+            mStartWorkButton.setVisibility(View.GONE);
+        }
+
         mStartWorkButton.setOnClickListener(this);
         mTaskLogButton.setOnClickListener(this);
     }
