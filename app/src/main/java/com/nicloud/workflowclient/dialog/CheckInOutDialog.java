@@ -1,5 +1,6 @@
 package com.nicloud.workflowclient.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import com.nicloud.workflowclient.data.connectserver.worker.CheckInOutCommand;
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingLoginWorkerCommand;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.googlelocation.GoogleLocationUtils;
 import com.nicloud.workflowclient.main.main.MainApplication;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.googlelocation.AddressResultReceiver;
@@ -153,6 +155,7 @@ public class CheckInOutDialog extends Dialog implements View.OnClickListener,
     private void setupFetchingAddress() {
         buildGoogleApiClient();
         createLocationRequest();
+        GoogleLocationUtils.showLocationEnabledDialog((Activity) mContext, mLocationRequest, mGoogleApiClient);
         mReceiver = new AddressResultReceiver(new Handler(), this);
     }
 

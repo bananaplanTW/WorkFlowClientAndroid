@@ -34,6 +34,7 @@ import com.nicloud.workflowclient.data.connectserver.activity.LeaveAFileCommentT
 import com.nicloud.workflowclient.data.connectserver.tasklog.LeaveAPhotoCommentToTaskCommand;
 import com.nicloud.workflowclient.data.connectserver.tasklog.LeaveATextCommentToTaskCommand;
 import com.nicloud.workflowclient.data.connectserver.tasklog.OnLeaveCommentListener;
+import com.nicloud.workflowclient.googlelocation.GoogleLocationUtils;
 import com.nicloud.workflowclient.main.main.MainApplication;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.googlelocation.AddressResultReceiver;
@@ -128,6 +129,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     private void setupFetchingAddress() {
         buildGoogleApiClient();
         createLocationRequest();
+        GoogleLocationUtils.showLocationEnabledDialog(this, mLocationRequest, mGoogleApiClient);
         mReceiver = new AddressResultReceiver(new Handler(), this);
     }
 
