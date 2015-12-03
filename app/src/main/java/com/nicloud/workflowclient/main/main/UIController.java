@@ -95,9 +95,7 @@ public class UIController implements View.OnClickListener, DataObserver,
 
         @Override
         public void onFailLoadingData(boolean isFailCausedByInternet) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            Toast.makeText(mMainActivity,
-                    mMainActivity.getString(R.string.no_internet_connection_information), Toast.LENGTH_SHORT).show();
+            showInternetConnectionWeakToast();
         }
     };
 
@@ -165,7 +163,7 @@ public class UIController implements View.OnClickListener, DataObserver,
 
                     @Override
                     public void onFailCompleteTask() {
-
+                        showInternetConnectionWeakToast();
                     }
                 });
 
@@ -358,7 +356,13 @@ public class UIController implements View.OnClickListener, DataObserver,
 
     @Override
     public void onShiftTaskFailed() {
+        showInternetConnectionWeakToast();
+    }
 
+    private void showInternetConnectionWeakToast() {
+        mSwipeRefreshLayout.setRefreshing(false);
+        Toast.makeText(mMainActivity,
+                mMainActivity.getString(R.string.no_internet_connection_information), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -374,7 +378,7 @@ public class UIController implements View.OnClickListener, DataObserver,
 
     @Override
     public void onFailPauseTask() {
-
+        showInternetConnectionWeakToast();
     }
 
     @Override
@@ -384,7 +388,7 @@ public class UIController implements View.OnClickListener, DataObserver,
 
     @Override
     public void onCheckInOutFailed() {
-
+        showInternetConnectionWeakToast();
     }
 
     @Override
@@ -396,6 +400,6 @@ public class UIController implements View.OnClickListener, DataObserver,
 
     @Override
     public void onLoadingLoginWorkerFailed(boolean isFailCausedByInternet) {
-
+        showInternetConnectionWeakToast();
     }
 }
