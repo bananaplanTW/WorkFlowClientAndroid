@@ -2,6 +2,7 @@ package com.nicloud.workflowclient.main.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -273,10 +274,16 @@ public class UIController implements View.OnClickListener, DataObserver,
     }
 
     private void loadWorkerAvatar() {
+        Drawable avatar = WorkingData.getInstance(mMainActivity).getLoginWorker().avatar;
         String s = WorkingData.getInstance(mMainActivity).getLoginWorker().avatarUrl;
 
         if (TextUtils.isEmpty(s)) {
-            mActionBarWorkerAvatar.setImageResource(R.drawable.ic_worker);
+            if (avatar == null) {
+                mActionBarWorkerAvatar.setImageResource(R.drawable.ic_worker);
+            } else {
+                mActionBarWorkerAvatar.setImageDrawable(avatar);
+            }
+
             return;
         }
 

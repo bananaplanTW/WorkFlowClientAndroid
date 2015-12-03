@@ -34,12 +34,12 @@ public class LoadingDrawableAsyncTask extends AsyncTask<Void, Void, Drawable> {
     private OnFinishLoadingDataListener mOnFinishLoadingDataListener;
     private Drawable result;
 
+
     public LoadingDrawableAsyncTask(Context context, Uri uri, OnFinishLoadingDataListener onFinishLoadingDataListener) {
         mContext = context;
         mUri = uri;
         mOnFinishLoadingDataListener = onFinishLoadingDataListener;
     }
-
 
     public Drawable getResult () {
         return result;

@@ -2,11 +2,11 @@ package com.nicloud.workflowclient.data.connectserver.worker;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.activity.LoadingDrawableAsyncTask;
+import com.nicloud.workflowclient.data.data.data.WorkingData;
 
 
 /**
@@ -14,10 +14,11 @@ import com.nicloud.workflowclient.data.connectserver.activity.LoadingDrawableAsy
  */
 public class LoadingWorkerAvatarCommand implements LoadingDrawableAsyncTask.OnFinishLoadingDataListener {
 
-    private LoadingDrawableAsyncTask mLoadingDrawableAsyncTask;
     private Context mContext;
     private Uri mUri;
     private ImageView mAvatar;
+
+    private LoadingDrawableAsyncTask mLoadingDrawableAsyncTask;
 
 
     public LoadingWorkerAvatarCommand(Context context, Uri uri, ImageView avatar) {
@@ -28,17 +29,21 @@ public class LoadingWorkerAvatarCommand implements LoadingDrawableAsyncTask.OnFi
 
     public void execute () {
         mLoadingDrawableAsyncTask = new LoadingDrawableAsyncTask(mContext, mUri, this);
-        mLoadingDrawableAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        mLoadingDrawableAsyncTask.execute();
     }
-
 
     @Override
     public void onFinishLoadingData() {
         mAvatar.setImageDrawable(mLoadingDrawableAsyncTask.getResult());
+        WorkingData.getInstance(mContext).getLoginWorker().avatar = mAvatar.getDrawable();
     }
 
     @Override
     public void onFailLoadingData(boolean isFailCausedByInternet) {
-        mAvatar.setImageResource(R.drawable.ic_worker);
+        if (WorkingData.getInstance(mContext).getLoginWorker().avatar == null) {
+            mAvatar.setImageResource(R.drawable.ic_worker);
+        } else {
+            mAvatar.setImageDrawable(WorkingData.getInstance(mContext).getLoginWorker().avatar);
+        }
     }
 }
