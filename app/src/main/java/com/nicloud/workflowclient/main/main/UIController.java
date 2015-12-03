@@ -42,6 +42,7 @@ import com.nicloud.workflowclient.main.tasklist.TasksListAdapter.ItemViewType;
 import com.nicloud.workflowclient.main.tasklist.TasksListItem;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 import com.nicloud.workflowclient.utility.Utilities;
+import com.parse.ParsePush;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,7 +130,8 @@ public class UIController implements View.OnClickListener, DataObserver,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_logout:
-                //ParsePush.unsubscribeInBackground("user_" + WorkingData.getUserId());
+                ParsePush.unsubscribeInBackground("user_" + WorkingData.getUserId());
+                //ParseUtils.removeLoginWorkerToParse();
 
                 WorkingData.resetAccount();
                 SharedPreferences sharedPreferences = mMainActivity.getSharedPreferences(WorkingData.SHARED_PREFERENCE_KEY, 0);

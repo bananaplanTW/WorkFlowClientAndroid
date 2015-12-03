@@ -21,11 +21,14 @@ import com.nicloud.workflowclient.data.connectserver.worker.CheckLoggedInStatusC
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingLoginWorkerCommand;
 import com.nicloud.workflowclient.data.connectserver.worker.UserLoggingInCommand;
 import com.nicloud.workflowclient.main.main.MainActivity;
+import com.parse.ParsePush;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
         CheckLoggedInStatusCommand.OnFinishCheckingLoggedInStatusListener,
         UserLoggingInCommand.OnFinishLoggedInListener, LoadingLoginWorkerCommand.OnLoadingLoginWorker {
+
+    private static final String TAG = "LoginActivity";
 
     public static final long NICLOUD_LOGO_DISPLAYING_INTERVAL = 1000L;
 
@@ -179,7 +182,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         WorkingData.setUserId(userId);
         WorkingData.setAuthToken(authToken);
 
-        //ParsePush.subscribeInBackground("user_" + userId);
+        //ParseUtils.registerLoginWorkerToParse(WorkingData.getInstance(mContext).getLoginWorker().id);
+        ParsePush.subscribeInBackground("user_" + WorkingData.getUserId());
 
         loadingLoginWorker();
     }
