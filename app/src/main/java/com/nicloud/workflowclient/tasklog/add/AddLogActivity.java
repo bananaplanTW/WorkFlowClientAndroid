@@ -34,6 +34,7 @@ import com.nicloud.workflowclient.data.connectserver.activity.LeaveAFileCommentT
 import com.nicloud.workflowclient.data.connectserver.tasklog.LeaveAPhotoCommentToTaskCommand;
 import com.nicloud.workflowclient.data.connectserver.tasklog.LeaveATextCommentToTaskCommand;
 import com.nicloud.workflowclient.data.connectserver.tasklog.OnLeaveCommentListener;
+import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.googlelocation.CurrentAddress;
 import com.nicloud.workflowclient.googlelocation.GoogleLocationUtils;
 import com.nicloud.workflowclient.main.main.MainApplication;
@@ -63,6 +64,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     private ActionBar mActionBar;
     private Toolbar mToolbar;
 
+    private ImageView mWorkerPhoto;
     private EditText mEditContent;
     private TextView mLocation;
     private ProgressBar mLocationProgressBar;
@@ -100,6 +102,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
     private void findViews() {
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        mWorkerPhoto = (ImageView) findViewById(R.id.add_log_worker_photo);
         mEditContent = (EditText) findViewById(R.id.add_log_edit_content);
         mLocation = (TextView) findViewById(R.id.location_text);
         mLocationProgressBar = (ProgressBar) findViewById(R.id.location_progress_bar);
@@ -119,6 +122,10 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setupViews() {
+        if (WorkingData.getInstance(this).getLoginWorker().avatar != null) {
+            mWorkerPhoto.setImageDrawable(WorkingData.getInstance(this).getLoginWorker().avatar);
+        }
+
         mCameraButton.setOnClickListener(this);
         mUploadButton.setOnClickListener(this);
         mRecordButton.setOnClickListener(this);
