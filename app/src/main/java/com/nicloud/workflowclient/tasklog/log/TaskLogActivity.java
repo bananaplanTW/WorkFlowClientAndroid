@@ -201,7 +201,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_record_log, menu);
+        getMenuInflater().inflate(R.menu.menu_task_log, menu);
         return true;
     }
 

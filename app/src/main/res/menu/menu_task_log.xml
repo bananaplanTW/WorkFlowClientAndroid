@@ -4,7 +4,7 @@
 
     <item android:id="@+id/action_add_record"
         android:title="@string/add_record"
-        android:icon="@drawable/ic_add_record"
+        android:icon="@drawable/ic_add_log"
         android:orderInCategory="1"
         app:showAsAction="ifRoom" />
 
