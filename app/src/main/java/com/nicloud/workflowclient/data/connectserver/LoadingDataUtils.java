@@ -28,8 +28,6 @@ public class LoadingDataUtils {
 
     private static final String TAG = "LoadDataUtils";
 
-    public static final String BASE_URL = "base_url";
-
     public static String sBaseUrl;
 
     public static final class WorkingDataUrl {

@@ -20,6 +20,7 @@ import java.util.List;
 public final class WorkingData implements DataSubject {
 
     public static final String SHARED_PREFERENCE_KEY = "workflow";
+    public static final String COMPANY_ACCOUNT = "company_account";
     public static final String USER_ID = "userId";
     public static final String AUTH_TOKEN = "authToken";
 

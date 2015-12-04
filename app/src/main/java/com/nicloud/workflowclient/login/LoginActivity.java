@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,7 +35,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private LinearLayout mLoginViewContainer;
 
-    private EditText mCompanyAccount;
+    private EditText mCompanyAccountEditText;
     private EditText mAccountEditText;
     private EditText mPasswordEditText;
     private Button mLoginButton;
@@ -45,6 +43,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ImageView mNiCloudImage;
     private View mNICContainer;
     private Button mNICRetryButton;
+
+    private String mCompanyAccount;
+    private String mUserId;
+    private String mAuthToken;
 
 
     @Override
@@ -55,16 +57,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initialize() {
-        mSharedPreferences = getSharedPreferences(WorkingData.SHARED_PREFERENCE_KEY, 0);
+        getSharedPreferences();
         findViews();
         setupViews();
         hideAllViews();
     }
 
+    private void getSharedPreferences() {
+        mSharedPreferences = getSharedPreferences(WorkingData.SHARED_PREFERENCE_KEY, 0);
+        mCompanyAccount = mSharedPreferences.getString(WorkingData.COMPANY_ACCOUNT, "");
+        mUserId = mSharedPreferences.getString(WorkingData.USER_ID, "");
+        mAuthToken = mSharedPreferences.getString(WorkingData.AUTH_TOKEN, "");
+    }
+
     private void findViews () {
         mNiCloudImage = (ImageView) findViewById(R.id.login_nicloud_image);
         mLoginViewContainer = (LinearLayout) findViewById(R.id.login_container);
-        mCompanyAccount = (EditText) findViewById(R.id.login_company_account);
+        mCompanyAccountEditText = (EditText) findViewById(R.id.login_company_account);
         mAccountEditText = (EditText) findViewById(R.id.login_account_edit_text);
         mPasswordEditText = (EditText) findViewById(R.id.login_password_edit_text);
         mLoginButton = (Button) findViewById(R.id.login_button);
@@ -73,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void setupViews () {
+        mCompanyAccountEditText.setText(mCompanyAccount);
         mLoginButton.setOnClickListener(this);
         mNICRetryButton.setOnClickListener(this);
     }
@@ -89,15 +99,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onStart() {
         super.onStart();
 
-        LoadingDataUtils.sBaseUrl = mSharedPreferences.getString(LoadingDataUtils.BASE_URL, "");
-        WorkingData.setUserId(mSharedPreferences.getString(WorkingData.USER_ID, ""));
-        WorkingData.setAuthToken(mSharedPreferences.getString(WorkingData.AUTH_TOKEN, ""));
+        LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccount;
+        WorkingData.setUserId(mUserId);
+        WorkingData.setAuthToken(mAuthToken);
 
         checkLoggedInStatus();
     }
 
     private void checkLoggedInStatus() {
-        if (TextUtils.isEmpty(LoadingDataUtils.sBaseUrl)) {
+        if (TextUtils.isEmpty(mCompanyAccount) ||
+            TextUtils.isEmpty(WorkingData.getUserId()) || TextUtils.isEmpty(WorkingData.getAuthToken())) {
             showAllViews();
             return;
         }
@@ -116,7 +127,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_button:
-                LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccount.getText().toString();
+                LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccountEditText.getText().toString();
                 String username = mAccountEditText.getText().toString();
                 String password = mPasswordEditText.getText().toString();
 
@@ -172,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mSharedPreferences.edit()
                 .putString(WorkingData.USER_ID, userId)
                 .putString(WorkingData.AUTH_TOKEN, authToken)
-                .putString(LoadingDataUtils.BASE_URL, LoadingDataUtils.sBaseUrl)
+                .putString(WorkingData.COMPANY_ACCOUNT, mCompanyAccountEditText.getText().toString())
                 .apply();
 
         WorkingData.setUserId(userId);
