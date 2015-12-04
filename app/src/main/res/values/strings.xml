@@ -22,7 +22,7 @@
     <string name="task_log">Task log</string>
     <string name="start_work">Start work</string>
     <string name="no_internet_connection">Check your connection and try again.</string>
-    <string name="no_internet_connection_information">Some information can not display normally. Check your connection and try again.</string>
+    <string name="no_internet_connection_information">Some function couldn\'t work normally. Please check your connection and try again.</string>
     <string name="error_account_password">Account or password is not correct.</string>
     <string name="retry">Retry</string>
     <string name="date_format_mm_dd_yyyy" translatable="false">%1$s/%2$s/%3$s</string>

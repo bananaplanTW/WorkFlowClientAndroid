@@ -16,7 +16,7 @@
     <string name="task_log">工作記錄</string>
     <string name="start_work">開始工作</string>
     <string name="no_internet_connection">請檢查您的連線狀態，然後再試一次。</string>
-    <string name="no_internet_connection_information">有些資訊無法正常顯示，請檢查您的連線狀態，然後再試一次。</string>
+    <string name="no_internet_connection_information">有些功能無法正常運作，請檢查您的連線狀態，然後再試一次。</string>
     <string name="error_account_password">帳號密碼錯誤。</string>
     <string name="retry">重試</string>
     <string name="date_format_mm_dd">%1$s月%2$s日</string>
