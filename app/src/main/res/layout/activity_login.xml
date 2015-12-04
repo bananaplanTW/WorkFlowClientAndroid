@@ -38,11 +38,11 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/login_company_domain"
+                android:id="@+id/login_company_account"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_edit_text_height"
                 android:inputType="textEmailAddress"
-                android:hint="@string/login_company_domain"/>
+                android:hint="@string/login_company_account"/>
 
         </android.support.design.widget.TextInputLayout>
 

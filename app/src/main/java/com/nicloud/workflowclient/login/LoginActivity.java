@@ -21,6 +21,7 @@ import com.nicloud.workflowclient.data.connectserver.worker.CheckLoggedInStatusC
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingLoginWorkerCommand;
 import com.nicloud.workflowclient.data.connectserver.worker.UserLoggingInCommand;
 import com.nicloud.workflowclient.main.main.MainActivity;
+import com.nicloud.workflowclient.main.main.MainApplication;
 import com.parse.ParsePush;
 
 
@@ -36,7 +37,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private LinearLayout mLoginViewContainer;
 
-    private EditText mCompanyDomain;
+    private EditText mCompanyAccount;
     private EditText mAccountEditText;
     private EditText mPasswordEditText;
     private Button mLoginButton;
@@ -44,9 +45,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ImageView mNiCloudImage;
     private View mNICContainer;
     private Button mNICRetryButton;
-
-    private Animation mFadeInAnimation;
-    private Animation mFadeOutAnimation;
 
 
     @Override
@@ -58,8 +56,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void initialize() {
         mSharedPreferences = getSharedPreferences(WorkingData.SHARED_PREFERENCE_KEY, 0);
-        mFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.abc_fade_in);
-        mFadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.abc_fade_out);
         findViews();
         setupViews();
         hideAllViews();
@@ -68,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void findViews () {
         mNiCloudImage = (ImageView) findViewById(R.id.login_nicloud_image);
         mLoginViewContainer = (LinearLayout) findViewById(R.id.login_container);
-        mCompanyDomain = (EditText) findViewById(R.id.login_company_domain);
+        mCompanyAccount = (EditText) findViewById(R.id.login_company_account);
         mAccountEditText = (EditText) findViewById(R.id.login_account_edit_text);
         mPasswordEditText = (EditText) findViewById(R.id.login_password_edit_text);
         mLoginButton = (Button) findViewById(R.id.login_button);
@@ -120,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_button:
-                LoadingDataUtils.sBaseUrl = "http://" + mCompanyDomain.getText().toString();
+                LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccount.getText().toString();
                 String username = mAccountEditText.getText().toString();
                 String password = mPasswordEditText.getText().toString();
 
@@ -139,13 +135,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void showNiCloudImage(boolean isDisplayed) {
         if (isDisplayed) {
-            mNICContainer.startAnimation(mFadeOutAnimation);
-            mNiCloudImage.startAnimation(mFadeInAnimation);
+            mNICContainer.startAnimation(MainApplication.sFadeOutAnimation);
+            mNiCloudImage.startAnimation(MainApplication.sFadeInAnimation);
             mNICContainer.setVisibility(View.GONE);
             mNiCloudImage.setVisibility(View.VISIBLE);
         } else {
-            mNICContainer.startAnimation(mFadeInAnimation);
-            mNiCloudImage.startAnimation(mFadeOutAnimation);
+            mNICContainer.startAnimation(MainApplication.sFadeInAnimation);
+            mNiCloudImage.startAnimation(MainApplication.sFadeOutAnimation);
             mNICContainer.setVisibility(View.VISIBLE);
             mNiCloudImage.setVisibility(View.GONE);
         }

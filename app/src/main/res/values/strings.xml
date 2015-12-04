@@ -38,7 +38,7 @@
     <string name="wip_task_card_not_working_time">Not working time</string>
 
     <!-- Login -->
-    <string name="login_company_domain">Company domain</string>
+    <string name="login_company_account">Company account</string>
     <string name="login_account">Account</string>
     <string name="login_password">Password</string>
     <string name="login">Login</string>

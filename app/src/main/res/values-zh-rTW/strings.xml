@@ -28,7 +28,7 @@
     <string name="wip_task_card_not_working_time">非上班時段</string>
 
     <!-- Login -->
-    <string name="login_company_domain">公司網域</string>
+    <string name="login_company_account">公司帳號</string>
     <string name="login_account">帳號</string>
     <string name="login_password">密碼</string>
     <string name="login">登入</string>
