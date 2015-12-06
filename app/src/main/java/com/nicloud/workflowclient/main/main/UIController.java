@@ -197,9 +197,10 @@ public class UIController implements View.OnClickListener, DataObserver,
         Utilities.dismissDialog(mFragmentManager);
     }
 
-    public void onCheck(Location currentLocation, CheckInOutCommand.OnDialogCheckInOutStatusListener onDialogCheckInOutStatusListener) {
+    public void onCheck(Location currentLocation, String currentAddress,
+                        CheckInOutCommand.OnDialogCheckInOutStatusListener onDialogCheckInOutStatusListener) {
         CheckInOutCommand checkInOutCommand
-                = new CheckInOutCommand(mMainActivity, currentLocation, onDialogCheckInOutStatusListener, this);
+                = new CheckInOutCommand(mMainActivity, currentLocation, currentAddress, onDialogCheckInOutStatusListener, this);
         checkInOutCommand.execute();
     }
 

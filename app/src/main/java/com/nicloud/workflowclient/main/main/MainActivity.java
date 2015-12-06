@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity implements DisplayDialogFrag
     }
 
     @Override
-    public void onCheck(Location currentLocation, CheckInOutCommand.OnDialogCheckInOutStatusListener onDialogCheckInOutStatusListener) {
-        mUIController.onCheck(currentLocation, onDialogCheckInOutStatusListener);
+    public void onCheck(Location currentLocation, String currentAddress,
+                        CheckInOutCommand.OnDialogCheckInOutStatusListener onDialogCheckInOutStatusListener) {
+        mUIController.onCheck(currentLocation, currentAddress, onDialogCheckInOutStatusListener);
     }
 }

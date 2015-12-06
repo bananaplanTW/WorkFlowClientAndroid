@@ -178,7 +178,7 @@ public class CheckInOutDialog extends Dialog implements View.OnClickListener,
 
         switch (v.getId()) {
             case R.id.check_button:
-                mOnDialogActionListener.onCheck(mCurrentAddress.mCurrentLocation, this);
+                mOnDialogActionListener.onCheck(mCurrentAddress.mCurrentLocation, mLocation.getText().toString(), this);
 
                 break;
         }

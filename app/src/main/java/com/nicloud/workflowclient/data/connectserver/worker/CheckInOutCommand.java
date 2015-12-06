@@ -23,18 +23,21 @@ public class CheckInOutCommand implements IWorkerActionCommand, PostRequestAsync
     }
 
     private Context mContext;
+
     private Location mCurrentLocation;
+    private String mCurrentAddress;
 
     private PostRequestAsyncTask mPostRequestAsyncTask;
     private OnDialogCheckInOutStatusListener mOnDialogCheckInOutStatusListener;
     private OnMainCheckInOutStatusListener mOnMainCheckInOutStatusListener;
 
 
-    public CheckInOutCommand(Context context, Location currentLocation,
+    public CheckInOutCommand(Context context, Location currentLocation, String currentAddress,
                              OnDialogCheckInOutStatusListener onDialogCheckInOutStatusListener,
                              OnMainCheckInOutStatusListener onMainCheckInOutStatusListener) {
         mContext = context;
         mCurrentLocation = currentLocation;
+        mCurrentAddress = currentAddress;
         mOnDialogCheckInOutStatusListener = onDialogCheckInOutStatusListener;
         mOnMainCheckInOutStatusListener = onMainCheckInOutStatusListener;
     }
@@ -42,7 +45,7 @@ public class CheckInOutCommand implements IWorkerActionCommand, PostRequestAsync
 
     @Override
     public void execute() {
-        CheckInOutStrategy checkInOutStrategy = new CheckInOutStrategy(mCurrentLocation);
+        CheckInOutStrategy checkInOutStrategy = new CheckInOutStrategy(mCurrentLocation, mCurrentAddress);
         mPostRequestAsyncTask = new PostRequestAsyncTask(mContext, checkInOutStrategy, this);
         mPostRequestAsyncTask.execute();
     }

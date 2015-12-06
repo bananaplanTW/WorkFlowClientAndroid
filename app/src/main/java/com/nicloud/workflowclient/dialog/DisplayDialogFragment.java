@@ -33,7 +33,8 @@ public class DisplayDialogFragment extends DialogFragment {
         void onCompleteTaskOk(String taskId);
         void onChooseTaskStartWork(String taskId);
         void onChooseTaskLog(String taskId);
-        void onCheck(Location currentLocation, CheckInOutCommand.OnDialogCheckInOutStatusListener onDialogCheckInOutStatusListener);
+        void onCheck(Location currentLocation, String currentAddress,
+                     CheckInOutCommand.OnDialogCheckInOutStatusListener onDialogCheckInOutStatusListener);
     }
 
     private OnDialogActionListener mOnDialogActionListener;

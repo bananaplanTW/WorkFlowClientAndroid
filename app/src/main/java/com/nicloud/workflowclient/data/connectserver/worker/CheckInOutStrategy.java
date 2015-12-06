@@ -22,10 +22,12 @@ public class CheckInOutStrategy implements IPostRequestStrategy {
     private static final String TAG = CheckInOutStrategy.class.toString();
 
     private Location mCurrentLocation;
+    private String mCurrentAddress;
 
 
-    public CheckInOutStrategy(Location currentLocation) {
+    public CheckInOutStrategy(Location currentLocation, String currentAddress) {
         mCurrentLocation = currentLocation;
+        mCurrentAddress = currentAddress;
     }
 
     @Override
@@ -38,6 +40,7 @@ public class CheckInOutStrategy implements IPostRequestStrategy {
             HashMap<String, String> bodies = new HashMap<>();
             bodies.put("lat", String.valueOf(mCurrentLocation.getLatitude()));
             bodies.put("lng", String.valueOf(mCurrentLocation.getLongitude()));
+            bodies.put("ad", mCurrentAddress);
 
             String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, LoadingDataUtils.WorkingDataUrl.EndPoints.CHECKIN_OUT, null);
             String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
