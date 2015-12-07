@@ -108,6 +108,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public TextView taskIndex;
         public TextView taskName;
         public TextView caseName;
+        public TextView status;
 
         public ScheduledTaskViewHolder(View view) {
             super(view);
@@ -120,6 +121,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             taskIndex = (TextView) view.findViewById(R.id.scheduled_task_index);
             taskName = (TextView) view.findViewById(R.id.scheduled_task_task_name);
             caseName = (TextView) view.findViewById(R.id.scheduled_task_case_name);
+            status = (TextView) view.findViewById(R.id.scheduled_task_status);
         }
 
         private void setupViews() {
@@ -216,6 +218,11 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         holder.taskIndex.setText(String.valueOf(position - 2));
         holder.taskName.setText(task.name);
         holder.caseName.setText(task.caseName);
+
+        if (task.spentTime > 0L) {
+            holder.status.setText(R.string.task_status_pause);
+            holder.status.setBackgroundResource(R.drawable.scheduled_task_status_pause_background);
+        }
     }
 
     @Override

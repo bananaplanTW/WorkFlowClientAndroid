@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <corners android:radius="@dimen/scheduled_task_card_corner_radius" />
+    <solid android:color="@color/scheduled_task_card_status_pause_background_color" />
+
+</shape>

@@ -68,7 +68,7 @@
     <string name="task_status_unclaimed">尚無排程</string>
     <string name="task_status_pending">已排程</string>
     <string name="task_status_wip">正常工作中</string>
-    <string name="task_status_pause">暫停</string>
+    <string name="task_status_pause">暫停中</string>
     <string name="task_status_finished">已完成</string>
     <string name="task_status_in_review">檢驗中</string>
     <string name="task_status_warning">發生警訊</string>

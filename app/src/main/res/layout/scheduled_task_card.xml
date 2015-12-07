@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/scheduled_task_card_height"
     android:paddingTop="@dimen/scheduled_task_card_padding_top_bottom"
     android:paddingBottom="@dimen/scheduled_task_card_padding_top_bottom"
     android:paddingLeft="@dimen/scheduled_task_card_padding_left_right"
     android:paddingRight="@dimen/scheduled_task_card_padding_left_right"
-    android:gravity="center_vertical"
-    android:background="@drawable/scheduled_task_card_background"
-    android:orientation="horizontal">
+    android:background="@drawable/scheduled_task_card_background">
 
     <TextView
         android:id="@+id/scheduled_task_index"
         android:layout_width="@dimen/scheduled_task_card_index_width_height"
         android:layout_height="@dimen/scheduled_task_card_index_width_height"
+        android:layout_centerVertical="true"
         android:gravity="center"
         android:textSize="@dimen/scheduled_task_card_content_text_size"
         android:textColor="@color/scheduled_task_card_content_text_color"
@@ -22,6 +21,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/scheduled_task_index"
+        android:layout_toLeftOf="@+id/scheduled_task_status"
         android:layout_marginLeft="@dimen/scheduled_task_card_task_name_margin_left"
         android:orientation="vertical">
 
@@ -29,6 +31,8 @@
             android:id="@+id/scheduled_task_task_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textColor="@color/title_task_name_text_color"
             android:textSize="@dimen/title_information_text_size" />
 
@@ -36,9 +40,21 @@
             android:id="@+id/scheduled_task_case_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textColor="@color/title_case_name_text_color"
             android:textSize="@dimen/title_information_text_size" />
 
     </LinearLayout>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/scheduled_task_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:padding="@dimen/scheduled_task_card_status_padding"
+        android:textColor="@color/scheduled_task_card_status_text_color"
+        android:textSize="@dimen/scheduled_task_card_status_text_size"/>
+
+</RelativeLayout>

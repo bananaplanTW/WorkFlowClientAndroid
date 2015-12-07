@@ -49,8 +49,11 @@
     <dimen name="scheduled_task_card_padding_left_right">15dp</dimen>
     <dimen name="scheduled_task_card_margin_top_bottom">5dp</dimen>
     <dimen name="scheduled_task_card_index_width_height">25dp</dimen>
-    <dimen name="scheduled_task_card_task_name_margin_left">30dp</dimen>
+    <dimen name="scheduled_task_card_task_name_margin_left">15dp</dimen>
     <dimen name="scheduled_task_card_content_text_size">18dp</dimen>
+    <dimen name="scheduled_task_card_corner_radius">5dp</dimen>
+    <dimen name="scheduled_task_card_status_text_size">13dp</dimen>
+    <dimen name="scheduled_task_card_status_padding">6dp</dimen>
     <dimen name="working_time_container_height">60dp</dimen>
     <dimen name="working_time_container_padding_left_right">17dp</dimen>
     <dimen name="working_time_container_working_time_text_size">16dp</dimen>
