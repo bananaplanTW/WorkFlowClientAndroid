@@ -246,7 +246,8 @@ public class UIController implements View.OnClickListener, DataObserver,
 
         mTasksList.setLayoutManager(mTasksListManager);
         mTasksList.addItemDecoration(
-                new DividerItemDecoration(mMainActivity.getResources().getDrawable(R.drawable.list_divider), false, true));
+                new DividerItemDecoration(mMainActivity.getResources().getDrawable(R.drawable.list_divider),
+                        true, true, true, mMainActivity.getResources().getDimensionPixelSize(R.dimen.tasks_list_padding_bottom)));
         mTasksList.setAdapter(mTasksListAdapter);
     }
 

@@ -157,7 +157,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
 
         mTaskLogListView.setLayoutManager(mTaskLogListViewLayoutManager);
         mTaskLogListView.addItemDecoration(
-                new DividerItemDecoration(getResources().getDrawable(R.drawable.list_divider), false, true));
+                new DividerItemDecoration(getResources().getDrawable(R.drawable.list_divider), false, true, false, 0));
         mTaskLogListView.setAdapter(mTaskLogListAdapter);
     }
 

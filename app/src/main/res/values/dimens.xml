@@ -32,6 +32,7 @@
     <dimen name="tasks_list_title_padding_left_right">15dp</dimen>
     <dimen name="tasks_list_title_padding_top">20dp</dimen>
     <dimen name="tasks_list_title_padding_bottom">10dp</dimen>
+    <dimen name="tasks_list_padding_bottom">60dp</dimen>
     <dimen name="task_card_background_corners_radius">5dp</dimen>
     <dimen name="wip_task_card_height">200dp</dimen>
     <dimen name="wip_task_card_information_container_padding_left_right">25dp</dimen>

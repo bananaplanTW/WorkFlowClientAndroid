@@ -10,14 +10,20 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.nicloud.workflowclient.R;
+
 /**
  * Divider for vertical/horizontal RecyclerView
  */
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private Drawable mDivider;
+
     private boolean mShowFirstDivider = false;
     private boolean mShowLastDivider = false;
+    private boolean mShowLastPadding = false;
+
+    private int mLastPaddingSize = 0;
 
 
     public DividerItemDecoration(Context context, AttributeSet attrs) {
@@ -27,22 +33,28 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         a.recycle();
     }
 
-    public DividerItemDecoration(Context context, AttributeSet attrs, boolean showFirstDivider,
-                                 boolean showLastDivider) {
+    public DividerItemDecoration(Context context, AttributeSet attrs,
+                                 boolean showFirstDivider, boolean showLastDivider, boolean showLastPadding,
+                                 int lastPaddingSize) {
         this(context, attrs);
         mShowFirstDivider = showFirstDivider;
         mShowLastDivider = showLastDivider;
+        mShowLastPadding = showLastPadding;
+        mLastPaddingSize = lastPaddingSize;
     }
 
     public DividerItemDecoration(Drawable divider) {
         mDivider = divider;
     }
 
-    public DividerItemDecoration(Drawable divider, boolean showFirstDivider,
-                                 boolean showLastDivider) {
+    public DividerItemDecoration(Drawable divider,
+                                 boolean showFirstDivider, boolean showLastDivider, boolean showLastPadding,
+                                 int lastPaddingSize) {
         this(divider);
         mShowFirstDivider = showFirstDivider;
         mShowLastDivider = showLastDivider;
+        mShowLastPadding = showLastPadding;
+        mLastPaddingSize = lastPaddingSize;
     }
 
     @Override
@@ -52,14 +64,27 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         if (mDivider == null) {
             return;
         }
-        if (parent.getChildAdapterPosition(view) < 1) {
+
+        int itemCount = parent.getAdapter().getItemCount();
+        int itemPosition = parent.getChildAdapterPosition(view);
+
+        if (itemPosition < 1) {
             return;
         }
 
         if (getOrientation(parent) == LinearLayoutManager.VERTICAL) {
             outRect.top = mDivider.getIntrinsicHeight();
+
+            if (mShowLastPadding && itemPosition == itemCount - 1) {
+                outRect.bottom = mLastPaddingSize;
+            }
+
         } else {
             outRect.left = mDivider.getIntrinsicWidth();
+
+            if (mShowLastPadding && itemPosition == itemCount - 1) {
+                outRect.right = mLastPaddingSize;
+            }
         }
     }
 
