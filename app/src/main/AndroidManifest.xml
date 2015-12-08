@@ -48,16 +48,16 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
-            android:name=".detailedtask.add.AddLogActivity"
+            android:name=".detailedtask.addlog.AddLogActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.WhiteBackground"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".detailedtask.log.DetailedTaskActivity"
+            android:name=".detailedtask.DetailedTaskActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.WhiteBackground" />
         <activity
-            android:name=".detailedtask.log.DisplayImageActivity"
+            android:name=".detailedtask.tasklog.DisplayImageActivity"
             android:screenOrientation="portrait" />
 
         <service

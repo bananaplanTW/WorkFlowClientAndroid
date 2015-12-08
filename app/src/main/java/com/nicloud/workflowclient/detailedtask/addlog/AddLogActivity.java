@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.detailedtask.add;
+package com.nicloud.workflowclient.detailedtask.addlog;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.tasklog.DownloadFileFromURLCommand;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
-import com.nicloud.workflowclient.detailedtask.log.DetailedTaskActivity;
+import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;

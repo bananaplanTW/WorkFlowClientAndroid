@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.detailedtask.log;
+package com.nicloud.workflowclient.detailedtask;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +25,8 @@ import com.nicloud.workflowclient.data.data.activity.ActivityDataFactory;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.detailedtask.add.AddLogActivity;
+import com.nicloud.workflowclient.detailedtask.addlog.AddLogActivity;
+import com.nicloud.workflowclient.detailedtask.tasklog.DetailedTaskListAdapter;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 
 import org.json.JSONArray;
