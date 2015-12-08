@@ -44,12 +44,14 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private static final int TASK_LOG_LIMIT = 15;
 
     private static final class TabPosition {
-        public static final int TEXT = 0;
-        public static final int PHOTO = 1;
-        public static final int FILE = 2;
+        public static final int CHECK = 0;
+        public static final int TEXT = 1;
+        public static final int PHOTO = 2;
+        public static final int FILE = 3;
     }
 
     private static final class TabTag {
+        public static final String CHECK = "tag_tab_check";
         public static final String TEXT = "tag_tab_text";
         public static final String PHOTO = "tag_tab_photo";
         public static final String FILE = "tag_tab_file";
@@ -62,7 +64,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private TextView mCaseName;
 
     private TabHost mDetailedTaskTabHost;
-    private int mSelectedTabPosition = TabPosition.TEXT;
+    private int mSelectedTabPosition = TabPosition.CHECK;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mDetailedTaskListView;
@@ -145,6 +147,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     private void setupTabs() {
         mDetailedTaskTabHost.setup();
+        addTab(TabTag.CHECK);
         addTab(TabTag.TEXT);
         addTab(TabTag.PHOTO);
         addTab(TabTag.FILE);
@@ -186,7 +189,9 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         TextView tabText = (TextView) tabView.findViewById(R.id.detailed_task_tab_text);
 
         String text = "";
-        if(TabTag.TEXT.equals(tag)) {
+        if (TabTag.CHECK.equals(tag)) {
+            text = getString(R.string.detailed_task_tab_check_list);
+        } else if(TabTag.TEXT.equals(tag)) {
             text = getString(R.string.detailed_task_tab_text);
         } else if(TabTag.PHOTO.equals(tag)) {
             text = getString(R.string.detailed_task_tab_photo);
