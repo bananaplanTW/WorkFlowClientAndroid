@@ -17,12 +17,13 @@ import com.nicloud.workflowclient.data.data.activity.RecordData;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by logicmelody on 2015/11/17.
  */
-public class DetailedTaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final class ItemViewType {
         public static final int RECORD = 0;
@@ -78,14 +79,9 @@ public class DetailedTaskListAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
 
-    public DetailedTaskListAdapter(Context context) {
+    public TaskLogListAdapter(Context context, List<BaseData> dataSet) {
         mContext = context;
-    }
-
-    public void swapDataSet(List<BaseData> dataSet) {
-        mDataSet.clear();
-        mDataSet.addAll(dataSet);
-        notifyDataSetChanged();
+        mDataSet = dataSet;
     }
 
     @Override
@@ -125,20 +121,20 @@ public class DetailedTaskListAdapter extends RecyclerView.Adapter<RecyclerView.V
     private void onBindTextLog(TextLogViewHolder holder, int position) {
         RecordData recordData = (RecordData) mDataSet.get(position);
 
-        holder.icon.setImageDrawable(recordData.avatar);
+        holder.icon.setImageBitmap(recordData.avatar);
         holder.userName.setText(recordData.reporterName);
         holder.description.setText(recordData.description);
-        holder.timestamp.setText(Utilities.timestamp2Date(recordData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
+        holder.timestamp.setText(Utilities.timestamp2Date(new Date(recordData.time), Utilities.DATE_FORMAT_YMD_HM_AMPM));
     }
 
     private void onBindPhotoLog(PhotoLogViewHolder holder, int position) {
         final PhotoData photoData = (PhotoData) mDataSet.get(position);
 
-        holder.icon.setImageDrawable(photoData.avatar);
+        holder.icon.setImageBitmap(photoData.avatar);
         holder.userName.setText(photoData.uploaderName);
         holder.description.setText(String.format(mContext.getString(R.string.detailed_task_upload_photo), photoData.fileName));
-        holder.timestamp.setText(Utilities.timestamp2Date(photoData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
-        holder.photo.setImageDrawable(photoData.photo);
+        holder.timestamp.setText(Utilities.timestamp2Date(new Date(photoData.time), Utilities.DATE_FORMAT_YMD_HM_AMPM));
+        holder.photo.setImageBitmap(photoData.photo);
 
         if (Uri.EMPTY != photoData.filePath) {
             holder.view.setOnClickListener(new View.OnClickListener() {
@@ -154,10 +150,10 @@ public class DetailedTaskListAdapter extends RecyclerView.Adapter<RecyclerView.V
     private void onBindFileLog(FileLogViewHolder holder, int position) {
         final FileData fileData = (FileData) mDataSet.get(position);
 
-        holder.icon.setImageDrawable(fileData.avatar);
+        holder.icon.setImageBitmap(fileData.avatar);
         holder.userName.setText(fileData.uploaderName);
         holder.description.setText(String.format(mContext.getString(R.string.detailed_task_upload_file), fileData.fileName));
-        holder.timestamp.setText(Utilities.timestamp2Date(fileData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
+        holder.timestamp.setText(Utilities.timestamp2Date(new Date(fileData.time), Utilities.DATE_FORMAT_YMD_HM_AMPM));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override

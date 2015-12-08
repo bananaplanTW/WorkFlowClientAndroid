@@ -1,7 +1,6 @@
 package com.nicloud.workflowclient.detailedtask.tasklog;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,16 +13,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.connectserver.activity.ILoadingActivitiesStrategy;
-import com.nicloud.workflowclient.data.connectserver.activity.LoadingActivitiesAsyncTask;
-import com.nicloud.workflowclient.data.connectserver.activity.LoadingTaskActivitiesStrategy;
-import com.nicloud.workflowclient.data.data.activity.ActivityDataFactory;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,24 +24,47 @@ import java.util.List;
  */
 public class TaskLogFragment extends Fragment {
 
+    public static final String EXTRA_TASK_LOG = "extra_task_log";
+
+    public interface OnRefreshTaskLog {
+        void onRefreshTaskLog();
+    }
+
     private Context mContext;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mDetailedTaskListView;
-    private LinearLayoutManager mDetailedTaskListViewLayoutManager;
-    private DetailedTaskListAdapter mDetailedTaskListAdapter;
+    private SwipeRefreshLayout mTaskLogSwipeRefreshLayout;
+    private RecyclerView mTaskLogListView;
+    private LinearLayoutManager mTaskLogLayoutManager;
+    private TaskLogListAdapter mTaskLogListAdapter;
 
-    private List<BaseData> mTextDataSet = new ArrayList<>();
-    private List<BaseData> mPhotoDataSet = new ArrayList<>();
-    private List<BaseData> mFileDataSet = new ArrayList<>();
+    private List<BaseData> mDataSet = new ArrayList<>();
 
     private TextView mNoLogText;
 
-    
+    private OnRefreshTaskLog mOnRefreshTaskLog;
+
+
+    public void swapTaskLogData(List<BaseData> dataSet) {
+        mDataSet.clear();
+        mDataSet.addAll(dataSet);
+        mTaskLogListAdapter.notifyDataSetChanged();
+
+        setNoLogTextVisibility();
+    }
+
+    public void refresh() {
+        mTaskLogListAdapter.notifyDataSetChanged();
+    }
+
+    public void setSwipeRefreshLayout(boolean isRefresh) {
+        mTaskLogSwipeRefreshLayout.setRefreshing(isRefresh);
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+        mOnRefreshTaskLog = (OnRefreshTaskLog) context;
     }
 
     @Nullable
@@ -62,147 +76,58 @@ public class TaskLogFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ArrayList<BaseData> dataSet = getArguments().getParcelableArrayList(EXTRA_TASK_LOG);
+        mDataSet.clear();
+        mDataSet.addAll(dataSet);
         initialize();
     }
 
     private void initialize() {
+        findViews();
+        setupTaskLogList();
+        setupSwipeRefreshLayout();
+        setNoLogTextVisibility();
     }
 
-//    private void loadTaskActivities() {
-//        LoadingTaskActivitiesStrategy loadingTaskActivitiesStrategy =
-//                new LoadingTaskActivitiesStrategy(mTask.id, TASK_LOG_LIMIT);
-//        LoadingActivitiesAsyncTask loadingWorkerActivitiesTask =
-//                new LoadingActivitiesAsyncTask(this, mTask.id, this, loadingTaskActivitiesStrategy);
-//        loadingWorkerActivitiesTask.execute();
-//    }
+    private void setNoLogTextVisibility() {
+        if (mDataSet.size() == 0) {
+            //mTaskLogListView.setVisibility(View.GONE);
+            mNoLogText.setVisibility(View.VISIBLE);
 
-//    private void setupRecordLog() {
-//        mDetailedTaskListViewLayoutManager = new LinearLayoutManager(this);
-//        mDetailedTaskListAdapter = new DetailedTaskListAdapter(this);
-//
-//        mDetailedTaskListView.setLayoutManager(mDetailedTaskListViewLayoutManager);
-//        mDetailedTaskListView.addItemDecoration(
-//                new DividerItemDecoration(getResources().getDrawable(R.drawable.list_divider), false, true, false, 0));
-//        mDetailedTaskListView.setAdapter(mDetailedTaskListAdapter);
-//    }
-//
-//    private void setupSwipeRefreshLayout() {
-//        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//
-//            @Override
-//            public void onRefresh() {
-//                //loadTaskActivities();
-//            }
-//        });
-//
-//        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-//                android.R.color.holo_green_light,
-//                android.R.color.holo_orange_light,
-//                android.R.color.holo_red_light);
-//    }
-//
-//    @Override
-//    public void onFinishLoadingData(String id, ILoadingActivitiesStrategy.ActivityCategory category, JSONArray activities) {
-//        if (activities == null) return;
-//
-//        setTaskLogData(parseActivityJSONArray(activities));
-//        mSwipeRefreshLayout.setRefreshing(false);
-//    }
-//
-//    private void setTaskLogData(ArrayList<BaseData> logData) {
-//        mTextDataSet.clear();
-//        mPhotoDataSet.clear();
-//        mFileDataSet.clear();
-//
-//        for (BaseData data : logData) {
-//            switch (data.type) {
-//                case RECORD:
-//                    mTextDataSet.add(data);
-//                    break;
-//
-//                case PHOTO:
-//                    mPhotoDataSet.add(data);
-//                    break;
-//
-//                case FILE:
-//                    mFileDataSet.add(data);
-//                    break;
-//            }
-//        }
-//
-//        updateDetailedTaskListAccordingToTab();
-//    }
-//
-//    private void updateDetailedTaskListAccordingToTab() {
-//        switch (mSelectedTabPosition) {
-//            case TabPosition.TEXT:
-//                mDetailedTaskListAdapter.swapDataSet(mTextDataSet);
-//
-//                break;
-//
-//            case TabPosition.PHOTO:
-//                mDetailedTaskListAdapter.swapDataSet(mPhotoDataSet);
-//
-//                break;
-//
-//            case TabPosition.FILE:
-//                mDetailedTaskListAdapter.swapDataSet(mFileDataSet);
-//
-//                break;
-//        }
-//
-//        setNoLogTextVisibility();
-//    }
-//
-//    private void setNoLogTextVisibility() {
-//        if (mDetailedTaskListAdapter.getItemCount() == 0) {
-//            mNoLogText.setVisibility(View.VISIBLE);
-//
-//        } else {
-//            mNoLogText.setVisibility(View.GONE);
-//        }
-//    }
-//
-//    private ArrayList<BaseData> parseActivityJSONArray(JSONArray activities) {
-//        ArrayList<BaseData> parsedActivities = new ArrayList<>();
-//
-//        int length = activities.length();
-//
-//        try {
-//            for (int i = 0; i < length; i++) {
-//                JSONObject activity = activities.getJSONObject(i);
-//                BaseData activityData = ActivityDataFactory.genData(activity, this, this);
-//                if (activityData != null) {
-//                    parsedActivities.add(activityData);
-//                }
-//            }
-//            return parsedActivities;
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    public void onFailLoadingData(boolean isFailCausedByInternet) {
-//
-//    }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        switch (requestCode) {
-//            case REQUEST_ADD_LOG:
-//                if (RESULT_OK != resultCode) return;
-//                loadTaskActivities();
-//
-//                break;
-//        }
-//    }
-//
-//    @Override
-//    public void onFinishLoadImage() {
-//        mDetailedTaskListAdapter.notifyDataSetChanged();
-//    }
+        } else {
+            //mTaskLogListView.setVisibility(View.VISIBLE);
+            mNoLogText.setVisibility(View.GONE);
+        }
+    }
 
+    private void findViews() {
+        mTaskLogSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.task_log_swipe_refresh_container);
+        mTaskLogListView = (RecyclerView) getView().findViewById(R.id.task_log_list);
+        mNoLogText = (TextView) getView().findViewById(R.id.task_log_no_log_text);
+    }
+
+    private void setupTaskLogList() {
+        mTaskLogLayoutManager = new LinearLayoutManager(mContext);
+        mTaskLogListAdapter = new TaskLogListAdapter(mContext, mDataSet);
+
+        mTaskLogListView.setLayoutManager(mTaskLogLayoutManager);
+        mTaskLogListView.addItemDecoration(
+                new DividerItemDecoration(getResources().getDrawable(R.drawable.list_divider), false, true, false, 0));
+        mTaskLogListView.setAdapter(mTaskLogListAdapter);
+    }
+
+    private void setupSwipeRefreshLayout() {
+        mTaskLogSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                mOnRefreshTaskLog.onRefreshTaskLog();
+            }
+        });
+
+        mTaskLogSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
 }

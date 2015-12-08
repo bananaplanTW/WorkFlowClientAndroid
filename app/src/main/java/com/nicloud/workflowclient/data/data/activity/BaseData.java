@@ -1,13 +1,14 @@
 package com.nicloud.workflowclient.data.data.activity;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import java.util.Date;
 
 /**
  * Created by Ben on 2015/8/29.
  */
-public class BaseData {
+public class BaseData implements Parcelable {
 
     public enum TYPE {
         RECORD, FILE, PHOTO, HISTORY
@@ -20,8 +21,8 @@ public class BaseData {
     public long id;
     public String workerId;
 
-    public Drawable avatar;
-    public Date time;
+    public Bitmap avatar;
+    public long time;
     public TYPE type;
     public CATEGORY category;
     public String tag;
@@ -31,5 +32,54 @@ public class BaseData {
 
     public BaseData(TYPE type) {
         this.type = type;
+    }
+
+    protected BaseData(Parcel in) {
+        id = in.readLong();
+        workerId = in.readString();
+        avatar = in.readParcelable(Bitmap.class.getClassLoader());
+        time = in.readLong();
+
+        try {
+            type = TYPE.valueOf(in.readString());
+        } catch (IllegalArgumentException x) {
+            type = null;
+        }
+
+        try {
+            category = CATEGORY.valueOf(in.readString());
+        } catch (IllegalArgumentException x) {
+            category = null;
+        }
+
+        tag = in.readString();
+    }
+
+    public static final Creator<BaseData> CREATOR = new Creator<BaseData>() {
+        @Override
+        public BaseData createFromParcel(Parcel in) {
+            return new BaseData(in);
+        }
+
+        @Override
+        public BaseData[] newArray(int size) {
+            return new BaseData[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(workerId);
+        dest.writeParcelable(avatar, flags);
+        dest.writeLong(time);
+        dest.writeString((type == null) ? "" : type.name());
+        dest.writeString((category == null) ? "" : category.name());
+        dest.writeString(tag);
     }
 }

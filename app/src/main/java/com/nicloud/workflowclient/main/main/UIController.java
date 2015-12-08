@@ -227,7 +227,7 @@ public class UIController implements View.OnClickListener, DataObserver,
         mActionBarWorkerFactoryName = (TextView) mMainActivity.findViewById(R.id.action_bar_worker_factory_name);
         mFab = (FloatingActionButton) mMainActivity.findViewById(R.id.fab);
         mTasksList = (RecyclerView) mMainActivity.findViewById(R.id.tasks_list);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) mMainActivity.findViewById(R.id.swipe_refresh_container);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mMainActivity.findViewById(R.id.task_log_swipe_refresh_container);
     }
 
     private void setupActionbar() {

@@ -37,5 +37,6 @@ public class CheckListFragment extends Fragment {
     }
 
     private void initialize() {
+
     }
 }

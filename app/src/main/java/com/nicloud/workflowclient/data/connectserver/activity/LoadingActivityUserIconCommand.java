@@ -1,6 +1,7 @@
 package com.nicloud.workflowclient.data.connectserver.activity;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -35,7 +36,7 @@ public class LoadingActivityUserIconCommand implements LoadingDrawableAsyncTask.
 
     @Override
     public void onFinishLoadingData() {
-        mBaseData.avatar = mLoadingDrawableAsyncTask.getResult();
+        mBaseData.avatar = ((BitmapDrawable) mLoadingDrawableAsyncTask.getResult()).getBitmap();
         mOnLoadImageListener.onFinishLoadImage();
     }
 

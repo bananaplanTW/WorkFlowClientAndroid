@@ -5,12 +5,9 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,9 +27,7 @@ import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.addlog.AddLogActivity;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
-import com.nicloud.workflowclient.detailedtask.tasklog.DetailedTaskListAdapter;
 import com.nicloud.workflowclient.detailedtask.tasklog.TaskLogFragment;
-import com.nicloud.workflowclient.utility.DividerItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +36,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailedTaskActivity extends AppCompatActivity implements TabHost.OnTabChangeListener {
+public class DetailedTaskActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
+        LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnLoadImageListener, TaskLogFragment.OnRefreshTaskLog {
 
     public static final String EXTRA_TASK_ID = "DetailedTaskActivity_extra_task_id";
 
@@ -80,6 +76,10 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     private Task mTask;
 
+    private ArrayList<BaseData> mTextDataSet = new ArrayList<>();
+    private ArrayList<BaseData> mPhotoDataSet = new ArrayList<>();
+    private ArrayList<BaseData> mFileDataSet = new ArrayList<>();
+
 
     private class DetailedTaskTabContentFactory implements TabHost.TabContentFactory {
 
@@ -113,6 +113,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         setupActionBar();
         setupTabs();
         setupInitFragment();
+        loadTaskActivities();
     }
 
     private void findViews() {
@@ -182,6 +183,15 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         fragmentTransaction.commit();
     }
 
+    private void loadTaskActivities() {
+        LoadingTaskActivitiesStrategy loadingTaskActivitiesStrategy =
+                new LoadingTaskActivitiesStrategy(mTask.id, TASK_LOG_LIMIT);
+        LoadingActivitiesAsyncTask loadingWorkerActivitiesTask =
+                new LoadingActivitiesAsyncTask(this, mTask.id, this, loadingTaskActivitiesStrategy);
+        loadingWorkerActivitiesTask.execute();
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detailed_task, menu);
@@ -223,7 +233,9 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
             case TabPosition.TEXT:
             case TabPosition.PHOTO:
             case TabPosition.FILE:
-                if (mCurrentFragment instanceof TaskLogFragment) return;
+                if (mCurrentFragment instanceof TaskLogFragment) {
+                    updateTaskLogListAccordingToTab();
+                }
                 replaceTo(TaskLogFragment.class, FragmentTag.TASK_LOG);
 
                 break;
@@ -237,6 +249,8 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         if (fragment == null) {
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
+                addFragmentBundle(fragment);
+
                 fragmentTransaction.replace(R.id.detailed_task_content, fragment, fragmentTag);
             } catch (InstantiationException e) {
                 e.printStackTrace();
@@ -247,5 +261,128 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
         mCurrentFragment = fragment;
         fragmentTransaction.commit();
+    }
+
+    private void addFragmentBundle(Fragment fragment) {
+        if (fragment instanceof TaskLogFragment) {
+            Bundle bundle = new Bundle();
+
+            switch (mDetailedTaskTabHost.getCurrentTab()) {
+                case TabPosition.TEXT:
+                    bundle.putParcelableArrayList(TaskLogFragment.EXTRA_TASK_LOG, mTextDataSet);
+                    break;
+
+                case TabPosition.PHOTO:
+                    bundle.putParcelableArrayList(TaskLogFragment.EXTRA_TASK_LOG, mPhotoDataSet);
+                    break;
+
+                case TabPosition.FILE:
+                    bundle.putParcelableArrayList(TaskLogFragment.EXTRA_TASK_LOG, mFileDataSet);
+                    break;
+            }
+
+            fragment.setArguments(bundle);
+        }
+    }
+
+    @Override
+    public void onRefreshTaskLog() {
+        loadTaskActivities();
+    }
+
+    @Override
+    public void onFinishLoadingData(String id, ILoadingActivitiesStrategy.ActivityCategory category, JSONArray activities) {
+        if (activities == null) return;
+
+        setTaskLogData(parseActivityJSONArray(activities));
+        updateTaskLogListAccordingToTab();
+    }
+
+
+    private void setTaskLogData(ArrayList<BaseData> logData) {
+        mTextDataSet.clear();
+        mPhotoDataSet.clear();
+        mFileDataSet.clear();
+
+        for (BaseData data : logData) {
+            switch (data.type) {
+                case RECORD:
+                    mTextDataSet.add(data);
+                    break;
+
+                case PHOTO:
+                    mPhotoDataSet.add(data);
+                    break;
+
+                case FILE:
+                    mFileDataSet.add(data);
+                    break;
+            }
+        }
+    }
+
+    private void updateTaskLogListAccordingToTab() {
+        if (!(mCurrentFragment instanceof TaskLogFragment)) return;
+
+        TaskLogFragment taskLogFragment = (TaskLogFragment) mCurrentFragment;
+        switch (mDetailedTaskTabHost.getCurrentTab()) {
+            case TabPosition.TEXT:
+                taskLogFragment.swapTaskLogData(mTextDataSet);
+                break;
+
+            case TabPosition.PHOTO:
+                taskLogFragment.swapTaskLogData(mPhotoDataSet);
+                break;
+
+            case TabPosition.FILE:
+                taskLogFragment.swapTaskLogData(mFileDataSet);
+                break;
+        }
+
+        taskLogFragment.setSwipeRefreshLayout(false);
+    }
+
+    private ArrayList<BaseData> parseActivityJSONArray(JSONArray activities) {
+        ArrayList<BaseData> parsedActivities = new ArrayList<>();
+
+        int length = activities.length();
+
+        try {
+            for (int i = 0; i < length; i++) {
+                JSONObject activity = activities.getJSONObject(i);
+                BaseData activityData = ActivityDataFactory.genData(activity, this, this);
+                if (activityData != null) {
+                    parsedActivities.add(activityData);
+                }
+            }
+            return parsedActivities;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_ADD_LOG:
+                if (RESULT_OK != resultCode) return;
+                loadTaskActivities();
+
+                break;
+        }
+    }
+
+    @Override
+    public void onFailLoadingData(boolean isFailCausedByInternet) {
+
+    }
+
+    @Override
+    public void onFinishLoadImage() {
+        if (!(mCurrentFragment instanceof TaskLogFragment)) return;
+
+        ((TaskLogFragment) mCurrentFragment).refresh();
     }
 }

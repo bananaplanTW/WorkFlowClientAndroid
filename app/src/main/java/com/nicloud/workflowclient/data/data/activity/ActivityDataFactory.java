@@ -1,6 +1,7 @@
 package com.nicloud.workflowclient.data.data.activity;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.text.TextUtils;
 
@@ -39,7 +40,7 @@ public class ActivityDataFactory {
                 HistoryData attendance = (HistoryData) DataFactory.genData(recordJSON.getString("receiverId"), BaseData.TYPE.HISTORY);
                 attendance.tag = type;
                 attendance.category = BaseData.CATEGORY.WORKER;
-                attendance.time = new Date(recordJSON.getLong("createdAt"));
+                attendance.time = recordJSON.getLong("createdAt");
 
                 return attendance;
 
@@ -55,7 +56,7 @@ public class ActivityDataFactory {
                 HistoryData task = (HistoryData) DataFactory.genData(recordJSON.getString("receiverId"), BaseData.TYPE.HISTORY);
                 task.tag = type;
                 task.category = BaseData.CATEGORY.WORKER;
-                task.time = new Date(recordJSON.getLong("createdAt"));
+                task.time = recordJSON.getLong("createdAt");
                 task.description = recordJSON.getString("taskName");
 
                 return task;
@@ -65,7 +66,7 @@ public class ActivityDataFactory {
                 comment.tag = type;
                 comment.reporter = recordJSON.getString("ownerId");
                 comment.reporterName = recordJSON.getString("ownerName");
-                comment.time = new Date(recordJSON.getLong("createdAt"));
+                comment.time = recordJSON.getLong("createdAt");
                 comment.description = recordJSON.getString("content");
 
                 loadUserIcon(context, recordJSON, comment, listener);
@@ -78,7 +79,7 @@ public class ActivityDataFactory {
                     photoData.uploader = recordJSON.getString("ownerId");
                     photoData.uploaderName = recordJSON.getString("ownerName");
                     photoData.tag = type;
-                    photoData.time = new Date(recordJSON.getLong("createdAt"));
+                    photoData.time = recordJSON.getLong("createdAt");
                     photoData.fileName = recordJSON.getString("name");
 
                     Uri.Builder thumbBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
@@ -102,7 +103,7 @@ public class ActivityDataFactory {
                     fileData.uploader = recordJSON.getString("ownerId");
                     fileData.uploaderName = recordJSON.getString("ownerName");
                     fileData.tag = type;
-                    fileData.time = new Date(recordJSON.getLong("createdAt"));
+                    fileData.time = recordJSON.getLong("createdAt");
                     fileData.fileName = recordJSON.getString("name");
 
                     loadUserIcon(context, recordJSON, fileData, listener);
@@ -119,7 +120,7 @@ public class ActivityDataFactory {
                 HistoryData dispatchTask = (HistoryData) DataFactory.genData(recordJSON.getString("ownerId"), BaseData.TYPE.HISTORY);
                 dispatchTask.tag = type;
                 dispatchTask.category = BaseData.CATEGORY.TASK;
-                dispatchTask.time = new Date(recordJSON.getLong("createdAt"));
+                dispatchTask.time = recordJSON.getLong("createdAt");
                 dispatchTask.description = recordJSON.getString("employeeName");
 
                 return dispatchTask;
@@ -134,7 +135,7 @@ public class ActivityDataFactory {
                 HistoryData taskStatus = (HistoryData) DataFactory.genData(recordJSON.getString("ownerId"), BaseData.TYPE.HISTORY);
                 taskStatus.tag = type;
                 taskStatus.category = BaseData.CATEGORY.TASK;
-                taskStatus.time = new Date(recordJSON.getLong("createdAt"));
+                taskStatus.time = recordJSON.getLong("createdAt");
 
                 return taskStatus;
 
@@ -143,7 +144,7 @@ public class ActivityDataFactory {
                 HistoryData taskException = (HistoryData) DataFactory.genData(recordJSON.getString("ownerId"), BaseData.TYPE.HISTORY);
                 taskException.tag = type;
                 taskException.category = BaseData.CATEGORY.TASK;
-                taskException.time = new Date(recordJSON.getLong("createdAt"));
+                taskException.time = recordJSON.getLong("createdAt");
                 taskException.description = recordJSON.getString("exceptionName");
 
                 return taskException;
@@ -154,7 +155,7 @@ public class ActivityDataFactory {
                 HistoryData taskWarningStatus = (HistoryData) DataFactory.genData(recordJSON.getString("ownerId"), BaseData.TYPE.HISTORY);
                 taskWarningStatus.tag = type;
                 taskWarningStatus.category = BaseData.CATEGORY.WARNING;
-                taskWarningStatus.time = new Date(recordJSON.getLong("createdAt"));
+                taskWarningStatus.time = recordJSON.getLong("createdAt");
 
                 return taskWarningStatus;
 
@@ -179,7 +180,7 @@ public class ActivityDataFactory {
                         = new LoadingActivityUserIconCommand(context, userIconUri, baseData, listener);
                 loadingActivityUserIconCommand.execute();
             } else {
-                baseData.avatar = context.getDrawable(R.drawable.ic_worker);
+                baseData.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker)).getBitmap();
             }
 
         } catch (JSONException e) {
