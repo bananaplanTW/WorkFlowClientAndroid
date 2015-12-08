@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.tasklog.log;
+package com.nicloud.workflowclient.detailedtask.log;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +25,7 @@ import com.nicloud.workflowclient.data.data.activity.ActivityDataFactory;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.tasklog.add.AddLogActivity;
+import com.nicloud.workflowclient.detailedtask.add.AddLogActivity;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 
 import org.json.JSONArray;
@@ -35,10 +35,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
+public class DetailedTaskActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
         LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnLoadImageListener {
 
-    public static final String EXTRA_TASK_ID = "TaskLogActivity_extra_task_id";
+    public static final String EXTRA_TASK_ID = "DetailedTaskActivity_extra_task_id";
 
     private static final int REQUEST_ADD_LOG = 32;
     private static final int TASK_LOG_LIMIT = 15;
@@ -58,16 +58,16 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     private ActionBar mActionBar;
     private Toolbar mToolbar;
 
-    private TextView mLogTaskName;
-    private TextView mLogCaseName;
+    private TextView mTaskName;
+    private TextView mCaseName;
 
-    private TabHost mTaskLogTabHost;
+    private TabHost mDetailedTaskTabHost;
     private int mSelectedTabPosition = TabPosition.TEXT;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mTaskLogListView;
-    private LinearLayoutManager mTaskLogListViewLayoutManager;
-    private TaskLogListAdapter mTaskLogListAdapter;
+    private RecyclerView mDetailedTaskListView;
+    private LinearLayoutManager mDetailedTaskListViewLayoutManager;
+    private DetailedTaskListAdapter mDetailedTaskListAdapter;
 
     private List<BaseData> mTextDataSet = new ArrayList<>();
     private List<BaseData> mPhotoDataSet = new ArrayList<>();
@@ -77,11 +77,11 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
 
     private Task mTask;
 
-    private class LogTabContentFactory implements TabHost.TabContentFactory {
+    private class DetailedTaskTabContentFactory implements TabHost.TabContentFactory {
 
         private Context mContext;
 
-        public LogTabContentFactory(Context context) {
+        public DetailedTaskTabContentFactory(Context context) {
             mContext = context;
         }
 
@@ -98,7 +98,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_log);
+        setContentView(R.layout.activity_detailed_task);
         initialize();
         loadTaskActivities();
     }
@@ -122,12 +122,12 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
 
     private void findViews() {
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        mLogTaskName = (TextView) findViewById(R.id.task_log_task_name);
-        mLogCaseName = (TextView) findViewById(R.id.task_log_case_name);
-        mTaskLogTabHost = (TabHost) findViewById(R.id.task_log_tab_host);
+        mTaskName = (TextView) findViewById(R.id.detailed_task_task_name);
+        mCaseName = (TextView) findViewById(R.id.detailed_task_case_name);
+        mDetailedTaskTabHost = (TabHost) findViewById(R.id.detailed_task_tab_host);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_container);
-        mTaskLogListView = (RecyclerView) findViewById(R.id.task_log_list);
-        mNoLogText = (TextView) findViewById(R.id.task_log_no_log_text);
+        mDetailedTaskListView = (RecyclerView) findViewById(R.id.detailed_task_list);
+        mNoLogText = (TextView) findViewById(R.id.detailed_task_no_log_text);
     }
 
     private void setupActionBar() {
@@ -139,26 +139,26 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mLogTaskName.setText(mTask.name);
-        mLogCaseName.setText(mTask.caseName);
+        mTaskName.setText(mTask.name);
+        mCaseName.setText(mTask.caseName);
     }
 
     private void setupTabs() {
-        mTaskLogTabHost.setup();
+        mDetailedTaskTabHost.setup();
         addTab(TabTag.TEXT);
         addTab(TabTag.PHOTO);
         addTab(TabTag.FILE);
-        mTaskLogTabHost.setOnTabChangedListener(this);
+        mDetailedTaskTabHost.setOnTabChangedListener(this);
     }
 
     private void setupRecordLog() {
-        mTaskLogListViewLayoutManager = new LinearLayoutManager(this);
-        mTaskLogListAdapter = new TaskLogListAdapter(this);
+        mDetailedTaskListViewLayoutManager = new LinearLayoutManager(this);
+        mDetailedTaskListAdapter = new DetailedTaskListAdapter(this);
 
-        mTaskLogListView.setLayoutManager(mTaskLogListViewLayoutManager);
-        mTaskLogListView.addItemDecoration(
+        mDetailedTaskListView.setLayoutManager(mDetailedTaskListViewLayoutManager);
+        mDetailedTaskListView.addItemDecoration(
                 new DividerItemDecoration(getResources().getDrawable(R.drawable.list_divider), false, true, false, 0));
-        mTaskLogListView.setAdapter(mTaskLogListAdapter);
+        mDetailedTaskListView.setAdapter(mDetailedTaskListAdapter);
     }
 
     private void setupSwipeRefreshLayout() {
@@ -177,21 +177,21 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     }
 
     private void addTab(String tag) {
-        mTaskLogTabHost.addTab(mTaskLogTabHost.newTabSpec(tag).setIndicator(getTabView(tag))
-                .setContent(new LogTabContentFactory(this)));
+        mDetailedTaskTabHost.addTab(mDetailedTaskTabHost.newTabSpec(tag).setIndicator(getTabView(tag))
+                .setContent(new DetailedTaskTabContentFactory(this)));
     }
 
     private View getTabView(String tag) {
-        View tabView = LayoutInflater.from(this).inflate(R.layout.task_log_tab, null);
-        TextView tabText = (TextView) tabView.findViewById(R.id.record_log_tab_text);
+        View tabView = LayoutInflater.from(this).inflate(R.layout.detailed_task_tab, null);
+        TextView tabText = (TextView) tabView.findViewById(R.id.detailed_task_tab_text);
 
         String text = "";
         if(TabTag.TEXT.equals(tag)) {
-            text = getString(R.string.task_log_tab_text);
+            text = getString(R.string.detailed_task_tab_text);
         } else if(TabTag.PHOTO.equals(tag)) {
-            text = getString(R.string.task_log_tab_photo);
+            text = getString(R.string.detailed_task_tab_photo);
         } else if(TabTag.FILE.equals(tag)) {
-            text = getString(R.string.task_log_tab_file);
+            text = getString(R.string.detailed_task_tab_file);
         }
 
         tabText.setText(text);
@@ -201,7 +201,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_task_log, menu);
+        getMenuInflater().inflate(R.menu.menu_detailed_task, menu);
         return true;
     }
 
@@ -212,8 +212,8 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
                 finish();
                 return true;
 
-            case R.id.action_add_record:
-                goToAddRecordActivity();
+            case R.id.action_add_log:
+                goToAddLogActivity();
                 return true;
 
             default:
@@ -221,7 +221,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
         }
     }
 
-    private void goToAddRecordActivity() {
+    private void goToAddLogActivity() {
         Intent intent = new Intent(this, AddLogActivity.class);
         intent.putExtra(AddLogActivity.EXTRA_TASK_ID, mTask.id);
 
@@ -230,8 +230,8 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
 
     @Override
     public void onTabChanged(String tabId) {
-        mSelectedTabPosition = mTaskLogTabHost.getCurrentTab();
-        updateTaskLogListAccordingToTab();
+        mSelectedTabPosition = mDetailedTaskTabHost.getCurrentTab();
+        updateDetailedTaskListAccordingToTab();
     }
 
     @Override
@@ -263,23 +263,23 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
             }
         }
 
-        updateTaskLogListAccordingToTab();
+        updateDetailedTaskListAccordingToTab();
     }
 
-    private void updateTaskLogListAccordingToTab() {
+    private void updateDetailedTaskListAccordingToTab() {
         switch (mSelectedTabPosition) {
             case TabPosition.TEXT:
-                mTaskLogListAdapter.swapDataSet(mTextDataSet);
+                mDetailedTaskListAdapter.swapDataSet(mTextDataSet);
 
                 break;
 
             case TabPosition.PHOTO:
-                mTaskLogListAdapter.swapDataSet(mPhotoDataSet);
+                mDetailedTaskListAdapter.swapDataSet(mPhotoDataSet);
 
                 break;
 
             case TabPosition.FILE:
-                mTaskLogListAdapter.swapDataSet(mFileDataSet);
+                mDetailedTaskListAdapter.swapDataSet(mFileDataSet);
 
                 break;
         }
@@ -288,7 +288,7 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
     }
 
     private void setNoLogTextVisibility() {
-        if (mTaskLogListAdapter.getItemCount() == 0) {
+        if (mDetailedTaskListAdapter.getItemCount() == 0) {
             mNoLogText.setVisibility(View.VISIBLE);
 
         } else {
@@ -335,6 +335,6 @@ public class TaskLogActivity extends AppCompatActivity implements TabHost.OnTabC
 
     @Override
     public void onFinishLoadImage() {
-        mTaskLogListAdapter.notifyDataSetChanged();
+        mDetailedTaskListAdapter.notifyDataSetChanged();
     }
 }

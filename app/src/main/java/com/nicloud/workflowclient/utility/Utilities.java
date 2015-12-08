@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.tasklog.DownloadFileFromURLCommand;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
-import com.nicloud.workflowclient.tasklog.log.TaskLogActivity;
+import com.nicloud.workflowclient.detailedtask.log.DetailedTaskActivity;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -420,8 +420,8 @@ public class Utilities {
     }
 
     public static void goToTaskLogActivity(Context context, String taskId) {
-        Intent intent = new Intent(context, TaskLogActivity.class);
-        intent.putExtra(TaskLogActivity.EXTRA_TASK_ID, taskId);
+        Intent intent = new Intent(context, DetailedTaskActivity.class);
+        intent.putExtra(DetailedTaskActivity.EXTRA_TASK_ID, taskId);
 
         context.startActivity(intent);
     }

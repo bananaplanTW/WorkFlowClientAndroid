@@ -44,13 +44,13 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
-    <!-- Task Log -->
-    <string name="task_log_tab_text">Text</string>
-    <string name="task_log_tab_photo">Photo</string>
-    <string name="task_log_tab_file">File</string>
-    <string name="task_log_upload_file">Upload file %1$s</string>
-    <string name="task_log_upload_photo">Upload photo %1$s</string>
-    <string name="task_log_no_log_text">No log</string>
+    <!-- Detailed task -->
+    <string name="detailed_task_tab_text">Text</string>
+    <string name="detailed_task_tab_photo">Photo</string>
+    <string name="detailed_task_tab_file">File</string>
+    <string name="detailed_task_upload_file">Upload file %1$s</string>
+    <string name="detailed_task_upload_photo">Upload photo %1$s</string>
+    <string name="detailed_task_no_log_text">No log</string>
 
     <!-- Add Log -->
     <string name="add_log_edit_content_hint">Input log...</string>

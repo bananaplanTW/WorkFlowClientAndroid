@@ -16,19 +16,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/log_icon"
-        android:layout_marginLeft="@dimen/task_log_list_item_title_container_margin_left"
+        android:layout_marginLeft="@dimen/detailed_task_list_item_title_container_margin_left"
         android:layout_toRightOf="@+id/log_icon"
         android:textColor="@color/task_log_list_item_description_text_color"
-        android:textSize="@dimen/task_log_list_item_user_name_text_size" />
+        android:textSize="@dimen/detailed_task_list_item_user_name_text_size" />
 
     <TextView
         android:id="@+id/log_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/task_log_list_item_description_margin_top"
+        android:layout_marginTop="@dimen/detailed_task_list_item_description_margin_top"
         android:layout_below="@+id/log_user_name"
         android:layout_alignLeft="@+id/log_user_name"
-        android:textSize="@dimen/task_log_list_item_description_text_size"
+        android:textSize="@dimen/detailed_task_list_item_description_text_size"
         android:textColor="@color/task_log_list_item_description_text_color"/>
 
 </RelativeLayout>

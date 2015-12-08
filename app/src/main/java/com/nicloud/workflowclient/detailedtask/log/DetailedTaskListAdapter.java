@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.tasklog.log;
+package com.nicloud.workflowclient.detailedtask.log;
 
 import android.content.Context;
 import android.net.Uri;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/11/17.
  */
-public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class DetailedTaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final class ItemViewType {
         public static final int RECORD = 0;
@@ -78,7 +78,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-    public TaskLogListAdapter(Context context) {
+    public DetailedTaskListAdapter(Context context) {
         mContext = context;
     }
 
@@ -136,7 +136,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         holder.icon.setImageDrawable(photoData.avatar);
         holder.userName.setText(photoData.uploaderName);
-        holder.description.setText(String.format(mContext.getString(R.string.task_log_upload_photo), photoData.fileName));
+        holder.description.setText(String.format(mContext.getString(R.string.detailed_task_upload_photo), photoData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(photoData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
         holder.photo.setImageDrawable(photoData.photo);
 
@@ -156,7 +156,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         holder.icon.setImageDrawable(fileData.avatar);
         holder.userName.setText(fileData.uploaderName);
-        holder.description.setText(String.format(mContext.getString(R.string.task_log_upload_file), fileData.fileName));
+        holder.description.setText(String.format(mContext.getString(R.string.detailed_task_upload_file), fileData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(fileData.time, Utilities.DATE_FORMAT_YMD_HM_AMPM));
 
         holder.view.setOnClickListener(new View.OnClickListener() {

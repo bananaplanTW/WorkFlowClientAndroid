@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.tasklog.add;
+package com.nicloud.workflowclient.detailedtask.add;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -8,7 +8,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +27,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.nicloud.workflowclient.data.connectserver.activity.LeaveAFileCommentToTaskCommand;
 import com.nicloud.workflowclient.data.connectserver.tasklog.LeaveAPhotoCommentToTaskCommand;

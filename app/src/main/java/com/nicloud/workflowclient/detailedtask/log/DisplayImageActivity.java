@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.tasklog.log;
+package com.nicloud.workflowclient.detailedtask.log;
 
 import android.content.Context;
 import android.content.Intent;
