@@ -146,6 +146,11 @@ public final class WorkingData implements DataSubject {
         return null;
     }
 
+    public void resetTasks() {
+        mWipTask = null;
+        mScheduledTasks.clear();
+    }
+
 
     public void updateData() {
         notifyDataObservers();

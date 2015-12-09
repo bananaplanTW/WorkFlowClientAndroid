@@ -133,7 +133,9 @@ public class UIController implements View.OnClickListener, DataObserver,
                 ParsePush.unsubscribeInBackground("user_" + WorkingData.getUserId());
                 //ParseUtils.removeLoginWorkerToParse();
 
+                WorkingData.getInstance(mMainActivity).resetTasks();
                 WorkingData.resetAccount();
+
                 SharedPreferences sharedPreferences = mMainActivity.getSharedPreferences(WorkingData.SHARED_PREFERENCE_KEY, 0);
                 sharedPreferences.edit().remove(WorkingData.USER_ID).remove(WorkingData.AUTH_TOKEN).commit();
 
