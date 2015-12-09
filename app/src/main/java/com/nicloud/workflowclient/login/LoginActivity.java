@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onStart() {
         super.onStart();
 
-        LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccount;
+        //LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccount;
         WorkingData.setUserId(mUserId);
         WorkingData.setAuthToken(mAuthToken);
 
@@ -127,11 +127,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_button:
-                LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccountEditText.getText().toString();
+                //LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccountEditText.getText().toString();
+                String companyAccount = mCompanyAccountEditText.getText().toString();
                 String username = mAccountEditText.getText().toString();
                 String password = mPasswordEditText.getText().toString();
 
-                UserLoggingInCommand userLoggingInCommand = new UserLoggingInCommand(this, username, password, this);
+                UserLoggingInCommand userLoggingInCommand
+                        = new UserLoggingInCommand(this, companyAccount, username, password, this);
                 userLoggingInCommand.execute();
 
                 break;

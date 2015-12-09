@@ -24,14 +24,16 @@ public class UserLoggingInCommand implements IWorkerActionCommand, PostRequestAs
 
     private OnFinishLoggedInListener mOnFinishLoggedInListener;
     private PostRequestAsyncTask mPostRequestAsyncTask;
+    private String mCompanyAccount;
     private String mUsername;
     private String mPassword;
 
     private long mTime = 0L;
 
 
-    public UserLoggingInCommand (Context context, String username, String password, OnFinishLoggedInListener onFinishLoggedInListener) {
+    public UserLoggingInCommand (Context context, String companyAccount, String username, String password, OnFinishLoggedInListener onFinishLoggedInListener) {
         mContext = context;
+        mCompanyAccount = companyAccount;
         mUsername = username;
         mPassword = password;
         mOnFinishLoggedInListener = onFinishLoggedInListener;
@@ -42,6 +44,7 @@ public class UserLoggingInCommand implements IWorkerActionCommand, PostRequestAs
         HashMap<String, String> bodies = new HashMap<>();
         bodies.put("username", mUsername);
         bodies.put("password", mPassword);
+        bodies.put("companyAccount", mCompanyAccount);
 
         UserLoggingInStrategy userLoggingInStrategy = new UserLoggingInStrategy(bodies);
         mPostRequestAsyncTask = new PostRequestAsyncTask(mContext, userLoggingInStrategy, this);
