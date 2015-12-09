@@ -107,11 +107,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void checkLoggedInStatus() {
-        if (TextUtils.isEmpty(mCompanyAccount) ||
-            TextUtils.isEmpty(WorkingData.getUserId()) || TextUtils.isEmpty(WorkingData.getAuthToken())) {
+        if (TextUtils.isEmpty(WorkingData.getUserId()) || TextUtils.isEmpty(WorkingData.getAuthToken())) {
             showAllViews();
             return;
         }
+//        if (TextUtils.isEmpty(mCompanyAccount) ||
+//            TextUtils.isEmpty(WorkingData.getUserId()) || TextUtils.isEmpty(WorkingData.getAuthToken())) {
+//            showAllViews();
+//            return;
+//        }
 
         CheckLoggedInStatusCommand checkLoggedInStatusCommand = new CheckLoggedInStatusCommand(this, this);
         checkLoggedInStatusCommand.execute();
