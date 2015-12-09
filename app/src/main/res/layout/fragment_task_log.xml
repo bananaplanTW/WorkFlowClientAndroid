@@ -22,6 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/task_log_no_log_text"
-        android:textSize="@dimen/task_log_no_log_text_size" />
+        android:textSize="@dimen/empty_text_size" />
 
 </FrameLayout>

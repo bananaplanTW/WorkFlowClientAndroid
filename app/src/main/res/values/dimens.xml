@@ -73,7 +73,7 @@
     <dimen name="detailed_task_list_item_description_margin_top">5dp</dimen>
     <dimen name="detailed_task_list_item_description_text_size">15dp</dimen>
     <dimen name="detailed_task_list_item_photo_margin_top">10dp</dimen>
-    <dimen name="task_log_no_log_text_size">25dp</dimen>
+    <dimen name="empty_text_size">20dp</dimen>
 
     <!-- Add log -->
     <dimen name="add_log_action_container_height">55dp</dimen>

@@ -151,6 +151,20 @@ public final class WorkingData implements DataSubject {
         mScheduledTasks.clear();
     }
 
+    public void updateTask(Task task, String taskId) {
+        if (mWipTask != null && Utilities.isSameId(mWipTask.id, taskId)) {
+            mWipTask.update(task);
+            return;
+        }
+
+        for (Task scheduledTask : mScheduledTasks) {
+            if (Utilities.isSameId(scheduledTask.id, taskId)) {
+                scheduledTask.update(task);
+                return;
+            }
+        }
+    }
+
 
     public void updateData() {
         notifyDataObservers();

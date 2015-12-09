@@ -3,6 +3,7 @@ package com.nicloud.workflowclient.data.connectserver;
 import android.content.Context;
 import android.util.Log;
 
+import com.nicloud.workflowclient.data.data.data.CheckItem;
 import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
@@ -41,6 +42,7 @@ public class LoadingDataUtils {
         public static final String FACTORIES = sBaseUrl + "/api/groups";
         public static final String EQUIPMENTS = sBaseUrl + "/api/resources";
         public static final String TASKS_BY_CASE = sBaseUrl + "/api/tasks?caseId=";
+        public static final String TASK_BY_ID = sBaseUrl + "/api/task?taskId=";
         public static final String TASKS_BY_WORKER = sBaseUrl + "/api/employee/tasks?employeeId=";
         public static final String WORKERS_BY_FACTORY = sBaseUrl + "/api/group/employees?groupId=";
         public static final String TIME_CARD_BY_CASE = sBaseUrl + "/api/case/task-timecards?caseId=%s&startDate=%d&endDate=%d";
@@ -325,6 +327,25 @@ public class LoadingDataUtils {
                     WorkingData.getInstance(context).addScheduledTask(retrieveTaskFromJson(context, scheduledTaskJson));
                 }
             }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadTaskById(Context context, String taskId) {
+        try {
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("x-user-id", WorkingData.getUserId());
+            headers.put("x-auth-token", WorkingData.getAuthToken());
+
+            String taskJsonString = RestfulUtils.restfulGetRequest(getTaskByIdUrl(taskId), headers);
+
+            JSONObject taskJson = new JSONObject(taskJsonString).getJSONObject("result");
+
+            if (taskJson == null) return;
+
+            WorkingData.getInstance(context).getTask(taskId).update(retrieveTaskFromJson(context, taskJson));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -937,7 +958,8 @@ public class LoadingDataUtils {
     }
     private static Task retrieveTaskFromJson(Context context, JSONObject taskJson) {
         try {
-            JSONArray warningJsonList = taskJson.getJSONArray("taskExceptions");
+            //JSONArray warningJsonList = taskJson.getJSONArray("taskExceptions");
+            JSONArray checkListJsonList = getJsonArrayFromJson(taskJson, "todos");
             JSONObject equipmentJson = getJsonObjectFromJson(taskJson, "resource");
             JSONObject taskTimecardJson = getJsonObjectFromJson(taskJson, "taskTimecard");
 
@@ -978,7 +1000,14 @@ public class LoadingDataUtils {
 
             boolean isDelayed = getBooleanFromJson(taskJson, "delay");
 
-            // TODO: Sub task
+            ArrayList<CheckItem> checkList = new ArrayList<>();
+
+            if (checkListJsonList != null) {
+                for (int i = 0 ;  i < checkListJsonList.length() ; i++) {
+                    JSONObject checkItemJson = checkListJsonList.getJSONObject(i);
+                    checkList.add(new CheckItem(checkItemJson.getString("name"), checkItemJson.getBoolean("checked")));
+                }
+            }
 
             Task task = new Task(
                     id,
@@ -995,12 +1024,14 @@ public class LoadingDataUtils {
                     startTime,
                     spentTime,
                     lastUpdatedTime,
-                    isDelayed);
+                    isDelayed,
+                    checkList);
 
             JSONObject scheduledTaskAlert = getJsonObjectFromJson(taskJson, "scheduledTaskAlert");
             if (scheduledTaskAlert != null) {
                 task.nextNotifyTime = scheduledTaskAlert.getLong("willAlertAt");
             }
+
             return task;
 
         } catch (JSONException e) {
@@ -1189,6 +1220,9 @@ public class LoadingDataUtils {
 //    }
     private static String getTasksByWorkerUrl(String workerId) {
         return WorkingDataUrl.TASKS_BY_WORKER + workerId;
+    }
+    private static String getTaskByIdUrl(String taskId) {
+        return WorkingDataUrl.TASK_BY_ID + taskId;
     }
 //    private static String getWorkersByFactoryUrl(String factoryId) {
 //        return WorkingDataUrl.WORKERS_BY_FACTORY + factoryId;

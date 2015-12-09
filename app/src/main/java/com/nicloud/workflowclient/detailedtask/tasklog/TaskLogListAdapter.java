@@ -32,7 +32,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private Context mContext;
-    private List<BaseData> mDataSet = new ArrayList<>();
+    private List<BaseData> mDataSet;
 
     private class BaseLogViewHolder extends RecyclerView.ViewHolder {
 

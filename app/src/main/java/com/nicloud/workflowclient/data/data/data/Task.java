@@ -35,18 +35,15 @@ public class Task extends IdData {
     public long expectedTime = 0L;
     public long startTime = 0L;  // The starting time of this working section
     public long spentTime = 0L;
-
-    public List<TaskWarning> taskWarnings = new ArrayList<>();
     public long nextNotifyTime = 0L;
 
-    public List<Task> subTaskIds = new ArrayList<>();
-
-    public int errorCount;
 
     public boolean isDelayed = false;
 
     public Status status = Task.Status.UNCLAIMED;
-    //public ArrayList<BaseData> records = new ArrayList<>();
+
+    public List<TaskWarning> taskWarnings = new ArrayList<>();
+    public ArrayList<CheckItem> checkList = new ArrayList<>();
 
 
     public Task(String title) {
@@ -67,7 +64,8 @@ public class Task extends IdData {
                 long startTime,
                 long spentTime,
                 long lastUpdatedTime,
-                boolean isDelayed) {
+                boolean isDelayed,
+                ArrayList<CheckItem> checkList) {
         this.id = id;
         this.name = name;
         this.caseName = caseName;
@@ -84,6 +82,7 @@ public class Task extends IdData {
         //this.taskWarnings = taskWarnings;
         this.lastUpdatedTime = lastUpdatedTime;
         this.isDelayed = isDelayed;
+        this.checkList = checkList;
 
         if (this.taskWarnings == null) {
             this.taskWarnings = new ArrayList<>();
@@ -122,6 +121,7 @@ public class Task extends IdData {
         //this.taskWarnings = task.taskWarnings;
         this.lastUpdatedTime = task.lastUpdatedTime;
         this.isDelayed = task.isDelayed;
+        this.checkList = task.checkList;
     }
 
     public long getWorkingTime() {

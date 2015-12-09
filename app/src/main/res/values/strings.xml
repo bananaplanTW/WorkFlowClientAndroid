@@ -52,6 +52,7 @@
     <string name="detailed_task_upload_file">Upload file %1$s</string>
     <string name="detailed_task_upload_photo">Upload photo %1$s</string>
     <string name="task_log_no_log_text">No log</string>
+    <string name="check_list_no_task_text">No task</string>
 
     <!-- Add Log -->
     <string name="add_log_edit_content_hint">Input log...</string>

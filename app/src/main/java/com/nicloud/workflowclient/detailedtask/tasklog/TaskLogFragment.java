@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
+import com.nicloud.workflowclient.detailedtask.OnRefreshDetailedTask;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -26,10 +27,6 @@ public class TaskLogFragment extends Fragment {
 
     public static final String EXTRA_TASK_LOG = "extra_task_log";
 
-    public interface OnRefreshTaskLog {
-        void onRefreshTaskLog();
-    }
-
     private Context mContext;
 
     private SwipeRefreshLayout mTaskLogSwipeRefreshLayout;
@@ -41,7 +38,7 @@ public class TaskLogFragment extends Fragment {
 
     private TextView mNoLogText;
 
-    private OnRefreshTaskLog mOnRefreshTaskLog;
+    private OnRefreshDetailedTask mOnRefreshDetailedTask;
 
 
     public void swapTaskLogData(List<BaseData> dataSet) {
@@ -64,7 +61,7 @@ public class TaskLogFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        mOnRefreshTaskLog = (OnRefreshTaskLog) context;
+        mOnRefreshDetailedTask = (OnRefreshDetailedTask) context;
     }
 
     @Nullable
@@ -121,7 +118,7 @@ public class TaskLogFragment extends Fragment {
 
             @Override
             public void onRefresh() {
-                mOnRefreshTaskLog.onRefreshTaskLog();
+                mOnRefreshDetailedTask.onRefreshDetailedTask();
             }
         });
 

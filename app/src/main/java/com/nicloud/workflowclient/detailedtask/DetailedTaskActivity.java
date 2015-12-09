@@ -15,11 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.activity.ILoadingActivitiesStrategy;
 import com.nicloud.workflowclient.data.connectserver.activity.LoadingActivitiesAsyncTask;
 import com.nicloud.workflowclient.data.connectserver.activity.LoadingTaskActivitiesStrategy;
+import com.nicloud.workflowclient.data.connectserver.task.LoadingTaskById;
 import com.nicloud.workflowclient.data.connectserver.tasklog.OnLoadImageListener;
 import com.nicloud.workflowclient.data.data.activity.ActivityDataFactory;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
@@ -37,7 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DetailedTaskActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
-        LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnLoadImageListener, TaskLogFragment.OnRefreshTaskLog {
+        LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnLoadImageListener, OnRefreshDetailedTask,
+        LoadingTaskById.OnFinishLoadingTaskByIdListener {
 
     public static final String EXTRA_TASK_ID = "DetailedTaskActivity_extra_task_id";
 
@@ -176,6 +179,8 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         CheckListFragment checkListFragment = (CheckListFragment) mFragmentManager.findFragmentByTag(FragmentTag.CHECK_LIST);
         if (checkListFragment == null) {
             checkListFragment = new CheckListFragment();
+            addFragmentBundle(checkListFragment);
+
             fragmentTransaction.add(R.id.detailed_task_content, checkListFragment, FragmentTag.CHECK_LIST);
         }
 
@@ -264,9 +269,10 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     }
 
     private void addFragmentBundle(Fragment fragment) {
-        if (fragment instanceof TaskLogFragment) {
-            Bundle bundle = new Bundle();
+        Bundle bundle = new Bundle();
+        bundle.putString(EXTRA_TASK_ID, mTask.id);
 
+        if (fragment instanceof TaskLogFragment) {
             switch (mDetailedTaskTabHost.getCurrentTab()) {
                 case TabPosition.TEXT:
                     bundle.putParcelableArrayList(TaskLogFragment.EXTRA_TASK_LOG, mTextDataSet);
@@ -280,14 +286,9 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
                     bundle.putParcelableArrayList(TaskLogFragment.EXTRA_TASK_LOG, mFileDataSet);
                     break;
             }
-
-            fragment.setArguments(bundle);
         }
-    }
 
-    @Override
-    public void onRefreshTaskLog() {
-        loadTaskActivities();
+        fragment.setArguments(bundle);
     }
 
     @Override
@@ -296,8 +297,29 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
         setTaskLogData(parseActivityJSONArray(activities));
         updateTaskLogListAccordingToTab();
+
+        if (!(mCurrentFragment instanceof TaskLogFragment)) return;
+        TaskLogFragment taskLogFragment = (TaskLogFragment) mCurrentFragment;
+
+        taskLogFragment.setSwipeRefreshLayout(false);
     }
 
+    @Override
+    public void onFailLoadingData(boolean isFailCausedByInternet) {
+        Toast.makeText(this, getString(R.string.no_internet_connection_information), Toast.LENGTH_SHORT).show();
+
+        if (!(mCurrentFragment instanceof TaskLogFragment)) return;
+        TaskLogFragment taskLogFragment = (TaskLogFragment) mCurrentFragment;
+
+        taskLogFragment.setSwipeRefreshLayout(false);
+    }
+
+    @Override
+    public void onFinishLoadImage() {
+        if (!(mCurrentFragment instanceof TaskLogFragment)) return;
+
+        ((TaskLogFragment) mCurrentFragment).refresh();
+    }
 
     private void setTaskLogData(ArrayList<BaseData> logData) {
         mTextDataSet.clear();
@@ -338,8 +360,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
                 taskLogFragment.swapTaskLogData(mFileDataSet);
                 break;
         }
-
-        taskLogFragment.setSwipeRefreshLayout(false);
     }
 
     private ArrayList<BaseData> parseActivityJSONArray(JSONArray activities) {
@@ -375,14 +395,27 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     }
 
     @Override
-    public void onFailLoadingData(boolean isFailCausedByInternet) {
-
+    public void onRefreshDetailedTask() {
+        loadTaskActivities();
+        new LoadingTaskById(this, mTask.id, this).execute();
     }
 
     @Override
-    public void onFinishLoadImage() {
-        if (!(mCurrentFragment instanceof TaskLogFragment)) return;
+    public void onFinishLoadingTaskById() {
+        if (!(mCurrentFragment instanceof CheckListFragment)) return;
+        CheckListFragment checkListFragment = (CheckListFragment) mCurrentFragment;
 
-        ((TaskLogFragment) mCurrentFragment).refresh();
+        checkListFragment.refresh();
+        checkListFragment.setSwipeRefreshLayout(false);
+    }
+
+    @Override
+    public void onFailLoadingTaskById(boolean isFailCausedByInternet) {
+        Toast.makeText(this, getString(R.string.no_internet_connection_information), Toast.LENGTH_SHORT).show();
+
+        if (!(mCurrentFragment instanceof CheckListFragment)) return;
+        CheckListFragment checkListFragment = (CheckListFragment) mCurrentFragment;
+
+        checkListFragment.setSwipeRefreshLayout(false);
     }
 }

@@ -41,6 +41,10 @@
     <color name="task_log_tab_text_selected_color">#FFFFFFFF</color>
     <color name="task_log_list_item_description_text_color">#FF000000</color>
 
+    <!-- Check list -->
+    <color name="check_list_checked_text_color">#FF8C8C8C</color>
+    <color name="check_list_unchecked_text_color">#FF000000</color>
+
     <!-- Dialog -->
     <color name="dialog_background_color">#FFFFFFFF</color>
     <color name="dialog_green_button_background_color">#FF009789</color>
