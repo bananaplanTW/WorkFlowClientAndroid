@@ -1,17 +1,18 @@
 package com.nicloud.workflowclient.detailedtask.checklist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.CheckItem;
+import com.nicloud.workflowclient.serveraction.action.ActionService;
 
 import java.util.List;
 
@@ -24,17 +25,37 @@ public class CheckListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private List<CheckItem> mDataSet;
 
+    private String mTaskId;
+
 
     private class CheckItemViewHolder extends RecyclerView.ViewHolder {
 
+        public View view;
         public TextView name;
         public CheckBox checkBox;
 
 
         public CheckItemViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
             findViews();
-            setCheckBox();
+
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeCheckItemCheckStatus(checkBox.isChecked());
+                }
+            });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean currentChecked = checkBox.isChecked();
+                    checkBox.setChecked(!currentChecked);
+
+                    changeCheckItemCheckStatus(!currentChecked);
+                }
+            });
         }
 
         private void findViews() {
@@ -42,18 +63,20 @@ public class CheckListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             checkBox = (CheckBox) itemView.findViewById(R.id.check_item_check_box);
         }
 
-        private void setCheckBox() {
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        private void changeCheckItemCheckStatus(boolean isChecked) {
+            Intent intent = new Intent(mContext, ActionService.class);
+            intent.setAction(ActionService.ServerAction.CHECK_ITEM);
+            intent.putExtra(ActionService.ExtraKey.TASK_ID, mTaskId);
+            intent.putExtra(ActionService.ExtraKey.CHECK_ITEM_INDEX, getAdapterPosition());
+            intent.putExtra(ActionService.ExtraKey.CHECK_ITEM_CHECKED, isChecked);
 
-                }
-            });
+            mContext.startService(intent);
         }
     }
 
-    public CheckListAdapter(Context context, List<CheckItem> dataSet) {
+    public CheckListAdapter(Context context, String taskId, List<CheckItem> dataSet) {
         mContext = context;
+        mTaskId = taskId;
         mDataSet = dataSet;
     }
 

@@ -1,9 +1,12 @@
 package com.nicloud.workflowclient.detailedtask.checklist;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +20,9 @@ import com.nicloud.workflowclient.data.data.data.CheckItem;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.OnRefreshDetailedTask;
+import com.nicloud.workflowclient.serveraction.action.ActionService;
+import com.nicloud.workflowclient.serveraction.action.ServerActionCompletedReceiver;
+import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +30,10 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/12/8.
  */
-public class CheckListFragment extends Fragment {
+public class CheckListFragment extends Fragment implements ServerActionCompletedReceiver.OnServerActionCompletedListener {
 
     private Context mContext;
+    private ServerActionCompletedReceiver mServerActionCompletedReceiver;
 
     private RecyclerView mCheckList;
     private LinearLayoutManager mCheckListLayoutManager;
@@ -71,7 +78,21 @@ public class CheckListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
         mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
+        mServerActionCompletedReceiver = new ServerActionCompletedReceiver(this);
         initialize();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(ActionService.ServerAction.CHECK_ITEM);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mServerActionCompletedReceiver, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mServerActionCompletedReceiver);
     }
 
     private void initialize() {
@@ -89,7 +110,7 @@ public class CheckListFragment extends Fragment {
 
     private void setupCheckList() {
         mCheckListLayoutManager = new LinearLayoutManager(mContext);
-        mCheckListAdapter = new CheckListAdapter(mContext, mDataSet);
+        mCheckListAdapter = new CheckListAdapter(mContext, mTaskId, mDataSet);
 
         mCheckList.setLayoutManager(mCheckListLayoutManager);
         mCheckList.setAdapter(mCheckListAdapter);
@@ -115,6 +136,26 @@ public class CheckListFragment extends Fragment {
             mNoCheckItemText.setVisibility(View.VISIBLE);
         } else {
             mNoCheckItemText.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onServerActionCompleted(Intent intent) {
+        String action = intent.getAction();
+        boolean isActionSuccessful = intent.getBooleanExtra(ActionService.ExtraKey.ACTION_SUCCESSFUL, false);
+
+        if (ActionService.ServerAction.CHECK_ITEM.equals(action)) {
+            String taskId = intent.getStringExtra(ActionService.ExtraKey.TASK_ID);
+            int index = intent.getIntExtra(ActionService.ExtraKey.CHECK_ITEM_INDEX, 0);
+            boolean checked = intent.getBooleanExtra(ActionService.ExtraKey.CHECK_ITEM_CHECKED, false);
+
+            if (isActionSuccessful) {
+                WorkingData.getInstance(mContext).getTask(taskId).checkList.get(index).isChecked = checked;
+            } else {
+                Utilities.showInternetConnectionWeakToast(mContext);
+            }
+
+            mCheckListAdapter.notifyDataSetChanged();
         }
     }
 }

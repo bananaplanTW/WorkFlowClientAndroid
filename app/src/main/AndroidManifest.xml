@@ -64,6 +64,10 @@
             android:name=".googlelocation.FetchAddressIntentService"
             android:exported="false" />
 
+        <service android:name=".serveraction.action.ActionService"
+            android:exported="false"/>
+
+
         <!-- Parse -->
         <service android:name="com.parse.PushService" />
         <receiver android:name="com.nicloud.workflowclient.parse.ParsePushReceiver"

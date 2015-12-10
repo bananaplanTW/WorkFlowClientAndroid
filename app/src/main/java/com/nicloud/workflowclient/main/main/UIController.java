@@ -374,8 +374,7 @@ public class UIController implements View.OnClickListener, DataObserver,
 
     private void showInternetConnectionWeakToast() {
         mSwipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(mMainActivity,
-                mMainActivity.getString(R.string.no_internet_connection_information), Toast.LENGTH_SHORT).show();
+        Utilities.showInternetConnectionWeakToast(mMainActivity);
     }
 
     @Override

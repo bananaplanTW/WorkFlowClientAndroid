@@ -30,6 +30,7 @@ import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.addlog.AddLogActivity;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
 import com.nicloud.workflowclient.detailedtask.tasklog.TaskLogFragment;
+import com.nicloud.workflowclient.utility.Utilities;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -306,7 +307,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     @Override
     public void onFailLoadingData(boolean isFailCausedByInternet) {
-        Toast.makeText(this, getString(R.string.no_internet_connection_information), Toast.LENGTH_SHORT).show();
+        Utilities.showInternetConnectionWeakToast(this);
 
         if (!(mCurrentFragment instanceof TaskLogFragment)) return;
         TaskLogFragment taskLogFragment = (TaskLogFragment) mCurrentFragment;
@@ -411,7 +412,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     @Override
     public void onFailLoadingTaskById(boolean isFailCausedByInternet) {
-        Toast.makeText(this, getString(R.string.no_internet_connection_information), Toast.LENGTH_SHORT).show();
+        Utilities.showInternetConnectionWeakToast(this);
 
         if (!(mCurrentFragment instanceof CheckListFragment)) return;
         CheckListFragment checkListFragment = (CheckListFragment) mCurrentFragment;

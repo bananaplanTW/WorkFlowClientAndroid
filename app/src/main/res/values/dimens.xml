@@ -75,6 +75,10 @@
     <dimen name="detailed_task_list_item_photo_margin_top">10dp</dimen>
     <dimen name="empty_text_size">20dp</dimen>
 
+    <!-- Check list -->
+    <dimen name="check_list_item_padding">10dp</dimen>
+    <dimen name="check_list_item_min_height">60dp</dimen>
+
     <!-- Add log -->
     <dimen name="add_log_action_container_height">55dp</dimen>
     <dimen name="add_log_action_container_padding_left_right">15dp</dimen>

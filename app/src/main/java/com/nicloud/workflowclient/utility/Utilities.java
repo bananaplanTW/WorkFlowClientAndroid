@@ -450,4 +450,8 @@ public class Utilities {
         DownloadFileFromURLCommand downloadFileFromURLCommand = new DownloadFileFromURLCommand(context, urlString, fileName);
         downloadFileFromURLCommand.execute();
     }
+
+    public static void showInternetConnectionWeakToast(Context context) {
+        Toast.makeText(context, context.getString(R.string.no_internet_connection_information), Toast.LENGTH_SHORT).show();
+    }
 }
