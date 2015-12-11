@@ -39,6 +39,7 @@ public class UploadService extends IntentService {
         public static final String TASK_ID = "extra_task_id";
         public static final String TEXT = "extra_text";
         public static final String PHOTO_PATH = "extra_photo_path";
+        public static final String FILE_PATH = "extra_file_path";
         public static final String UPLOAD_SUCCESSFUL = "extra_upload_successful";
     }
 
@@ -61,6 +62,15 @@ public class UploadService extends IntentService {
         intent.setAction(UploadAction.PHOTO);
         intent.putExtra(ExtraKey.TASK_ID, taskId);
         intent.putExtra(ExtraKey.PHOTO_PATH, photoPath);
+
+        return intent;
+    }
+
+    public static Intent generateUploadFileIntent(Context context, String taskId, String filePath) {
+        Intent intent = new Intent(context, UploadService.class);
+        intent.setAction(UploadAction.FILE);
+        intent.putExtra(ExtraKey.TASK_ID, taskId);
+        intent.putExtra(ExtraKey.FILE_PATH, filePath);
 
         return intent;
     }
@@ -200,6 +210,54 @@ public class UploadService extends IntentService {
     }
 
     private void uploadFile(Intent intent) {
+        int notificationId = Utilities.generateNotificationId();
+
+        String taskId = intent.getStringExtra(ExtraKey.TASK_ID);
+        String filePath = intent.getStringExtra(ExtraKey.FILE_PATH);
+
+        Intent broadcastIntent = new Intent(UploadAction.UPLOAD_COMPLETED);
+
+        NotificationCompat.Builder builder
+                = generateUploadNotificationBuilder(WorkingData.getInstance(this).getTask(taskId).name,
+                getString(R.string.add_log_uploading_file));
+        mNotificationManager.notify(notificationId, builder.build());
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-user-id", WorkingData.getUserId());
+        headers.put("x-auth-token", WorkingData.getAuthToken());
+        headers.put("td", taskId);
+
+        try {
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.COMMENT_FILE_ACTIVITY_TO_TASK, null);
+            String responseString = RestfulUtils.restfulPostFileRequest(urlString, headers, filePath);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+                if (jsonObject.getString("status").equals("success")) {
+                    uploadSuccessfully(builder, getString(R.string.add_log_complete_file));
+                    mNotificationManager.notify(notificationId, builder.build());
+
+                    Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.add_log_complete_file));
+
+                    broadcastIntent.putExtra(ExtraKey.UPLOAD_SUCCESSFUL, true);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+
+                    return;
+                }
+            }
+        }  catch (JSONException e) {
+            Log.e(TAG, "Exception in uploadText() in UploadService");
+            e.printStackTrace();
+
+            uploadFailed(builder, getString(R.string.add_log_failed));
+            mNotificationManager.notify(notificationId, builder.build());
+
+            return;
+        }
+
+        uploadFailed(builder, getString(R.string.add_log_failed));
+        mNotificationManager.notify(notificationId, builder.build());
     }
 
     private NotificationCompat.Builder generateUploadNotificationBuilder(String taskName, String contentText) {

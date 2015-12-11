@@ -1,9 +1,7 @@
 package com.nicloud.workflowclient.detailedtask.addlog;
 
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -12,7 +10,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,16 +24,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
-import com.nicloud.workflowclient.data.connectserver.activity.LeaveAFileCommentToTaskCommand;
-import com.nicloud.workflowclient.data.connectserver.tasklog.LeaveAPhotoCommentToTaskCommand;
-import com.nicloud.workflowclient.data.connectserver.tasklog.LeaveATextCommentToTaskCommand;
-import com.nicloud.workflowclient.data.connectserver.tasklog.OnLeaveCommentListener;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.googlelocation.CurrentAddress;
 import com.nicloud.workflowclient.googlelocation.GoogleLocationUtils;
@@ -44,7 +36,6 @@ import com.nicloud.workflowclient.main.main.MainApplication;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.googlelocation.AddressResultReceiver;
 import com.nicloud.workflowclient.googlelocation.FetchAddressIntentService;
-import com.nicloud.workflowclient.serveraction.ActionService;
 import com.nicloud.workflowclient.serveraction.UploadCompletedReceiver;
 import com.nicloud.workflowclient.serveraction.UploadService;
 import com.nicloud.workflowclient.utility.Utilities;
@@ -58,7 +49,7 @@ import java.util.Date;
 
 public class AddLogActivity extends AppCompatActivity implements View.OnClickListener,
         AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, OnLeaveCommentListener,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener,
         UploadCompletedReceiver.OnUploadCompletedListener {
 
     private static final String TAG = "AddLogActivity";
@@ -332,18 +323,6 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    @Override
-    public void onFinishLeaveComment() {
-        setResult(RESULT_OK);
-        mProgressDialog.dismiss();
-        mProgressDialog = null;
-    }
-
-    @Override
-    public void onFailLeaveComment(boolean isFailCausedByInternet) {
-        Toast.makeText(this, getString(R.string.add_log_failed), Toast.LENGTH_SHORT).show();
-    }
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK) return;
@@ -356,7 +335,6 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
             case REQUEST_PICK_FILE:
                 onFilePicked(data);
-                displayProgressDialog(getString(R.string.add_log_uploading_file));
 
                 break;
 
@@ -433,13 +411,10 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
     private void syncingFileActivity() {
         if (Utilities.isImage(mCurrentFilePath)) {
-            LeaveAPhotoCommentToTaskCommand leaveAPhotoCommentToTaskCommand =
-                    new LeaveAPhotoCommentToTaskCommand(this, mTaskId, mCurrentFilePath, this);
-            leaveAPhotoCommentToTaskCommand.execute();
+            startService(UploadService.generateUploadPhotoIntent(this, mTaskId, mCurrentFilePath));
+
         } else {
-            LeaveAFileCommentToTaskCommand leaveAFileCommentToTaskCommand =
-                    new LeaveAFileCommentToTaskCommand(this, mTaskId, mCurrentFilePath, this);
-            leaveAFileCommentToTaskCommand.execute();
+            startService(UploadService.generateUploadFileIntent(this, mTaskId, mCurrentFilePath));
         }
 
         mCurrentFilePath = null;
