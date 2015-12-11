@@ -2,9 +2,11 @@ package com.nicloud.workflowclient.detailedtask;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +32,8 @@ import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.addlog.AddLogActivity;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
 import com.nicloud.workflowclient.detailedtask.tasklog.TaskLogFragment;
+import com.nicloud.workflowclient.serveraction.UploadCompletedReceiver;
+import com.nicloud.workflowclient.serveraction.UploadService;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import org.json.JSONArray;
@@ -41,7 +45,7 @@ import java.util.List;
 
 public class DetailedTaskActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
         LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnLoadImageListener, OnRefreshDetailedTask,
-        LoadingTaskById.OnFinishLoadingTaskByIdListener {
+        LoadingTaskById.OnFinishLoadingTaskByIdListener, UploadCompletedReceiver.OnUploadCompletedListener {
 
     public static final String EXTRA_TASK_ID = "DetailedTaskActivity_extra_task_id";
 
@@ -72,6 +76,8 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     private ActionBar mActionBar;
     private Toolbar mToolbar;
+
+    private UploadCompletedReceiver mUploadCompletedReceiver;
 
     private TextView mTaskName;
     private TextView mCaseName;
@@ -110,9 +116,23 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         initialize();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(UploadService.UploadAction.UPLOAD_COMPLETED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mUploadCompletedReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUploadCompletedReceiver);
+    }
+
     private void initialize() {
         mFragmentManager = getSupportFragmentManager();
         mTask = WorkingData.getInstance(this).getTask(getIntent().getStringExtra(EXTRA_TASK_ID));
+        mUploadCompletedReceiver = new UploadCompletedReceiver(this);
         findViews();
         setupActionBar();
         setupTabs();
@@ -418,5 +438,14 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         CheckListFragment checkListFragment = (CheckListFragment) mCurrentFragment;
 
         checkListFragment.setSwipeRefreshLayout(false);
+    }
+
+    @Override
+    public void onUploadCompletedListener(Intent intent) {
+        boolean isUploadSuccessful = intent.getBooleanExtra(UploadService.ExtraKey.UPLOAD_SUCCESSFUL, false);
+
+        if (isUploadSuccessful) {
+            loadTaskActivities();
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.location.Location;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,6 +44,8 @@ import com.nicloud.workflowclient.main.main.MainApplication;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.googlelocation.AddressResultReceiver;
 import com.nicloud.workflowclient.googlelocation.FetchAddressIntentService;
+import com.nicloud.workflowclient.serveraction.ActionService;
+import com.nicloud.workflowclient.serveraction.UploadCompletedReceiver;
 import com.nicloud.workflowclient.serveraction.UploadService;
 import com.nicloud.workflowclient.utility.Utilities;
 
@@ -54,7 +58,8 @@ import java.util.Date;
 
 public class AddLogActivity extends AppCompatActivity implements View.OnClickListener,
         AddressResultReceiver.OnReceiveListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, OnLeaveCommentListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, OnLeaveCommentListener,
+        UploadCompletedReceiver.OnUploadCompletedListener {
 
     private static final String TAG = "AddLogActivity";
 
@@ -65,6 +70,8 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
     private ActionBar mActionBar;
     private Toolbar mToolbar;
+
+    private UploadCompletedReceiver mUploadCompletedReceiver;
 
     private ImageView mWorkerPhoto;
     private EditText mEditContent;
@@ -96,6 +103,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
     private void initialize() {
         mTaskId = getIntent().getStringExtra(EXTRA_TASK_ID);
+        mUploadCompletedReceiver = new UploadCompletedReceiver(this);
         findViews();
         setupActionBar();
         setupViews();
@@ -142,12 +150,16 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onStart() {
         super.onStart();
+        IntentFilter intentFilter = new IntentFilter(UploadService.UploadAction.UPLOAD_COMPLETED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mUploadCompletedReceiver, intentFilter);
+
         mCurrentAddress.mGoogleApiClient.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUploadCompletedReceiver);
         if (mCurrentAddress.mGoogleApiClient.isConnected()) {
             mCurrentAddress.mGoogleApiClient.disconnect();
         }
@@ -199,8 +211,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
                 String editContent = mEditContent.getText().toString();
                 if (TextUtils.isEmpty(editContent)) break;
 
-                startService(UploadService
-                        .generateUploadTextIntent(this, mTaskId, mEditContent.getText().toString()));
+                startService(UploadService.generateUploadTextIntent(this, mTaskId, mEditContent.getText().toString()));
 
                 mEditContent.setText("");
 
@@ -340,7 +351,6 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
         switch (requestCode) {
             case REQUEST_IMAGE_CAPTURE:
                 onPhotoCaptured();
-                displayProgressDialog(getString(R.string.add_log_uploading_photo));
 
                 break;
 
@@ -390,9 +400,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     private void syncingPhotoActivity() {
         String realPath = mCurrentPhotoPath.substring(mCurrentPhotoPath.indexOf(':') + 1);
 
-        LeaveAPhotoCommentToTaskCommand leaveAPhotoCommentToTaskCommand =
-                new LeaveAPhotoCommentToTaskCommand(this, mTaskId, realPath, this);
-        leaveAPhotoCommentToTaskCommand.execute();
+        startService(UploadService.generateUploadPhotoIntent(this, mTaskId, realPath));
 
         mCurrentPhotoPath = null;
     }
@@ -435,5 +443,14 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         mCurrentFilePath = null;
+    }
+
+    @Override
+    public void onUploadCompletedListener(Intent intent) {
+        boolean isUploadSuccessful = intent.getBooleanExtra(UploadService.ExtraKey.UPLOAD_SUCCESSFUL, false);
+
+        if (isUploadSuccessful) {
+            setResult(RESULT_OK);
+        }
     }
 }
