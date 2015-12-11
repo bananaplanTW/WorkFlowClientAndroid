@@ -1,6 +1,7 @@
 package com.nicloud.workflowclient.data.connectserver.tasklog;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
@@ -45,7 +46,7 @@ public class LeaveAPhotoCommentToTaskCommand implements ICreateActivityCommand, 
 
     @Override
     public void onFinishPostingData() {
-        Utilities.showToastInNonUiThread(mContext, mContext.getString(R.string.add_log_complete_photo));
+        Utilities.showToastInNonUiThread(new Handler(), mContext, mContext.getString(R.string.add_log_complete_photo));
         mOnLeaveCommentListener.onFinishLeaveComment();
     }
 

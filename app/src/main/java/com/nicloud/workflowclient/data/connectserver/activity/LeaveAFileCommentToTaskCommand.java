@@ -1,6 +1,7 @@
 package com.nicloud.workflowclient.data.connectserver.activity;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
@@ -50,7 +51,7 @@ public class LeaveAFileCommentToTaskCommand implements ICreateActivityCommand, P
     @Override
     public void onFinishPostingData() {
         mOnLeaveCommentListener.onFinishLeaveComment();
-        Utilities.showToastInNonUiThread(mContext, mContext.getString(R.string.add_log_complete_file));
+        Utilities.showToastInNonUiThread(new Handler(), mContext, mContext.getString(R.string.add_log_complete_file));
     }
 
     @Override

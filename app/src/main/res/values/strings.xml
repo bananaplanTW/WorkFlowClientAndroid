@@ -99,4 +99,9 @@
     <string name="downloading">Downloading...</string>
     <string name="download_completed">Download Completed</string>
 
+    <!-- Upload -->
+    <string name="upload_text_ing">Uploading text...</string>
+    <string name="upload_text_completed">Uploading text successfully</string>
+    <string name="upload_text_failed">Uploading text failed</string>
+
 </resources>

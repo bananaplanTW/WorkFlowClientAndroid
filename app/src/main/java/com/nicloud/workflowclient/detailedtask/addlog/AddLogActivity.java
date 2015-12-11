@@ -1,7 +1,9 @@
 package com.nicloud.workflowclient.detailedtask.addlog;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Geocoder;
@@ -9,6 +11,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +42,7 @@ import com.nicloud.workflowclient.main.main.MainApplication;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.googlelocation.AddressResultReceiver;
 import com.nicloud.workflowclient.googlelocation.FetchAddressIntentService;
+import com.nicloud.workflowclient.serveraction.UploadService;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import java.io.File;
@@ -193,16 +197,12 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
             case R.id.add_log_button:
                 String editContent = mEditContent.getText().toString();
-
                 if (TextUtils.isEmpty(editContent)) break;
 
-                LeaveATextCommentToTaskCommand leaveATextCommentToTaskCommand =
-                        new LeaveATextCommentToTaskCommand(this, mTaskId, editContent, this);
-                leaveATextCommentToTaskCommand.execute();
+                startService(UploadService
+                        .generateUploadTextIntent(this, mTaskId, mEditContent.getText().toString()));
 
                 mEditContent.setText("");
-
-                displayProgressDialog(getString(R.string.add_log_uploading_text));
 
                 break;
         }

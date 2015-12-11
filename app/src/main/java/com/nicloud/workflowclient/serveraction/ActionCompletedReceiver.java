@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.serveraction.action;
+package com.nicloud.workflowclient.serveraction;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.content.Intent;
 /**
  * Created by logicmelody on 2015/12/10.
  */
-public class ServerActionCompletedReceiver extends BroadcastReceiver {
+public class ActionCompletedReceiver extends BroadcastReceiver {
 
     public interface OnServerActionCompletedListener {
         void onServerActionCompleted(Intent intent);
@@ -16,7 +16,7 @@ public class ServerActionCompletedReceiver extends BroadcastReceiver {
     private OnServerActionCompletedListener mOnServerActionCompletedListener;
 
 
-    public ServerActionCompletedReceiver(OnServerActionCompletedListener listener) {
+    public ActionCompletedReceiver(OnServerActionCompletedListener listener) {
         mOnServerActionCompletedListener = listener;
     }
 

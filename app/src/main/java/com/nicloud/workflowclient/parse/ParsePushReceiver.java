@@ -13,6 +13,6 @@ public class ParsePushReceiver extends ParsePushBroadcastReceiver {
 
     @Override
     protected int getSmallIconId(Context context, Intent intent) {
-        return R.drawable.ic_notification;
+        return R.drawable.ic_nicloud_notification;
     }
 }

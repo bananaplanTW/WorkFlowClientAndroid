@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.serveraction.action;
+package com.nicloud.workflowclient.serveraction;
 
 import android.app.IntentService;
 import android.content.Intent;

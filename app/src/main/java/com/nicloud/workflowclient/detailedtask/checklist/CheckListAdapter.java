@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.CheckItem;
-import com.nicloud.workflowclient.serveraction.action.ActionService;
+import com.nicloud.workflowclient.serveraction.ActionService;
 
 import java.util.List;
 

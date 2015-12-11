@@ -64,7 +64,10 @@
             android:name=".googlelocation.FetchAddressIntentService"
             android:exported="false" />
 
-        <service android:name=".serveraction.action.ActionService"
+        <service android:name=".serveraction.ActionService"
+            android:exported="false"/>
+
+        <service android:name=".serveraction.UploadService"
             android:exported="false"/>
 
 

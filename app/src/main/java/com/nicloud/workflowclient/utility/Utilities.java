@@ -50,6 +50,8 @@ public class Utilities {
     public static final String DATE_FORMAT_YMD_HM_AMPM = "yyyy/MM/dd hh:mm aa";
     public static final String DATE_FORMAT_HM_AMPM = "hh:mm aa";
 
+    public static int sNotificationId = 0;
+
 
     public static String timestamp2Date(Date date, String format) {
         if (date == null) return "";
@@ -329,8 +331,8 @@ public class Utilities {
      * @param context
      * @param text
      */
-    public static void showToastInNonUiThread(final Context context, final String text) {
-        new Handler().post(new Runnable() {
+    public static void showToastInNonUiThread(Handler handler, final Context context, final String text) {
+        handler.post(new Runnable() {
             public void run() {
                 Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
             }
@@ -453,5 +455,9 @@ public class Utilities {
 
     public static void showInternetConnectionWeakToast(Context context) {
         Toast.makeText(context, context.getString(R.string.no_internet_connection_information), Toast.LENGTH_SHORT).show();
+    }
+
+    public static int generateNotificationId() {
+        return sNotificationId++;
     }
 }

@@ -20,8 +20,8 @@ import com.nicloud.workflowclient.data.data.data.CheckItem;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.OnRefreshDetailedTask;
-import com.nicloud.workflowclient.serveraction.action.ActionService;
-import com.nicloud.workflowclient.serveraction.action.ServerActionCompletedReceiver;
+import com.nicloud.workflowclient.serveraction.ActionService;
+import com.nicloud.workflowclient.serveraction.ActionCompletedReceiver;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.ArrayList;
@@ -30,10 +30,10 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/12/8.
  */
-public class CheckListFragment extends Fragment implements ServerActionCompletedReceiver.OnServerActionCompletedListener {
+public class CheckListFragment extends Fragment implements ActionCompletedReceiver.OnServerActionCompletedListener {
 
     private Context mContext;
-    private ServerActionCompletedReceiver mServerActionCompletedReceiver;
+    private ActionCompletedReceiver mActionCompletedReceiver;
 
     private RecyclerView mCheckList;
     private LinearLayoutManager mCheckListLayoutManager;
@@ -78,7 +78,7 @@ public class CheckListFragment extends Fragment implements ServerActionCompleted
         super.onActivityCreated(savedInstanceState);
         mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
         mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
-        mServerActionCompletedReceiver = new ServerActionCompletedReceiver(this);
+        mActionCompletedReceiver = new ActionCompletedReceiver(this);
         initialize();
     }
 
@@ -86,13 +86,13 @@ public class CheckListFragment extends Fragment implements ServerActionCompleted
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter(ActionService.ServerAction.CHECK_ITEM);
-        LocalBroadcastManager.getInstance(mContext).registerReceiver(mServerActionCompletedReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mActionCompletedReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mServerActionCompletedReceiver);
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mActionCompletedReceiver);
     }
 
     private void initialize() {
