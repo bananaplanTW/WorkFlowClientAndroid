@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.data.connectserver.activity.LoadingPhotoDataCommand;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.activity.FileData;
 import com.nicloud.workflowclient.data.data.activity.PhotoData;
@@ -134,7 +135,15 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.userName.setText(photoData.uploaderName);
         holder.description.setText(String.format(mContext.getString(R.string.detailed_task_upload_photo), photoData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(new Date(photoData.time), Utilities.DATE_FORMAT_YMD_HM_AMPM));
-        holder.photo.setImageBitmap(photoData.photo);
+
+        if (photoData.photo != null) {
+            holder.photo.setImageBitmap(photoData.photo);
+
+        } else {
+            LoadingPhotoDataCommand loadingPhotoDataCommand
+                    = new LoadingPhotoDataCommand(mContext, photoData.photoUri, photoData, holder.photo);
+            loadingPhotoDataCommand.execute();
+        }
 
         if (Uri.EMPTY != photoData.filePath) {
             holder.view.setOnClickListener(new View.OnClickListener() {

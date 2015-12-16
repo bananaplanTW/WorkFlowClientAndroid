@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.widget.ImageView;
 
 import com.nicloud.workflowclient.data.connectserver.tasklog.OnLoadImageListener;
 import com.nicloud.workflowclient.data.data.activity.PhotoData;
@@ -16,16 +17,17 @@ public class LoadingPhotoDataCommand implements LoadingDrawableAsyncTask.OnFinis
 
     private LoadingDrawableAsyncTask mLoadingDrawableAsyncTask;
     private Context mContext;
+
     private Uri mUri;
     private PhotoData mPhotoData;
+    private ImageView mPhotoImageView;
 
-    private OnLoadImageListener mOnLoadImageListener;
 
-    public LoadingPhotoDataCommand(Context context, Uri uri, PhotoData photoData, OnLoadImageListener listener) {
+    public LoadingPhotoDataCommand(Context context, Uri uri, PhotoData photoData, ImageView photoImageView) {
         mContext = context;
         mUri = uri;
         mPhotoData = photoData;
-        mOnLoadImageListener = listener;
+        mPhotoImageView = photoImageView;
     }
 
     public void execute () {
@@ -33,11 +35,10 @@ public class LoadingPhotoDataCommand implements LoadingDrawableAsyncTask.OnFinis
         mLoadingDrawableAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-
     @Override
     public void onFinishLoadingData() {
         mPhotoData.photo = ((BitmapDrawable) mLoadingDrawableAsyncTask.getResult()).getBitmap();
-        mOnLoadImageListener.onFinishLoadImage();
+        mPhotoImageView.setImageBitmap(mPhotoData.photo);
     }
 
     @Override

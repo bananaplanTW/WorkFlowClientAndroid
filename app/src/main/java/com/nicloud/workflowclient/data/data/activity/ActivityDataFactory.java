@@ -84,11 +84,7 @@ public class ActivityDataFactory {
 
                     Uri.Builder thumbBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
                     thumbBuilder.path(recordJSON.getString("thumbUrl"));
-                    Uri thumbUri = thumbBuilder.build();
-                    // TODO: DO NOT load all thumbnails into memory to avoid OOM
-                    LoadingPhotoDataCommand loadingPhotoDataCommand
-                            = new LoadingPhotoDataCommand(context, thumbUri, photoData, listener);
-                    loadingPhotoDataCommand.execute();
+                    photoData.photoUri = thumbBuilder.build();
 
                     loadUserIcon(context, recordJSON, photoData, listener);
 
@@ -175,7 +171,6 @@ public class ActivityDataFactory {
                 userIconBuilder.path(iconThumbUrl);
                 Uri userIconUri = userIconBuilder.build();
 
-                // TODO: DO NOT load all thumbnails into memory to avoid OOM
                 LoadingActivityUserIconCommand loadingActivityUserIconCommand
                         = new LoadingActivityUserIconCommand(context, userIconUri, baseData, listener);
                 loadingActivityUserIconCommand.execute();

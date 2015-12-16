@@ -14,6 +14,8 @@ public class PhotoData extends BaseData implements Parcelable {
     public String uploaderName;
 
     public Bitmap photo;
+    public Uri photoUri;
+
     public String fileName;
     public Uri filePath = Uri.EMPTY;
 
