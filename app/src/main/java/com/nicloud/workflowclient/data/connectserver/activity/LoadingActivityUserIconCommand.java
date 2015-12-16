@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.widget.ImageView;
 
 import com.nicloud.workflowclient.data.connectserver.tasklog.OnLoadImageListener;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
@@ -16,17 +17,17 @@ public class LoadingActivityUserIconCommand implements LoadingDrawableAsyncTask.
 
     private LoadingDrawableAsyncTask mLoadingDrawableAsyncTask;
     private Context mContext;
+
     private Uri mUri;
     private BaseData mBaseData;
+    private ImageView mAvatar;
 
-    private OnLoadImageListener mOnLoadImageListener;
 
-
-    public LoadingActivityUserIconCommand(Context context, Uri uri, BaseData baseData, OnLoadImageListener listener) {
+    public LoadingActivityUserIconCommand(Context context, Uri uri, BaseData baseData, ImageView avatar) {
         mContext = context;
         mUri = uri;
         mBaseData = baseData;
-        mOnLoadImageListener = listener;
+        mAvatar = avatar;
     }
 
     public void execute () {
@@ -37,7 +38,7 @@ public class LoadingActivityUserIconCommand implements LoadingDrawableAsyncTask.
     @Override
     public void onFinishLoadingData() {
         mBaseData.avatar = ((BitmapDrawable) mLoadingDrawableAsyncTask.getResult()).getBitmap();
-        mOnLoadImageListener.onFinishLoadImage();
+        mAvatar.setImageBitmap(mBaseData.avatar);
     }
 
     @Override

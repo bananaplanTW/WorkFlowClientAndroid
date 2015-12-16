@@ -7,6 +7,7 @@ package com.nicloud.workflowclient.data.data.activity;
 public class DataFactory {
     public static BaseData genData(String workerId, BaseData.TYPE type) {
         BaseData data;
+
         switch (type) {
             case RECORD:
                 data = new RecordData(type);
@@ -23,7 +24,9 @@ public class DataFactory {
             default:
                 throw new IllegalArgumentException("DataFactory.genData type = " + type);
         }
+
         data.workerId = workerId;
+
         return data;
     }
 }

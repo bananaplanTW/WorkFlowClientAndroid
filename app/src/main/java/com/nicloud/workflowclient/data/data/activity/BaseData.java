@@ -1,6 +1,7 @@
 package com.nicloud.workflowclient.data.data.activity;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -22,6 +23,8 @@ public class BaseData implements Parcelable {
     public String workerId;
 
     public Bitmap avatar;
+    public Uri avatarUri;
+
     public long time;
     public TYPE type;
     public CATEGORY category;

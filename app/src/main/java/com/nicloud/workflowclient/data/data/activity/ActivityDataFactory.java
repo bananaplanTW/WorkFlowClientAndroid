@@ -21,10 +21,11 @@ import java.util.Date;
  */
 public class ActivityDataFactory {
 
-    public static BaseData genData(JSONObject recordJSON, Context context, OnLoadImageListener listener)
+    public static BaseData genData(JSONObject recordJSON, Context context)
             throws JSONException {
 
         String type = recordJSON.getString("type");
+        String avatarThumbUrl = LoadingDataUtils.getStringFromJson(recordJSON, "iconThumbUrl");
 
         switch (type) {
             case "checkIn":
@@ -69,7 +70,14 @@ public class ActivityDataFactory {
                 comment.time = recordJSON.getLong("createdAt");
                 comment.description = recordJSON.getString("content");
 
-                loadUserIcon(context, recordJSON, comment, listener);
+                if (!TextUtils.isEmpty(avatarThumbUrl)) {
+                    Uri.Builder userIconBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+                    userIconBuilder.path(avatarThumbUrl);
+                    comment.avatarUri = userIconBuilder.build();
+
+                } else {
+                    comment.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker)).getBitmap();
+                }
 
                 return comment;
 
@@ -86,7 +94,14 @@ public class ActivityDataFactory {
                     thumbBuilder.path(recordJSON.getString("thumbUrl"));
                     photoData.photoUri = thumbBuilder.build();
 
-                    loadUserIcon(context, recordJSON, photoData, listener);
+                    if (!TextUtils.isEmpty(avatarThumbUrl)) {
+                        Uri.Builder userIconBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+                        userIconBuilder.path(avatarThumbUrl);
+                        photoData.avatarUri = userIconBuilder.build();
+
+                    } else {
+                        photoData.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker)).getBitmap();
+                    }
 
                     Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
                     imageBuilder.path(recordJSON.getString("imageUrl"));
@@ -102,7 +117,14 @@ public class ActivityDataFactory {
                     fileData.time = recordJSON.getLong("createdAt");
                     fileData.fileName = recordJSON.getString("name");
 
-                    loadUserIcon(context, recordJSON, fileData, listener);
+                    if (!TextUtils.isEmpty(avatarThumbUrl)) {
+                        Uri.Builder userIconBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+                        userIconBuilder.path(avatarThumbUrl);
+                        fileData.avatarUri = userIconBuilder.build();
+
+                    } else {
+                        fileData.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker)).getBitmap();
+                    }
 
                     Uri.Builder builder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
                     builder.path(recordJSON.getString("fileUrl"));
@@ -157,29 +179,6 @@ public class ActivityDataFactory {
 
             default:
                 return null;
-        }
-    }
-
-    private static void loadUserIcon(Context context, JSONObject jsonObject, BaseData baseData, OnLoadImageListener listener) {
-        String iconThumbUrl = null;
-
-        try {
-            iconThumbUrl = LoadingDataUtils.getStringFromJson(jsonObject, "iconThumbUrl");
-
-            if (!TextUtils.isEmpty(iconThumbUrl)) {
-                Uri.Builder userIconBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
-                userIconBuilder.path(iconThumbUrl);
-                Uri userIconUri = userIconBuilder.build();
-
-                LoadingActivityUserIconCommand loadingActivityUserIconCommand
-                        = new LoadingActivityUserIconCommand(context, userIconUri, baseData, listener);
-                loadingActivityUserIconCommand.execute();
-            } else {
-                baseData.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker)).getBitmap();
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 }

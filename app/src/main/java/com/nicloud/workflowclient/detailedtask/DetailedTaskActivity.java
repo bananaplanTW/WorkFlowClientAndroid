@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DetailedTaskActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
-        LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnLoadImageListener, OnRefreshDetailedTask,
+        LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnRefreshDetailedTask,
         LoadingTaskById.OnFinishLoadingTaskByIdListener, UploadCompletedReceiver.OnUploadCompletedListener {
 
     public static final String EXTRA_TASK_ID = "DetailedTaskActivity_extra_task_id";
@@ -335,13 +335,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         taskLogFragment.setSwipeRefreshLayout(false);
     }
 
-    @Override
-    public void onFinishLoadImage() {
-        if (!(mCurrentFragment instanceof TaskLogFragment)) return;
-
-        ((TaskLogFragment) mCurrentFragment).refresh();
-    }
-
     private void setTaskLogData(ArrayList<BaseData> logData) {
         mTextDataSet.clear();
         mPhotoDataSet.clear();
@@ -391,7 +384,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         try {
             for (int i = 0; i < length; i++) {
                 JSONObject activity = activities.getJSONObject(i);
-                BaseData activityData = ActivityDataFactory.genData(activity, this, this);
+                BaseData activityData = ActivityDataFactory.genData(activity, this);
                 if (activityData != null) {
                     parsedActivities.add(activityData);
                 }

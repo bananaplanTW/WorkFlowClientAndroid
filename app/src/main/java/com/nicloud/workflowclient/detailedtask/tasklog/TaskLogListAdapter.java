@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.data.connectserver.activity.LoadingActivityUserIconCommand;
 import com.nicloud.workflowclient.data.connectserver.activity.LoadingPhotoDataCommand;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.activity.FileData;
@@ -122,7 +123,15 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void onBindTextLog(TextLogViewHolder holder, int position) {
         RecordData recordData = (RecordData) mDataSet.get(position);
 
-        holder.icon.setImageBitmap(recordData.avatar);
+        if (recordData.avatar != null) {
+            holder.icon.setImageBitmap(recordData.avatar);
+
+        } else {
+            LoadingActivityUserIconCommand loadingActivityUserIconCommand
+                    = new LoadingActivityUserIconCommand(mContext, recordData.avatarUri, recordData, holder.icon);
+            loadingActivityUserIconCommand.execute();
+        }
+
         holder.userName.setText(recordData.reporterName);
         holder.description.setText(recordData.description);
         holder.timestamp.setText(Utilities.timestamp2Date(new Date(recordData.time), Utilities.DATE_FORMAT_YMD_HM_AMPM));
@@ -131,7 +140,15 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void onBindPhotoLog(PhotoLogViewHolder holder, int position) {
         final PhotoData photoData = (PhotoData) mDataSet.get(position);
 
-        holder.icon.setImageBitmap(photoData.avatar);
+        if (photoData.avatar != null) {
+            holder.icon.setImageBitmap(photoData.avatar);
+
+        } else {
+            LoadingActivityUserIconCommand loadingActivityUserIconCommand
+                    = new LoadingActivityUserIconCommand(mContext, photoData.avatarUri, photoData, holder.icon);
+            loadingActivityUserIconCommand.execute();
+        }
+
         holder.userName.setText(photoData.uploaderName);
         holder.description.setText(String.format(mContext.getString(R.string.detailed_task_upload_photo), photoData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(new Date(photoData.time), Utilities.DATE_FORMAT_YMD_HM_AMPM));
@@ -159,7 +176,15 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void onBindFileLog(FileLogViewHolder holder, int position) {
         final FileData fileData = (FileData) mDataSet.get(position);
 
-        holder.icon.setImageBitmap(fileData.avatar);
+        if (fileData.avatar != null) {
+            holder.icon.setImageBitmap(fileData.avatar);
+
+        } else {
+            LoadingActivityUserIconCommand loadingActivityUserIconCommand
+                    = new LoadingActivityUserIconCommand(mContext, fileData.avatarUri, fileData, holder.icon);
+            loadingActivityUserIconCommand.execute();
+        }
+
         holder.userName.setText(fileData.uploaderName);
         holder.description.setText(String.format(mContext.getString(R.string.detailed_task_upload_file), fileData.fileName));
         holder.timestamp.setText(Utilities.timestamp2Date(new Date(fileData.time), Utilities.DATE_FORMAT_YMD_HM_AMPM));
