@@ -91,7 +91,7 @@ public class UIController implements View.OnClickListener, DataObserver,
                 mSwipeRefreshLayout.setRefreshing(false);
             }
 
-            mFab.show();
+            //mFab.show();
             WorkingData.getInstance(mMainActivity).updateData();
         }
 
