@@ -215,14 +215,14 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void bindScheduledTaskViewHolder(ScheduledTaskViewHolder holder, Task task, int position) {
-        holder.taskIndex.setText(String.valueOf(position - 2));
+        holder.taskIndex.setText(String.valueOf(position));
         holder.taskName.setText(task.name);
         holder.caseName.setText(task.caseName);
 
-        if (task.spentTime > 0L) {
-            holder.status.setText(R.string.task_status_pause);
-            holder.status.setBackgroundResource(R.drawable.scheduled_task_status_pause_background);
-        }
+//        if (task.spentTime > 0L) {
+//            holder.status.setText(R.string.task_status_pause);
+//            holder.status.setBackgroundResource(R.drawable.scheduled_task_status_pause_background);
+//        }
     }
 
     @Override
