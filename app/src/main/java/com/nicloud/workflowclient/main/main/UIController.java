@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,6 +27,7 @@ import com.nicloud.workflowclient.data.connectserver.worker.LoadingLoginWorkerCo
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatarCommand;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclient.drawermenu.DrawerMenuFragment;
 import com.nicloud.workflowclient.login.LoginActivity;
 import com.nicloud.workflowclient.tasklist.TaskListFragment;
 import com.nicloud.workflowclient.utility.Utilities;
@@ -54,6 +56,7 @@ public class UIController implements View.OnClickListener, LoadingLoginWorkerCom
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerMenuFragment mDrawerMenuFragment;
 
     private ImageView mActionBarWorkerAvatar;
     private TextView mActionBarWorkerName;
@@ -119,6 +122,14 @@ public class UIController implements View.OnClickListener, LoadingLoginWorkerCom
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
+    public boolean isDrawerOpen() {
+        return mDrawerLayout.isDrawerOpen(GravityCompat.START);
+    }
+
+    public void closeDrawer() {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+    }
+
     private void initialize() {
         mFragmentManager = mMainActivity.getSupportFragmentManager();
         findViews();
@@ -171,12 +182,11 @@ public class UIController implements View.OnClickListener, LoadingLoginWorkerCom
     private void setupFragments() {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
-//        mDrawerFragment = (DrawerFragment) mFragmentManager.findFragmentByTag(FragmentTag.DRAWER_MENU_FRAGMENT);
-//        if (mDrawerFragment == null) {
-//            mDrawerFragment = new DrawerFragment();
-//            fragmentTransaction.add(R.id.drawer_menu_container, mDrawerFragment, FragmentTag.DRAWER_MENU_FRAGMENT);
-//        }
-//        mDrawerFragment.setOnClickDrawerItemListener(this);
+        mDrawerMenuFragment = (DrawerMenuFragment) mFragmentManager.findFragmentByTag(FragmentTag.DRAWER_MENU);
+        if (mDrawerMenuFragment == null) {
+            mDrawerMenuFragment = new DrawerMenuFragment();
+            fragmentTransaction.add(R.id.drawer_menu_container, mDrawerMenuFragment, FragmentTag.DRAWER_MENU);
+        }
 
         // Default fragment when launch app
         TaskListFragment taskListFragment = (TaskListFragment) mFragmentManager.findFragmentByTag(FragmentTag.TASK_LIST);

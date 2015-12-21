@@ -49,6 +49,15 @@ public class MainActivity extends AppCompatActivity implements TaskListFragment.
     }
 
     @Override
+    public void onBackPressed() {
+        if (mUIController.isDrawerOpen()) {
+            mUIController.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public void onRefreshInTaskList() {
         mUIController.onRefreshInTaskList();
     }
