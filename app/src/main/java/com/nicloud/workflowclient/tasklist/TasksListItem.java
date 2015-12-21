@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.main.tasklist;
+package com.nicloud.workflowclient.tasklist;
 
 import com.nicloud.workflowclient.data.data.data.Task;
 

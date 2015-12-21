@@ -3,6 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="drawer_menu_with">300dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="button_padding_top_bottom">5dp</dimen>
     <dimen name="button_padding_left_right">15dp</dimen>

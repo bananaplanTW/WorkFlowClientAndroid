@@ -13,6 +13,9 @@
     <color name="green_button_background_color">#FF009789</color>
     <color name="no_internet_connection_text_color">@android:color/black</color>
 
+    <!-- Drawer menu -->
+    <color name="drawer_menu_background_color">#FF424242</color>
+
     <!-- Login -->
     <color name="login_activity_background_color">#FFFFFFFF</color>
     <color name="login_container_background_color">#FFFFFFFF</color>

@@ -109,6 +109,13 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         }
     }
 
+    public static Intent generateActivityIntent(Context context, String taskId) {
+        Intent intent = new Intent(context, DetailedTaskActivity.class);
+        intent.putExtra(EXTRA_TASK_ID, taskId);
+
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

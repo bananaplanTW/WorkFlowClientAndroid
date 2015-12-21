@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.main.tasklist;
+package com.nicloud.workflowclient.tasklist;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
@@ -12,7 +12,7 @@ import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.dialog.DisplayDialogFragment.DialogType;
+import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.List;
@@ -21,10 +21,6 @@ import java.util.List;
  * Created by logicmelody on 2015/11/11.
  */
 public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    public interface OnPauseWipTaskListener {
-        void onPauseWipTask(String taskId);
-    }
 
     public static class ItemViewType {
         public static final int TITLE = 0;
@@ -36,7 +32,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private FragmentManager mFragmentManager;
     private List<TasksListItem> mDataSet;
 
-    private OnPauseWipTaskListener mOnPauseWipTaskListener;
 
     private class TitleViewHolder extends RecyclerView.ViewHolder {
 
@@ -48,7 +43,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    private class WipTaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class WipTaskViewHolder extends RecyclerView.ViewHolder {
 
         public View wipTaskCardView;
         public View noWipTaskCardView;
@@ -63,7 +58,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public WipTaskViewHolder(View view) {
             super(view);
             findViews(view);
-            setupViews();
         }
 
         private void findViews(View view) {
@@ -76,29 +70,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             noWipTaskText = (TextView) view.findViewById(R.id.no_wip_task_card_text);
             pauseButton = view.findViewById(R.id.wip_task_card_pause_button);
             completeButton = view.findViewById(R.id.wip_task_card_complete_button);
-        }
-
-        private void setupViews() {
-            wipTaskCardView.setOnClickListener(this);
-            pauseButton.setOnClickListener(this);
-            completeButton.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.wip_task_card_pause_button:
-                    mOnPauseWipTaskListener.onPauseWipTask(mDataSet.get(getAdapterPosition()).task.id);
-                    break;
-
-                case R.id.wip_task_card_complete_button:
-                    Utilities.showDialog(mFragmentManager, DialogType.COMPLETE_TASK, mDataSet.get(getAdapterPosition()).task.id);
-                    break;
-
-                case R.id.wip_task_card_view:
-                    Utilities.goToTaskLogActivity(mContext, mDataSet.get(getAdapterPosition()).task.id);
-                    break;
-            }
         }
     }
 
@@ -128,18 +99,18 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utilities.showDialog(mFragmentManager, DialogType.CHOOSE_TASK, mDataSet.get(getAdapterPosition()).task.id);
+                    mContext.startActivity(
+                            DetailedTaskActivity.generateActivityIntent(mContext, mDataSet.get(getAdapterPosition()).task.id));
                 }
             });
         }
     }
 
 
-    public TasksListAdapter(Context context, FragmentManager fm, List<TasksListItem> dataSet, OnPauseWipTaskListener listener) {
+    public TasksListAdapter(Context context, FragmentManager fm, List<TasksListItem> dataSet) {
         mContext = context;
         mFragmentManager = fm;
         mDataSet = dataSet;
-        mOnPauseWipTaskListener = listener;
     }
 
     @Override

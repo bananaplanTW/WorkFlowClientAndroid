@@ -1,5 +1,6 @@
 package com.nicloud.workflowclient.main.main;
 
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,8 +11,9 @@ import android.location.Location;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.worker.CheckInOutCommand;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclient.tasklist.TaskListFragment;
 
-public class MainActivity extends AppCompatActivity implements DisplayDialogFragment.OnDialogActionListener {
+public class MainActivity extends AppCompatActivity implements TaskListFragment.OnRefreshInTaskList {
 
     private UIController mUIController;
 
@@ -25,18 +27,6 @@ public class MainActivity extends AppCompatActivity implements DisplayDialogFrag
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mUIController.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mUIController.onStop();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return mUIController.onCreateOptionsMenu(menu);
     }
@@ -47,28 +37,19 @@ public class MainActivity extends AppCompatActivity implements DisplayDialogFrag
     }
 
     @Override
-    public void onCompleteTaskCancel() {
-        mUIController.onCompleteTaskCancel();
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mUIController.onPostCreate(savedInstanceState);
     }
 
     @Override
-    public void onCompleteTaskOk(String taskId) {
-        mUIController.onCompleteTaskOk(taskId);
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mUIController.onConfigurationChanged(newConfig);
     }
 
     @Override
-    public void onChooseTaskStartWork(String taskId) {
-        mUIController.onChooseTaskStartWork(taskId);
-    }
-
-    @Override
-    public void onChooseTaskLog(String taskId) {
-        mUIController.onChooseTaskLog(taskId);
-    }
-
-    @Override
-    public void onCheck(Location currentLocation, String currentAddress,
-                        CheckInOutCommand.OnDialogCheckInOutStatusListener onDialogCheckInOutStatusListener) {
-        mUIController.onCheck(currentLocation, currentAddress, onDialogCheckInOutStatusListener);
+    public void onRefreshInTaskList() {
+        mUIController.onRefreshInTaskList();
     }
 }

@@ -37,6 +37,10 @@
     <string name="wip_task_card_choose_task">Please choose a task from below</string>
     <string name="wip_task_card_not_working_time">Not working time</string>
 
+    <!-- Drawer menu -->
+    <string name="drawer_open" translatable="false">drawer_open</string>
+    <string name="drawer_close" translatable="false">drawer_close</string>
+
     <!-- Login -->
     <string name="login_company_account">Company account</string>
     <string name="login_account">Account</string>
