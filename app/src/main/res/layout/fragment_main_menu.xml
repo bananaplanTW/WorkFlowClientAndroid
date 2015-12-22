@@ -3,12 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/main_menu_worker_container_padding"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/main_menu_worker_avatar"
@@ -17,8 +16,10 @@
             android:src="@drawable/ic_worker_white"/>
 
         <LinearLayout
+            android:id="@+id/main_menu_worker_name_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/main_menu_worker_avatar"
             android:layout_marginLeft="@dimen/main_menu_worker_name_container_margin_left"
             android:orientation="vertical">
 
@@ -37,6 +38,17 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/main_menu_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/main_menu_logout_padding"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/main_menu_text_color"
+            android:text="@string/logout"
+            android:background="?selectableItemBackgroundBorderless"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

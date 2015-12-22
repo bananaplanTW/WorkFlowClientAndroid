@@ -5,7 +5,8 @@
     <item android:id="@+id/action_logout"
         android:title="@string/action_logout"
         android:orderInCategory="1"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        android:visible="false" />
 
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
