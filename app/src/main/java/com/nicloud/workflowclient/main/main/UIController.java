@@ -177,7 +177,7 @@ public class UIController implements View.OnClickListener, LoadingLoginWorkerCom
 
     private void setupViews() {
         mActionBarWorkerName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().name);
-        mActionBarWorkerFactoryName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().factoryName);
+        mActionBarWorkerFactoryName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().departmentName);
 
         mActionBarWorkerContainer.setOnClickListener(this);
     }
@@ -266,7 +266,7 @@ public class UIController implements View.OnClickListener, LoadingLoginWorkerCom
 
         if (TextUtils.isEmpty(s)) {
             if (avatar == null) {
-                mActionBarWorkerAvatar.setImageResource(R.drawable.ic_worker);
+                mActionBarWorkerAvatar.setImageResource(R.drawable.ic_worker_black);
             } else {
                 mActionBarWorkerAvatar.setImageDrawable(avatar);
             }
@@ -308,7 +308,7 @@ public class UIController implements View.OnClickListener, LoadingLoginWorkerCom
     public void onLoadingLoginWorkerSuccessful() {
         loadWorkerAvatar();
         mActionBarWorkerName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().name);
-        mActionBarWorkerFactoryName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().factoryName);
+        mActionBarWorkerFactoryName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().departmentName);
     }
 
     @Override

@@ -41,7 +41,7 @@ public class LoadingWorkerAvatarCommand implements LoadingDrawableAsyncTask.OnFi
     @Override
     public void onFailLoadingData(boolean isFailCausedByInternet) {
         if (WorkingData.getInstance(mContext).getLoginWorker().avatar == null) {
-            mAvatar.setImageResource(R.drawable.ic_worker);
+            mAvatar.setImageResource(R.drawable.ic_worker_black);
         } else {
             mAvatar.setImageDrawable(WorkingData.getInstance(mContext).getLoginWorker().avatar);
         }

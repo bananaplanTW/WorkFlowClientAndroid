@@ -3,11 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Main menu"
-        android:textColor="@android:color/white"/>
+        android:padding="@dimen/main_menu_worker_container_padding"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/main_menu_worker_avatar"
+            android:layout_width="@dimen/main_menu_worker_avatar_width_height"
+            android:layout_height="@dimen/main_menu_worker_avatar_width_height"
+            android:src="@drawable/ic_worker_white"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/main_menu_worker_name_container_margin_left"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/main_menu_worker_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/main_menu_highlight_text_color"
+                android:textSize="@dimen/main_menu_worker_name_text_size" />
+
+            <TextView
+                android:id="@+id/main_menu_worker_department_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/main_menu_highlight_text_color" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

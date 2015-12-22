@@ -243,15 +243,15 @@ public class LoadingDataUtils {
 //            e.printStackTrace();
 //        }
 //    }
-//    public static void loadWorkersByFactory(Context context, String factoryId) {
-//        if (!WorkingData.getInstance(context).hasFactory(factoryId)) return;
+//    public static void loadWorkersByFactory(Context context, String departmentId) {
+//        if (!WorkingData.getInstance(context).hasFactory(departmentId)) return;
 //
 //        try {
 //            HashMap<String, String> headers = new HashMap<>();
 //            headers.put("x-user-id", WorkingData.getUserId());
 //            headers.put("x-auth-token", WorkingData.getAuthToken());
 //
-//            String workerJsonString = RestfulUtils.restfulGetRequest(getWorkersByFactoryUrl(factoryId), headers);
+//            String workerJsonString = RestfulUtils.restfulGetRequest(getWorkersByFactoryUrl(departmentId), headers);
 //            JSONArray workerJsonList = new JSONObject(workerJsonString).getJSONArray("result");
 //            List<Worker> newWorkers = new ArrayList<>();
 //
@@ -265,7 +265,7 @@ public class LoadingDataUtils {
 //                }
 //            }
 //
-//            WorkingData.getInstance(context).getFactoryById(factoryId).workers = newWorkers;
+//            WorkingData.getInstance(context).getFactoryById(departmentId).workers = newWorkers;
 //
 //        } catch (JSONException e) {
 //            e.printStackTrace();
@@ -582,17 +582,17 @@ public class LoadingDataUtils {
 //    }
 //    private static void addFactoryToWorkingData(Context context, JSONObject factoryJson) {
 //        try {
-//            String factoryId = factoryJson.getString("_id");
+//            String departmentId = factoryJson.getString("_id");
 //            long lastUpdatedTime = factoryJson.getLong("updatedAt");
-//            boolean hasFactory = WorkingData.getInstance(context).hasFactory(factoryId);
+//            boolean hasFactory = WorkingData.getInstance(context).hasFactory(departmentId);
 //
 //            if (hasFactory &&
-//                    WorkingData.getInstance(context).getFactoryById(factoryId).lastUpdatedTime >= lastUpdatedTime) {
+//                    WorkingData.getInstance(context).getFactoryById(departmentId).lastUpdatedTime >= lastUpdatedTime) {
 //                return;
 //            }
 //
 //            if (hasFactory) {
-//                WorkingData.getInstance(context).updateFactory(factoryId, retrieveFactoryFromJson(context, factoryJson));
+//                WorkingData.getInstance(context).updateFactory(departmentId, retrieveFactoryFromJson(context, factoryJson));
 //            } else {
 //                WorkingData.getInstance(context).addFactory(retrieveFactoryFromJson(context, factoryJson));
 //            }
@@ -1130,7 +1130,7 @@ public class LoadingDataUtils {
 //            String id = equipmentJson.getString("_id");
 //            String name = equipmentJson.getString("name");
 //            String description = getStringFromJson(equipmentJson, "details");
-//            String factoryId = equipmentJson.getString("workingGroupId");
+//            String departmentId = equipmentJson.getString("workingGroupId");
 //
 //            long lastUpdatedTime = equipmentJson.getLong("updatedAt");
 //            Date purchasedDate = getDateFromJson(equipmentJson, "purchasedDate");
@@ -1141,7 +1141,7 @@ public class LoadingDataUtils {
 //                    id,
 //                    name,
 //                    description,
-//                    factoryId,
+//                    departmentId,
 //                    status,
 //                    purchasedDate,
 //                    lastUpdatedTime);
@@ -1225,8 +1225,8 @@ public class LoadingDataUtils {
     private static String getTaskByIdUrl(String taskId) {
         return WorkingDataUrl.TASK_BY_ID + taskId;
     }
-//    private static String getWorkersByFactoryUrl(String factoryId) {
-//        return WorkingDataUrl.WORKERS_BY_FACTORY + factoryId;
+//    private static String getWorkersByFactoryUrl(String departmentId) {
+//        return WorkingDataUrl.WORKERS_BY_FACTORY + departmentId;
 //    }
 //    private static String getCaseTimeCardUrl(String caseId, long startDate, long endDate) {
 //        String url = String.format(WorkingDataUrl.TIME_CARD_BY_CASE, caseId, startDate, endDate);

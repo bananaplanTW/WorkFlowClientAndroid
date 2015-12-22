@@ -35,7 +35,7 @@
             android:id="@+id/add_log_worker_photo"
             android:layout_width="@dimen/worker_icon_width_height"
             android:layout_height="@dimen/worker_icon_width_height"
-            android:src="@drawable/ic_worker"/>
+            android:src="@drawable/ic_worker_black"/>
 
         <EditText
             android:id="@+id/add_log_edit_content"

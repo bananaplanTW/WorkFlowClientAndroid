@@ -7,14 +7,9 @@ import android.text.TextUtils;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
-import com.nicloud.workflowclient.data.connectserver.activity.LoadingActivityUserIconCommand;
-import com.nicloud.workflowclient.data.connectserver.activity.LoadingPhotoDataCommand;
-import com.nicloud.workflowclient.data.connectserver.tasklog.OnLoadImageListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Date;
 
 /**
  * Created by daz on 10/9/15.
@@ -76,7 +71,7 @@ public class ActivityDataFactory {
                     comment.avatarUri = userIconBuilder.build();
 
                 } else {
-                    comment.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker)).getBitmap();
+                    comment.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker_black)).getBitmap();
                 }
 
                 return comment;
@@ -100,7 +95,7 @@ public class ActivityDataFactory {
                         photoData.avatarUri = userIconBuilder.build();
 
                     } else {
-                        photoData.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker)).getBitmap();
+                        photoData.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker_black)).getBitmap();
                     }
 
                     Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
@@ -123,7 +118,7 @@ public class ActivityDataFactory {
                         fileData.avatarUri = userIconBuilder.build();
 
                     } else {
-                        fileData.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker)).getBitmap();
+                        fileData.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker_black)).getBitmap();
                     }
 
                     Uri.Builder builder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();

@@ -33,8 +33,8 @@ public class Worker extends IdData {
         }
     }
 
-    public String factoryId;
-    public String factoryName;
+    public String departmentId;
+    public String departmentName;
     public String jobTitle;
     public String address;
     public String phone;
@@ -66,8 +66,8 @@ public class Worker extends IdData {
     public Worker(
             String id,
             String name,
-            String factoryId,
-            String factoryName,
+            String departmentId,
+            String departmentName,
             String wipTaskId,
             String address,
             String phone,
@@ -81,8 +81,8 @@ public class Worker extends IdData {
             long lastUpdatedTime) {
         this.id = id;
         this.name = name;
-        this.factoryId = factoryId;
-        this.factoryName = factoryName;
+        this.departmentId = departmentId;
+        this.departmentName = departmentName;
         this.wipTaskId = wipTaskId;
         this.address = address;
         this.phone = phone;
@@ -109,8 +109,8 @@ public class Worker extends IdData {
 
     public void update(Worker worker) {
         this.name = worker.name;
-        this.factoryId = worker.factoryId;
-        this.factoryName = worker.factoryName;
+        this.departmentId = worker.departmentId;
+        this.departmentName = worker.departmentName;
         this.wipTaskId = worker.wipTaskId;
         this.address = worker.address;
         this.phone = worker.phone;

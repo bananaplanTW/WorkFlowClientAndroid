@@ -63,6 +63,12 @@
     <dimen name="working_time_container_start_working_time_text_size">20dp</dimen>
     <dimen name="working_time_container_check_in_time_text_size">10dp</dimen>
 
+    <!-- Main menu -->
+    <dimen name="main_menu_worker_container_padding">20dp</dimen>
+    <dimen name="main_menu_worker_avatar_width_height">50dp</dimen>
+    <dimen name="main_menu_worker_name_container_margin_left">8dp</dimen>
+    <dimen name="main_menu_worker_name_text_size">18dp</dimen>
+
     <!-- Detailed task -->
     <dimen name="detailed_task_tab_height">35dp</dimen>
     <dimen name="detailed_task_list_item_min_height">80dp</dimen>
