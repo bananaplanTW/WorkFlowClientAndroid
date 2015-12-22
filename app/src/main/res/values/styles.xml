@@ -1,11 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="BaseAppTheme" parent="Theme.AppCompat.Light">
-    </style>
-
-    <!-- Main application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Action bar color -->
         <item name="colorPrimary">@color/color_primary</item>
         <!-- Status bar color -->
@@ -14,6 +10,11 @@
         <item name="android:windowBackground">@color/main_window_background_color</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <!-- Main application theme. -->
+    <style name="AppTheme" parent="BaseAppTheme">
+    </style>
+
     <style name="AppTheme.WhiteBackground">
         <item name="android:windowBackground">@android:color/white</item>
     </style>
