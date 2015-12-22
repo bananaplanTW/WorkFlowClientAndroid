@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.drawermenu;
+package com.nicloud.workflowclient.mainmenu;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import com.nicloud.workflowclient.R;
 /**
  * Created by logicmelody on 2015/12/21.
  */
-public class DrawerMenuFragment extends Fragment {
+public class MainMenuFragment extends Fragment {
 
 
     @Override
@@ -24,7 +24,7 @@ public class DrawerMenuFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_drawer_menu, container, false);
+        return inflater.inflate(R.layout.fragment_main_menu, container, false);
     }
 
     @Override

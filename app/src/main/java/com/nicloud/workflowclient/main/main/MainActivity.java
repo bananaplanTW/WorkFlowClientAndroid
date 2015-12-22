@@ -6,11 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import android.location.Location;
-
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.connectserver.worker.CheckInOutCommand;
-import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.tasklist.TaskListFragment;
 
 public class MainActivity extends AppCompatActivity implements TaskListFragment.OnRefreshInTaskList {
@@ -50,8 +46,12 @@ public class MainActivity extends AppCompatActivity implements TaskListFragment.
 
     @Override
     public void onBackPressed() {
-        if (mUIController.isDrawerOpen()) {
-            mUIController.closeDrawer();
+        if (mUIController.isLeftDrawerOpened()) {
+            mUIController.closeLeftDrawer();
+
+        } else if (mUIController.isRightDrawerOpened()) {
+            mUIController.closeRightDrawer();
+
         } else {
             super.onBackPressed();
         }

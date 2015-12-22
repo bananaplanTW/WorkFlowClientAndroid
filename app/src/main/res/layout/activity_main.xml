@@ -19,8 +19,10 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <RelativeLayout
+                android:id="@+id/action_bar_worker_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="?selectableItemBackground">
 
                 <ImageView
                     android:id="@+id/action_bar_worker"
@@ -66,13 +68,22 @@
 
     </LinearLayout>
 
-    <!-- Navigation drawer -->
+    <!-- Navigation drawer in left side -->
     <FrameLayout
-        android:id="@+id/drawer_menu_container"
+        android:id="@+id/drawer_menu_left_side_container"
         android:layout_width="@dimen/drawer_menu_with"
         android:layout_height="match_parent"
         android:clickable="true"
         android:layout_gravity="start"
+        android:background="@color/drawer_menu_background_color" />
+
+    <!-- Navigation drawer in right side -->
+    <FrameLayout
+        android:id="@+id/drawer_menu_right_side_container"
+        android:layout_width="@dimen/drawer_menu_with"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:layout_gravity="end"
         android:background="@color/drawer_menu_background_color" />
 
 </android.support.v4.widget.DrawerLayout>
