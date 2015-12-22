@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -42,6 +43,8 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
     private LinearLayoutManager mTasksListManager;
     private TasksListAdapter mTasksListAdapter;
     private List<TasksListItem> mTasksDataSet = new ArrayList<>();
+
+    private boolean mNeedRefresh = false;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -134,6 +137,40 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
                 new DividerItemDecoration(mContext.getResources().getDrawable(R.drawable.list_divider),
                         true, true, true, mContext.getResources().getDimensionPixelSize(R.dimen.tasks_list_padding_bottom)));
         mTasksList.setAdapter(mTasksListAdapter);
+
+        mTasksList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        if (!mNeedRefresh) break;
+
+                        if (!isFirstItemOnTheTopOfTheList()) {
+                            mNeedRefresh = false;
+                            mSwipeRefreshLayout.setEnabled(false);
+                        }
+
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        if (isFirstItemOnTheTopOfTheList()) {
+                            mNeedRefresh = true;
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+
+                        break;
+                }
+
+                return false;
+            }
+        });
+    }
+
+    private boolean isFirstItemOnTheTopOfTheList() {
+        return mTasksListManager.findFirstVisibleItemPosition() == 0;
     }
 
     private void setupSwipeRefresh() {
