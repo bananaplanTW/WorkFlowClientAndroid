@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,9 @@ import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.login.LoginActivity;
 import com.parse.ParsePush;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by logicmelody on 2015/12/21.
  */
@@ -34,6 +39,11 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
     private TextView mWorkerDepartment;
 
     private TextView mLogoutButton;
+
+    private RecyclerView mMainMenuList;
+    private LinearLayoutManager mMainMenuListLayoutManager;
+    private MainMenuListAdapter mMainMenuListAdapter;
+    private List<MainMenuItem> mDataSet = new ArrayList<>();
 
 
     @Override
@@ -56,8 +66,9 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
 
     private void initialize() {
         findViews();
-        setupWorkerViews();
         loadWorkerAvatar();
+        setupWorkerViews();
+        setupMainMenuList();
     }
 
     private void findViews() {
@@ -65,13 +76,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         mWorkerName = (TextView) getView().findViewById(R.id.main_menu_worker_name);
         mWorkerDepartment = (TextView) getView().findViewById(R.id.main_menu_worker_department_name);
         mLogoutButton = (TextView) getView().findViewById(R.id.main_menu_logout);
-    }
-
-    private void setupWorkerViews() {
-        mWorkerName.setText(WorkingData.getInstance(mContext).getLoginWorker().name);
-        mWorkerDepartment.setText(WorkingData.getInstance(mContext).getLoginWorker().departmentName);
-
-        mLogoutButton.setOnClickListener(this);
+        mMainMenuList = (RecyclerView) getView().findViewById(R.id.main_menu_list);
     }
 
     private void loadWorkerAvatar() {
@@ -95,6 +100,28 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         LoadingWorkerAvatarCommand loadingWorkerAvatarCommand
                 = new LoadingWorkerAvatarCommand(mContext, avatarUri, mWorkerAvatar);
         loadingWorkerAvatarCommand.execute();
+    }
+
+    private void setupWorkerViews() {
+        mWorkerName.setText(WorkingData.getInstance(mContext).getLoginWorker().name);
+        mWorkerDepartment.setText(WorkingData.getInstance(mContext).getLoginWorker().departmentName);
+
+        mLogoutButton.setOnClickListener(this);
+    }
+
+    private void setupMainMenuList() {
+        setMainMenuListData();
+
+        mMainMenuListLayoutManager = new LinearLayoutManager(mContext);
+        mMainMenuListAdapter = new MainMenuListAdapter(mContext, mDataSet);
+
+        mMainMenuList.setLayoutManager(mMainMenuListLayoutManager);
+        mMainMenuList.setAdapter(mMainMenuListAdapter);
+    }
+
+    private void setMainMenuListData() {
+        mDataSet.add(new MainMenuItem(mContext.getString(R.string.main_menu_my_tasks), MainMenuListAdapter.ItemViewType.ITEM, true));
+        //mDataSet.add(new MainMenuItem("", MainMenuListAdapter.ItemViewType.EMPTY, false));
     }
 
     @Override

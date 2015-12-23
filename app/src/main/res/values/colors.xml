@@ -15,8 +15,11 @@
 
     <!-- Main menu -->
     <color name="main_menu_background_color">#FF424242</color>
-    <color name="main_menu_text_color">#FF9D9D9D</color>
-    <color name="main_menu_highlight_text_color">#FFFFFFFF</color>
+    <color name="main_menu_worker_name_text_color">#FFFFFFFF</color>
+    <color name="main_menu_logout_button_text_color">#FF9D9D9D</color>
+    <color name="main_menu_item_text_color">#FF9D9D9D</color>
+    <color name="main_menu_item_selected_text_color">#FFFFFFFF</color>
+    <color name="main_menu_item_selected_background_color">#FF222222</color>
 
     <!-- Login -->
     <color name="login_activity_background_color">#FFFFFFFF</color>

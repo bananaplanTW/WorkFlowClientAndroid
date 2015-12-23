@@ -17,48 +17,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:theme="@style/AppTheme.AppBarOverlay"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-            <RelativeLayout
-                android:id="@+id/action_bar_worker_container"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="?selectableItemBackground">
-
-                <ImageView
-                    android:id="@+id/action_bar_worker"
-                    android:layout_width="@dimen/worker_icon_width_height"
-                    android:layout_height="@dimen/worker_icon_width_height"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true" />
-
-                <LinearLayout
-                    android:id="@+id/action_bar_title_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/action_bar_title_container_margin_left"
-                    android:layout_toRightOf="@+id/action_bar_worker"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/action_bar_worker_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/action_bar_title_text_color"
-                        android:textSize="@dimen/action_bar_worker_name_text_size" />
-
-                    <TextView
-                        android:id="@+id/action_bar_worker_factory_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/action_bar_title_text_color" />
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.Toolbar>
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:titleTextAppearance="@style/AppTheme.Toolbar.Title" />
 
         <!-- Main content view -->
         <FrameLayout
@@ -72,7 +32,7 @@
     <!-- Navigation drawer in left side -->
     <FrameLayout
         android:id="@+id/drawer_menu_left_side_container"
-        android:layout_width="@dimen/drawer_menu_with"
+        android:layout_width="@dimen/main_menu_width"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:clickable="true"
@@ -82,7 +42,7 @@
     <!-- Navigation drawer in right side -->
     <FrameLayout
         android:id="@+id/drawer_menu_right_side_container"
-        android:layout_width="@dimen/drawer_menu_with"
+        android:layout_width="@dimen/message_menu_width"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:clickable="true"

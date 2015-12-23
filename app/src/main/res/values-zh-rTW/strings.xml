@@ -27,6 +27,9 @@
     <string name="wip_task_card_choose_task">點取下方工作開始工作</string>
     <string name="wip_task_card_not_working_time">非上班時段</string>
 
+    <!-- Main menu -->
+    <string name="main_menu_my_tasks">我的工作</string>
+
     <!-- Login -->
     <string name="login_company_account">公司帳號</string>
     <string name="login_account">帳號</string>

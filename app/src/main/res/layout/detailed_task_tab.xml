@@ -4,5 +4,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="@drawable/detailed_task_tab_background"
-    android:textColor="@drawable/detailed_task_tab_text_color" />
+    android:background="@drawable/selector_detailed_task_tab_background"
+    android:textColor="@drawable/selector_detailed_task_tab_text_color" />

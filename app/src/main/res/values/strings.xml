@@ -41,6 +41,9 @@
     <string name="drawer_open" translatable="false">drawer_open</string>
     <string name="drawer_close" translatable="false">drawer_close</string>
 
+    <!-- Main menu -->
+    <string name="main_menu_my_tasks">My tasks</string>
+
     <!-- Login -->
     <string name="login_company_account">Company account</string>
     <string name="login_account">Account</string>

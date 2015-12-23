@@ -43,7 +43,7 @@ import com.parse.ParsePush;
  * @since 2015.05.28
  *
  */
-public class UIController implements View.OnClickListener, LoadingLoginWorkerCommand.OnLoadingLoginWorker {
+public class UIController implements View.OnClickListener {
 
     private static final String TAG = "UIController";
 
@@ -56,7 +56,6 @@ public class UIController implements View.OnClickListener, LoadingLoginWorkerCom
     private AppCompatActivity mMainActivity;
     private ActionBar mActionBar;
     private Toolbar mToolbar;
-    private View mActionBarWorkerContainer;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -66,10 +65,6 @@ public class UIController implements View.OnClickListener, LoadingLoginWorkerCom
     private MainMenuFragment mMainMenuFragment;
     private MessageMenuFragment mMessageMenuFragment;
 
-    private ImageView mActionBarWorkerAvatar;
-    private TextView mActionBarWorkerName;
-    private TextView mActionBarWorkerFactoryName;
-
     private FragmentManager mFragmentManager;
 
 
@@ -78,7 +73,6 @@ public class UIController implements View.OnClickListener, LoadingLoginWorkerCom
     }
 
     public void onRefreshInTaskList() {
-        loadingLoginWorker();
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -161,34 +155,26 @@ public class UIController implements View.OnClickListener, LoadingLoginWorkerCom
         setupActionbar();
         setupDrawer();
         setupFragments();
-        loadDataInFirstLaunch();
     }
 
     private void findViews() {
         mToolbar = (Toolbar) mMainActivity.findViewById(R.id.tool_bar);
-        mActionBarWorkerContainer = mMainActivity.findViewById(R.id.action_bar_worker_container);
         mDrawerLayout = (DrawerLayout) mMainActivity.findViewById(R.id.drawer_layout);
         mLeftDrawerView = mMainActivity.findViewById(R.id.drawer_menu_left_side_container);
         mRightDrawerView = mMainActivity.findViewById(R.id.drawer_menu_right_side_container);
-        mActionBarWorkerAvatar = (ImageView) mMainActivity.findViewById(R.id.action_bar_worker);
-        mActionBarWorkerName = (TextView) mMainActivity.findViewById(R.id.action_bar_worker_name);
-        mActionBarWorkerFactoryName = (TextView) mMainActivity.findViewById(R.id.action_bar_worker_factory_name);
     }
 
     private void setupViews() {
-        mActionBarWorkerName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().name);
-        mActionBarWorkerFactoryName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().departmentName);
-
-        mActionBarWorkerContainer.setOnClickListener(this);
     }
 
     private void setupActionbar() {
         mMainActivity.setSupportActionBar(mToolbar);
         mActionBar = mMainActivity.getSupportActionBar();
+        mActionBar.setTitle(mMainActivity.getString(R.string.main_menu_my_tasks));
 
         if (mActionBar != null) {
-            mActionBar.setDisplayHomeAsUpEnabled(false);
-            mActionBar.setDisplayShowTitleEnabled(false);
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setDisplayShowTitleEnabled(true);
         }
     }
 
@@ -256,63 +242,13 @@ public class UIController implements View.OnClickListener, LoadingLoginWorkerCom
         fragmentTransaction.commit();
     }
 
-    private void loadDataInFirstLaunch() {
-        loadWorkerAvatar();
-    }
-
-    private void loadWorkerAvatar() {
-        Drawable avatar = WorkingData.getInstance(mMainActivity).getLoginWorker().avatar;
-        String s = WorkingData.getInstance(mMainActivity).getLoginWorker().avatarUrl;
-
-        if (TextUtils.isEmpty(s)) {
-            if (avatar == null) {
-                mActionBarWorkerAvatar.setImageResource(R.drawable.ic_worker_black);
-            } else {
-                mActionBarWorkerAvatar.setImageDrawable(avatar);
-            }
-
-            return;
-        }
-
-        Uri.Builder avatarBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
-        avatarBuilder.path(s);
-        Uri avatarUri = avatarBuilder.build();
-
-        LoadingWorkerAvatarCommand loadingWorkerAvatarCommand
-                = new LoadingWorkerAvatarCommand(mMainActivity, avatarUri, mActionBarWorkerAvatar);
-        loadingWorkerAvatarCommand.execute();
-    }
-
-    private void loadingLoginWorker() {
-        LoadingLoginWorkerCommand loadingLoginWorkerCommand = new LoadingLoginWorkerCommand(mMainActivity, this);
-        loadingLoginWorkerCommand.execute();
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.action_bar_worker_container:
-                if (isLeftDrawerOpened()) break;
-                openLeftDrawer();
-
-                break;
-
             case R.id.fab:
                 Utilities.showDialog(mFragmentManager, DisplayDialogFragment.DialogType.CHECK_IN_OUT, null);
 
                 break;
         }
-    }
-
-    @Override
-    public void onLoadingLoginWorkerSuccessful() {
-        loadWorkerAvatar();
-        mActionBarWorkerName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().name);
-        mActionBarWorkerFactoryName.setText(WorkingData.getInstance(mMainActivity).getLoginWorker().departmentName);
-    }
-
-    @Override
-    public void onLoadingLoginWorkerFailed(boolean isFailCausedByInternet) {
-        Utilities.showInternetConnectionWeakToast(mMainActivity);
     }
 }
