@@ -90,18 +90,8 @@ public class UIController implements View.OnClickListener {
 
         } else {
             switch(item.getItemId()) {
-                case R.id.action_logout:
-                    ParsePush.unsubscribeInBackground("user_" + WorkingData.getUserId());
-                    //ParseUtils.removeLoginWorkerToParse();
-
-                    WorkingData.getInstance(mMainActivity).resetTasks();
-                    WorkingData.resetAccount();
-
-                    SharedPreferences sharedPreferences = mMainActivity.getSharedPreferences(WorkingData.SHARED_PREFERENCE_KEY, 0);
-                    sharedPreferences.edit().remove(WorkingData.USER_ID).remove(WorkingData.AUTH_TOKEN).commit();
-
-                    mMainActivity.startActivity(new Intent(mMainActivity, LoginActivity.class));
-                    mMainActivity.finish();
+                case R.id.action_message:
+                    openRightDrawer();
 
                     return true;
 
