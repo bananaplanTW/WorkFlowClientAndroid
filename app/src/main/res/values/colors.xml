@@ -13,13 +13,16 @@
     <color name="green_button_background_color">#FF009789</color>
     <color name="no_internet_connection_text_color">@android:color/black</color>
 
+    <!-- Drawer menu -->
+    <color name="drawer_menu_background_color">#FF424242</color>
+    <color name="drawer_menu_item_title_text_color">#FFFFFFFF</color>
+    <color name="drawer_menu_item_text_color">#FF9D9D9D</color>
+    <color name="drawer_menu_item_selected_text_color">#FFFFFFFF</color>
+    <color name="drawer_menu_item_selected_background_color">#FF6898C5</color>
+
     <!-- Main menu -->
-    <color name="main_menu_background_color">#FF424242</color>
     <color name="main_menu_worker_name_text_color">#FFFFFFFF</color>
     <color name="main_menu_logout_button_text_color">#FF9D9D9D</color>
-    <color name="main_menu_item_text_color">#FF9D9D9D</color>
-    <color name="main_menu_item_selected_text_color">#FFFFFFFF</color>
-    <color name="main_menu_item_selected_background_color">#FF222222</color>
 
     <!-- Login -->
     <color name="login_activity_background_color">#FFFFFFFF</color>

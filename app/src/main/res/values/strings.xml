@@ -46,6 +46,10 @@
     <!-- Main menu -->
     <string name="main_menu_my_tasks">My tasks</string>
 
+    <!-- Message menu -->
+    <string name="message_menu_cases">Cases</string>
+    <string name="message_menu_messages">Messages</string>
+
     <!-- Login -->
     <string name="login_company_account">Company account</string>
     <string name="login_account">Account</string>

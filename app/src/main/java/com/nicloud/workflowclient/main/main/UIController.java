@@ -92,7 +92,6 @@ public class UIController implements View.OnClickListener {
             switch(item.getItemId()) {
                 case R.id.action_message:
                     openRightDrawer();
-
                     return true;
 
                 case R.id.action_settings:

@@ -5,13 +5,20 @@
     android:paddingLeft="@dimen/drawer_menu_list_padding"
     android:paddingRight="@dimen/drawer_menu_list_padding"
     android:gravity="center_vertical"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:background="@drawable/drawer_menu_item_background">
 
+    <ImageView
+        android:id="@+id/message_menu_worker_avatar"
+        android:layout_width="@dimen/message_menu_worker_avatar_width_height"
+        android:layout_height="@dimen/message_menu_worker_avatar_width_height"
+        android:src="@drawable/selector_message_menu_worker_avatar"/>
+
     <TextView
-        android:id="@+id/main_menu_item_name"
+        android:id="@+id/message_menu_worker_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/message_menu_worker_name_margin_left"
         android:textSize="@dimen/drawer_menu_item_text_size"
         android:textColor="@drawable/selector_drawer_menu_item_text_color"/>
 

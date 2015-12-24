@@ -32,6 +32,10 @@
     <!-- Main menu -->
     <string name="main_menu_my_tasks">我的工作</string>
 
+    <!-- Message menu -->
+    <string name="message_menu_cases">案件</string>
+    <string name="message_menu_messages">訊息</string>
+
     <!-- Login -->
     <string name="login_company_account">公司帳號</string>
     <string name="login_account">帳號</string>

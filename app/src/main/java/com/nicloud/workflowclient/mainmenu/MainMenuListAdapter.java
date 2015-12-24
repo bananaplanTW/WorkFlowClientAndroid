@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public class ItemViewType {
+    public static class ItemViewType {
         public static final int ITEM = 0;
         public static final int TITLE = 1;
         public static final int EMPTY = 2;
@@ -66,10 +66,9 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        int viewType = mDataSet.get(position).viewType;
         MainMenuItem mainMenuItem = mDataSet.get(position);
 
-        switch (viewType) {
+        switch (mainMenuItem.viewType) {
             case ItemViewType.ITEM:
                 onBindMainMenuItem(holder, mainMenuItem);
 
