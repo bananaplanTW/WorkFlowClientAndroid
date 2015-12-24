@@ -20,6 +20,10 @@ import java.util.List;
  */
 public class MessageMenuFragment extends Fragment {
 
+    public interface OnClickMessageMenuItemListener {
+        void onClickMessageMenuItem(String itemId);
+    }
+
     private Context mContext;
 
     private RecyclerView mMessageMenuList;
@@ -27,11 +31,18 @@ public class MessageMenuFragment extends Fragment {
     private MessageMenuListAdapter mMessageMenuListAdapter;
     private List<MessageMenuItem> mDataSet = new ArrayList<>();
 
+    private OnClickMessageMenuItemListener mOnClickMessageMenuItemListener;
+
+
+    public void clearSelectedMessageMenuItem() {
+        mMessageMenuListAdapter.clearSelectedMessageMenuItem();
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+        mOnClickMessageMenuItemListener = (OnClickMessageMenuItemListener) context;
     }
 
     @Nullable
@@ -59,26 +70,26 @@ public class MessageMenuFragment extends Fragment {
         setMessageMenuListData();
 
         mMessageMenuListLayoutManager = new LinearLayoutManager(mContext);
-        mMessageMenuListAdapter = new MessageMenuListAdapter(mContext, mDataSet);
+        mMessageMenuListAdapter = new MessageMenuListAdapter(mContext, mDataSet, mOnClickMessageMenuItemListener);
 
         mMessageMenuList.setLayoutManager(mMessageMenuListLayoutManager);
         mMessageMenuList.setAdapter(mMessageMenuListAdapter);
     }
 
     private void setMessageMenuListData() {
-        mDataSet.add(new MessageMenuItem(mContext.getString(R.string.message_menu_cases),
+        mDataSet.add(new MessageMenuItem("", mContext.getString(R.string.message_menu_cases),
                 MessageMenuListAdapter.ItemViewType.TITLE, false));
 
-        mDataSet.add(new MessageMenuItem("iOS", MessageMenuListAdapter.ItemViewType.CASE, true));
-        mDataSet.add(new MessageMenuItem("Android", MessageMenuListAdapter.ItemViewType.CASE, false));
-        mDataSet.add(new MessageMenuItem("Marketing", MessageMenuListAdapter.ItemViewType.CASE, false));
-        mDataSet.add(new MessageMenuItem("", MessageMenuListAdapter.ItemViewType.EMPTY, false));
+        mDataSet.add(new MessageMenuItem("123", "iOS", MessageMenuListAdapter.ItemViewType.CASE, false));
+        mDataSet.add(new MessageMenuItem("456", "Android", MessageMenuListAdapter.ItemViewType.CASE, false));
+        mDataSet.add(new MessageMenuItem("789", "Marketing", MessageMenuListAdapter.ItemViewType.CASE, false));
+        mDataSet.add(new MessageMenuItem("", "", MessageMenuListAdapter.ItemViewType.EMPTY, false));
 
-        mDataSet.add(new MessageMenuItem(mContext.getString(R.string.message_menu_messages),
+        mDataSet.add(new MessageMenuItem("", mContext.getString(R.string.message_menu_messages),
                 MessageMenuListAdapter.ItemViewType.TITLE, false));
 
-        mDataSet.add(new MessageMenuItem("Paul", MessageMenuListAdapter.ItemViewType.WORKER, false));
-        mDataSet.add(new MessageMenuItem("Daz", MessageMenuListAdapter.ItemViewType.WORKER, false));
-        mDataSet.add(new MessageMenuItem("Nash", MessageMenuListAdapter.ItemViewType.WORKER, false));
+        mDataSet.add(new MessageMenuItem("wedw", "Paul", MessageMenuListAdapter.ItemViewType.WORKER, false));
+        mDataSet.add(new MessageMenuItem("2d2d", "Daz", MessageMenuListAdapter.ItemViewType.WORKER, false));
+        mDataSet.add(new MessageMenuItem("2d2d", "Nash", MessageMenuListAdapter.ItemViewType.WORKER, false));
     }
 }

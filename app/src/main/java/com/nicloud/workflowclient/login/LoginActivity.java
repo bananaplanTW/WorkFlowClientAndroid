@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.connectserver.worker.CheckLoggedInStatusCommand;
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingLoginWorkerCommand;

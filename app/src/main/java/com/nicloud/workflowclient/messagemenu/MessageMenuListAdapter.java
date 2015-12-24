@@ -2,6 +2,7 @@ package com.nicloud.workflowclient.messagemenu;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.messagemenu.MessageMenuFragment.OnClickMessageMenuItemListener;
 
 import java.util.List;
 
@@ -16,6 +18,8 @@ import java.util.List;
  * Created by logicmelody on 2015/12/23.
  */
 public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final String TAG = "MessageMenuListAdapter";
 
     public static class ItemViewType {
         public static final int EMPTY = 0;
@@ -27,6 +31,10 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private Context mContext;
 
     private List<MessageMenuItem> mDataSet;
+
+    private OnClickMessageMenuItemListener mOnClickMessageMenuItemListener;
+
+    private MessageMenuItem mCurrentSelectedItem;
 
 
     private class EmptyViewHolder extends RecyclerView.ViewHolder {
@@ -61,7 +69,7 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    onClickMessageMenuItem(mDataSet.get(getAdapterPosition()));
                 }
             });
         }
@@ -82,15 +90,41 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    onClickMessageMenuItem(mDataSet.get(getAdapterPosition()));
                 }
             });
         }
     }
 
-    public MessageMenuListAdapter(Context context, List<MessageMenuItem> dataSet) {
+    private void onClickMessageMenuItem(MessageMenuItem clickedItem) {
+        if (clickedItem.isSelected) return;
+
+        clickedItem.isSelected = true;
+        if (mCurrentSelectedItem != null) {
+            mCurrentSelectedItem.isSelected = false;
+        }
+        mCurrentSelectedItem = clickedItem;
+
+        notifyDataSetChanged();
+
+        mOnClickMessageMenuItemListener.onClickMessageMenuItem(clickedItem.id);
+
+        Log.d(TAG, "Current selected message menu item: " + mCurrentSelectedItem.name);
+    }
+
+    public void clearSelectedMessageMenuItem() {
+        if (mCurrentSelectedItem == null) return;
+
+        mCurrentSelectedItem.isSelected = false;
+        mCurrentSelectedItem = null;
+
+        notifyDataSetChanged();
+    }
+
+    public MessageMenuListAdapter(Context context, List<MessageMenuItem> dataSet, OnClickMessageMenuItemListener listener) {
         mContext = context;
         mDataSet = dataSet;
+        mOnClickMessageMenuItemListener = listener;
     }
 
     @Override
@@ -129,6 +163,10 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             case ItemViewType.WORKER:
                 onBindWorker((WorkerViewHolder) holder, messageMenuItem);
                 break;
+        }
+
+        if (messageMenuItem.isSelected) {
+            mCurrentSelectedItem = messageMenuItem;
         }
     }
 

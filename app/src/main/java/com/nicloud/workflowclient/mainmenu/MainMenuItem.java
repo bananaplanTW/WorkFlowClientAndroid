@@ -6,11 +6,13 @@ package com.nicloud.workflowclient.mainmenu;
 public class MainMenuItem {
 
     public String name;
+    public int id;
     public int viewType;
     public boolean isSelected = false;
 
 
-    public MainMenuItem(String name, int viewType, boolean isSelected) {
+    public MainMenuItem(int id, String name, int viewType, boolean isSelected) {
+        this.id = id;
         this.name = name;
         this.viewType = viewType;
         this.isSelected = isSelected;

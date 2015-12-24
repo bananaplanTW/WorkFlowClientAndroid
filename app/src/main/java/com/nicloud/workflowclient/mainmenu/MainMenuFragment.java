@@ -32,6 +32,14 @@ import java.util.List;
  */
 public class MainMenuFragment extends Fragment implements View.OnClickListener {
 
+    public interface OnClickMainMenuItemListener {
+        void onClickMainMenuItem(int itemId);
+    }
+
+    public static class MainMenuItemId {
+        public static final int MY_TASKS = 0;
+    }
+
     private Context mContext;
 
     private ImageView mWorkerAvatar;
@@ -45,11 +53,18 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
     private MainMenuListAdapter mMainMenuListAdapter;
     private List<MainMenuItem> mDataSet = new ArrayList<>();
 
+    private OnClickMainMenuItemListener mOnClickMainMenuItemListener;
+
+
+    public void clearSelectedMainMenuItem() {
+        mMainMenuListAdapter.clearSelectedMainMenuItem();
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+        mOnClickMainMenuItemListener = (OnClickMainMenuItemListener) context;
     }
 
     @Nullable
@@ -113,15 +128,15 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         setMainMenuListData();
 
         mMainMenuListLayoutManager = new LinearLayoutManager(mContext);
-        mMainMenuListAdapter = new MainMenuListAdapter(mContext, mDataSet);
+        mMainMenuListAdapter = new MainMenuListAdapter(mContext, mDataSet, mOnClickMainMenuItemListener);
 
         mMainMenuList.setLayoutManager(mMainMenuListLayoutManager);
         mMainMenuList.setAdapter(mMainMenuListAdapter);
     }
 
     private void setMainMenuListData() {
-        mDataSet.add(new MainMenuItem(mContext.getString(R.string.main_menu_my_tasks), MainMenuListAdapter.ItemViewType.ITEM, true));
-        //mDataSet.add(new MainMenuItem("", MainMenuListAdapter.ItemViewType.EMPTY, false));
+        mDataSet.add(new MainMenuItem(MainMenuItemId.MY_TASKS,
+                mContext.getString(R.string.main_menu_my_tasks), MainMenuListAdapter.ItemViewType.ITEM, true));
     }
 
     @Override

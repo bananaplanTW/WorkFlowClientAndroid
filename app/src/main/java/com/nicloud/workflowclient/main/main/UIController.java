@@ -1,11 +1,8 @@
 package com.nicloud.workflowclient.main.main;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -14,26 +11,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
-import com.nicloud.workflowclient.data.connectserver.worker.LoadingLoginWorkerCommand;
-import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatarCommand;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
-import com.nicloud.workflowclient.login.LoginActivity;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.tasklist.TaskListFragment;
 import com.nicloud.workflowclient.utility.Utilities;
-import com.parse.ParsePush;
 
 
 /**
@@ -66,6 +53,7 @@ public class UIController implements View.OnClickListener {
     private MessageMenuFragment mMessageMenuFragment;
 
     private FragmentManager mFragmentManager;
+    private Fragment mCurrentContentFragment;
 
 
     public UIController(AppCompatActivity activity) {
@@ -111,6 +99,26 @@ public class UIController implements View.OnClickListener {
     public void onConfigurationChanged(Configuration newConfig) {
         // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    public void onClickMainMenuItem(int itemId) {
+        // TODO: Exchange main content fragment
+        mMessageMenuFragment.clearSelectedMessageMenuItem();
+
+        switch (itemId) {
+            case MainMenuFragment.MainMenuItemId.MY_TASKS:
+                break;
+        }
+
+        closeLeftDrawer();
+    }
+
+    public void onClickMessageMenuItem(String itemId) {
+        // TODO: Exchange main content fragment to MessageChatFragment
+
+        mMainMenuFragment.clearSelectedMainMenuItem();
+
+        closeRightDrawer();
     }
 
     public boolean isLeftDrawerOpened() {
@@ -187,19 +195,15 @@ public class UIController implements View.OnClickListener {
 
     private void onOpenDrawer(View drawerView) {
         if (mLeftDrawerView == drawerView) {
-            Log.d("danny", "onDrawerOpened left side");
 
         } else if (mRightDrawerView == drawerView) {
-            Log.d("danny", "onDrawerOpened right side");
         }
     }
 
     private void onCloseDrawer(View drawerView) {
         if (mLeftDrawerView == drawerView) {
-            Log.d("danny", "onDrawerClosed left side");
 
         } else if (mRightDrawerView == drawerView) {
-            Log.d("danny", "onDrawerClosed right side");
         }
     }
 
@@ -220,14 +224,15 @@ public class UIController implements View.OnClickListener {
             fragmentTransaction.add(R.id.drawer_menu_right_side_container, mMessageMenuFragment, FragmentTag.MESSAGE_MENU);
         }
 
-        // Default fragment when launch app
+        // Default fragment(TaskListFragment) when we launch app
         TaskListFragment taskListFragment = (TaskListFragment) mFragmentManager.findFragmentByTag(FragmentTag.TASK_LIST);
         if (taskListFragment == null) {
             taskListFragment = new TaskListFragment();
             fragmentTransaction.add(R.id.content_container, taskListFragment, FragmentTag.TASK_LIST);
         }
 
-        //mCurrentFragment = mainInfoFragment;
+        mCurrentContentFragment = taskListFragment;
+
         fragmentTransaction.commit();
     }
 

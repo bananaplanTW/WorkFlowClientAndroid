@@ -7,9 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
+import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.tasklist.TaskListFragment;
 
-public class MainActivity extends AppCompatActivity implements TaskListFragment.OnRefreshInTaskList {
+public class MainActivity extends AppCompatActivity implements TaskListFragment.OnRefreshInTaskList,
+        MainMenuFragment.OnClickMainMenuItemListener, MessageMenuFragment.OnClickMessageMenuItemListener {
 
     private UIController mUIController;
 
@@ -60,5 +63,15 @@ public class MainActivity extends AppCompatActivity implements TaskListFragment.
     @Override
     public void onRefreshInTaskList() {
         mUIController.onRefreshInTaskList();
+    }
+
+    @Override
+    public void onClickMainMenuItem(int itemId) {
+        mUIController.onClickMainMenuItem(itemId);
+    }
+
+    @Override
+    public void onClickMessageMenuItem(String itemId) {
+        mUIController.onClickMessageMenuItem(itemId);
     }
 }

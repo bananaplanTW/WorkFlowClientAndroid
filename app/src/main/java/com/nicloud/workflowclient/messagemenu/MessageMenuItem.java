@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
  */
 public class MessageMenuItem {
 
+    public String id;
     public String name;
     public int viewType;
     public boolean isSelected = false;
@@ -15,7 +16,8 @@ public class MessageMenuItem {
     public String avatarUrl;
 
 
-    public MessageMenuItem(String name, int viewType, boolean isSelected) {
+    public MessageMenuItem(String id, String name, int viewType, boolean isSelected) {
+        this.id = id;
         this.name = name;
         this.viewType = viewType;
         this.isSelected = isSelected;
