@@ -17,8 +17,8 @@ import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.connectserver.worker.CheckLoggedInStatusCommand;
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingLoginWorkerCommand;
 import com.nicloud.workflowclient.data.connectserver.worker.UserLoggingInCommand;
-import com.nicloud.workflowclient.main.main.MainActivity;
-import com.nicloud.workflowclient.main.main.MainApplication;
+import com.nicloud.workflowclient.main.MainActivity;
+import com.nicloud.workflowclient.main.MainApplication;
 import com.parse.ParsePush;
 
 

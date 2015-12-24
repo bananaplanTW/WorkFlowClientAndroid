@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.main.main;
+package com.nicloud.workflowclient.main;
 
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;

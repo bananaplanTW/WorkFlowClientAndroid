@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.main.main;
+package com.nicloud.workflowclient.main;
 
 import android.app.Application;
 import android.view.animation.Animation;

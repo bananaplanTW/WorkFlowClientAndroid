@@ -61,9 +61,6 @@ public class DisplayDialogFragment extends DialogFragment {
             case DialogType.CHOOSE_TASK:
                 return new ChooseTaskDialog(getActivity(), getArguments().getString(EXTRA_TASK_ID), mOnDialogActionListener);
 
-            case DialogType.CHECK_IN_OUT:
-                return new CheckInOutDialog(getActivity(), mOnDialogActionListener);
-
             default:
                 return new CompleteTaskDialog(getActivity(), getArguments().getString(EXTRA_TASK_ID), mOnDialogActionListener);
         }

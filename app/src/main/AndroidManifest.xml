@@ -22,16 +22,12 @@
 
 
     <application
-        android:name=".main.main.MainApplication"
+        android:name=".main.MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_nicloud"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".login.LoginActivity"
@@ -44,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.main.MainActivity"
+            android:name=".main.MainActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask" />
         <activity
@@ -59,10 +55,6 @@
         <activity
             android:name=".detailedtask.tasklog.DisplayImageActivity"
             android:screenOrientation="portrait" />
-
-        <service
-            android:name=".googlelocation.FetchAddressIntentService"
-            android:exported="false" />
 
         <service android:name=".serveraction.ActionService"
             android:exported="false"/>

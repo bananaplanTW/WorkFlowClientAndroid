@@ -48,12 +48,6 @@
             android:hint="@string/add_log_edit_content_hint"
             android:background="@android:color/transparent"/>
 
-        <include layout="@layout/location_view"
-            android:id="@+id/add_log_location_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
-
     </RelativeLayout>
 
     <include layout="@layout/horizontal_divider" />
