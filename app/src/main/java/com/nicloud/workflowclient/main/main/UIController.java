@@ -18,6 +18,7 @@ import android.view.View;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
+import com.nicloud.workflowclient.messagechat.MessageChatFragment;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.tasklist.TaskListFragment;
 import com.nicloud.workflowclient.utility.Utilities;
@@ -38,6 +39,7 @@ public class UIController implements View.OnClickListener {
         public static final String TASK_LIST = "tag_fragment_task_list";
         public static final String MAIN_MENU = "tag_fragment_main_menu";
         public static final String MESSAGE_MENU = "tag_fragment_message_menu";
+        public static final String MESSAGE_CHAT = "tag_fragment_message_chat";
     }
 
     private AppCompatActivity mMainActivity;
@@ -102,11 +104,14 @@ public class UIController implements View.OnClickListener {
     }
 
     public void onClickMainMenuItem(int itemId) {
-        // TODO: Exchange main content fragment
         mMessageMenuFragment.clearSelectedMessageMenuItem();
 
         switch (itemId) {
             case MainMenuFragment.MainMenuItemId.MY_TASKS:
+                if (mCurrentContentFragment instanceof TaskListFragment) break;
+                replaceTo(TaskListFragment.class, FragmentTag.TASK_LIST);
+                mActionBar.setTitle(mMainActivity.getString(R.string.main_menu_my_tasks));
+
                 break;
         }
 
@@ -114,9 +119,12 @@ public class UIController implements View.OnClickListener {
     }
 
     public void onClickMessageMenuItem(String itemId) {
-        // TODO: Exchange main content fragment to MessageChatFragment
-
         mMainMenuFragment.clearSelectedMainMenuItem();
+
+        if (!(mCurrentContentFragment instanceof MessageChatFragment)) {
+            replaceTo(MessageChatFragment.class, FragmentTag.MESSAGE_CHAT);
+        }
+        mActionBar.setTitle(itemId);
 
         closeRightDrawer();
     }
@@ -232,7 +240,25 @@ public class UIController implements View.OnClickListener {
         }
 
         mCurrentContentFragment = taskListFragment;
+        fragmentTransaction.commit();
+    }
 
+    private void replaceTo(Class<?> fragmentClass, String fragmentTag) {
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+
+        Fragment fragment = mFragmentManager.findFragmentByTag(fragmentTag);
+        if (fragment == null) {
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+                fragmentTransaction.replace(R.id.content_container, fragment, fragmentTag);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        mCurrentContentFragment = fragment;
         fragmentTransaction.commit();
     }
 
