@@ -36,6 +36,8 @@ public final class WorkingData implements DataSubject {
     private Task mWipTask;
     private List<Task> mScheduledTasks = new ArrayList<>();
 
+    private boolean mHasLoadedTasks = false;
+
 
     public static WorkingData getInstance(Context context) {
         if (sWorkingData == null) {
@@ -57,52 +59,58 @@ public final class WorkingData implements DataSubject {
         sUserId = "";
         sAuthToken = "";
     }
+
     public static void setUserId(String userId) {
         sUserId = userId;
     }
+
     public static void setAuthToken(String authToken) {
         sAuthToken = authToken;
     }
+
     public static String getUserId () {
         return sUserId;
     }
+
     public static String getAuthToken() {
         return sAuthToken;
     }
 
-
     public void setLoginWorker(Worker worker) {
         mLoginWorker = worker;
     }
+
     public Worker getLoginWorker() {
         return mLoginWorker;
     }
 
-
     public void setWipTask(Task task) {
         mWipTask = task;
     }
+
     public Task getWipTask() {
         return mWipTask;
     }
 
-
     public void addScheduledTask(Task task) {
         mScheduledTasks.add(task);
     }
+
     public void addAllScheduledTasks(List<Task> scheduledTasks) {
         mScheduledTasks.addAll(scheduledTasks);
     }
+
     public void clearScheduledTasks() {
         mScheduledTasks.clear();
     }
+
     public void removeScheduledTask(int position) {
         mScheduledTasks.remove(position);
     }
+
     public List<Task> getScheduledTasks() {
         return mScheduledTasks;
     }
-
 
     public Task getTask(String taskId) {
         if (mWipTask != null && Utilities.isSameId(mWipTask.id, taskId)) {
@@ -135,6 +143,14 @@ public final class WorkingData implements DataSubject {
                 return;
             }
         }
+    }
+
+    public boolean hasLoadedTasks() {
+        return mHasLoadedTasks;
+    }
+
+    public void setHasLoadedTasks(boolean hasLoadedTasks) {
+        mHasLoadedTasks = hasLoadedTasks;
     }
 
 

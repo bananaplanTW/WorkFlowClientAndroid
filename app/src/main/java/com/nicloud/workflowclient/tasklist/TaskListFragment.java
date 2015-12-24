@@ -48,16 +48,15 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private boolean mFirstLaunch = true;
-
     private OnRefreshInTaskList mOnRefreshInTaskList;
 
     private LoadingWorkerTasks.OnFinishLoadingDataListener mOnFinishLoadingDataListener = new LoadingWorkerTasks.OnFinishLoadingDataListener() {
         @Override
         public void onFinishLoadingData() {
-            if (mFirstLaunch) {
+            if (!WorkingData.getInstance(mContext).hasLoadedTasks()) {
                 forceHideRefreshSpinner();
-                mFirstLaunch = false;
+                WorkingData.getInstance(mContext).setHasLoadedTasks(true);
+
             } else {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -115,7 +114,12 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
         setupViews();
         setupTasksList();
         setupSwipeRefresh();
-        loadDataInFirstLaunch();
+
+        if (!WorkingData.getInstance(mContext).hasLoadedTasks()) {
+            loadDataInFirstLaunch();
+        } else {
+            setScheduledTasksData();
+        }
     }
 
     private void findViews() {
@@ -227,7 +231,6 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
     @Override
     public void updateData() {
         setScheduledTasksData();
-        mTasksListAdapter.notifyDataSetChanged();
     }
 
     private void setScheduledTasksData() {
@@ -242,6 +245,8 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
         for (Task scheduledTask : WorkingData.getInstance(mContext).getScheduledTasks()) {
             mTasksDataSet.add(new TasksListItem(scheduledTask, TasksListAdapter.ItemViewType.SCHEDULED_TASK));
         }
+
+        mTasksListAdapter.notifyDataSetChanged();
     }
 
     @Override
