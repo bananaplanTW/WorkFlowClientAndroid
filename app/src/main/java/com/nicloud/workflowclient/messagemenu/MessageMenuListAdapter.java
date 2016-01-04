@@ -24,8 +24,7 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static class ItemViewType {
         public static final int EMPTY = 0;
         public static final int TITLE = 1;
-        public static final int CASE = 2;
-        public static final int WORKER = 3;
+        public static final int WORKER = 2;
     }
 
     private Context mContext;
@@ -51,27 +50,7 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         public TitleViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.message_menu_title);
-        }
-    }
-
-    private class CaseViewHolder extends RecyclerView.ViewHolder {
-
-        public View view;
-        public TextView caseName;
-
-
-        public CaseViewHolder(View itemView) {
-            super(itemView);
-            view = itemView;
-            caseName = (TextView) itemView.findViewById(R.id.message_menu_case);
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickMessageMenuItem(mDataSet.get(getAdapterPosition()));
-                }
-            });
+            title = (TextView) itemView.findViewById(R.id.menu_title);
         }
     }
 
@@ -107,7 +86,7 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         notifyDataSetChanged();
 
-        mOnClickMessageMenuItemListener.onClickMessageMenuItem(clickedItem.id);
+        mOnClickMessageMenuItemListener.onClickMessageMenuItem(clickedItem.id, clickedItem.name);
 
         Log.d(TAG, "Current selected message menu item: " + mCurrentSelectedItem.name);
     }
@@ -131,13 +110,10 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case ItemViewType.EMPTY:
-                return new EmptyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.message_menu_empty, parent, false));
+                return new EmptyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.menu_empty, parent, false));
 
             case ItemViewType.TITLE:
-                return new TitleViewHolder(LayoutInflater.from(mContext).inflate(R.layout.message_menu_title, parent, false));
-
-            case ItemViewType.CASE:
-                return new CaseViewHolder(LayoutInflater.from(mContext).inflate(R.layout.message_menu_case, parent, false));
+                return new TitleViewHolder(LayoutInflater.from(mContext).inflate(R.layout.menu_title, parent, false));
 
             case ItemViewType.WORKER:
                 return new WorkerViewHolder(LayoutInflater.from(mContext).inflate(R.layout.message_menu_worker, parent, false));
@@ -156,10 +132,6 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 onBindTitle((TitleViewHolder) holder, messageMenuItem);
                 break;
 
-            case ItemViewType.CASE:
-                onBindCase((CaseViewHolder) holder, messageMenuItem);
-                break;
-
             case ItemViewType.WORKER:
                 onBindWorker((WorkerViewHolder) holder, messageMenuItem);
                 break;
@@ -172,11 +144,6 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     private void onBindTitle(TitleViewHolder holder, MessageMenuItem messageMenuItem) {
         holder.title.setText(messageMenuItem.name);
-    }
-
-    private void onBindCase(CaseViewHolder holder, MessageMenuItem messageMenuItem) {
-        holder.caseName.setText(messageMenuItem.name);
-        holder.view.setSelected(messageMenuItem.isSelected);
     }
 
     private void onBindWorker(WorkerViewHolder holder, MessageMenuItem messageMenuItem) {

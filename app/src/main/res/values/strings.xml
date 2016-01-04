@@ -47,7 +47,7 @@
     <string name="main_menu_my_tasks">My tasks</string>
 
     <!-- Message menu -->
-    <string name="message_menu_cases">Cases</string>
+    <string name="main_menu_cases">Cases</string>
     <string name="message_menu_messages">Messages</string>
 
     <!-- Login -->

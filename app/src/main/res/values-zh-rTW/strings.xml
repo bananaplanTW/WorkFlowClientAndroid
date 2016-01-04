@@ -33,7 +33,7 @@
     <string name="main_menu_my_tasks">我的工作</string>
 
     <!-- Message menu -->
-    <string name="message_menu_cases">案件</string>
+    <string name="main_menu_cases">案件</string>
     <string name="message_menu_messages">訊息</string>
 
     <!-- Login -->

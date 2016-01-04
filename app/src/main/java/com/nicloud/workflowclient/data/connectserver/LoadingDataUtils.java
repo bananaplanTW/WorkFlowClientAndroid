@@ -3,6 +3,7 @@ package com.nicloud.workflowclient.data.connectserver;
 import android.content.Context;
 import android.util.Log;
 
+import com.nicloud.workflowclient.data.data.data.Case;
 import com.nicloud.workflowclient.data.data.data.CheckItem;
 import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.Worker;
@@ -93,31 +94,30 @@ public class LoadingDataUtils {
         }
     }
 
-//    /**
-//     * Load all cases data from server, not include tasks data.
-//     * We only load task id of each task in the case.
-//     *
-//     * @param context
-//     */
-//    public static void loadCases(Context context) {
-//        try {
-//            HashMap<String, String> headers = new HashMap<>();
-//            headers.put("x-user-id", WorkingData.getUserId());
-//            headers.put("x-auth-token", WorkingData.getAuthToken());
-//
-//            String caseJsonListString = RestfulUtils.restfulGetRequest(WorkingDataUrl.CASES, headers);
-//            JSONArray caseJsonList = new JSONObject(caseJsonListString).getJSONArray("result");
-//
-//            for (int i = 0; i < caseJsonList.length(); i++) {
-//                JSONObject caseJson = caseJsonList.getJSONObject(i);
-//                addCaseToWorkingData(context, caseJson);
-//            }
-//
-//        } catch (JSONException e) {
-//            Log.e(TAG, "Exception in loadCases()");
-//            e.printStackTrace();
-//        }
-//    }
+    /**
+     * Load all cases data from server.
+     *
+     * @param context
+     */
+    public static void loadCases(Context context) {
+        try {
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("x-user-id", WorkingData.getUserId());
+            headers.put("x-auth-token", WorkingData.getAuthToken());
+
+            String caseJsonListString = RestfulUtils.restfulGetRequest(WorkingDataUrl.CASES, headers);
+            JSONArray caseJsonList = new JSONObject(caseJsonListString).getJSONArray("result");
+
+            for (int i = 0; i < caseJsonList.length(); i++) {
+                JSONObject caseJson = caseJsonList.getJSONObject(i);
+                addCaseToWorkingData(context, caseJson);
+            }
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Exception in loadCases()");
+            e.printStackTrace();
+        }
+    }
 //    /**
 //     * Load all factories data from server, not include workers data.
 //     * We only load worker id of each worker in the factory.
@@ -522,27 +522,28 @@ public class LoadingDataUtils {
 //    }
 //
 //
-//    private static void addCaseToWorkingData(Context context, JSONObject caseJson) {
-//        try {
-//            String caseId = caseJson.getString("_id");
-//            long lastUpdatedTime = caseJson.getLong("updatedAt");
-//            boolean hasCase = WorkingData.getInstance(context).hasCase(caseId);
-//
-//            if (hasCase &&
-//                    WorkingData.getInstance(context).getCaseById(caseId).lastUpdatedTime >= lastUpdatedTime) {
-//                return;
-//            }
-//
-//            if (hasCase) {
-//                WorkingData.getInstance(context).updateCase(caseId, retrieveCaseFromJson(context, caseJson));
-//            } else {
-//                WorkingData.getInstance(context).addCase(retrieveCaseFromJson(context, caseJson));
-//            }
-//        } catch (JSONException e) {
-//            Log.e(TAG, "Exception in addCaseToWorkingData()");
-//            e.printStackTrace();
-//        }
-//    }
+    private static void addCaseToWorkingData(Context context, JSONObject caseJson) {
+        try {
+            String caseId = caseJson.getString("_id");
+            long lastUpdatedTime = caseJson.getLong("updatedAt");
+            boolean hasCase = WorkingData.getInstance(context).hasCase(caseId);
+
+            if (hasCase &&
+                    WorkingData.getInstance(context).getCaseById(caseId).lastUpdatedTime >= lastUpdatedTime) {
+                return;
+            }
+
+            if (hasCase) {
+                WorkingData.getInstance(context).updateCase(caseId, retrieveCaseFromJson(caseJson));
+            } else {
+                WorkingData.getInstance(context).addCase(retrieveCaseFromJson(caseJson));
+            }
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Exception in addCaseToWorkingData()");
+            e.printStackTrace();
+        }
+    }
 //    private static void addWipTaskToWorkingData(Context context, JSONObject wipTaskJson) {
 //        try {
 //            String taskId = wipTaskJson.getString("_id");
@@ -755,119 +756,26 @@ public class LoadingDataUtils {
 //    }
 //
 //
-//    private static Case retrieveCaseFromJson(Context context, JSONObject caseJson) {
-//        try {
-//            JSONObject caseIndustrialForm = caseJson.getJSONObject("industrialForm");
-//            JSONObject caseVendor = caseJson.getJSONObject("client");
-//            JSONObject caseManager = caseJson.getJSONObject("lead");
-//            JSONArray caseMovableMoldSize = caseIndustrialForm.getJSONArray("movableMoldSize");
-//            JSONArray caseFixedMoldSize = caseIndustrialForm.getJSONArray("fixedMoldSize");
-//            JSONArray caseSupportBlockMoldSize = caseIndustrialForm.getJSONArray("supportBlockMoldSize");
-//            JSONArray caseTagListJson = caseJson.getJSONArray("tags");
-//            JSONArray caseWorkerIds = caseJson.getJSONArray("employeeIdList");
-//
-//            String id = caseJson.getString("_id");
-//            String name = caseJson.getString("name");
-//            String description = getStringFromJson(caseJson, "details");
-//            double cost = caseJson.getDouble("cost");
-//
-//            addVendorToWorkingData(context, caseVendor);
-//            String vendorId = caseVendor.getString("_id");
-//
-//            addManagerToWorkingData(context, caseManager);
-//            String managerId = caseManager.getString("_id");
-//
-//            int plateCount = caseIndustrialForm.getInt("plateCount");
-//            int supportBlockCount = caseIndustrialForm.getInt("supportBlockCount");
-//            long lastUpdatedTime = caseJson.getLong("updatedAt");
-//
-//            double[] movableMoldSize = {
-//                    caseMovableMoldSize.getDouble(0),
-//                    caseMovableMoldSize.getDouble(1),
-//                    caseMovableMoldSize.getDouble(2),
-//                    caseIndustrialForm.getDouble("movableMoldWeight")
-//            };
-//            double[] fixedMoldSize = {
-//                    caseFixedMoldSize.getDouble(0),
-//                    caseFixedMoldSize.getDouble(1),
-//                    caseFixedMoldSize.getDouble(2),
-//                    caseIndustrialForm.getDouble("fixedMoldWeight")
-//            };
-//            double[] supportBlockMoldSize = {
-//                    caseSupportBlockMoldSize.getDouble(0),
-//                    caseSupportBlockMoldSize.getDouble(1),
-//                    caseSupportBlockMoldSize.getDouble(2),
-//                    caseIndustrialForm.getDouble("supportBlockMoldWeight")
-//            };
-//
-//            Date deliveredDate = getDateFromJson(caseJson, "willDeliverAt");
-//            Date materialPurchasedDate = getDateFromJson(caseIndustrialForm, "materialPurchasedAt");
-//            Date layoutDeliveredDate = getDateFromJson(caseIndustrialForm, "layoutDeliveredAt");
-//
-//            List<Tag> tags = new ArrayList<>();
-//            for (int j = 0 ; j < caseTagListJson.length() ; j++) {
-//                JSONObject caseTag = caseTagListJson.getJSONObject(j);
-//                String tagId = caseTag.getString("_id");
-//
-//                addTagToWorkingData(context, caseTag);
-//                tags.add(WorkingData.getInstance(context).getTagById(tagId));
-//            }
-//
-//            // TODO: employeeIdList is empty
-//            List<String> workerIds = new ArrayList<>();
-//            for (int w = 0 ; w < caseWorkerIds.length() ; w++) {
-//                workerIds.add(caseWorkerIds.getString(w));
-//            }
-//
-////            Log.d(TAG, "Case id = " + id);
-////            Log.d(TAG, "Case name = " + name);
-////            Log.d(TAG, "Case description = " + description);
-////            Log.d(TAG, "Case vendorId = " + vendorId);
-////            Log.d(TAG, "Case managerId = " + managerId);
-////            Log.d(TAG, "Case deliveredDate = " + deliveredDate.getTime());
-////            Log.d(TAG, "Case materialPurchasedDate = " + materialPurchasedDate.getTime());
-////            Log.d(TAG, "Case layoutDeliveredDate = " + layoutDeliveredDate.getTime());
-////            Log.d(TAG, "Case movableMoldSize = " + description);
-////            Log.d(TAG, "Case movableMoldSize = "
-////                    + movableMoldSize[0] + " " + movableMoldSize[1] + " " + movableMoldSize[2] + " " + movableMoldSize[3]);
-////            Log.d(TAG, "Case fixedMoldSize = "
-////                    + fixedMoldSize[0] + " " + fixedMoldSize[1] + " " + fixedMoldSize[2] + " " + fixedMoldSize[3]);
-////            Log.d(TAG, "Case supportBlockMoldSize = "
-////                    + supportBlockMoldSize[0] + " " + supportBlockMoldSize[1] + " "
-////                    + supportBlockMoldSize[2] + " " + supportBlockMoldSize[3]);
-////            Log.d(TAG, "Case plateCount = " + plateCount);
-////            Log.d(TAG, "Case supportBlockCount = " + supportBlockCount);
-////            Log.d(TAG, "Case tags = " + tags);
-////            Log.d(TAG, "Case involvedWorkerIds = " + involvedWorkerIds);
-////            Log.d(TAG, "Case lastUpdatedTime = " + lastUpdatedTime);
-//
-//
-//            return new Case(
-//                    id,
-//                    name,
-//                    description,
-//                    vendorId,
-//                    managerId,
-//                    cost,
-//                    deliveredDate,
-//                    materialPurchasedDate,
-//                    layoutDeliveredDate,
-//                    new Case.Size(movableMoldSize),
-//                    new Case.Size(fixedMoldSize),
-//                    new Case.Size(supportBlockMoldSize),
-//                    plateCount,
-//                    supportBlockCount,
-//                    tags,
-//                    workerIds,
-//                    lastUpdatedTime);
-//
-//        } catch (JSONException e) {
-//            Log.e(TAG, "Exception in retrieveCaseFromJson()");
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
+    private static Case retrieveCaseFromJson(JSONObject caseJson) {
+        try {
+            String id = caseJson.getString("_id");
+            String name = caseJson.getString("name");
+            boolean isCompleted = caseJson.getBoolean("completed");
+            long updatedAt = caseJson.getLong("updatedAt");
+
+            return new Case(
+                    id,
+                    name,
+                    isCompleted,
+                    updatedAt);
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Exception in retrieveCaseFromJson()");
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 //    private static Factory retrieveFactoryFromJson(Context context, JSONObject factoryJson) {
 //        try {
 //            JSONArray managerJsonList = factoryJson.getJSONArray("managerList");

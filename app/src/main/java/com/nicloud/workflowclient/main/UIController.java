@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.cases.CaseFragment;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.messagechat.MessageChatFragment;
@@ -37,6 +38,7 @@ public class UIController implements View.OnClickListener {
 
     private class FragmentTag {
         public static final String TASK_LIST = "tag_fragment_task_list";
+        public static final String CASE = "tag_fragment_case";
         public static final String MAIN_MENU = "tag_fragment_main_menu";
         public static final String MESSAGE_MENU = "tag_fragment_message_menu";
         public static final String MESSAGE_CHAT = "tag_fragment_message_chat";
@@ -103,28 +105,34 @@ public class UIController implements View.OnClickListener {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    public void onClickMainMenuItem(int itemId) {
+    public void onClickMainMenuItem(int itemId, String title) {
         mMessageMenuFragment.clearSelectedMessageMenuItem();
 
         switch (itemId) {
             case MainMenuFragment.MainMenuItemId.MY_TASKS:
                 if (mCurrentContentFragment instanceof TaskListFragment) break;
                 replaceTo(TaskListFragment.class, FragmentTag.TASK_LIST);
-                mActionBar.setTitle(mMainActivity.getString(R.string.main_menu_my_tasks));
+
+                break;
+
+            case MainMenuFragment.MainMenuItemId.CASE:
+                if (mCurrentContentFragment instanceof CaseFragment) break;
+                replaceTo(CaseFragment.class, FragmentTag.CASE);
 
                 break;
         }
 
+        mActionBar.setTitle(title);
         closeLeftDrawer();
     }
 
-    public void onClickMessageMenuItem(String itemId) {
+    public void onClickMessageMenuItem(String itemId, String title) {
         mMainMenuFragment.clearSelectedMainMenuItem();
 
         if (!(mCurrentContentFragment instanceof MessageChatFragment)) {
             replaceTo(MessageChatFragment.class, FragmentTag.MESSAGE_CHAT);
         }
-        mActionBar.setTitle(itemId);
+        mActionBar.setTitle(title);
 
         closeRightDrawer();
     }

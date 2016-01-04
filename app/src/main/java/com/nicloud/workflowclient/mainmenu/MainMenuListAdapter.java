@@ -24,6 +24,7 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public static final int ITEM = 0;
         public static final int TITLE = 1;
         public static final int EMPTY = 2;
+        public static final int CASE = 3;
     }
 
     private Context mContext;
@@ -55,26 +56,64 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    private void onClickMainMenuItem(MainMenuItem clickedItem) {
-        if (clickedItem.isSelected) return;
+    private class TitleViewHolder extends RecyclerView.ViewHolder {
 
-        clickedItem.isSelected = true;
+        public TextView title;
+
+
+        public TitleViewHolder(View itemView) {
+            super(itemView);
+            title = (TextView) itemView.findViewById(R.id.menu_title);
+        }
+    }
+
+    private class EmptyViewHolder extends RecyclerView.ViewHolder {
+
+        public EmptyViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    private class CaseViewHolder extends RecyclerView.ViewHolder {
+
+        public View view;
+        public TextView caseName;
+
+
+        public CaseViewHolder(View itemView) {
+            super(itemView);
+            view = itemView;
+            caseName = (TextView) itemView.findViewById(R.id.main_menu_case);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickMainMenuItem(mDataSet.get(getAdapterPosition()));
+                }
+            });
+        }
+    }
+
+    private void onClickMainMenuItem(MainMenuItem clickedItem) {
+        if (clickedItem.mIsSelected) return;
+
+        clickedItem.mIsSelected = true;
         if (mCurrentSelectedItem != null) {
-            mCurrentSelectedItem.isSelected = false;
+            mCurrentSelectedItem.mIsSelected = false;
         }
         mCurrentSelectedItem = clickedItem;
 
         notifyDataSetChanged();
 
-        mOnClickMainMenuItemListener.onClickMainMenuItem(mCurrentSelectedItem.id);
+        mOnClickMainMenuItemListener.onClickMainMenuItem(mCurrentSelectedItem.mId, mCurrentSelectedItem.mName);
 
-        Log.d(TAG, "Current selected main menu item: " + mCurrentSelectedItem.name);
+        Log.d(TAG, "Current selected main menu item: " + mCurrentSelectedItem.mName);
     }
 
     public void clearSelectedMainMenuItem() {
         if (mCurrentSelectedItem == null) return;
 
-        mCurrentSelectedItem.isSelected = false;
+        mCurrentSelectedItem.mIsSelected = false;
         mCurrentSelectedItem = null;
 
         notifyDataSetChanged();
@@ -92,6 +131,15 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case ItemViewType.ITEM:
                 return new ItemViewHolder(LayoutInflater.from(mContext).inflate(R.layout.main_menu_item, parent, false));
 
+            case ItemViewType.EMPTY:
+                return new EmptyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.menu_empty, parent, false));
+
+            case ItemViewType.TITLE:
+                return new TitleViewHolder(LayoutInflater.from(mContext).inflate(R.layout.menu_title, parent, false));
+
+            case ItemViewType.CASE:
+                return new CaseViewHolder(LayoutInflater.from(mContext).inflate(R.layout.main_menu_case, parent, false));
+
             default:
                 return null;
         }
@@ -101,21 +149,45 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         MainMenuItem mainMenuItem = mDataSet.get(position);
 
-        switch (mainMenuItem.viewType) {
+        switch (mainMenuItem.mViewType) {
             case ItemViewType.ITEM:
-                onBindMainMenuItem(holder, mainMenuItem);
+                onBindItem(holder, mainMenuItem);
+                break;
 
+            case ItemViewType.TITLE:
+                onBindTitle(holder, mainMenuItem);
+                break;
+
+            case ItemViewType.CASE:
+                onBindCase(holder, mainMenuItem);
                 break;
         }
     }
 
-    private void onBindMainMenuItem(RecyclerView.ViewHolder holder, MainMenuItem mainMenuItem) {
+    private void onBindItem(RecyclerView.ViewHolder holder, MainMenuItem mainMenuItem) {
         ItemViewHolder itemVH = (ItemViewHolder) holder;
 
-        itemVH.name.setText(mainMenuItem.name);
-        itemVH.view.setSelected(mainMenuItem.isSelected);
+        itemVH.name.setText(mainMenuItem.mName);
+        itemVH.view.setSelected(mainMenuItem.mIsSelected);
 
-        if (mainMenuItem.isSelected) {
+        if (mainMenuItem.mIsSelected) {
+            mCurrentSelectedItem = mainMenuItem;
+        }
+    }
+
+    private void onBindTitle(RecyclerView.ViewHolder holder, MainMenuItem mainMenuItem) {
+        TitleViewHolder itemVH = (TitleViewHolder) holder;
+
+        itemVH.title.setText(mainMenuItem.mName);
+    }
+
+    private void onBindCase(RecyclerView.ViewHolder holder, MainMenuItem mainMenuItem) {
+        CaseViewHolder itemVH = (CaseViewHolder) holder;
+
+        itemVH.caseName.setText(mainMenuItem.mName);
+        itemVH.view.setSelected(mainMenuItem.mIsSelected);
+
+        if (mainMenuItem.mIsSelected) {
             mCurrentSelectedItem = mainMenuItem;
         }
     }
@@ -127,6 +199,6 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        return mDataSet.get(position).viewType;
+        return mDataSet.get(position).mViewType;
     }
 }

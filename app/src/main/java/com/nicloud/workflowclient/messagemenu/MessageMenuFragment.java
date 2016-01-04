@@ -21,7 +21,7 @@ import java.util.List;
 public class MessageMenuFragment extends Fragment {
 
     public interface OnClickMessageMenuItemListener {
-        void onClickMessageMenuItem(String itemId);
+        void onClickMessageMenuItem(String itemId, String title);
     }
 
     private Context mContext;
@@ -60,6 +60,11 @@ public class MessageMenuFragment extends Fragment {
     private void initialize() {
         findViews();
         setupMessageMenuList();
+        loadWorkers();
+    }
+
+    private void loadWorkers() {
+
     }
 
     private void findViews() {
@@ -77,14 +82,6 @@ public class MessageMenuFragment extends Fragment {
     }
 
     private void setMessageMenuListData() {
-        mDataSet.add(new MessageMenuItem("", mContext.getString(R.string.message_menu_cases),
-                MessageMenuListAdapter.ItemViewType.TITLE, false));
-
-        mDataSet.add(new MessageMenuItem("123", "iOS", MessageMenuListAdapter.ItemViewType.CASE, false));
-        mDataSet.add(new MessageMenuItem("456", "Android", MessageMenuListAdapter.ItemViewType.CASE, false));
-        mDataSet.add(new MessageMenuItem("789", "Marketing", MessageMenuListAdapter.ItemViewType.CASE, false));
-        mDataSet.add(new MessageMenuItem("", "", MessageMenuListAdapter.ItemViewType.EMPTY, false));
-
         mDataSet.add(new MessageMenuItem("", mContext.getString(R.string.message_menu_messages),
                 MessageMenuListAdapter.ItemViewType.TITLE, false));
 

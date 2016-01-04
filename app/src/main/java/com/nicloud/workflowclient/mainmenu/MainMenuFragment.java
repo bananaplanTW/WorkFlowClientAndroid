@@ -19,9 +19,12 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
+import com.nicloud.workflowclient.data.connectserver.cases.LoadingCases;
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatarCommand;
+import com.nicloud.workflowclient.data.data.data.Case;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.login.LoginActivity;
+import com.nicloud.workflowclient.utility.Utilities;
 import com.parse.ParsePush;
 
 import java.util.ArrayList;
@@ -30,14 +33,16 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/12/21.
  */
-public class MainMenuFragment extends Fragment implements View.OnClickListener {
+public class MainMenuFragment extends Fragment implements View.OnClickListener,
+        LoadingCases.OnFinishLoadingCasesListener {
 
     public interface OnClickMainMenuItemListener {
-        void onClickMainMenuItem(int itemId);
+        void onClickMainMenuItem(int itemId, String title);
     }
 
     public static class MainMenuItemId {
         public static final int MY_TASKS = 0;
+        public static final int CASE = 1;
     }
 
     private Context mContext;
@@ -84,6 +89,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         loadWorkerAvatar();
         setupWorkerViews();
         setupMainMenuList();
+        loadCases();
     }
 
     private void findViews() {
@@ -125,8 +131,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setupMainMenuList() {
-        setMainMenuListData();
-
         mMainMenuListLayoutManager = new LinearLayoutManager(mContext);
         mMainMenuListAdapter = new MainMenuListAdapter(mContext, mDataSet, mOnClickMainMenuItemListener);
 
@@ -134,9 +138,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
         mMainMenuList.setAdapter(mMainMenuListAdapter);
     }
 
-    private void setMainMenuListData() {
-        mDataSet.add(new MainMenuItem(MainMenuItemId.MY_TASKS,
-                mContext.getString(R.string.main_menu_my_tasks), MainMenuListAdapter.ItemViewType.ITEM, true));
+    private void loadCases() {
+        new LoadingCases(mContext, this).execute();
     }
 
     @Override
@@ -157,5 +160,36 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
 
                 break;
         }
+    }
+
+    @Override
+    public void onFinishLoadingCases() {
+        setMainMenuListData();
+    }
+
+    private void setMainMenuListData() {
+        mDataSet.clear();
+
+        mDataSet.add(new MainMenuItem(MainMenuItemId.MY_TASKS,
+                mContext.getString(R.string.main_menu_my_tasks),
+                null, MainMenuListAdapter.ItemViewType.ITEM, true));
+
+        mDataSet.add(new MainMenuItem(-1, "", null, MainMenuListAdapter.ItemViewType.EMPTY, false));
+
+        mDataSet.add(new MainMenuItem(-1,
+                mContext.getString(R.string.main_menu_cases),
+                null, MainMenuListAdapter.ItemViewType.TITLE, false));
+
+        for (Case aCase : WorkingData.getInstance(mContext).getCases()) {
+            mDataSet.add(new MainMenuItem(MainMenuItemId.CASE, aCase.name, aCase,
+                    MainMenuListAdapter.ItemViewType.CASE, false));
+        }
+
+        mMainMenuListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFailLoadingCases(boolean isFailCausedByInternet) {
+        Utilities.showInternetConnectionWeakToast(mContext);
     }
 }

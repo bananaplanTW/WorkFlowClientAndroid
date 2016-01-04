@@ -66,12 +66,12 @@ public class MainActivity extends AppCompatActivity implements TaskListFragment.
     }
 
     @Override
-    public void onClickMainMenuItem(int itemId) {
-        mUIController.onClickMainMenuItem(itemId);
+    public void onClickMainMenuItem(int itemId, String title) {
+        mUIController.onClickMainMenuItem(itemId, title);
     }
 
     @Override
-    public void onClickMessageMenuItem(String itemId) {
-        mUIController.onClickMessageMenuItem(itemId);
+    public void onClickMessageMenuItem(String itemId, String title) {
+        mUIController.onClickMessageMenuItem(itemId, title);
     }
 }

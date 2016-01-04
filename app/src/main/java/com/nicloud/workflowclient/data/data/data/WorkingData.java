@@ -26,6 +26,7 @@ public final class WorkingData implements DataSubject {
     private static int sDataIdCount = -1;
 
     private Context mContext;
+
     private List<DataObserver> mDataObservers = new ArrayList<>();
 
     private static String sUserId;
@@ -33,8 +34,10 @@ public final class WorkingData implements DataSubject {
 
     private Worker mLoginWorker;
 
+    // TODO: Implement DB
     private Task mWipTask;
     private List<Task> mScheduledTasks = new ArrayList<>();
+    private List<Case> mCases = new ArrayList<>();
 
     private boolean mHasLoadedTasks = false;
 
@@ -143,6 +146,38 @@ public final class WorkingData implements DataSubject {
                 return;
             }
         }
+    }
+
+    public void addCase(Case aCase) {
+        mCases.add(aCase);
+    }
+
+    public void updateCase(String caseId, Case aCase) {
+        getCaseById(caseId).update(aCase);
+    }
+
+    public Case getCaseById(String caseId) {
+        for (Case aCase : mCases) {
+            if (aCase.id.equals(caseId)) return aCase;
+        }
+
+        return null;
+    }
+
+    public List<Case> getCases() {
+        return mCases;
+    }
+
+    public boolean hasCase(String caseId) {
+        for (Case aCase : mCases) {
+            if (aCase.id.equals(caseId)) return true;
+        }
+
+        return false;
+    }
+
+    public void clearCases() {
+        mCases.clear();
     }
 
     public boolean hasLoadedTasks() {
