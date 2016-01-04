@@ -803,38 +803,18 @@ public class LoadingDataUtils {
 //    }
     public static Worker retrieveWorkerFromJson(Context context, JSONObject workerJson) {
         try {
-            JSONObject paymentJson = workerJson.getJSONObject("paymentClassification");
-            JSONObject equipmentJson = getJsonObjectFromJson(workerJson, "resource");
-            JSONObject timeCardJson = getJsonObjectFromJson(workerJson, "timecard");
             JSONArray scheduledTaskJsonList = workerJson.getJSONArray("scheduledTaskIds");
 
             String id = workerJson.getString("_id");
             String name = workerJson.getJSONObject("profile").getString("name");
-            String factoryId = getStringFromJson(workerJson, "groupId");
-            String factoryName = getStringFromJson(workerJson, "groupName");
-            String equipmentId = "";
+            String departmentId = getStringFromJson(workerJson, "groupId");
+            String departmentName = getStringFromJson(workerJson, "groupName");
             String wipTaskId = getStringFromJson(workerJson, "WIPTaskId");
             String address = getStringFromJson(workerJson, "address");
             String phone = getStringFromJson(workerJson, "phone");
             String avatarUrl = getStringFromJson(workerJson, "iconThumbUrl");
 
-            if (equipmentJson != null) {
-                equipmentId = equipmentJson.getString("_id");
-                //addEquipmentToWorkingData(context, equipmentJson);
-            }
-
-            long checkInTime = timeCardJson == null ? 0L : timeCardJson.getLong("startDate");
-            int score = workerJson.getInt("score");
             long lastUpdatedTime = workerJson.getLong("updatedAt");
-            boolean isOvertime = workerJson.getBoolean("overwork");
-
-            Worker.Status status = Worker.convertStringToStatus(workerJson.getString("status"));
-
-            Worker.PaymentClassification payment =
-                    new Worker.PaymentClassification(paymentJson.getString("type"),
-                                                     paymentJson.getDouble("base"),
-                                                     paymentJson.getDouble("hourlyPayment"),
-                                                     paymentJson.getDouble("overtimeBase"));
 
             List<String> scheduledTaskIds = new ArrayList<>();
             for (int st = 0 ; st < scheduledTaskJsonList.length() ; st++) {
@@ -844,18 +824,11 @@ public class LoadingDataUtils {
             return new Worker(
                     id,
                     name,
-                    factoryId,
-                    factoryName,
-                    wipTaskId,
+                    departmentId,
+                    departmentName,
                     address,
                     phone,
                     avatarUrl,
-                    checkInTime,
-                    score,
-                    isOvertime,
-                    status,
-                    payment,
-                    scheduledTaskIds,
                     lastUpdatedTime);
 
         } catch (JSONException e) {

@@ -31,10 +31,6 @@ public class DisplayDialogFragment extends DialogFragment {
     public interface OnDialogActionListener {
         void onCompleteTaskCancel();
         void onCompleteTaskOk(String taskId);
-        void onChooseTaskStartWork(String taskId);
-        void onChooseTaskLog(String taskId);
-        void onCheck(Location currentLocation, String currentAddress,
-                     CheckInOutCommand.OnDialogCheckInOutStatusListener onDialogCheckInOutStatusListener);
     }
 
     private OnDialogActionListener mOnDialogActionListener;
@@ -57,9 +53,6 @@ public class DisplayDialogFragment extends DialogFragment {
         switch (getArguments().getInt(EXTRA_DIALOG_TYPE)) {
             case DialogType.COMPLETE_TASK:
                 return new CompleteTaskDialog(getActivity(), getArguments().getString(EXTRA_TASK_ID), mOnDialogActionListener);
-
-            case DialogType.CHOOSE_TASK:
-                return new ChooseTaskDialog(getActivity(), getArguments().getString(EXTRA_TASK_ID), mOnDialogActionListener);
 
             default:
                 return new CompleteTaskDialog(getActivity(), getArguments().getString(EXTRA_TASK_ID), mOnDialogActionListener);

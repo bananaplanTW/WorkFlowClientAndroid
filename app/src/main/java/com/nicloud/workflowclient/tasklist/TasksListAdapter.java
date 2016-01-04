@@ -43,36 +43,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    private class WipTaskViewHolder extends RecyclerView.ViewHolder {
-
-        public View wipTaskCardView;
-        public View noWipTaskCardView;
-        public TextView chooseTaskText;
-        public TextView wipTaskName;
-        public TextView wipCaseName;
-        public TextView wipWorkingTime;
-        public TextView noWipTaskText;
-        public View pauseButton;
-        public View completeButton;
-
-        public WipTaskViewHolder(View view) {
-            super(view);
-            findViews(view);
-        }
-
-        private void findViews(View view) {
-            wipTaskCardView = view.findViewById(R.id.wip_task_card_view);
-            noWipTaskCardView = view.findViewById(R.id.no_wip_task_card_view);
-            chooseTaskText = (TextView) view.findViewById(R.id.no_wip_task_card_choose_task_text);
-            wipTaskName = (TextView) view.findViewById(R.id.wip_task_card_task_name);
-            wipCaseName = (TextView) view.findViewById(R.id.wip_task_card_case_name);
-            wipWorkingTime = (TextView) view.findViewById(R.id.wip_task_card_working_time);
-            noWipTaskText = (TextView) view.findViewById(R.id.no_wip_task_card_text);
-            pauseButton = view.findViewById(R.id.wip_task_card_pause_button);
-            completeButton = view.findViewById(R.id.wip_task_card_complete_button);
-        }
-    }
-
     private class ScheduledTaskViewHolder extends RecyclerView.ViewHolder {
 
         public View view;
@@ -119,9 +89,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case ItemViewType.TITLE:
                 return new TitleViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_list_title, parent, false));
 
-            case ItemViewType.WIP_TASK:
-                return new WipTaskViewHolder(LayoutInflater.from(mContext).inflate(R.layout.wip_task_card, parent, false));
-
             case ItemViewType.SCHEDULED_TASK:
                 return new ScheduledTaskViewHolder(LayoutInflater.from(mContext).inflate(R.layout.scheduled_task_card,
                                                    parent, false));
@@ -142,10 +109,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 bindTitleViewHolder((TitleViewHolder) holder, task);
                 break;
 
-            case ItemViewType.WIP_TASK:
-                bindWipTaskViewHolder((WipTaskViewHolder) holder, task);
-                break;
-
             case ItemViewType.SCHEDULED_TASK:
                 bindScheduledTaskViewHolder((ScheduledTaskViewHolder) holder, task, position);
                 break;
@@ -154,35 +117,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private void bindTitleViewHolder(TitleViewHolder holder, Task task) {
         holder.title.setText(task.name);
-    }
-
-    private void bindWipTaskViewHolder(WipTaskViewHolder holder, Task task) {
-        if (WorkingData.getInstance(mContext).getLoginWorker().status == Worker.Status.STOP ||
-            WorkingData.getInstance(mContext).getLoginWorker().status == Worker.Status.OFF) {
-            holder.wipTaskCardView.setVisibility(View.GONE);
-            holder.noWipTaskCardView.setVisibility(View.VISIBLE);
-            holder.chooseTaskText.setVisibility(View.GONE);
-
-            holder.noWipTaskText.setText(mContext.getString(R.string.wip_task_card_not_working_time));
-
-            return;
-        }
-
-        if (task == null) {
-            holder.wipTaskCardView.setVisibility(View.GONE);
-            holder.noWipTaskCardView.setVisibility(View.VISIBLE);
-            holder.chooseTaskText.setVisibility(View.VISIBLE);
-
-            holder.noWipTaskText.setText(mContext.getString(R.string.wip_task_card_prepare_for_next_task));
-
-        } else {
-            holder.wipTaskCardView.setVisibility(View.VISIBLE);
-            holder.noWipTaskCardView.setVisibility(View.GONE);
-
-            holder.wipTaskName.setText(task.name);
-            holder.wipCaseName.setText(task.caseName);
-            holder.wipWorkingTime.setText(Utilities.millisecondsToTimeString(task.getWorkingTime()));
-        }
     }
 
     private void bindScheduledTaskViewHolder(ScheduledTaskViewHolder holder, Task task, int position) {
@@ -202,9 +136,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         if (ItemViewType.TITLE == itemViewType || ItemViewType.TITLE == itemViewType) {
             return ItemViewType.TITLE;
-
-        } else if (ItemViewType.WIP_TASK == itemViewType) {
-            return ItemViewType.WIP_TASK;
 
         } else {
             return ItemViewType.SCHEDULED_TASK;
