@@ -112,4 +112,7 @@
     <string name="downloading">Downloading...</string>
     <string name="download_completed">Download Completed</string>
 
+    <!-- Message chat -->
+    <string name="message_chat_message_box_hint">Send a message</string>
+
 </resources>

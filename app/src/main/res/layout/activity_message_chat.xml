@@ -14,4 +14,46 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:titleTextAppearance="@style/AppTheme.Toolbar.Title" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/message_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/message_box_container"
+            android:scrollbars="vertical"/>
+
+        <RelativeLayout
+            android:id="@+id/message_box_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/message_chat_message_box_min_height"
+            android:paddingLeft="@dimen/message_chat_message_box_padding_left_right"
+            android:paddingRight="@dimen/message_chat_message_box_padding_left_right"
+            android:layout_alignParentBottom="true"
+            android:background="@color/message_chat_message_box_background_color">
+
+            <EditText
+                android:id="@+id/message_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/send_button"
+                android:background="@null"
+                android:hint="@string/message_chat_message_box_hint"/>
+
+            <ImageView
+                android:id="@+id/send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_send_disabled" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 </LinearLayout>

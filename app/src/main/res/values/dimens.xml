@@ -126,4 +126,9 @@
     <dimen name="dialog_check_current_time_location_padding_top_bottom">8dp</dimen>
     <dimen name="dialog_check_current_time_drawable_padding">5dp</dimen>
 
+    <!-- Message chat -->
+    <dimen name="message_chat_message_box_min_height">60dp</dimen>
+    <dimen name="message_chat_message_box_padding_left_right">15dp</dimen>
+    <dimen name="message_chat_send_button_background_padding">8dp</dimen>
+
 </resources>

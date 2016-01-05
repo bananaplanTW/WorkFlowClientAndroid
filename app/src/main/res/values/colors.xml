@@ -71,4 +71,8 @@
     <color name="dialog_check_time_text_color">#FF000000</color>
     <color name="dialog_uncheck_time_text_color">#FF9B9B9B</color>
 
+    <!-- Message chat -->
+    <color name="message_chat_message_box_background_color">#FFFFFFFF</color>
+    <color name="message_chat_send_button_enabled_background_color">#FF56A4E8</color>
+
 </resources>

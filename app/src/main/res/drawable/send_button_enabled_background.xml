@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <padding
+        android:bottom="@dimen/message_chat_send_button_background_padding"
+        android:left="@dimen/message_chat_send_button_background_padding"
+        android:right="@dimen/message_chat_send_button_background_padding"
+        android:top="@dimen/message_chat_send_button_background_padding" />
+    <solid android:color="@color/message_chat_send_button_enabled_background_color" />
+
+</shape>

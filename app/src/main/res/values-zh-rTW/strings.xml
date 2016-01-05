@@ -98,4 +98,7 @@
     <string name="downloading">下載中...</string>
     <string name="download_completed">下載完成</string>
 
+    <!-- Message chat -->
+    <string name="message_chat_message_box_hint">寫訊息</string>
+
 </resources>
