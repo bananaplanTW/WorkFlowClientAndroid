@@ -97,17 +97,19 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private void onClickMainMenuItem(MainMenuItem clickedItem) {
         if (clickedItem.mIsSelected) return;
 
-        clickedItem.mIsSelected = true;
-        if (mCurrentSelectedItem != null) {
-            mCurrentSelectedItem.mIsSelected = false;
+        if (clickedItem.mType != MainMenuFragment.MainMenuItemType.CASE) {
+            clickedItem.mIsSelected = true;
+            if (mCurrentSelectedItem != null) {
+                mCurrentSelectedItem.mIsSelected = false;
+            }
+            mCurrentSelectedItem = clickedItem;
         }
-        mCurrentSelectedItem = clickedItem;
 
         notifyDataSetChanged();
 
-        mOnClickMainMenuItemListener.onClickMainMenuItem(mCurrentSelectedItem.mId, mCurrentSelectedItem.mName);
+        mOnClickMainMenuItemListener.onClickMainMenuItem(clickedItem);
 
-        Log.d(TAG, "Current selected main menu item: " + mCurrentSelectedItem.mName);
+        Log.d(TAG, "Current selected main menu item: " + clickedItem.mName);
     }
 
     public void clearSelectedMainMenuItem() {
@@ -185,11 +187,6 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         CaseViewHolder itemVH = (CaseViewHolder) holder;
 
         itemVH.caseName.setText(mainMenuItem.mName);
-        itemVH.view.setSelected(mainMenuItem.mIsSelected);
-
-        if (mainMenuItem.mIsSelected) {
-            mCurrentSelectedItem = mainMenuItem;
-        }
     }
 
     @Override

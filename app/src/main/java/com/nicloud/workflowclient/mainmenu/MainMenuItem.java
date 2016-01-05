@@ -7,7 +7,7 @@ import com.nicloud.workflowclient.data.data.data.Case;
  */
 public class MainMenuItem {
 
-    public int mId;
+    public int mType;
     public String mName;
     public Case mCase;
     public int mViewType;
@@ -15,7 +15,7 @@ public class MainMenuItem {
 
 
     public MainMenuItem(int id, String name, Case aCase, int viewType, boolean isSelected) {
-        mId = id;
+        mType = id;
         mName = name;
         mCase = aCase;
         mViewType = viewType;

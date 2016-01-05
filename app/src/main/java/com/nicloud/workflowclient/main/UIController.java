@@ -1,5 +1,6 @@
 package com.nicloud.workflowclient.main;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,9 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.cases.CaseFragment;
+import com.nicloud.workflowclient.cases.CaseActivity;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
+import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagechat.MessageChatFragment;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.tasklist.TaskListFragment;
@@ -58,6 +60,8 @@ public class UIController implements View.OnClickListener {
 
     private FragmentManager mFragmentManager;
     private Fragment mCurrentContentFragment;
+
+    private MainMenuItem mClickedMainMenuItem;
 
 
     public UIController(AppCompatActivity activity) {
@@ -105,36 +109,20 @@ public class UIController implements View.OnClickListener {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    public void onClickMainMenuItem(int itemId, String title) {
-        mMessageMenuFragment.clearSelectedMessageMenuItem();
-
-        switch (itemId) {
-            case MainMenuFragment.MainMenuItemId.MY_TASKS:
-                if (mCurrentContentFragment instanceof TaskListFragment) break;
-                replaceTo(TaskListFragment.class, FragmentTag.TASK_LIST);
-
-                break;
-
-            case MainMenuFragment.MainMenuItemId.CASE:
-                if (mCurrentContentFragment instanceof CaseFragment) break;
-                replaceTo(CaseFragment.class, FragmentTag.CASE);
-
-                break;
-        }
-
-        mActionBar.setTitle(title);
+    public void onClickMainMenuItem(MainMenuItem item) {
+        mClickedMainMenuItem = item;
         closeLeftDrawer();
     }
 
     public void onClickMessageMenuItem(String workerId, String title) {
+        closeRightDrawer();
+
         mMainMenuFragment.clearSelectedMainMenuItem();
 
         if (!(mCurrentContentFragment instanceof MessageChatFragment)) {
             replaceTo(MessageChatFragment.class, FragmentTag.MESSAGE_CHAT);
         }
         mActionBar.setTitle(title);
-
-        closeRightDrawer();
     }
 
     public boolean isLeftDrawerOpened() {
@@ -218,9 +206,40 @@ public class UIController implements View.OnClickListener {
 
     private void onCloseDrawer(View drawerView) {
         if (mLeftDrawerView == drawerView) {
+            onCloseMainMenuAction();
 
         } else if (mRightDrawerView == drawerView) {
+            onCloseMessageMenuAction();
         }
+    }
+
+    private void onCloseMainMenuAction() {
+        if (mClickedMainMenuItem == null) return;
+
+        mMessageMenuFragment.clearSelectedMessageMenuItem();
+
+        switch (mClickedMainMenuItem.mType) {
+            case MainMenuFragment.MainMenuItemType.MY_TASKS:
+                if (mCurrentContentFragment instanceof TaskListFragment) break;
+                replaceTo(TaskListFragment.class, FragmentTag.TASK_LIST);
+
+                break;
+
+            case MainMenuFragment.MainMenuItemType.CASE:
+                Intent intent = new Intent(mMainActivity, CaseActivity.class);
+                intent.putExtra(CaseActivity.EXTRA_CASE_ID, mClickedMainMenuItem.mType);
+                intent.putExtra(CaseActivity.EXTRA_CASE_NAME, mClickedMainMenuItem.mName);
+
+                mMainActivity.startActivity(intent);
+
+                break;
+        }
+
+        mClickedMainMenuItem = null;
+    }
+
+    private void onCloseMessageMenuAction() {
+
     }
 
     private void setupFragments() {

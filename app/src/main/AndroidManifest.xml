@@ -16,10 +16,11 @@
       IMPORTANT: Change "com.parse.starter.permission.C2D_MESSAGE" in the lines below
       to match your app's package name + ".permission.C2D_MESSAGE".
     -->
-    <permission android:protectionLevel="signature"
-        android:name="com.nicloud.workflowclient.permission.C2D_MESSAGE" />
-    <uses-permission android:name="com.nicloud.workflowclient.permission.C2D_MESSAGE" />
+    <permission
+        android:name="com.nicloud.workflowclient.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
+    <uses-permission android:name="com.nicloud.workflowclient.permission.C2D_MESSAGE" />
 
     <application
         android:name=".main.MainApplication"
@@ -28,7 +29,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".login.LoginActivity"
             android:screenOrientation="portrait"
@@ -41,8 +41,8 @@
         </activity>
         <activity
             android:name=".main.MainActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".detailedtask.addlog.AddLogActivity"
             android:screenOrientation="portrait"
@@ -55,17 +55,22 @@
         <activity
             android:name=".detailedtask.tasklog.DisplayImageActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".cases.CaseActivity"
+            android:screenOrientation="portrait" />
 
-        <service android:name=".serveraction.ActionService"
-            android:exported="false"/>
-
-        <service android:name=".serveraction.UploadService"
-            android:exported="false"/>
-
+        <service
+            android:name=".serveraction.ActionService"
+            android:exported="false" />
+        <service
+            android:name=".serveraction.UploadService"
+            android:exported="false" />
 
         <!-- Parse -->
         <service android:name="com.parse.PushService" />
-        <receiver android:name="com.nicloud.workflowclient.parse.ParsePushReceiver"
+
+        <receiver
+            android:name=".parse.ParsePushReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
@@ -73,19 +78,17 @@
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.GcmBroadcastReceiver"
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <!--
-                  IMPORTANT: Change "com.parse.starter" to match your app's package name.
-                -->
+                <!--                   IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="com.nicloud.workflowclient" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

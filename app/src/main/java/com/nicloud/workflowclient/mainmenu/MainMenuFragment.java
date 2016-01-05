@@ -37,10 +37,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
         LoadingCases.OnFinishLoadingCasesListener {
 
     public interface OnClickMainMenuItemListener {
-        void onClickMainMenuItem(int itemId, String title);
+        void onClickMainMenuItem(MainMenuItem item);
     }
 
-    public static class MainMenuItemId {
+    public static class MainMenuItemType {
         public static final int MY_TASKS = 0;
         public static final int CASE = 1;
     }
@@ -171,7 +171,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
     private void setMainMenuListData() {
         mDataSet.clear();
 
-        mDataSet.add(new MainMenuItem(MainMenuItemId.MY_TASKS,
+        mDataSet.add(new MainMenuItem(MainMenuItemType.MY_TASKS,
                 mContext.getString(R.string.main_menu_my_tasks),
                 null, MainMenuListAdapter.ItemViewType.ITEM, true));
 
@@ -182,7 +182,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
                 null, MainMenuListAdapter.ItemViewType.TITLE, false));
 
         for (Case aCase : WorkingData.getInstance(mContext).getCases()) {
-            mDataSet.add(new MainMenuItem(MainMenuItemId.CASE, aCase.name, aCase,
+            mDataSet.add(new MainMenuItem(MainMenuItemType.CASE, aCase.name, aCase,
                     MainMenuListAdapter.ItemViewType.CASE, false));
         }
 

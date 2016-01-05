@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
+import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.tasklist.TaskListFragment;
 
@@ -66,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements TaskListFragment.
     }
 
     @Override
-    public void onClickMainMenuItem(int itemId, String title) {
-        mUIController.onClickMainMenuItem(itemId, title);
+    public void onClickMainMenuItem(MainMenuItem item) {
+        mUIController.onClickMainMenuItem(item);
     }
 
     @Override
