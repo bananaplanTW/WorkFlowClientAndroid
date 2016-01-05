@@ -1,7 +1,9 @@
 package com.nicloud.workflowclient.messagemenu;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
+import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
+import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment.OnClickMessageMenuItemListener;
 
 import java.util.List;
@@ -86,9 +91,9 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         notifyDataSetChanged();
 
-        mOnClickMessageMenuItemListener.onClickMessageMenuItem(clickedItem.id, clickedItem.name);
+        mOnClickMessageMenuItemListener.onClickMessageMenuItem(clickedItem.worker.id, clickedItem.title);
 
-        Log.d(TAG, "Current selected message menu item: " + mCurrentSelectedItem.name);
+        Log.d(TAG, "Current selected message menu item: " + mCurrentSelectedItem.worker.name);
     }
 
     public void clearSelectedMessageMenuItem() {
@@ -143,12 +148,26 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private void onBindTitle(TitleViewHolder holder, MessageMenuItem messageMenuItem) {
-        holder.title.setText(messageMenuItem.name);
+        holder.title.setText(messageMenuItem.title);
     }
 
     private void onBindWorker(WorkerViewHolder holder, MessageMenuItem messageMenuItem) {
-        holder.worker.setText(messageMenuItem.name);
+        Worker worker = messageMenuItem.worker;
+
+        holder.worker.setText(messageMenuItem.worker.name);
         holder.view.setSelected(messageMenuItem.isSelected);
+
+        if (TextUtils.isEmpty(worker.avatarUrl)) {
+            holder.workerAvatar.setImageResource(R.drawable.selector_message_menu_worker_avatar);
+
+        } else {
+            Uri.Builder avatarBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+            avatarBuilder.path(worker.avatarUrl);
+            Uri avatarUri = avatarBuilder.build();
+
+            new LoadingWorkerAvatar(mContext, avatarUri, holder.workerAvatar,
+                    worker, R.drawable.selector_message_menu_worker_avatar).execute();
+        }
     }
 
     @Override

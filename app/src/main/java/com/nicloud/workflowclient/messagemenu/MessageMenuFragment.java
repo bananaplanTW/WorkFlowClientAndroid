@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkers;
+import com.nicloud.workflowclient.data.data.data.Worker;
+import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +22,10 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/12/22.
  */
-public class MessageMenuFragment extends Fragment {
+public class MessageMenuFragment extends Fragment implements LoadingWorkers.OnFinishLoadingWorkersListener {
 
     public interface OnClickMessageMenuItemListener {
-        void onClickMessageMenuItem(String itemId, String title);
+        void onClickMessageMenuItem(String workerId, String title);
     }
 
     private Context mContext;
@@ -64,7 +68,7 @@ public class MessageMenuFragment extends Fragment {
     }
 
     private void loadWorkers() {
-
+        new LoadingWorkers(mContext, this).execute();
     }
 
     private void findViews() {
@@ -72,8 +76,6 @@ public class MessageMenuFragment extends Fragment {
     }
 
     private void setupMessageMenuList() {
-        setMessageMenuListData();
-
         mMessageMenuListLayoutManager = new LinearLayoutManager(mContext);
         mMessageMenuListAdapter = new MessageMenuListAdapter(mContext, mDataSet, mOnClickMessageMenuItemListener);
 
@@ -81,12 +83,25 @@ public class MessageMenuFragment extends Fragment {
         mMessageMenuList.setAdapter(mMessageMenuListAdapter);
     }
 
+    @Override
+    public void onFinishLoadingWorkers() {
+        setMessageMenuListData();
+    }
+
     private void setMessageMenuListData() {
-        mDataSet.add(new MessageMenuItem("", mContext.getString(R.string.message_menu_messages),
+        mDataSet.add(new MessageMenuItem(mContext.getString(R.string.message_menu_messages), null,
                 MessageMenuListAdapter.ItemViewType.TITLE, false));
 
-        mDataSet.add(new MessageMenuItem("wedw", "Paul", MessageMenuListAdapter.ItemViewType.WORKER, false));
-        mDataSet.add(new MessageMenuItem("2d2d", "Daz", MessageMenuListAdapter.ItemViewType.WORKER, false));
-        mDataSet.add(new MessageMenuItem("2d2d", "Nash", MessageMenuListAdapter.ItemViewType.WORKER, false));
+        for (Worker worker : WorkingData.getInstance(mContext).getWorkers()) {
+            mDataSet.add(new MessageMenuItem(worker.name, worker,
+                    MessageMenuListAdapter.ItemViewType.WORKER, false));
+        }
+
+        mMessageMenuListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFailLoadingWorkers(boolean isFailCausedByInternet) {
+        Utilities.showInternetConnectionWeakToast(mContext);
     }
 }

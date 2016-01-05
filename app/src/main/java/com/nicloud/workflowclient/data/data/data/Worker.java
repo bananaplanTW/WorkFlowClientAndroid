@@ -1,13 +1,6 @@
 package com.nicloud.workflowclient.data.data.data;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
-
-import com.nicloud.workflowclient.R;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * @author Danny Lin

@@ -126,7 +126,7 @@ public class UIController implements View.OnClickListener {
         closeLeftDrawer();
     }
 
-    public void onClickMessageMenuItem(String itemId, String title) {
+    public void onClickMessageMenuItem(String workerId, String title) {
         mMainMenuFragment.clearSelectedMainMenuItem();
 
         if (!(mCurrentContentFragment instanceof MessageChatFragment)) {

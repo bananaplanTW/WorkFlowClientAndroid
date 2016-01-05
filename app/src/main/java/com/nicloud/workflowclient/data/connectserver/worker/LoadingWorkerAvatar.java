@@ -1,30 +1,39 @@
 package com.nicloud.workflowclient.data.connectserver.worker;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.activity.LoadingDrawableAsyncTask;
+import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 
 
 /**
  * Created by daz on 10/10/15.
  */
-public class LoadingWorkerAvatarCommand implements LoadingDrawableAsyncTask.OnFinishLoadingDataListener {
+public class LoadingWorkerAvatar implements LoadingDrawableAsyncTask.OnFinishLoadingDataListener {
 
     private Context mContext;
     private Uri mUri;
     private ImageView mAvatar;
 
+    private Worker mWorker;
+    private int mDefaultWorkerIconId;
+
     private LoadingDrawableAsyncTask mLoadingDrawableAsyncTask;
 
 
-    public LoadingWorkerAvatarCommand(Context context, Uri uri, ImageView avatar) {
+    public LoadingWorkerAvatar(Context context, Uri uri,
+                               ImageView avatar, Worker worker, int defaultWorkerIconId) {
         mContext = context;
         mUri = uri;
         mAvatar = avatar;
+        mWorker = worker;
+        mDefaultWorkerIconId = defaultWorkerIconId;
     }
 
     public void execute () {
@@ -35,15 +44,15 @@ public class LoadingWorkerAvatarCommand implements LoadingDrawableAsyncTask.OnFi
     @Override
     public void onFinishLoadingData() {
         mAvatar.setImageDrawable(mLoadingDrawableAsyncTask.getResult());
-        WorkingData.getInstance(mContext).getLoginWorker().avatar = mAvatar.getDrawable();
+        mWorker.avatar = mAvatar.getDrawable();
     }
 
     @Override
     public void onFailLoadingData(boolean isFailCausedByInternet) {
-        if (WorkingData.getInstance(mContext).getLoginWorker().avatar == null) {
-            mAvatar.setImageResource(R.drawable.ic_worker_black);
+        if (mWorker.avatar == null) {
+            mAvatar.setImageResource(mDefaultWorkerIconId);
         } else {
-            mAvatar.setImageDrawable(WorkingData.getInstance(mContext).getLoginWorker().avatar);
+            mAvatar.setImageDrawable(mWorker.avatar);
         }
     }
 }

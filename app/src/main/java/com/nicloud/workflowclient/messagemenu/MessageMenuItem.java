@@ -1,24 +1,22 @@
 package com.nicloud.workflowclient.messagemenu;
 
-import android.graphics.Bitmap;
+import com.nicloud.workflowclient.data.data.data.Worker;
 
 /**
  * Created by logicmelody on 2015/12/23.
  */
 public class MessageMenuItem {
 
-    public String id;
-    public String name;
+    public String title;
+
+    public Worker worker;
     public int viewType;
     public boolean isSelected = false;
 
-    public Bitmap avatar;
-    public String avatarUrl;
 
-
-    public MessageMenuItem(String id, String name, int viewType, boolean isSelected) {
-        this.id = id;
-        this.name = name;
+    public MessageMenuItem(String title, Worker worker, int viewType, boolean isSelected) {
+        this.title = title;
+        this.worker = worker;
         this.viewType = viewType;
         this.isSelected = isSelected;
     }

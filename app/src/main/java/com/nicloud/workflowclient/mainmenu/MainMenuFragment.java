@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclient.data.connectserver.cases.LoadingCases;
-import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatarCommand;
+import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
 import com.nicloud.workflowclient.data.data.data.Case;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.login.LoginActivity;
@@ -118,9 +118,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
         avatarBuilder.path(s);
         Uri avatarUri = avatarBuilder.build();
 
-        LoadingWorkerAvatarCommand loadingWorkerAvatarCommand
-                = new LoadingWorkerAvatarCommand(mContext, avatarUri, mWorkerAvatar);
-        loadingWorkerAvatarCommand.execute();
+        LoadingWorkerAvatar loadingWorkerAvatar
+                = new LoadingWorkerAvatar(mContext, avatarUri, mWorkerAvatar,
+                WorkingData.getInstance(mContext).getLoginWorker(), R.drawable.ic_worker_white);
+        loadingWorkerAvatar.execute();
     }
 
     private void setupWorkerViews() {

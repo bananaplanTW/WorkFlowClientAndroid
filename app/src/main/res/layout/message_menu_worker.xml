@@ -11,8 +11,7 @@
     <ImageView
         android:id="@+id/message_menu_worker_avatar"
         android:layout_width="@dimen/message_menu_worker_avatar_width_height"
-        android:layout_height="@dimen/message_menu_worker_avatar_width_height"
-        android:src="@drawable/selector_message_menu_worker_avatar"/>
+        android:layout_height="@dimen/message_menu_worker_avatar_width_height" />
 
     <TextView
         android:id="@+id/message_menu_worker_name"

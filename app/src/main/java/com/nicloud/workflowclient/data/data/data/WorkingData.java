@@ -35,9 +35,9 @@ public final class WorkingData implements DataSubject {
     private Worker mLoginWorker;
 
     // TODO: Implement DB
-    private Task mWipTask;
     private List<Task> mScheduledTasks = new ArrayList<>();
     private List<Case> mCases = new ArrayList<>();
+    private List<Worker> mWorkers = new ArrayList<>();
 
     private boolean mHasLoadedTasks = false;
 
@@ -87,14 +87,6 @@ public final class WorkingData implements DataSubject {
         return mLoginWorker;
     }
 
-    public void setWipTask(Task task) {
-        mWipTask = task;
-    }
-
-    public Task getWipTask() {
-        return mWipTask;
-    }
-
     public void addScheduledTask(Task task) {
         mScheduledTasks.add(task);
     }
@@ -116,10 +108,6 @@ public final class WorkingData implements DataSubject {
     }
 
     public Task getTask(String taskId) {
-        if (mWipTask != null && Utilities.isSameId(mWipTask.id, taskId)) {
-            return mWipTask;
-        }
-
         for (Task scheduledTask : mScheduledTasks) {
             if (Utilities.isSameId(scheduledTask.id, taskId)) {
                 return scheduledTask;
@@ -130,16 +118,10 @@ public final class WorkingData implements DataSubject {
     }
 
     public void resetTasks() {
-        mWipTask = null;
         mScheduledTasks.clear();
     }
 
     public void updateTask(Task task, String taskId) {
-        if (mWipTask != null && Utilities.isSameId(mWipTask.id, taskId)) {
-            mWipTask.update(task);
-            return;
-        }
-
         for (Task scheduledTask : mScheduledTasks) {
             if (Utilities.isSameId(scheduledTask.id, taskId)) {
                 scheduledTask.update(task);
@@ -178,6 +160,38 @@ public final class WorkingData implements DataSubject {
 
     public void clearCases() {
         mCases.clear();
+    }
+
+    public void addWorker(Worker worker) {
+        mWorkers.add(worker);
+    }
+
+    public void updateWorker(String workerId, Worker worker) {
+        getWorkerById(workerId).update(worker);
+    }
+
+    public Worker getWorkerById(String workerId) {
+        for (Worker worker : mWorkers) {
+            if (worker.id.equals(workerId)) return worker;
+        }
+
+        return null;
+    }
+
+    public List<Worker> getWorkers() {
+        return mWorkers;
+    }
+
+    public boolean hasWorker(String workerId) {
+        for (Worker worker : mWorkers) {
+            if (worker.id.equals(workerId)) return true;
+        }
+
+        return false;
+    }
+
+    public void clearWorkers() {
+        mWorkers.clear();
     }
 
     public boolean hasLoadedTasks() {

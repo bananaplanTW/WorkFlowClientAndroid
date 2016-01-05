@@ -118,6 +118,32 @@ public class LoadingDataUtils {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Load all workers data from server.
+     *
+     * @param context
+     */
+    public static void loadWorkers(Context context) {
+        try {
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("x-user-id", WorkingData.getUserId());
+            headers.put("x-auth-token", WorkingData.getAuthToken());
+
+            String workerJsonListString = RestfulUtils.restfulGetRequest(WorkingDataUrl.WORKERS, headers);
+            JSONArray workerJsonList = new JSONObject(workerJsonListString).getJSONArray("result");
+
+            for (int i = 0; i < workerJsonList.length(); i++) {
+                JSONObject workerJson = workerJsonList.getJSONObject(i);
+                addWorkerToWorkingData(context, workerJson);
+            }
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Exception in loadWorkers()");
+            e.printStackTrace();
+        }
+    }
+
 //    /**
 //     * Load all factories data from server, not include workers data.
 //     * We only load worker id of each worker in the factory.
@@ -315,11 +341,7 @@ public class LoadingDataUtils {
             String taskJsonString = RestfulUtils.restfulGetRequest(getTasksByWorkerUrl(workerId), headers);
 
             JSONObject taskJson = new JSONObject(taskJsonString).getJSONObject("result");
-            JSONObject wipTaskJson = getJsonObjectFromJson(taskJson, "WIPTask");
             JSONArray scheduledTaskJsonList = getJsonArrayFromJson(taskJson, "scheduledTasks");
-
-            WorkingData.getInstance(context)
-                    .setWipTask(wipTaskJson != null ? retrieveTaskFromJson(context, wipTaskJson) : null);
 
             WorkingData.getInstance(context).clearScheduledTasks();
             if (scheduledTaskJsonList != null) {
@@ -602,28 +624,28 @@ public class LoadingDataUtils {
 //            e.printStackTrace();
 //        }
 //    }
-//    private static void addWorkerToWorkingData(Context context, JSONObject workerJson) {
-//        try {
-//            String workerId = workerJson.getString("_id");
-//            long lastUpdatedTime = workerJson.getLong("updatedAt");
-//            boolean workingDataHasWorker = WorkingData.getInstance(context).hasWorker(workerId);
-//
-//            if (workingDataHasWorker &&
-//                    WorkingData.getInstance(context).getWorkerById(workerId).lastUpdatedTime >= lastUpdatedTime) {
-//                return;
-//            }
-//
-//            if (workingDataHasWorker) {
-//                WorkingData.getInstance(context).updateWorker(workerId, retrieveWorkerFromJson(context, workerJson));
-//            } else {
-//                WorkingData.getInstance(context).addWorker(retrieveWorkerFromJson(context, workerJson));
-//            }
-//
-//        } catch (JSONException e) {
-//            Log.e(TAG, "Exception in addWorkerToWorkingData()");
-//            e.printStackTrace();
-//        }
-//    }
+    private static void addWorkerToWorkingData(Context context, JSONObject workerJson) {
+        try {
+            String workerId = workerJson.getString("_id");
+            long lastUpdatedTime = workerJson.getLong("updatedAt");
+            boolean workingDataHasWorker = WorkingData.getInstance(context).hasWorker(workerId);
+
+            if (workingDataHasWorker &&
+                    WorkingData.getInstance(context).getWorkerById(workerId).lastUpdatedTime >= lastUpdatedTime) {
+                return;
+            }
+
+            if (workingDataHasWorker) {
+                WorkingData.getInstance(context).updateWorker(workerId, retrieveWorkerFromJson(context, workerJson));
+            } else {
+                WorkingData.getInstance(context).addWorker(retrieveWorkerFromJson(context, workerJson));
+            }
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Exception in addWorkerToWorkingData()");
+            e.printStackTrace();
+        }
+    }
 //    private static void addVendorToWorkingData(Context context, JSONObject vendorJson) {
 //        try {
 //            String vendorId = vendorJson.getString("_id");
@@ -803,23 +825,15 @@ public class LoadingDataUtils {
 //    }
     public static Worker retrieveWorkerFromJson(Context context, JSONObject workerJson) {
         try {
-            JSONArray scheduledTaskJsonList = workerJson.getJSONArray("scheduledTaskIds");
-
             String id = workerJson.getString("_id");
             String name = workerJson.getJSONObject("profile").getString("name");
             String departmentId = getStringFromJson(workerJson, "groupId");
             String departmentName = getStringFromJson(workerJson, "groupName");
-            String wipTaskId = getStringFromJson(workerJson, "WIPTaskId");
             String address = getStringFromJson(workerJson, "address");
             String phone = getStringFromJson(workerJson, "phone");
             String avatarUrl = getStringFromJson(workerJson, "iconThumbUrl");
 
             long lastUpdatedTime = workerJson.getLong("updatedAt");
-
-            List<String> scheduledTaskIds = new ArrayList<>();
-            for (int st = 0 ; st < scheduledTaskJsonList.length() ; st++) {
-                scheduledTaskIds.add(scheduledTaskJsonList.getString(st));
-            }
 
             return new Worker(
                     id,
