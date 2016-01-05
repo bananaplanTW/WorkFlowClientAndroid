@@ -18,10 +18,11 @@ import android.view.View;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.cases.CaseActivity;
+import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
-import com.nicloud.workflowclient.messagechat.MessageChatFragment;
+import com.nicloud.workflowclient.messagechat.MessageChatActivity;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.tasklist.TaskListFragment;
 import com.nicloud.workflowclient.utility.Utilities;
@@ -62,6 +63,7 @@ public class UIController implements View.OnClickListener {
     private Fragment mCurrentContentFragment;
 
     private MainMenuItem mClickedMainMenuItem;
+    private Worker mClickedWorker;
 
 
     public UIController(AppCompatActivity activity) {
@@ -114,15 +116,9 @@ public class UIController implements View.OnClickListener {
         closeLeftDrawer();
     }
 
-    public void onClickMessageMenuItem(String workerId, String title) {
+    public void onClickMessageMenuWorker(Worker worker) {
         closeRightDrawer();
-
-        mMainMenuFragment.clearSelectedMainMenuItem();
-
-        if (!(mCurrentContentFragment instanceof MessageChatFragment)) {
-            replaceTo(MessageChatFragment.class, FragmentTag.MESSAGE_CHAT);
-        }
-        mActionBar.setTitle(title);
+        mClickedWorker = worker;
     }
 
     public boolean isLeftDrawerOpened() {
@@ -239,7 +235,15 @@ public class UIController implements View.OnClickListener {
     }
 
     private void onCloseMessageMenuAction() {
+        if (mClickedWorker == null) return;
 
+        Intent intent = new Intent(mMainActivity, MessageChatActivity.class);
+        intent.putExtra(MessageChatActivity.EXTRA_WORKER_ID, mClickedWorker.id);
+        intent.putExtra(MessageChatActivity.EXTRA_WORKER_NAME, mClickedWorker.name);
+
+        mMainActivity.startActivity(intent);
+
+        mClickedWorker = null;
     }
 
     private void setupFragments() {

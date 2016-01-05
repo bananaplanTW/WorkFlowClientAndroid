@@ -15,7 +15,7 @@ import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
 import com.nicloud.workflowclient.data.data.data.Worker;
-import com.nicloud.workflowclient.messagemenu.MessageMenuFragment.OnClickMessageMenuItemListener;
+import com.nicloud.workflowclient.messagemenu.MessageMenuFragment.OnClickMessageMenuWorkerListener;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     private List<MessageMenuItem> mDataSet;
 
-    private OnClickMessageMenuItemListener mOnClickMessageMenuItemListener;
+    private OnClickMessageMenuWorkerListener mOnClickMessageMenuWorkerListener;
 
     private MessageMenuItem mCurrentSelectedItem;
 
@@ -81,19 +81,9 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private void onClickMessageMenuItem(MessageMenuItem clickedItem) {
-        if (clickedItem.isSelected) return;
+        mOnClickMessageMenuWorkerListener.onClickMessageMenuWorker(clickedItem.worker);
 
-        clickedItem.isSelected = true;
-        if (mCurrentSelectedItem != null) {
-            mCurrentSelectedItem.isSelected = false;
-        }
-        mCurrentSelectedItem = clickedItem;
-
-        notifyDataSetChanged();
-
-        mOnClickMessageMenuItemListener.onClickMessageMenuItem(clickedItem.worker.id, clickedItem.title);
-
-        Log.d(TAG, "Current selected message menu item: " + mCurrentSelectedItem.worker.name);
+        Log.d(TAG, "Current selected message menu item: " + clickedItem.worker.name);
     }
 
     public void clearSelectedMessageMenuItem() {
@@ -105,10 +95,10 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         notifyDataSetChanged();
     }
 
-    public MessageMenuListAdapter(Context context, List<MessageMenuItem> dataSet, OnClickMessageMenuItemListener listener) {
+    public MessageMenuListAdapter(Context context, List<MessageMenuItem> dataSet, OnClickMessageMenuWorkerListener listener) {
         mContext = context;
         mDataSet = dataSet;
-        mOnClickMessageMenuItemListener = listener;
+        mOnClickMessageMenuWorkerListener = listener;
     }
 
     @Override

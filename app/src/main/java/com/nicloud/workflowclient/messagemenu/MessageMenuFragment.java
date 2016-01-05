@@ -24,8 +24,8 @@ import java.util.List;
  */
 public class MessageMenuFragment extends Fragment implements LoadingWorkers.OnFinishLoadingWorkersListener {
 
-    public interface OnClickMessageMenuItemListener {
-        void onClickMessageMenuItem(String workerId, String title);
+    public interface OnClickMessageMenuWorkerListener {
+        void onClickMessageMenuWorker(Worker worker);
     }
 
     private Context mContext;
@@ -35,7 +35,7 @@ public class MessageMenuFragment extends Fragment implements LoadingWorkers.OnFi
     private MessageMenuListAdapter mMessageMenuListAdapter;
     private List<MessageMenuItem> mDataSet = new ArrayList<>();
 
-    private OnClickMessageMenuItemListener mOnClickMessageMenuItemListener;
+    private OnClickMessageMenuWorkerListener mOnClickMessageMenuWorkerListener;
 
 
     public void clearSelectedMessageMenuItem() {
@@ -46,7 +46,7 @@ public class MessageMenuFragment extends Fragment implements LoadingWorkers.OnFi
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        mOnClickMessageMenuItemListener = (OnClickMessageMenuItemListener) context;
+        mOnClickMessageMenuWorkerListener = (OnClickMessageMenuWorkerListener) context;
     }
 
     @Nullable
@@ -77,7 +77,7 @@ public class MessageMenuFragment extends Fragment implements LoadingWorkers.OnFi
 
     private void setupMessageMenuList() {
         mMessageMenuListLayoutManager = new LinearLayoutManager(mContext);
-        mMessageMenuListAdapter = new MessageMenuListAdapter(mContext, mDataSet, mOnClickMessageMenuItemListener);
+        mMessageMenuListAdapter = new MessageMenuListAdapter(mContext, mDataSet, mOnClickMessageMenuWorkerListener);
 
         mMessageMenuList.setLayoutManager(mMessageMenuListLayoutManager);
         mMessageMenuList.setAdapter(mMessageMenuListAdapter);
