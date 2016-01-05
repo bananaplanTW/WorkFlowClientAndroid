@@ -93,6 +93,8 @@ public class MessageMenuFragment extends Fragment implements LoadingWorkers.OnFi
                 MessageMenuListAdapter.ItemViewType.TITLE, false));
 
         for (Worker worker : WorkingData.getInstance(mContext).getWorkers()) {
+            if (worker.id.equals(WorkingData.getInstance(mContext).getLoginWorker().id)) continue;
+
             mDataSet.add(new MessageMenuItem(worker.name, worker,
                     MessageMenuListAdapter.ItemViewType.WORKER, false));
         }
