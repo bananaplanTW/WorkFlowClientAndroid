@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,29 +35,37 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
 
     private List<String> mMessageListData = new ArrayList<>();
 
+    private boolean mIsSendButtonBeenChanged = false;
+
     private TextWatcher mMessageBoxWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
         }
 
         @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            String message = mMessageBox.getText().toString();
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            if (TextUtils.isEmpty(message)) {
-                mSendButton.setImageResource(R.drawable.ic_send_disabled);
-                mSendButton.setBackground(null);
-            } else {
-                mSendButton.setImageResource(R.drawable.ic_send_enabled);
-                mSendButton.setBackgroundResource(R.drawable.send_button_enabled_background);
-            }
-
-            mSendButton.setAnimation(
-                    AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.message_send_button_reveal));
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
+            if (editable.length() == 0) {
+                mSendButton.setImageResource(R.drawable.ic_send_disabled);
+                mSendButton.setBackground(null);
+                mSendButton.setAnimation(
+                        AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.message_send_button_reveal));
+                mIsSendButtonBeenChanged = false;
+
+            } else {
+                if (mIsSendButtonBeenChanged) return;
+
+                mSendButton.setImageResource(R.drawable.ic_send_enabled);
+                mSendButton.setBackgroundResource(R.drawable.send_button_enabled_background);
+                mSendButton.setAnimation(
+                        AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.message_send_button_reveal));
+                mIsSendButtonBeenChanged = true;
+            }
         }
     };
 
