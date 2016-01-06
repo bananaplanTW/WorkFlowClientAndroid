@@ -8,7 +8,7 @@
     <dimen name="button_padding_left_right">15dp</dimen>
     <dimen name="button_text_size">16dp</dimen>
     <dimen name="button_corner_radius">5dp</dimen>
-    <dimen name="worker_icon_width_height">36dp</dimen>
+    <dimen name="worker_avatar_width_height">40dp</dimen>
     <dimen name="location_progress_circle_width_height">20dp</dimen>
     <dimen name="location_text_drawable_padding">5dp</dimen>
 
@@ -130,5 +130,11 @@
     <dimen name="message_chat_message_box_min_height">60dp</dimen>
     <dimen name="message_chat_message_box_padding_left_right">15dp</dimen>
     <dimen name="message_chat_send_button_background_padding">8dp</dimen>
+    <dimen name="message_chat_message_list_boundary_margin">20dp</dimen>
+    <dimen name="message_chat_message_list_normal_margin">3dp</dimen>
+    <dimen name="message_chat_message_item_padding_left_right">20dp</dimen>
+    <dimen name="message_chat_message_item_content_text_size">20dp</dimen>
+    <dimen name="message_chat_message_item_content_background_corner_radius">5dp</dimen>
+    <dimen name="message_chat_message_other_item_content_margin_left">10dp</dimen>
 
 </resources>

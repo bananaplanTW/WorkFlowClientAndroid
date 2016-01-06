@@ -29,45 +29,14 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
 
     private RecyclerView mMessageList;
     private LinearLayoutManager mMessageListLayoutManager;
+    private MessageListAdapter mMessageListAdapter;
 
     private EditText mMessageBox;
     private ImageView mSendButton;
 
-    private List<String> mMessageListData = new ArrayList<>();
+    private List<Message> mMessageData = new ArrayList<>();
 
     private boolean mIsSendButtonBeenChanged = false;
-
-    private TextWatcher mMessageBoxWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            if (editable.length() == 0) {
-                mSendButton.setImageResource(R.drawable.ic_send_disabled);
-                mSendButton.setBackground(null);
-                mSendButton.setAnimation(
-                        AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.message_send_button_reveal));
-                mIsSendButtonBeenChanged = false;
-
-            } else {
-                if (mIsSendButtonBeenChanged) return;
-
-                mSendButton.setImageResource(R.drawable.ic_send_enabled);
-                mSendButton.setBackgroundResource(R.drawable.send_button_enabled_background);
-                mSendButton.setAnimation(
-                        AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.message_send_button_reveal));
-                mIsSendButtonBeenChanged = true;
-            }
-        }
-    };
 
 
     @Override
@@ -93,7 +62,38 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void setupViews() {
-        mMessageBox.addTextChangedListener(mMessageBoxWatcher);
+        mMessageBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() == 0) {
+                    mSendButton.setImageResource(R.drawable.ic_send_disabled);
+                    mSendButton.setBackground(null);
+                    mSendButton.setAnimation(
+                            AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.message_send_button_reveal));
+                    mIsSendButtonBeenChanged = false;
+
+                } else {
+                    if (mIsSendButtonBeenChanged) return;
+
+                    mSendButton.setImageResource(R.drawable.ic_send_enabled);
+                    mSendButton.setBackgroundResource(R.drawable.send_button_enabled_background);
+                    mSendButton.setAnimation(
+                            AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.message_send_button_reveal));
+                    mIsSendButtonBeenChanged = true;
+                }
+            }
+        });
+
         mSendButton.setOnClickListener(this);
     }
 
@@ -108,8 +108,58 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
 
     private void setupMessageList() {
         mMessageListLayoutManager = new LinearLayoutManager(this);
+        mMessageListAdapter = new MessageListAdapter(this, mMessageData);
 
+        mMessageList.addItemDecoration(new MessageListDecoration(this));
         mMessageList.setLayoutManager(mMessageListLayoutManager);
+        mMessageList.setAdapter(mMessageListAdapter);
+
+        setMessageData();
+    }
+
+    private void setMessageData() {
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Other", false, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Other", false, 34567));
+        mMessageData.add(new Message("ed", "Other", false, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Other", false, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Other", false, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageData.add(new Message("ed", "Me", true, 34567));
+
+        mMessageList.scrollToPosition(mMessageData.size() - 1);
     }
 
     @Override
