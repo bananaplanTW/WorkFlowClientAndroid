@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -51,6 +52,9 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
                 mSendButton.setImageResource(R.drawable.ic_send_enabled);
                 mSendButton.setBackgroundResource(R.drawable.send_button_enabled_background);
             }
+
+            mSendButton.setAnimation(
+                    AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.message_send_button_reveal));
         }
 
         @Override
