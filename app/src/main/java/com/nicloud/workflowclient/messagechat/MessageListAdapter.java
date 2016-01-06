@@ -1,11 +1,15 @@
 package com.nicloud.workflowclient.messagechat;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,12 +23,16 @@ import java.util.List;
  */
 public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final double MESSAGE_ITEM_WIDTH_RATIO = 0.75;
+
     private static final class ItemViewType {
         public static final int ME = 0;
         public static final int OTHER = 1;
     }
 
     private Context mContext;
+
+    private int mMessageItemMaxWidth;
 
     private List<MessageItem> mMessageItemData;
 
@@ -37,6 +45,8 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public MeViewHolder(View itemView) {
             super(itemView);
             messageContent = (TextView) itemView.findViewById(R.id.message_content);
+
+            messageContent.setMaxWidth((int) (mMessageItemMaxWidth * MESSAGE_ITEM_WIDTH_RATIO));
         }
     }
 
@@ -50,12 +60,20 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(itemView);
             workerAvatar = (ImageView) itemView.findViewById(R.id.worker_avatar);
             messageContent = (TextView) itemView.findViewById(R.id.message_content);
+
+            messageContent.setMaxWidth((int) (mMessageItemMaxWidth * MESSAGE_ITEM_WIDTH_RATIO));
         }
     }
 
     public MessageListAdapter(Context context, List<MessageItem> messageItemData) {
         mContext = context;
         mMessageItemData = messageItemData;
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        mMessageItemMaxWidth = size.x;
     }
 
     @Override
