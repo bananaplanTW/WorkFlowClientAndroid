@@ -34,7 +34,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
     private EditText mMessageBox;
     private ImageView mSendButton;
 
-    private List<Message> mMessageData = new ArrayList<>();
+    private List<MessageItem> mMessageItemData = new ArrayList<>();
 
     private boolean mIsSendButtonBeenChanged = false;
 
@@ -108,7 +108,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
 
     private void setupMessageList() {
         mMessageListLayoutManager = new LinearLayoutManager(this);
-        mMessageListAdapter = new MessageListAdapter(this, mMessageData);
+        mMessageListAdapter = new MessageListAdapter(this, mMessageItemData);
 
         mMessageList.addItemDecoration(new MessageListDecoration(this));
         mMessageList.setLayoutManager(mMessageListLayoutManager);
@@ -118,48 +118,48 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void setMessageData() {
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Other", false, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Other", false, 34567));
-        mMessageData.add(new Message("ed", "Other", false, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Other", false, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Other", false, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
-        mMessageData.add(new Message("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Other", false, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Other", false, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Other", false, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Other", false, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Other", false, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
+        mMessageItemData.add(new MessageItem("ed", "Me", true, 34567));
 
-        mMessageList.scrollToPosition(mMessageData.size() - 1);
+        mMessageList.scrollToPosition(mMessageItemData.size() - 1);
     }
 
     @Override

@@ -24,7 +24,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private Context mContext;
 
-    private List<Message> mMessageData;
+    private List<MessageItem> mMessageItemData;
 
 
     private class MeViewHolder extends RecyclerView.ViewHolder {
@@ -51,9 +51,9 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public MessageListAdapter(Context context, List<Message> messageData) {
+    public MessageListAdapter(Context context, List<MessageItem> messageItemData) {
         mContext = context;
-        mMessageData = messageData;
+        mMessageItemData = messageItemData;
     }
 
     @Override
@@ -72,31 +72,31 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Message message = mMessageData.get(position);
+        MessageItem messageItem = mMessageItemData.get(position);
 
-        if (message.isMe) {
-            onBindMeViewHolder((MeViewHolder) holder, message);
+        if (messageItem.isMe) {
+            onBindMeViewHolder((MeViewHolder) holder, messageItem);
 
         } else {
-            onBindOtherViewHolder((OtherViewHolder) holder, message);
+            onBindOtherViewHolder((OtherViewHolder) holder, messageItem);
         }
     }
 
-    private void onBindMeViewHolder(MeViewHolder holder, Message message) {
-        holder.messageContent.setText(message.content);
+    private void onBindMeViewHolder(MeViewHolder holder, MessageItem messageItem) {
+        holder.messageContent.setText(messageItem.content);
     }
 
-    private void onBindOtherViewHolder(OtherViewHolder holder, Message message) {
-        holder.messageContent.setText(message.content);
+    private void onBindOtherViewHolder(OtherViewHolder holder, MessageItem messageItem) {
+        holder.messageContent.setText(messageItem.content);
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mMessageData.get(position).isMe ? ItemViewType.ME : ItemViewType.OTHER;
+        return mMessageItemData.get(position).isMe ? ItemViewType.ME : ItemViewType.OTHER;
     }
 
     @Override
     public int getItemCount() {
-        return mMessageData.size();
+        return mMessageItemData.size();
     }
 }
