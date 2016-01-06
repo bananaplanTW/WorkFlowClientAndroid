@@ -1,6 +1,7 @@
 package com.nicloud.workflowclient.messagechat;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.data.data.data.WorkingData;
 
 import java.util.List;
 
@@ -87,7 +89,16 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void onBindOtherViewHolder(OtherViewHolder holder, MessageItem messageItem) {
+        Drawable avatar = WorkingData.getInstance(mContext).getWorkerById(messageItem.ownerId).avatar;
+
         holder.messageContent.setText(messageItem.content);
+
+        if (avatar == null) {
+            holder.workerAvatar.setImageResource(R.drawable.ic_worker_black);
+
+        } else {
+            holder.workerAvatar.setImageDrawable(avatar);
+        }
     }
 
     @Override

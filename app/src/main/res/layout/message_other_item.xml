@@ -10,8 +10,7 @@
     <ImageView
         android:id="@+id/worker_avatar"
         android:layout_width="@dimen/worker_avatar_width_height"
-        android:layout_height="@dimen/worker_avatar_width_height"
-        android:src="@drawable/ic_worker_black" />
+        android:layout_height="@dimen/worker_avatar_width_height" />
 
     <TextView
         android:id="@+id/message_content"
