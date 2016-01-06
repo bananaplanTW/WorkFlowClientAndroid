@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
@@ -162,6 +163,10 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
         mMessageItemData.add(new MessageItem("ed", "Me", meId, 34567));
         mMessageItemData.add(new MessageItem("ed", "Me", meId, 34567));
 
+        messageListScrollToLast();
+    }
+
+    private void messageListScrollToLast() {
         mMessageList.scrollToPosition(mMessageItemData.size() - 1);
     }
 
@@ -180,8 +185,20 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.send_button:
+                sendMessage();
 
                 break;
         }
+    }
+
+    private void sendMessage() {
+        String message = mMessageBox.getText().toString();
+        if (TextUtils.isEmpty(message)) return;
+
+        mMessageBox.setText(null);
+        mMessageItemData.add(new MessageItem("ed", message, WorkingData.getUserId(), 34567));
+        mMessageListAdapter.notifyDataSetChanged();
+
+        messageListScrollToLast();
     }
 }
