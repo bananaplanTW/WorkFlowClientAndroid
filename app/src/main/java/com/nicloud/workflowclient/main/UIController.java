@@ -24,6 +24,7 @@ import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagechat.MessageChatActivity;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
+import com.nicloud.workflowclient.provider.debug.AndroidDatabaseManager;
 import com.nicloud.workflowclient.tasklist.TaskListFragment;
 import com.nicloud.workflowclient.utility.Utilities;
 
@@ -90,6 +91,10 @@ public class UIController implements View.OnClickListener {
             switch(item.getItemId()) {
                 case R.id.action_message:
                     openRightDrawer();
+                    return true;
+
+                case R.id.action_database_debug:
+                    mMainActivity.startActivity(new Intent(mMainActivity, AndroidDatabaseManager.class));
                     return true;
 
                 case R.id.action_settings:

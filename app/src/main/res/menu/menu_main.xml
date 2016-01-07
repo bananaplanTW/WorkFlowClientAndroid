@@ -5,6 +5,11 @@
     <item android:id="@+id/action_message"
         android:title="@string/action_message"
         android:icon="@drawable/ic_message"
+        android:orderInCategory="2"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_database_debug"
+        android:title="DB debug"
         android:orderInCategory="1"
         app:showAsAction="ifRoom" />
 

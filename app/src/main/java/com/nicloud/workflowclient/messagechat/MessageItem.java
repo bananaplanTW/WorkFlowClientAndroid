@@ -1,25 +1,22 @@
 package com.nicloud.workflowclient.messagechat;
 
-import com.nicloud.workflowclient.data.data.data.WorkingData;
-
 /**
  * Created by logicmelody on 2016/1/6.
  */
 public class MessageItem {
 
-    public String id;
+    public String messageId;
     public String content;
-    public String ownerId;
-    public boolean isMe = false;
+    public String senderId;
+    public String receiverId;
     public long time = 0L;
 
 
-    public MessageItem(String id, String content, String ownerId, long time) {
-        this.id = id;
+    public MessageItem(String messageId, String content, String senderId, String receiverId, long time) {
+        this.messageId = messageId;
         this.content = content;
-        this.ownerId = ownerId;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
         this.time = time;
-
-        this.isMe = ownerId.equals(WorkingData.getUserId());
     }
 }

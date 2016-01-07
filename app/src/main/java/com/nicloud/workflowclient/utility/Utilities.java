@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.tasklog.DownloadFileFromURLCommand;
+import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
 
@@ -459,5 +460,9 @@ public class Utilities {
 
     public static int generateNotificationId() {
         return sNotificationId++;
+    }
+
+    public static boolean isMe(String workerId) {
+        return WorkingData.getUserId().equals(workerId);
     }
 }

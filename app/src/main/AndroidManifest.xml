@@ -12,6 +12,9 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
+    <uses-permission android:name="com.nicloud.workflowclient.permission.READ" />
+    <uses-permission android:name="com.nicloud.workflowclient.permission.WRITE" />
+
     <!--
       IMPORTANT: Change "com.parse.starter.permission.C2D_MESSAGE" in the lines below
       to match your app's package name + ".permission.C2D_MESSAGE".
@@ -60,6 +63,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".messagechat.MessageChatActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".provider.debug.AndroidDatabaseManager"
+            android:theme="@style/Theme.AppCompat.Light"/>
 
         <service
             android:name=".serveraction.ActionService"
@@ -91,6 +96,14 @@
                 <category android:name="com.nicloud.workflowclient" />
             </intent-filter>
         </receiver>
+
+        <provider
+            android:name=".provider.contentprovider.WorkFlowProvider"
+            android:authorities="com.nicloud.workflowclient.provider"
+            android:exported="false"
+            android:multiprocess="false"
+            android:readPermission="com.nicloud.workflowclient.provider.permission.READ"
+            android:writePermission="com.nicloud.workflowclient.provider.permission.WRITE" />
     </application>
 
 </manifest>

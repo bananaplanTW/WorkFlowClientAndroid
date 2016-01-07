@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.List;
 
@@ -94,7 +95,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         MessageItem messageItem = mMessageItemData.get(position);
 
-        if (messageItem.isMe) {
+        if (Utilities.isMe(messageItem.senderId)) {
             onBindMeViewHolder((MeViewHolder) holder, messageItem);
 
         } else {
@@ -107,7 +108,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void onBindOtherViewHolder(OtherViewHolder holder, MessageItem messageItem) {
-        Drawable avatar = WorkingData.getInstance(mContext).getWorkerById(messageItem.ownerId).avatar;
+        Drawable avatar = WorkingData.getInstance(mContext).getWorkerById(messageItem.receiverId).avatar;
 
         holder.messageContent.setText(messageItem.content);
 
@@ -121,7 +122,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        return mMessageItemData.get(position).isMe ? ItemViewType.ME : ItemViewType.OTHER;
+        return Utilities.isMe(mMessageItemData.get(position).senderId) ? ItemViewType.ME : ItemViewType.OTHER;
     }
 
     @Override
