@@ -191,9 +191,6 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
         values.put(WorkFlowContract.Message.TIME, System.currentTimeMillis());
 
         getContentResolver().insert(WorkFlowContract.Message.CONTENT_URI, values);
-
-        mMessageListAdapter.notifyDataSetChanged();
-        messageListScrollToLast();
     }
 
     @Override
@@ -225,6 +222,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
             mMessageListData.add(new MessageItem(messageId, content, senderId, receiverId, time));
         }
 
+        mMessageListAdapter.notifyDataSetChanged();
         messageListScrollToLast();
     }
 
