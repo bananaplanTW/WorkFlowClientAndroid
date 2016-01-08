@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
+import com.nicloud.workflowclient.serveraction.service.MessageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +80,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_chat);
         initialize();
+        loadMessagesFirstLaunch();
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -90,6 +93,12 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
         setupViews();
         setupActionBar();
         setupMessageList();
+    }
+
+    private void loadMessagesFirstLaunch() {
+        if (getMessageCount() == 0) {
+            startService(MessageService.generateLoadMessageNormalIntent(this, mWorkerId));
+        }
     }
 
     private void findViews() {
@@ -150,6 +159,41 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
         mMessageList.addItemDecoration(new MessageListDecoration(this));
         mMessageList.setLayoutManager(mMessageListLayoutManager);
         mMessageList.setAdapter(mMessageListAdapter);
+        mMessageList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d("danny", "onScrolled");
+
+                if (isMessageListScrollToTop()) {
+                    //loadMessages(getMessageCount());
+                }
+            }
+        });
+    }
+
+    private int getMessageCount() {
+        Cursor cursor = null;
+        int messageCount = 0;
+
+        try {
+            cursor = getContentResolver().query(WorkFlowContract.Message.CONTENT_URI,
+                    mProjection, mSelection, mSelectionArgs, null);
+            if (cursor != null) {
+                messageCount = cursor.getCount();
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return messageCount;
+    }
+
+    private boolean isMessageListScrollToTop() {
+        return mMessageListLayoutManager.findFirstVisibleItemPosition() == 0;
     }
 
     private void messageListScrollToLast() {

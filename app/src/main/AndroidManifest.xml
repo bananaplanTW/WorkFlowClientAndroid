@@ -67,6 +67,9 @@
         <service
             android:name=".serveraction.service.UploadService"
             android:exported="false" />
+        <service
+            android:name=".serveraction.service.MessageService"
+            android:exported="false" />
 
         <!-- Parse -->
         <service android:name="com.parse.PushService" />
