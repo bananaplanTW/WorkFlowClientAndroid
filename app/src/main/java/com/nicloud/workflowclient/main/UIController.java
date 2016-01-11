@@ -25,7 +25,7 @@ import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagechat.MessageChatActivity;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.provider.debug.AndroidDatabaseManager;
-import com.nicloud.workflowclient.tasklist.TaskListFragment;
+import com.nicloud.workflowclient.tasklist.TasksListFragment;
 import com.nicloud.workflowclient.utility.Utilities;
 
 
@@ -221,8 +221,8 @@ public class UIController implements View.OnClickListener {
 
         switch (mClickedMainMenuItem.mType) {
             case MainMenuFragment.MainMenuItemType.MY_TASKS:
-                if (mCurrentContentFragment instanceof TaskListFragment) break;
-                replaceTo(TaskListFragment.class, FragmentTag.TASK_LIST);
+                if (mCurrentContentFragment instanceof TasksListFragment) break;
+                replaceTo(TasksListFragment.class, FragmentTag.TASK_LIST);
 
                 break;
 
@@ -269,13 +269,13 @@ public class UIController implements View.OnClickListener {
         }
 
         // Default fragment(TaskListFragment) when we launch app
-        TaskListFragment taskListFragment = (TaskListFragment) mFragmentManager.findFragmentByTag(FragmentTag.TASK_LIST);
-        if (taskListFragment == null) {
-            taskListFragment = new TaskListFragment();
-            fragmentTransaction.add(R.id.content_container, taskListFragment, FragmentTag.TASK_LIST);
+        TasksListFragment tasksListFragment = (TasksListFragment) mFragmentManager.findFragmentByTag(FragmentTag.TASK_LIST);
+        if (tasksListFragment == null) {
+            tasksListFragment = new TasksListFragment();
+            fragmentTransaction.add(R.id.content_container, tasksListFragment, FragmentTag.TASK_LIST);
         }
 
-        mCurrentContentFragment = taskListFragment;
+        mCurrentContentFragment = tasksListFragment;
         fragmentTransaction.commit();
     }
 

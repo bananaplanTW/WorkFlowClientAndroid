@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/scheduled_task_card_height"
+    android:layout_height="wrap_content"
     android:paddingTop="@dimen/scheduled_task_card_padding_top_bottom"
     android:paddingBottom="@dimen/scheduled_task_card_padding_top_bottom"
     android:paddingLeft="@dimen/scheduled_task_card_padding_left_right"
     android:paddingRight="@dimen/scheduled_task_card_padding_left_right"
-    android:background="@drawable/scheduled_task_card_background">
+    android:background="?android:attr/selectableItemBackground">
 
+    <!--
     <TextView
         android:id="@+id/scheduled_task_index"
         android:layout_width="@dimen/scheduled_task_card_index_width_height"
@@ -17,14 +18,12 @@
         android:textSize="@dimen/scheduled_task_card_content_text_size"
         android:textColor="@color/scheduled_task_card_content_text_color"
         android:background="@drawable/scheduled_task_card_index_background"/>
+        -->
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/scheduled_task_index"
-        android:layout_toLeftOf="@+id/scheduled_task_status"
-        android:layout_marginLeft="@dimen/scheduled_task_card_task_name_margin_left"
         android:orientation="vertical">
 
         <TextView
@@ -47,6 +46,7 @@
 
     </LinearLayout>
 
+    <!--
     <TextView
         android:id="@+id/scheduled_task_status"
         android:layout_width="wrap_content"
@@ -57,5 +57,6 @@
         android:textColor="@color/scheduled_task_card_status_text_color"
         android:textSize="@dimen/scheduled_task_card_status_text_size"
         android:visibility="gone"/>
+        -->
 
 </RelativeLayout>

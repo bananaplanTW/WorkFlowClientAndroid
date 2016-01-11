@@ -11,9 +11,9 @@ import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
-import com.nicloud.workflowclient.tasklist.TaskListFragment;
+import com.nicloud.workflowclient.tasklist.TasksListFragment;
 
-public class MainActivity extends AppCompatActivity implements TaskListFragment.OnRefreshInTaskList,
+public class MainActivity extends AppCompatActivity implements TasksListFragment.OnRefreshInTasksList,
         MainMenuFragment.OnClickMainMenuItemListener, MessageMenuFragment.OnClickMessageMenuWorkerListener {
 
     private UIController mUIController;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements TaskListFragment.
     }
 
     @Override
-    public void onRefreshInTaskList() {
+    public void onRefreshInTasksList() {
         mUIController.onRefreshInTaskList();
     }
 

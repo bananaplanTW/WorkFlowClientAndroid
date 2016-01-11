@@ -28,10 +28,10 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/12/21.
  */
-public class TaskListFragment extends Fragment implements DataObserver, View.OnClickListener {
+public class TasksListFragment extends Fragment implements DataObserver, View.OnClickListener {
 
-    public interface OnRefreshInTaskList {
-        void onRefreshInTaskList();
+    public interface OnRefreshInTasksList {
+        void onRefreshInTasksList();
     }
 
     private Context mContext;
@@ -48,7 +48,7 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private OnRefreshInTaskList mOnRefreshInTaskList;
+    private OnRefreshInTasksList mOnRefreshInTasksList;
 
     private LoadingWorkerTasks.OnFinishLoadingDataListener mOnFinishLoadingDataListener = new LoadingWorkerTasks.OnFinishLoadingDataListener() {
         @Override
@@ -81,13 +81,13 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        mOnRefreshInTaskList = (OnRefreshInTaskList) context;
+        mOnRefreshInTasksList = (OnRefreshInTasksList) context;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_task_list, container, false);
+        return inflater.inflate(R.layout.fragment_tasks_list, container, false);
     }
 
     @Override
@@ -182,7 +182,7 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
 
             @Override
             public void onRefresh() {
-                mOnRefreshInTaskList.onRefreshInTaskList();
+                mOnRefreshInTasksList.onRefreshInTasksList();
                 loadWorkerTasks();
             }
         });
@@ -241,7 +241,7 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
         //mTasksDataSet.add(new TasksListItem(WorkingData.getInstance(mMainActivity).getWipTask(), ItemViewType.WIP_TASK));
 
         // Scheduled task
-        mTasksDataSet.add(new TasksListItem(new Task(mContext.getString(R.string.next_task)), TasksListAdapter.ItemViewType.TITLE));
+        //mTasksDataSet.add(new TasksListItem(new Task(mContext.getString(R.string.next_task)), TasksListAdapter.ItemViewType.TITLE));
         for (Task scheduledTask : WorkingData.getInstance(mContext).getScheduledTasks()) {
             mTasksDataSet.add(new TasksListItem(scheduledTask, TasksListAdapter.ItemViewType.SCHEDULED_TASK));
         }

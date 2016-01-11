@@ -2,7 +2,10 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/tasks_list_padding_top"
+    android:paddingLeft="@dimen/tasks_list_padding_left_right"
+    android:paddingRight="@dimen/tasks_list_padding_left_right">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/task_log_swipe_refresh_container"
@@ -13,7 +16,8 @@
             android:id="@+id/tasks_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            android:background="@drawable/tasks_list_background"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

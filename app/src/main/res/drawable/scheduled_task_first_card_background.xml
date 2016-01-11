@@ -4,6 +4,9 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
 
+            <corners
+                android:topLeftRadius="@dimen/tasks_list_corner_radius"
+                android:topRightRadius="@dimen/tasks_list_corner_radius"/>
             <solid android:color="@color/task_card_pressed_background_color" />
 
         </shape>
@@ -12,6 +15,9 @@
     <item>
         <shape android:shape="rectangle">
 
+            <corners
+                android:topLeftRadius="@dimen/tasks_list_corner_radius"
+                android:topRightRadius="@dimen/tasks_list_corner_radius"/>
             <solid android:color="@color/task_card_background_color" />
 
         </shape>

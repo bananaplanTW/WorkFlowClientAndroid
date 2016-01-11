@@ -10,10 +10,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.Task;
-import com.nicloud.workflowclient.data.data.data.Worker;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
-import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.List;
 
@@ -46,10 +43,8 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private class ScheduledTaskViewHolder extends RecyclerView.ViewHolder {
 
         public View view;
-        public TextView taskIndex;
         public TextView taskName;
         public TextView caseName;
-        public TextView status;
 
         public ScheduledTaskViewHolder(View view) {
             super(view);
@@ -59,10 +54,8 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         private void findViews(View view) {
             this.view = view;
-            taskIndex = (TextView) view.findViewById(R.id.scheduled_task_index);
             taskName = (TextView) view.findViewById(R.id.scheduled_task_task_name);
             caseName = (TextView) view.findViewById(R.id.scheduled_task_case_name);
-            status = (TextView) view.findViewById(R.id.scheduled_task_status);
         }
 
         private void setupViews() {
@@ -120,14 +113,12 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void bindScheduledTaskViewHolder(ScheduledTaskViewHolder holder, Task task, int position) {
-        holder.taskIndex.setText(String.valueOf(position));
+        if (position == 0) {
+            holder.view.setBackgroundResource(R.drawable.scheduled_task_first_card_background);
+        }
+
         holder.taskName.setText(task.name);
         holder.caseName.setText(task.caseName);
-
-//        if (task.spentTime > 0L) {
-//            holder.status.setText(R.string.task_status_pause);
-//            holder.status.setBackgroundResource(R.drawable.scheduled_task_status_pause_background);
-//        }
     }
 
     @Override

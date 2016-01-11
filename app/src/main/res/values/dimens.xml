@@ -28,6 +28,9 @@
     <!-- Main -->
     <dimen name="action_bar_title_container_margin_left">8dp</dimen>
     <dimen name="action_bar_worker_name_text_size">18dp</dimen>
+    <dimen name="tasks_list_padding_top">20dp</dimen>
+    <dimen name="tasks_list_padding_left_right">15dp</dimen>
+    <dimen name="tasks_list_corner_radius">10dp</dimen>
     <dimen name="tasks_list_title_text_size">17dp</dimen>
     <dimen name="tasks_list_title_padding_left_right">15dp</dimen>
     <dimen name="tasks_list_title_padding_top">20dp</dimen>
@@ -46,8 +49,8 @@
     <dimen name="wip_task_card_no_wip_task_text_size">25dp</dimen>
     <dimen name="wip_task_card_choose_task_text_margin_top">15dp</dimen>
     <dimen name="scheduled_task_card_height">60dp</dimen>
-    <dimen name="scheduled_task_card_padding_top_bottom">5dp</dimen>
-    <dimen name="scheduled_task_card_padding_left_right">15dp</dimen>
+    <dimen name="scheduled_task_card_padding_top_bottom">10dp</dimen>
+    <dimen name="scheduled_task_card_padding_left_right">21dp</dimen>
     <dimen name="scheduled_task_card_margin_top_bottom">5dp</dimen>
     <dimen name="scheduled_task_card_index_width_height">25dp</dimen>
     <dimen name="scheduled_task_card_task_name_margin_left">15dp</dimen>
