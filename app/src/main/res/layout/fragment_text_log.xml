@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/text_log_swipe_refresh_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/divider">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/text_log_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/add_text_log_container"
+        android:background="@color/divider_color" />
+
+    <RelativeLayout
+        android:id="@+id/add_text_log_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/add_log_container_min_height"
+        android:paddingLeft="@dimen/add_log_container_padding_left_right"
+        android:paddingRight="@dimen/add_log_container_padding_left_right"
+        android:layout_alignParentBottom="true">
+
+        <EditText
+            android:id="@+id/add_text_log_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/add_text_log_button"
+            android:layout_marginRight="@dimen/add_log_box_margin_right"
+            android:hint="@string/add_text_log_hint"/>
+
+        <TextView
+            android:id="@+id/add_text_log_button"
+            style="@style/AddLogButton"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="@string/add_text_log_button_text" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

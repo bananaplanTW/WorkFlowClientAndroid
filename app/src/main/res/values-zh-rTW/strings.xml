@@ -45,7 +45,7 @@
 
     <!-- Detailed task -->
     <string name="detailed_task_tab_check_list">待辦事項</string>
-    <string name="detailed_task_tab_text">文字</string>
+    <string name="detailed_task_tab_text">卡片記錄</string>
     <string name="detailed_task_tab_photo">照片</string>
     <string name="detailed_task_tab_file">檔案</string>
     <string name="detailed_task_upload_file">上傳檔案 %1$s</string>
@@ -53,7 +53,10 @@
     <string name="task_log_no_log_text">無記錄</string>
     <string name="check_list_no_task_text">無代辦事項</string>
 
-    <!-- Add Log -->
+    <!-- Add Log container -->
+    <string name="add_text_log_hint">寫下卡片記錄</string>
+    <string name="add_text_log_button_text">記錄</string>
+
     <string name="add_log_edit_content_hint">輸入紀錄...</string>
     <string name="add_log_complete_text">訊息記錄完成</string>
     <string name="add_log_complete_photo">照片上傳完成</string>

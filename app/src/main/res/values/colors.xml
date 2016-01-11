@@ -46,7 +46,7 @@
     <color name="scheduled_task_card_status_pause_background_color">#FFF0AD4E</color>
     <color name="scheduled_task_card_status_text_color">#FFFFFFFF</color>
 
-    <!-- Task log -->
+    <!-- Detailed task -->
     <color name="task_log_tab_selected_color">#FF009789</color>
     <color name="task_log_tab_text_color">#FF9B9B9B</color>
     <color name="task_log_tab_text_selected_color">#FFFFFFFF</color>
@@ -55,6 +55,11 @@
     <!-- Check list -->
     <color name="check_list_checked_text_color">#FF8C8C8C</color>
     <color name="check_list_unchecked_text_color">#FF000000</color>
+
+    <!-- Add log container -->
+    <color name="add_log_button_text_color">#FF00A3B1</color>
+    <color name="add_log_button_stroke_color">#FF00A3B1</color>
+    <color name="add_log_button_background_color">#FFFFFFFF</color>
 
     <!-- Dialog -->
     <color name="dialog_background_color">#FFFFFFFF</color>

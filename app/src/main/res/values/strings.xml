@@ -67,7 +67,10 @@
     <string name="task_log_no_log_text">No log</string>
     <string name="check_list_no_task_text">No task</string>
 
-    <!-- Add Log -->
+    <!-- Add Log container -->
+    <string name="add_text_log_hint">Input text...</string>
+    <string name="add_text_log_button_text">Add</string>
+
     <string name="add_log_edit_content_hint">Input log...</string>
     <string name="add_log_complete_text">Record message successfully</string>
     <string name="add_log_complete_photo">Record photo successfully</string>

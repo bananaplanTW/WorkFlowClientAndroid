@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?colorControlHighlight">
+
+    <item>
+        <shape android:shape="rectangle">
+            <stroke android:width="1dp" android:color="@color/add_log_button_stroke_color" />
+            <corners android:radius="@dimen/add_log_button_corner_radius" />
+            <solid android:color="@color/add_log_button_background_color" />
+        </shape>
+    </item>
+
+</ripple>

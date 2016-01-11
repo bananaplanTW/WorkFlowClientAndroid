@@ -100,7 +100,15 @@
     <dimen name="check_list_item_padding">10dp</dimen>
     <dimen name="check_list_item_min_height">60dp</dimen>
 
-    <!-- Add log -->
+    <!-- Add log container -->
+    <dimen name="add_log_container_min_height">90dp</dimen>
+    <dimen name="add_log_container_padding_left_right">15dp</dimen>
+    <dimen name="add_log_button_padding_left_right">23dp</dimen>
+    <dimen name="add_log_button_padding_top_bottom">10dp</dimen>
+    <dimen name="add_log_button_corner_radius">5dp</dimen>
+    <dimen name="add_log_button_text_size">15dp</dimen>
+    <dimen name="add_log_box_margin_right">20dp</dimen>
+
     <dimen name="add_log_action_container_height">55dp</dimen>
     <dimen name="add_log_action_container_padding_left_right">15dp</dimen>
     <dimen name="add_log_upload_button_margin_left">25dp</dimen>

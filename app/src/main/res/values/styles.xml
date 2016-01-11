@@ -95,4 +95,16 @@
         <item name="android:textSize">@dimen/message_chat_message_item_content_text_size</item>
     </style>
 
+    <style name="AddLogButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/add_log_button_padding_top_bottom</item>
+        <item name="android:paddingBottom">@dimen/add_log_button_padding_top_bottom</item>
+        <item name="android:paddingLeft">@dimen/add_log_button_padding_left_right</item>
+        <item name="android:paddingRight">@dimen/add_log_button_padding_left_right</item>
+        <item name="android:textSize">@dimen/add_log_button_text_size</item>
+        <item name="android:textColor">@color/add_log_button_text_color</item>
+        <item name="android:background">@drawable/add_log_button_background</item>
+    </style>
+
 </resources>
