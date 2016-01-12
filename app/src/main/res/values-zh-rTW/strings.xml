@@ -56,6 +56,8 @@
     <!-- Add Log container -->
     <string name="add_text_log_hint">寫下卡片記錄</string>
     <string name="add_text_log_button_text">記錄</string>
+    <string name="add_check_item_hint">新增待辦事項</string>
+    <string name="add_check_item_button_text">新增</string>
 
     <string name="add_log_edit_content_hint">輸入紀錄...</string>
     <string name="add_log_complete_text">訊息記錄完成</string>

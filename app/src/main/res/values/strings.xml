@@ -70,6 +70,8 @@
     <!-- Add Log container -->
     <string name="add_text_log_hint">Input text...</string>
     <string name="add_text_log_button_text">Add</string>
+    <string name="add_check_item_hint">Input check item...</string>
+    <string name="add_check_item_button_text">Add</string>
 
     <string name="add_log_edit_content_hint">Input log...</string>
     <string name="add_log_complete_text">Record message successfully</string>
