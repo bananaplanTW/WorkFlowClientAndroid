@@ -67,7 +67,7 @@ public class TaskLogFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_task_log, container, false);
+        return null;
     }
     
     @Override
@@ -99,8 +99,8 @@ public class TaskLogFragment extends Fragment {
 
     private void findViews() {
         mTaskLogSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.task_log_swipe_refresh_container);
-        mTaskLogListView = (RecyclerView) getView().findViewById(R.id.task_log_list);
-        mNoLogText = (TextView) getView().findViewById(R.id.task_log_no_log_text);
+        //mTaskLogListView = (RecyclerView) getView().findViewById(R.id.task_log_list);
+        //mNoLogText = (TextView) getView().findViewById(R.id.task_log_no_log_text);
     }
 
     private void setupTaskLogList() {

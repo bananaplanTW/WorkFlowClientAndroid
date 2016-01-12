@@ -97,6 +97,7 @@
     <dimen name="log_item_timestamp_text_size">13dp</dimen>
     <dimen name="log_item_timestamp_margin_top">3dp</dimen>
     <dimen name="log_item_description_margin_top">3dp</dimen>
+    <dimen name="log_file_item_width_height">40dp</dimen>
 
     <!-- Check list -->
     <dimen name="check_list_item_padding">10dp</dimen>

@@ -31,6 +31,7 @@ import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.addlog.AddLogActivity;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
+import com.nicloud.workflowclient.detailedtask.filelog.FileLogFragment;
 import com.nicloud.workflowclient.detailedtask.tasklog.TaskLogFragment;
 import com.nicloud.workflowclient.detailedtask.textlog.TextLogFragment;
 import com.nicloud.workflowclient.serveraction.UploadCompletedReceiver;
@@ -56,23 +57,19 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private static final class TabPosition {
         public static final int CHECK = 0;
         public static final int TEXT = 1;
-        public static final int PHOTO = 2;
-        public static final int FILE = 3;
+        public static final int FILE = 2;
     }
 
     private static final class TabTag {
         public static final String CHECK = "tag_tab_check";
         public static final String TEXT = "tag_tab_text";
-        public static final String PHOTO = "tag_tab_photo";
         public static final String FILE = "tag_tab_file";
     }
 
     private static final class FragmentTag {
         public static final String CHECK_LIST = "tag_fragment_check_list";
         public static final String TEXT_LOG = "tag_fragment_text_log";
-
-
-        public static final String TASK_LOG = "tag_fragment_task_log";
+        public static final String FILE_LOG = "tag_fragment_file_log";
     }
 
     private FragmentManager mFragmentManager;
@@ -91,7 +88,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private Task mTask;
 
     private ArrayList<BaseData> mTextDataSet = new ArrayList<>();
-    private ArrayList<BaseData> mPhotoDataSet = new ArrayList<>();
     private ArrayList<BaseData> mFileDataSet = new ArrayList<>();
 
 
@@ -175,7 +171,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         mDetailedTaskTabHost.setup();
         addTab(TabTag.CHECK);
         addTab(TabTag.TEXT);
-        addTab(TabTag.PHOTO);
         addTab(TabTag.FILE);
         mDetailedTaskTabHost.setOnTabChangedListener(this);
     }
@@ -194,8 +189,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
             text = getString(R.string.detailed_task_tab_check_list);
         } else if(TabTag.TEXT.equals(tag)) {
             text = getString(R.string.detailed_task_tab_text);
-        } else if(TabTag.PHOTO.equals(tag)) {
-            text = getString(R.string.detailed_task_tab_photo);
         } else if(TabTag.FILE.equals(tag)) {
             text = getString(R.string.detailed_task_tab_file);
         }
@@ -272,12 +265,9 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
                 break;
 
-            case TabPosition.PHOTO:
             case TabPosition.FILE:
-                if (mCurrentFragment instanceof TaskLogFragment) {
-                    updateTaskLogListAccordingToTab();
-                }
-                replaceTo(TaskLogFragment.class, FragmentTag.TASK_LOG);
+                if (mCurrentFragment instanceof TaskLogFragment) return;
+                replaceTo(FileLogFragment.class, FragmentTag.FILE_LOG);
 
                 break;
         }
@@ -308,19 +298,11 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_TASK_ID, mTask.id);
 
-        if (fragment instanceof TaskLogFragment) {
-            switch (mDetailedTaskTabHost.getCurrentTab()) {
-                case TabPosition.PHOTO:
-                    bundle.putParcelableArrayList(TaskLogFragment.EXTRA_TASK_LOG, mPhotoDataSet);
-                    break;
-
-                case TabPosition.FILE:
-                    bundle.putParcelableArrayList(TaskLogFragment.EXTRA_TASK_LOG, mFileDataSet);
-                    break;
-            }
-
-        } else if (fragment instanceof TextLogFragment) {
+        if (fragment instanceof TextLogFragment) {
             bundle.putParcelableArrayList(TextLogFragment.EXTRA_TEXT_LOG, mTextDataSet);
+
+        } else if (fragment instanceof FileLogFragment) {
+            bundle.putParcelableArrayList(FileLogFragment.EXTRA_FILE_LOG, mFileDataSet);
         }
 
         fragment.setArguments(bundle);
@@ -331,12 +313,29 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         if (activities == null) return;
 
         setTaskLogData(parseActivityJSONArray(activities));
-        updateTaskLogListAccordingToTab();
 
         if (!(mCurrentFragment instanceof TaskLogFragment)) return;
         TaskLogFragment taskLogFragment = (TaskLogFragment) mCurrentFragment;
 
         taskLogFragment.setSwipeRefreshLayout(false);
+    }
+
+    private void setTaskLogData(ArrayList<BaseData> logData) {
+        mTextDataSet.clear();
+        mFileDataSet.clear();
+
+        for (BaseData data : logData) {
+            switch (data.type) {
+                case RECORD:
+                    mTextDataSet.add(data);
+                    break;
+
+                case PHOTO:
+                case FILE:
+                    mFileDataSet.add(data);
+                    break;
+            }
+        }
     }
 
     @Override
@@ -347,47 +346,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         TaskLogFragment taskLogFragment = (TaskLogFragment) mCurrentFragment;
 
         taskLogFragment.setSwipeRefreshLayout(false);
-    }
-
-    private void setTaskLogData(ArrayList<BaseData> logData) {
-        mTextDataSet.clear();
-        mPhotoDataSet.clear();
-        mFileDataSet.clear();
-
-        for (BaseData data : logData) {
-            switch (data.type) {
-                case RECORD:
-                    mTextDataSet.add(data);
-                    break;
-
-                case PHOTO:
-                    mPhotoDataSet.add(data);
-                    break;
-
-                case FILE:
-                    mFileDataSet.add(data);
-                    break;
-            }
-        }
-    }
-
-    private void updateTaskLogListAccordingToTab() {
-        if (!(mCurrentFragment instanceof TaskLogFragment)) return;
-
-        TaskLogFragment taskLogFragment = (TaskLogFragment) mCurrentFragment;
-        switch (mDetailedTaskTabHost.getCurrentTab()) {
-            case TabPosition.TEXT:
-                taskLogFragment.swapTaskLogData(mTextDataSet);
-                break;
-
-            case TabPosition.PHOTO:
-                taskLogFragment.swapTaskLogData(mPhotoDataSet);
-                break;
-
-            case TabPosition.FILE:
-                taskLogFragment.swapTaskLogData(mFileDataSet);
-                break;
-        }
     }
 
     private ArrayList<BaseData> parseActivityJSONArray(JSONArray activities) {

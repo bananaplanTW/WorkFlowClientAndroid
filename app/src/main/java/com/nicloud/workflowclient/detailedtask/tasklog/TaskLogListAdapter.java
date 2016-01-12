@@ -16,6 +16,7 @@ import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.activity.FileData;
 import com.nicloud.workflowclient.data.data.activity.PhotoData;
 import com.nicloud.workflowclient.data.data.activity.RecordData;
+import com.nicloud.workflowclient.detailedtask.filelog.DisplayImageActivity;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.Date;

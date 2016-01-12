@@ -56,7 +56,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.WhiteBackground" />
         <activity
-            android:name=".detailedtask.tasklog.DisplayImageActivity"
+            android:name=".detailedtask.filelog.DisplayImageActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".cases.CaseActivity"
