@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
+import com.nicloud.workflowclient.utility.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,13 @@ import java.util.List;
  */
 public class TextLogFragment extends Fragment {
 
+    public static final String EXTRA_TEXT_LOG = "extra_text_log";
+
     private Context mContext;
 
     private RecyclerView mTextLogList;
     private LinearLayoutManager mTextLogListLayoutManager;
+    private TextLogAdapter mTextLogAdapter;
     private List<BaseData> mTextDataSet = new ArrayList<>();
 
 
@@ -47,6 +51,10 @@ public class TextLogFragment extends Fragment {
     }
 
     private void initialize() {
+        ArrayList<BaseData> dataSet = getArguments().getParcelableArrayList(EXTRA_TEXT_LOG);
+        mTextDataSet.clear();
+        mTextDataSet.addAll(dataSet);
+
         findViews();
         setupTextLogList();
     }
@@ -57,7 +65,11 @@ public class TextLogFragment extends Fragment {
 
     private void setupTextLogList() {
         mTextLogListLayoutManager = new LinearLayoutManager(mContext);
+        mTextLogAdapter = new TextLogAdapter(mContext, mTextDataSet);
 
+        mTextLogList.addItemDecoration(new DividerItemDecoration(
+                getResources().getDrawable(R.drawable.list_divider), false, true, false, 0));
         mTextLogList.setLayoutManager(mTextLogListLayoutManager);
+        mTextLogList.setAdapter(mTextLogAdapter);
     }
 }

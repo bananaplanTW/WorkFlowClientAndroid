@@ -50,7 +50,7 @@
     <color name="task_log_tab_selected_color">#FF009789</color>
     <color name="task_log_tab_text_color">#FF9B9B9B</color>
     <color name="task_log_tab_text_selected_color">#FFFFFFFF</color>
-    <color name="task_log_list_item_description_text_color">#FF000000</color>
+    <color name="log_item_text_color">#FF696969</color>
 
     <!-- Check list -->
     <color name="check_list_checked_text_color">#FF8C8C8C</color>

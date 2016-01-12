@@ -18,7 +18,6 @@ import com.nicloud.workflowclient.data.data.activity.PhotoData;
 import com.nicloud.workflowclient.data.data.activity.RecordData;
 import com.nicloud.workflowclient.utility.Utilities;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -90,7 +89,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case ItemViewType.RECORD:
-                return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_text_item, parent, false));
+                return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.text_log_item, parent, false));
 
             case ItemViewType.PHOTO:
                 return new PhotoLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_photo_item, parent, false));
@@ -99,7 +98,7 @@ public class TaskLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return new FileLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_file_item, parent, false));
 
             default:
-                return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_log_text_item, parent, false));
+                return new TextLogViewHolder(LayoutInflater.from(mContext).inflate(R.layout.text_log_item, parent, false));
         }
     }
 

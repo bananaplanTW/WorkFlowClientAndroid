@@ -228,7 +228,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         loadingWorkerActivitiesTask.execute();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detailed_task, menu);
@@ -311,10 +310,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
         if (fragment instanceof TaskLogFragment) {
             switch (mDetailedTaskTabHost.getCurrentTab()) {
-                case TabPosition.TEXT:
-                    bundle.putParcelableArrayList(TaskLogFragment.EXTRA_TASK_LOG, mTextDataSet);
-                    break;
-
                 case TabPosition.PHOTO:
                     bundle.putParcelableArrayList(TaskLogFragment.EXTRA_TASK_LOG, mPhotoDataSet);
                     break;
@@ -323,6 +318,9 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
                     bundle.putParcelableArrayList(TaskLogFragment.EXTRA_TASK_LOG, mFileDataSet);
                     break;
             }
+
+        } else if (fragment instanceof TextLogFragment) {
+            bundle.putParcelableArrayList(TextLogFragment.EXTRA_TEXT_LOG, mTextDataSet);
         }
 
         fragment.setArguments(bundle);
