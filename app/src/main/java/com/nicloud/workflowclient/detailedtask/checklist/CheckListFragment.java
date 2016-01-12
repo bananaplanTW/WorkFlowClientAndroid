@@ -22,6 +22,7 @@ import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.OnRefreshDetailedTask;
 import com.nicloud.workflowclient.serveraction.ActionService;
 import com.nicloud.workflowclient.serveraction.ActionCompletedReceiver;
+import com.nicloud.workflowclient.utility.DividerItemDecoration;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.ArrayList;
@@ -112,6 +113,8 @@ public class CheckListFragment extends Fragment implements ActionCompletedReceiv
         mCheckListLayoutManager = new LinearLayoutManager(mContext);
         mCheckListAdapter = new CheckListAdapter(mContext, mTaskId, mDataSet);
 
+        mCheckList.addItemDecoration(new DividerItemDecoration(
+                getResources().getDrawable(R.drawable.list_divider), false, true, false, 0));
         mCheckList.setLayoutManager(mCheckListLayoutManager);
         mCheckList.setAdapter(mCheckListAdapter);
     }
