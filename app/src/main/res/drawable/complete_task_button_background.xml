@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <size
+        android:width="@dimen/complete_task_button_background_width_height"
+        android:height="@dimen/complete_task_button_background_width_height" />
+    <padding
+        android:top="@dimen/complete_task_button_background_padding"
+        android:bottom="@dimen/complete_task_button_background_padding"
+        android:left="@dimen/complete_task_button_background_padding"
+        android:right="@dimen/complete_task_button_background_padding"/>
+    <solid android:color="@color/complete_task_button_background_color" />
+</shape>

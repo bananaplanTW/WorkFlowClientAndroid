@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
@@ -45,6 +46,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public View view;
         public TextView taskName;
         public TextView caseName;
+        public ImageView completeButton;
 
         public ScheduledTaskViewHolder(View view) {
             super(view);
@@ -56,6 +58,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             this.view = view;
             taskName = (TextView) view.findViewById(R.id.scheduled_task_task_name);
             caseName = (TextView) view.findViewById(R.id.scheduled_task_case_name);
+            completeButton = (ImageView) view.findViewById(R.id.complete_task_button);
         }
 
         private void setupViews() {
@@ -64,6 +67,13 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 public void onClick(View v) {
                     mContext.startActivity(
                             DetailedTaskActivity.generateActivityIntent(mContext, mDataSet.get(getAdapterPosition()).task.id));
+                }
+            });
+
+            completeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
                 }
             });
         }

@@ -40,6 +40,8 @@
     <dimen name="wip_task_card_height">120dp</dimen>
     <dimen name="wip_task_card_information_container_padding_left_right">25dp</dimen>
     <dimen name="wip_task_card_information_container_padding_top_bottom">8dp</dimen>
+    <dimen name="complete_task_button_background_width_height">35dp</dimen>
+    <dimen name="complete_task_button_background_padding">5dp</dimen>
     <dimen name="title_information_text_size">17dp</dimen>
     <dimen name="wip_task_card_working_time_text_size">30dp</dimen>
     <dimen name="wip_task_card_button_container_height">55dp</dimen>

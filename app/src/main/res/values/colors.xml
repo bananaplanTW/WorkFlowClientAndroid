@@ -45,6 +45,7 @@
     <color name="scheduled_task_card_index_stroke_color">#FF979797</color>
     <color name="scheduled_task_card_status_pause_background_color">#FFF0AD4E</color>
     <color name="scheduled_task_card_status_text_color">#FFFFFFFF</color>
+    <color name="complete_task_button_background_color">#FF00B3A1</color>
 
     <!-- Detailed task -->
     <color name="task_log_tab_selected_color">#FF009789</color>
