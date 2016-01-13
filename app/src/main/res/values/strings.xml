@@ -72,6 +72,8 @@
     <string name="add_text_log_button_text">Add</string>
     <string name="add_check_item_hint">Input check item...</string>
     <string name="add_check_item_button_text">Add</string>
+    <string name="add_file_button_text">Upload file</string>
+    <string name="add_photo_button_text">Take photo</string>
 
     <string name="add_log_edit_content_hint">Input log...</string>
     <string name="add_log_complete_text">Record message successfully</string>

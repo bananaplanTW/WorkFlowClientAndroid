@@ -27,7 +27,6 @@ import com.nicloud.workflowclient.data.data.activity.ActivityDataFactory;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.detailedtask.addlog.AddLogActivity;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
 import com.nicloud.workflowclient.detailedtask.filelog.FileLogFragment;
 import com.nicloud.workflowclient.detailedtask.textlog.TextLogFragment;
@@ -218,32 +217,15 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_detailed_task, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
 
-            case R.id.action_add_log:
-                goToAddLogActivity();
-                return false;
-
             default:
                 return false;
         }
-    }
-
-    private void goToAddLogActivity() {
-        Intent intent = new Intent(this, AddLogActivity.class);
-        intent.putExtra(AddLogActivity.EXTRA_TASK_ID, mTask.id);
-
-        startActivityForResult(intent, REQUEST_ADD_LOG);
     }
 
     @Override

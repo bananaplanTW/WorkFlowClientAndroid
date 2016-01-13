@@ -69,7 +69,7 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_log);
+        //setContentView(R.layout.activity_add_log);
         initialize();
     }
 
@@ -82,13 +82,13 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void findViews() {
-        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
-        mWorkerPhoto = (ImageView) findViewById(R.id.add_log_worker_photo);
-        mEditContent = (EditText) findViewById(R.id.add_log_edit_content);
-        mLocationProgressBar = (ProgressBar) findViewById(R.id.location_progress_bar);
-        mCameraButton = (ImageView) findViewById(R.id.add_log_camera_button);
-        mUploadButton = (ImageView) findViewById(R.id.add_log_upload_button);
-        mRecordButton = (TextView) findViewById(R.id.add_log_button);
+//        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+//        mWorkerPhoto = (ImageView) findViewById(R.id.add_log_worker_photo);
+//        mEditContent = (EditText) findViewById(R.id.add_log_edit_content);
+//        mLocationProgressBar = (ProgressBar) findViewById(R.id.location_progress_bar);
+//        mCameraButton = (ImageView) findViewById(R.id.add_log_camera_button);
+//        mUploadButton = (ImageView) findViewById(R.id.add_log_upload_button);
+//        mRecordButton = (TextView) findViewById(R.id.add_log_button);
     }
 
     private void setupActionBar() {
@@ -143,25 +143,25 @@ public class AddLogActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.add_log_camera_button:
-                capturePhoto();
-                break;
-
-            case R.id.add_log_upload_button:
-                pickupFile();
-                break;
-
-            case R.id.add_log_button:
-                String editContent = mEditContent.getText().toString();
-                if (TextUtils.isEmpty(editContent)) break;
-
-                startService(UploadService.generateUploadTextIntent(this, mTaskId, mEditContent.getText().toString()));
-
-                mEditContent.setText("");
-
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.add_log_camera_button:
+//                capturePhoto();
+//                break;
+//
+//            case R.id.add_log_upload_button:
+//                pickupFile();
+//                break;
+//
+//            case R.id.add_log_button:
+//                String editContent = mEditContent.getText().toString();
+//                if (TextUtils.isEmpty(editContent)) break;
+//
+//                startService(UploadService.generateUploadTextIntent(this, mTaskId, mEditContent.getText().toString()));
+//
+//                mEditContent.setText("");
+//
+//                break;
+//        }
     }
 
     private void capturePhoto() {

@@ -24,15 +24,36 @@
         android:layout_above="@+id/add_text_log_container"
         android:background="@color/divider_color" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/add_text_log_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/add_log_container_min_height"
         android:paddingLeft="@dimen/add_log_container_padding_left_right"
         android:paddingRight="@dimen/add_log_container_padding_left_right"
-        android:layout_alignParentBottom="true">
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/add_file_button"
+            style="@style/AddLogButton"
+            android:layout_width="@dimen/add_file_photo_button_width"
+            android:gravity="center"
+            android:text="@string/add_file_button_text"
+            android:drawableLeft="@drawable/ic_add_file"
+            android:drawablePadding="@dimen/add_file_photo_button_drawable_padding"/>
+
+        <TextView
+            android:id="@+id/add_photo_button"
+            style="@style/AddLogButton"
+            android:layout_width="@dimen/add_file_photo_button_width"
+            android:layout_marginLeft="@dimen/add_file_photo_button_between_margin"
+            android:gravity="center"
+            android:text="@string/add_photo_button_text"
+            android:drawableLeft="@drawable/ic_add_photo"
+            android:drawablePadding="@dimen/add_file_photo_button_drawable_padding"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

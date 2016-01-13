@@ -58,7 +58,7 @@
 
     <!-- Add log container -->
     <color name="add_log_button_text_color">#FF00A3B1</color>
-    <color name="add_log_button_stroke_color">#FF00A3B1</color>
+    <color name="add_log_button_stroke_color">#FF00B3A1</color>
     <color name="add_log_button_background_color">#FFFFFFFF</color>
 
     <!-- Dialog -->
