@@ -1,12 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:paddingLeft="@dimen/task_info_padding_left_right"
+    android:paddingRight="@dimen/task_info_padding_left_right"
+    android:paddingTop="@dimen/task_info_padding_top_bottom"
+    android:paddingBottom="@dimen/task_info_padding_top_bottom">
+
+    <RelativeLayout
+        android:id="@+id/task_description_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/task_info_description_container_min_height">
+
+        <TextView
+            android:id="@+id/task_description_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/task_info_task_description"
+            android:textSize="@dimen/task_info_title_text_size"
+            android:textStyle="bold"
+            android:textColor="@color/task_info_text_color"/>
+
+        <TextView
+            android:id="@+id/task_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/task_description_title"
+            android:layout_marginTop="@dimen/task_info_description_margin_top"
+            android:textColor="@color/task_info_text_color" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/task_due_date_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/task_description_container"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/task_info_task_due_date"
+            android:textSize="@dimen/task_info_title_text_size"
+            android:textStyle="bold"
+            android:textColor="@color/task_info_text_color"/>
+
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/complete_task_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Task info"/>
+        android:paddingLeft="@dimen/task_info_complete_task_button_padding_left_right"
+        android:paddingRight="@dimen/task_info_complete_task_button_padding_left_right"
+        android:paddingTop="@dimen/task_info_complete_task_button_padding_top_bottom"
+        android:paddingBottom="@dimen/task_info_complete_task_button_padding_top_bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/task_info_complete_task_button_text"
+        android:textStyle="bold"
+        android:textColor="@color/task_info_complete_task_button_text_color"
+        android:background="@drawable/task_info_complete_task_button_background"/>
 
-</LinearLayout>
+</RelativeLayout>

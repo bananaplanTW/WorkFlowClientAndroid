@@ -91,6 +91,20 @@
     <dimen name="detailed_task_list_item_photo_margin_top">10dp</dimen>
     <dimen name="empty_text_size">20dp</dimen>
 
+    <!-- Task info -->
+    <dimen name="task_info_padding_left_right">10dp</dimen>
+    <dimen name="task_info_padding_top_bottom">30dp</dimen>
+    <dimen name="task_info_title_text_size">18dp</dimen>
+    <dimen name="task_info_description_container_min_height">120dp</dimen>
+    <dimen name="task_info_description_margin_top">10dp</dimen>
+    <dimen name="task_info_complete_task_button_corner_radius">5dp</dimen>
+    <dimen name="task_info_complete_task_button_padding_left_right">20dp</dimen>
+    <dimen name="task_info_complete_task_button_padding_top_bottom">8dp</dimen>
+
+    <!-- Check list -->
+    <dimen name="check_list_item_padding">10dp</dimen>
+    <dimen name="check_list_item_min_height">60dp</dimen>
+
     <!-- Log -->
     <dimen name="log_item_min_height">60dp</dimen>
     <dimen name="log_item_padding">10dp</dimen>
@@ -100,10 +114,6 @@
     <dimen name="log_item_timestamp_margin_top">3dp</dimen>
     <dimen name="log_item_description_margin_top">3dp</dimen>
     <dimen name="log_file_item_width_height">40dp</dimen>
-
-    <!-- Check list -->
-    <dimen name="check_list_item_padding">10dp</dimen>
-    <dimen name="check_list_item_min_height">60dp</dimen>
 
     <!-- Add log container -->
     <dimen name="add_log_container_min_height">70dp</dimen>

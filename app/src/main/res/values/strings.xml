@@ -68,6 +68,11 @@
     <string name="task_log_no_log_text">No log</string>
     <string name="check_list_no_task_text">No task</string>
 
+    <!-- Task info -->
+    <string name="task_info_task_description">Task description</string>
+    <string name="task_info_task_due_date">Due date</string>
+    <string name="task_info_complete_task_button_text">Complete task</string>
+
     <!-- Add Log container -->
     <string name="add_text_log_hint">Input text...</string>
     <string name="add_text_log_button_text">Add</string>

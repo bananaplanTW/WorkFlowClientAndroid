@@ -53,6 +53,11 @@
     <color name="task_log_tab_text_selected_color">#FFFFFFFF</color>
     <color name="log_item_text_color">#FF696969</color>
 
+    <!-- Task info -->
+    <color name="task_info_text_color">#FF696969</color>
+    <color name="task_info_complete_task_button_text_color">#FFFFFFFF</color>
+    <color name="task_info_complete_task_button_background_color">#FF00B3A1</color>
+
     <!-- Check list -->
     <color name="check_list_checked_text_color">#FF8C8C8C</color>
     <color name="check_list_unchecked_text_color">#FF000000</color>

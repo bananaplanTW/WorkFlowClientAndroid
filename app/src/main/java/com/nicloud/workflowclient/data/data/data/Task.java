@@ -22,6 +22,7 @@ public class Task extends IdData {
         PENDING, UNCLAIMED, WIP, PAUSE, DONE, WARNING, STOP, CANCEL, IN_REVIEW
     }
 
+    public String description;
     public String caseId;
     public String caseName;
     public String workerId;
@@ -52,6 +53,7 @@ public class Task extends IdData {
 
     public Task(String id,
                 String name,
+                String description,
                 String caseName,
                 String caseId,
                 String workerId,
@@ -68,6 +70,7 @@ public class Task extends IdData {
                 ArrayList<CheckItem> checkList) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.caseName = caseName;
         this.caseId = caseId;
         this.workerId = workerId;
@@ -107,6 +110,7 @@ public class Task extends IdData {
 
     public void update(Task task) {
         this.name = task.name;
+        this.name = task.description;
         this.caseName = task.caseName;
         this.caseId = task.caseId;
         this.workerId = task.workerId;

@@ -861,6 +861,7 @@ public class LoadingDataUtils {
             JSONObject taskTimecardJson = getJsonObjectFromJson(taskJson, "taskTimecard");
 
             String id = taskJson.getString("_id");
+            String description = getStringFromJson(taskJson, "description");
             String name = taskJson.getString("name");
             String caseName = taskJson.getString("caseName");
             String caseId = taskJson.getString("caseId");
@@ -909,6 +910,7 @@ public class LoadingDataUtils {
             Task task = new Task(
                     id,
                     name,
+                    description,
                     caseName,
                     caseId,
                     workerId,
