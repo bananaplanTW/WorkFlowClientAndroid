@@ -51,7 +51,7 @@ public class CheckListFragment extends Fragment implements ActionCompletedReceiv
     private OnRefreshDetailedTask mOnRefreshDetailedTask;
 
 
-    public void refresh() {
+    public void swapData() {
         mDataSet.clear();
         mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
         mCheckListAdapter.notifyDataSetChanged();

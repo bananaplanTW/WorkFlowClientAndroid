@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
+import com.nicloud.workflowclient.detailedtask.OnRefreshDetailedTask;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -26,16 +28,37 @@ public class FileLogFragment extends Fragment {
 
     private Context mContext;
 
+    private SwipeRefreshLayout mFileLogSwipeRefreshLayout;
+
     private RecyclerView mFileLogList;
     private LinearLayoutManager mFileLogListLayoutManager;
     private FileLogListAdapter mFileLogListAdapter;
     private List<BaseData> mFileLogData = new ArrayList<>();
 
+    private OnRefreshDetailedTask mOnRefreshDetailedTask;
+
+
+    public void swapData(List<BaseData> dataSet) {
+        mFileLogData.clear();
+        mFileLogData.addAll(dataSet);
+        mFileLogListAdapter.notifyDataSetChanged();
+
+        //setNoLogTextVisibility();
+    }
+
+    public void refresh() {
+        mFileLogListAdapter.notifyDataSetChanged();
+    }
+
+    public void setSwipeRefreshLayout(boolean isRefresh) {
+        mFileLogSwipeRefreshLayout.setRefreshing(isRefresh);
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+        mOnRefreshDetailedTask = (OnRefreshDetailedTask) context;
     }
 
     @Nullable
@@ -55,11 +78,28 @@ public class FileLogFragment extends Fragment {
 
     private void initialize() {
         findViews();
+        setupSwipeRefreshLayout();
         setupFileLogList();
     }
 
     private void findViews() {
+        mFileLogSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.file_log_swipe_refresh_container);
         mFileLogList = (RecyclerView) getView().findViewById(R.id.file_log_list);
+    }
+
+    private void setupSwipeRefreshLayout() {
+        mFileLogSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                mOnRefreshDetailedTask.onRefreshDetailedTask();
+            }
+        });
+
+        mFileLogSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     private void setupFileLogList() {

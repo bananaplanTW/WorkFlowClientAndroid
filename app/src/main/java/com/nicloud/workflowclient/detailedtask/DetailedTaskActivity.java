@@ -17,14 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.activity.ILoadingActivitiesStrategy;
 import com.nicloud.workflowclient.data.connectserver.activity.LoadingActivitiesAsyncTask;
 import com.nicloud.workflowclient.data.connectserver.activity.LoadingTaskActivitiesStrategy;
 import com.nicloud.workflowclient.data.connectserver.task.LoadingTaskById;
-import com.nicloud.workflowclient.data.connectserver.tasklog.OnLoadImageListener;
 import com.nicloud.workflowclient.data.data.activity.ActivityDataFactory;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.data.Task;
@@ -32,7 +30,6 @@ import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.addlog.AddLogActivity;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
 import com.nicloud.workflowclient.detailedtask.filelog.FileLogFragment;
-import com.nicloud.workflowclient.detailedtask.tasklog.TaskLogFragment;
 import com.nicloud.workflowclient.detailedtask.textlog.TextLogFragment;
 import com.nicloud.workflowclient.serveraction.UploadCompletedReceiver;
 import com.nicloud.workflowclient.serveraction.UploadService;
@@ -43,7 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DetailedTaskActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
         LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnRefreshDetailedTask,
@@ -123,6 +119,17 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         initialize();
     }
 
+    private void initialize() {
+        mFragmentManager = getSupportFragmentManager();
+        mTask = WorkingData.getInstance(this).getTask(getIntent().getStringExtra(EXTRA_TASK_ID));
+        mUploadCompletedReceiver = new UploadCompletedReceiver(this);
+        findViews();
+        setupActionBar();
+        setupTabs();
+        setupInitFragment();
+        loadTaskActivities();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -134,17 +141,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     protected void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mUploadCompletedReceiver);
-    }
-
-    private void initialize() {
-        mFragmentManager = getSupportFragmentManager();
-        mTask = WorkingData.getInstance(this).getTask(getIntent().getStringExtra(EXTRA_TASK_ID));
-        mUploadCompletedReceiver = new UploadCompletedReceiver(this);
-        findViews();
-        setupActionBar();
-        setupTabs();
-        setupInitFragment();
-        loadTaskActivities();
     }
 
     private void findViews() {
@@ -266,7 +262,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
                 break;
 
             case TabPosition.FILE:
-                if (mCurrentFragment instanceof TaskLogFragment) return;
+                if (mCurrentFragment instanceof FileLogFragment) return;
                 replaceTo(FileLogFragment.class, FragmentTag.FILE_LOG);
 
                 break;
@@ -313,11 +309,36 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         if (activities == null) return;
 
         setTaskLogData(parseActivityJSONArray(activities));
+        updateListAccordingToTab();
+        turnOffSwipeRefreshLayout();
+    }
 
-        if (!(mCurrentFragment instanceof TaskLogFragment)) return;
-        TaskLogFragment taskLogFragment = (TaskLogFragment) mCurrentFragment;
+    private void updateListAccordingToTab() {
+        switch (mDetailedTaskTabHost.getCurrentTab()) {
+            case TabPosition.CHECK:
+                ((CheckListFragment) mCurrentFragment).swapData();
+                break;
 
-        taskLogFragment.setSwipeRefreshLayout(false);
+            case TabPosition.TEXT:
+                ((TextLogFragment) mCurrentFragment).swapData(mTextDataSet);
+                break;
+
+            case TabPosition.FILE:
+                ((FileLogFragment) mCurrentFragment).swapData(mFileDataSet);
+                break;
+        }
+    }
+
+    private void turnOffSwipeRefreshLayout() {
+        if (mCurrentFragment instanceof TextLogFragment) {
+            ((TextLogFragment) mCurrentFragment).setSwipeRefreshLayout(false);
+
+        } else if (mCurrentFragment instanceof FileLogFragment) {
+            ((FileLogFragment) mCurrentFragment).setSwipeRefreshLayout(false);
+
+        } else if (mCurrentFragment instanceof CheckListFragment) {
+            ((CheckListFragment) mCurrentFragment).setSwipeRefreshLayout(false);
+        }
     }
 
     private void setTaskLogData(ArrayList<BaseData> logData) {
@@ -341,11 +362,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     @Override
     public void onFailLoadingData(boolean isFailCausedByInternet) {
         Utilities.showInternetConnectionWeakToast(this);
-
-        if (!(mCurrentFragment instanceof TaskLogFragment)) return;
-        TaskLogFragment taskLogFragment = (TaskLogFragment) mCurrentFragment;
-
-        taskLogFragment.setSwipeRefreshLayout(false);
+        turnOffSwipeRefreshLayout();
     }
 
     private ArrayList<BaseData> parseActivityJSONArray(JSONArray activities) {
@@ -388,21 +405,14 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     @Override
     public void onFinishLoadingTaskById() {
-        if (!(mCurrentFragment instanceof CheckListFragment)) return;
-        CheckListFragment checkListFragment = (CheckListFragment) mCurrentFragment;
-
-        checkListFragment.refresh();
-        checkListFragment.setSwipeRefreshLayout(false);
+        updateListAccordingToTab();
+        turnOffSwipeRefreshLayout();
     }
 
     @Override
     public void onFailLoadingTaskById(boolean isFailCausedByInternet) {
         Utilities.showInternetConnectionWeakToast(this);
-
-        if (!(mCurrentFragment instanceof CheckListFragment)) return;
-        CheckListFragment checkListFragment = (CheckListFragment) mCurrentFragment;
-
-        checkListFragment.setSwipeRefreshLayout(false);
+        turnOffSwipeRefreshLayout();
     }
 
     @Override
