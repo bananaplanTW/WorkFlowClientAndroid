@@ -232,7 +232,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
             case R.id.action_add_log:
                 goToAddLogActivity();
-                return true;
+                return false;
 
             default:
                 return false;
