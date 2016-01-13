@@ -47,11 +47,6 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".detailedtask.addlog.AddLogActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.WhiteBackground"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
             android:name=".detailedtask.DetailedTaskActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.WhiteBackground" />

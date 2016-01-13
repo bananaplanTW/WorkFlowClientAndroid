@@ -74,15 +74,12 @@
     <string name="add_check_item_button_text">Add</string>
     <string name="add_file_button_text">Upload file</string>
     <string name="take_photo_button_text">Take photo</string>
-
-    <string name="add_log_edit_content_hint">Input log...</string>
     <string name="add_log_complete_text">Record message successfully</string>
     <string name="add_log_complete_photo">Record photo successfully</string>
     <string name="add_log_complete_file">Record file successfully</string>
     <string name="add_log_uploading_text">Uploading text...</string>
     <string name="add_log_uploading_photo">Uploading photo...</string>
     <string name="add_log_uploading_file">Uploading file...</string>
-    <string name="add_log_wait">Please wait</string>
     <string name="add_log_failed">Upload failed, please try again</string>
 
     <!-- Dialog -->

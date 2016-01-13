@@ -60,7 +60,6 @@
     <string name="add_check_item_button_text">新增</string>
     <string name="add_file_button_text">上傳檔案</string>
     <string name="take_photo_button_text">拍照</string>
-
     <string name="add_log_edit_content_hint">輸入紀錄...</string>
     <string name="add_log_complete_text">訊息記錄完成</string>
     <string name="add_log_complete_photo">照片上傳完成</string>
@@ -68,7 +67,6 @@
     <string name="add_log_uploading_text">上傳訊息中...</string>
     <string name="add_log_uploading_photo">上傳照片中...</string>
     <string name="add_log_uploading_file">上傳檔案中...</string>
-    <string name="add_log_wait">請稍候</string>
     <string name="add_log_failed">上傳失敗, 請再試一次</string>
 
     <!-- Dialog -->
