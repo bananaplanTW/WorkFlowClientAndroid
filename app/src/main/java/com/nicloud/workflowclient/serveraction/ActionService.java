@@ -24,10 +24,13 @@ public class ActionService extends IntentService {
 
     public static class ServerAction {
         public static final String CHECK_ITEM = "server_action_check_item";
+        public static final String COMPLETE_TASK = "server_action_complete_task";
     }
 
     public static class ExtraKey {
         public static final String TASK_ID = "extra_task_id";
+        public static final String TASK_NAME = "extra_task_name";
+        public static final String WORKER_ID = "extra_worker_id";
         public static final String ACTION_SUCCESSFUL = "extra_action_successful";
 
         // Check item
@@ -50,6 +53,9 @@ public class ActionService extends IntentService {
 
         if (ServerAction.CHECK_ITEM.equals(action)) {
             checkItem(intent);
+
+        } else if(ServerAction.COMPLETE_TASK.equals(action)) {
+            completeTask(intent);
         }
     }
 
@@ -91,6 +97,47 @@ public class ActionService extends IntentService {
             LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
 
             Log.e(TAG, "Exception in checkitem() in ActionService");
+            e.printStackTrace();
+
+            return;
+        }
+
+        broadcastIntent.putExtra(ExtraKey.ACTION_SUCCESSFUL, false);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+    }
+
+    private void completeTask(Intent intent) {
+        String taskId = intent.getStringExtra(ExtraKey.TASK_ID);
+        String taskName = intent.getStringExtra(ExtraKey.TASK_NAME);
+
+        Intent broadcastIntent = new Intent(ServerAction.COMPLETE_TASK);
+        broadcastIntent.putExtra(ExtraKey.TASK_NAME, taskName);
+
+        try {
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("x-user-id", WorkingData.getUserId());
+            headers.put("x-auth-token", WorkingData.getAuthToken());
+
+            HashMap<String, String> bodies = new HashMap<>();
+            bodies.put("td", taskId);
+
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, LoadingDataUtils.WorkingDataUrl.EndPoints.COMPLETE_TASK, null);
+            String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+                if (jsonObject.getString("status").equals("success")) {
+                    broadcastIntent.putExtra(ExtraKey.ACTION_SUCCESSFUL, true);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+
+                    return;
+                }
+            }
+        }  catch (JSONException e) {
+            broadcastIntent.putExtra(ExtraKey.ACTION_SUCCESSFUL, false);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+
+            Log.e(TAG, "Exception in CompleteTaskForWorkerStrategy() in ActionService");
             e.printStackTrace();
 
             return;

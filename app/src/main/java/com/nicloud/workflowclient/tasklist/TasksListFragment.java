@@ -72,6 +72,10 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
     };
 
 
+    public void loadWorkerTasks() {
+        new LoadingWorkerTasks(mContext, mOnFinishLoadingDataListener).execute();
+    }
+
     private void showInternetConnectionWeakToast() {
         mSwipeRefreshLayout.setRefreshing(false);
         Utilities.showInternetConnectionWeakToast(mContext);
@@ -222,10 +226,6 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
-    }
-
-    private void loadWorkerTasks() {
-        new LoadingWorkerTasks(mContext, mOnFinishLoadingDataListener).execute();
     }
 
     @Override

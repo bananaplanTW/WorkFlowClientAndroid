@@ -465,4 +465,9 @@ public class Utilities {
     public static boolean isMe(String workerId) {
         return WorkingData.getUserId().equals(workerId);
     }
+
+    public static void showCompleteTaskToast(Context context, String taskName) {
+        Toast.makeText(context, String.format(context.getString(R.string.complete_task), taskName),
+                Toast.LENGTH_SHORT).show();
+    }
 }

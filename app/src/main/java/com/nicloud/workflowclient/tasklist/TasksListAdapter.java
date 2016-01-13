@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
+import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.List;
 
@@ -73,12 +75,13 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             completeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Utilities.showDialog(mFragmentManager,
+                            DisplayDialogFragment.DialogType.COMPLETE_TASK,
+                            mDataSet.get(getAdapterPosition()).task.id);
                 }
             });
         }
     }
-
 
     public TasksListAdapter(Context context, FragmentManager fm, List<TasksListItem> dataSet) {
         mContext = context;

@@ -1,11 +1,13 @@
 package com.nicloud.workflowclient.main;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -19,12 +21,15 @@ import android.view.View;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.cases.CaseActivity;
 import com.nicloud.workflowclient.data.data.data.Worker;
+import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagechat.MessageChatActivity;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.provider.debug.AndroidDatabaseManager;
+import com.nicloud.workflowclient.serveraction.ActionCompletedReceiver;
+import com.nicloud.workflowclient.serveraction.ActionService;
 import com.nicloud.workflowclient.tasklist.TasksListFragment;
 import com.nicloud.workflowclient.utility.Utilities;
 
@@ -36,7 +41,7 @@ import com.nicloud.workflowclient.utility.Utilities;
  * @since 2015.05.28
  *
  */
-public class UIController implements View.OnClickListener {
+public class UIController implements View.OnClickListener, ActionCompletedReceiver.OnServerActionCompletedListener {
 
     private static final String TAG = "UIController";
 
@@ -66,9 +71,25 @@ public class UIController implements View.OnClickListener {
     private MainMenuItem mClickedMainMenuItem;
     private Worker mClickedWorker;
 
+    private ActionCompletedReceiver mActionCompletedReceiver;
+
 
     public UIController(AppCompatActivity activity) {
         mMainActivity = activity;
+    }
+
+    public void onCompleteTaskOk(String taskId) {
+        Intent intent = new Intent(mMainActivity, ActionService.class);
+        intent.setAction(ActionService.ServerAction.COMPLETE_TASK);
+        intent.putExtra(ActionService.ExtraKey.TASK_ID, taskId);
+        intent.putExtra(ActionService.ExtraKey.TASK_NAME, WorkingData.getInstance(mMainActivity).getTask(taskId).name);
+
+        mMainActivity.startService(intent);
+        Utilities.dismissDialog(mFragmentManager);
+    }
+
+    public void onCompleteTaskCancel() {
+        Utilities.dismissDialog(mFragmentManager);
     }
 
     public void onRefreshInTaskList() {
@@ -76,6 +97,15 @@ public class UIController implements View.OnClickListener {
 
     public void onCreate(Bundle savedInstanceState) {
         initialize();
+    }
+
+    public void onStart() {
+        IntentFilter intentFilter = new IntentFilter(ActionService.ServerAction.COMPLETE_TASK);
+        LocalBroadcastManager.getInstance(mMainActivity).registerReceiver(mActionCompletedReceiver, intentFilter);
+    }
+
+    public void onStop() {
+        LocalBroadcastManager.getInstance(mMainActivity).unregisterReceiver(mActionCompletedReceiver);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -152,6 +182,7 @@ public class UIController implements View.OnClickListener {
 
     private void initialize() {
         mFragmentManager = mMainActivity.getSupportFragmentManager();
+        mActionCompletedReceiver = new ActionCompletedReceiver(this);
         findViews();
         setupViews();
         setupActionbar();
@@ -305,6 +336,23 @@ public class UIController implements View.OnClickListener {
                 Utilities.showDialog(mFragmentManager, DisplayDialogFragment.DialogType.CHECK_IN_OUT, null);
 
                 break;
+        }
+    }
+
+    @Override
+    public void onServerActionCompleted(Intent intent) {
+        String action = intent.getAction();
+        String taskName = intent.getStringExtra(ActionService.ExtraKey.TASK_NAME);
+        boolean isActionSuccessful = intent.getBooleanExtra(ActionService.ExtraKey.ACTION_SUCCESSFUL, false);
+
+        if (action.equals(ActionService.ServerAction.COMPLETE_TASK)) {
+            if (isActionSuccessful) {
+                ((TasksListFragment) mCurrentContentFragment).loadWorkerTasks();
+                Utilities.showCompleteTaskToast(mMainActivity, taskName);
+
+            } else {
+                Utilities.showInternetConnectionWeakToast(mMainActivity);
+            }
         }
     }
 }
