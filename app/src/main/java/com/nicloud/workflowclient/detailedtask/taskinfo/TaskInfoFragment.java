@@ -15,6 +15,7 @@ import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.OnSwipeRefresh;
+import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh {
     private Context mContext;
 
     private TextView mTaskDescription;
+    private TextView mTaskDueDate;
 
     private Task mTask;
 
@@ -57,11 +59,12 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh {
 
     private void findViews() {
         mTaskDescription = (TextView) getView().findViewById(R.id.task_description);
+        mTaskDueDate = (TextView) getView().findViewById(R.id.task_due_date);
     }
 
     private void setTaskInfo() {
         mTaskDescription.setText(mTask.description);
-
+        //mTaskDueDate.setText(Utilities.timestamp2Date(mTask.endDate, Utilities.DATE_FORMAT_YMD));
     }
 
     @Override

@@ -886,7 +886,7 @@ public class LoadingDataUtils {
             Date startDate = getDateFromJson(taskJson, "startDate");
             Date endDate = getDateFromJson(taskJson, "endDate");
             Date assignDate = getDateFromJson(taskJson, "dispatchedDate");
-//
+
 //            List<TaskWarning> taskWarnings = new ArrayList<>();
 //            for (int w = 0 ; w < warningJsonList.length() ; w++) {
 //                JSONObject warningJson = warningJsonList.getJSONObject(w);

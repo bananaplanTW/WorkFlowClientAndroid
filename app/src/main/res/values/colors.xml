@@ -55,6 +55,7 @@
 
     <!-- Task info -->
     <color name="task_info_text_color">#FF696969</color>
+    <color name="task_info_due_date_background_color">#FFF1F1F1</color>
     <color name="task_info_complete_task_button_text_color">#FFFFFFFF</color>
     <color name="task_info_complete_task_button_background_color">#FF00B3A1</color>
 

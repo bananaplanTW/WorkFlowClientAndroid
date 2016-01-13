@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/task_description_title"
-            android:layout_marginTop="@dimen/task_info_description_margin_top"
+            android:layout_marginTop="@dimen/task_info_content_margin_top"
             android:textColor="@color/task_info_text_color" />
 
     </RelativeLayout>
@@ -40,12 +40,26 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/task_due_date_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/task_info_task_due_date"
             android:textSize="@dimen/task_info_title_text_size"
             android:textStyle="bold"
-            android:textColor="@color/task_info_text_color"/>
+            android:textColor="@color/task_info_text_color" />
+
+        <TextView
+            android:id="@+id/task_due_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/task_info_due_date_padding"
+            android:layout_below="@+id/task_due_date_title"
+            android:layout_marginTop="@dimen/task_info_content_margin_top"
+            android:textColor="@color/task_info_text_color"
+            android:drawableLeft="@drawable/ic_due_date"
+            android:drawablePadding="@dimen/task_info_due_date_drawable_padding"
+            android:text="2016/04/05"
+            android:background="@drawable/task_due_date_background"/>
 
     </LinearLayout>
 
