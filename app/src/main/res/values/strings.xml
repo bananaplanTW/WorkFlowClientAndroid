@@ -58,6 +58,7 @@
     <string name="logout">Logout</string>
 
     <!-- Detailed task -->
+    <string name="detailed_task_tab_task_info">Task information</string>
     <string name="detailed_task_tab_check_list">Check list</string>
     <string name="detailed_task_tab_text">Text</string>
     <string name="detailed_task_tab_photo">Photo</string>

@@ -44,6 +44,7 @@
     <string name="logout">登出</string>
 
     <!-- Detailed task -->
+    <string name="detailed_task_tab_task_info">工作描述</string>
     <string name="detailed_task_tab_check_list">待辦事項</string>
     <string name="detailed_task_tab_text">卡片記錄</string>
     <string name="detailed_task_tab_photo">照片</string>

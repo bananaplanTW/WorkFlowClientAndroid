@@ -175,11 +175,6 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
     }
 
     @Override
-    public void refresh() {
-
-    }
-
-    @Override
     public void setSwipeRefreshLayout(boolean isRefreshing) {
         mCheckListSwipeRefreshLayout.setRefreshing(isRefreshing);
     }

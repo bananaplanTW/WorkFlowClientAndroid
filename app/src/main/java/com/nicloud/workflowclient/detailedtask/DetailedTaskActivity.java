@@ -28,6 +28,7 @@ import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
 import com.nicloud.workflowclient.detailedtask.filelog.FileLogFragment;
+import com.nicloud.workflowclient.detailedtask.taskinfo.TaskInfoFragment;
 import com.nicloud.workflowclient.detailedtask.textlog.TextLogFragment;
 import com.nicloud.workflowclient.serveraction.UploadCompletedReceiver;
 import com.nicloud.workflowclient.serveraction.UploadService;
@@ -49,18 +50,21 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private static final int TASK_LOG_LIMIT = 15;
 
     private static final class TabPosition {
-        public static final int CHECK = 0;
-        public static final int TEXT = 1;
-        public static final int FILE = 2;
+        public static final int TASK_INFO = 0;
+        public static final int CHECK = 1;
+        public static final int TEXT = 2;
+        public static final int FILE = 3;
     }
 
     private static final class TabTag {
+        public static final String TASK_INFO = "tag_tab_task_info";
         public static final String CHECK = "tag_tab_check";
         public static final String TEXT = "tag_tab_text";
         public static final String FILE = "tag_tab_file";
     }
 
     private static final class FragmentTag {
+        public static final String TASK_INFO = "tag_fragment_task_info";
         public static final String CHECK_LIST = "tag_fragment_check_list";
         public static final String TEXT_LOG = "tag_fragment_text_log";
         public static final String FILE_LOG = "tag_fragment_file_log";
@@ -163,6 +167,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     private void setupTabs() {
         mDetailedTaskTabHost.setup();
+        addTab(TabTag.TASK_INFO);
         addTab(TabTag.CHECK);
         addTab(TabTag.TEXT);
         addTab(TabTag.FILE);
@@ -179,7 +184,9 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         TextView tabText = (TextView) tabView.findViewById(R.id.detailed_task_tab_text);
 
         String text = "";
-        if (TabTag.CHECK.equals(tag)) {
+        if(TabTag.TASK_INFO.equals(tag)) {
+            text = getString(R.string.detailed_task_tab_task_info);
+        } else if(TabTag.CHECK.equals(tag)) {
             text = getString(R.string.detailed_task_tab_check_list);
         } else if(TabTag.TEXT.equals(tag)) {
             text = getString(R.string.detailed_task_tab_text);
@@ -195,15 +202,16 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private void setupInitFragment() {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
-        CheckListFragment checkListFragment = (CheckListFragment) mFragmentManager.findFragmentByTag(FragmentTag.CHECK_LIST);
-        if (checkListFragment == null) {
-            checkListFragment = new CheckListFragment();
-            addFragmentBundle(checkListFragment);
+        TaskInfoFragment taskInfoFragment
+                = (TaskInfoFragment) mFragmentManager.findFragmentByTag(FragmentTag.TASK_INFO);
+        if (taskInfoFragment == null) {
+            taskInfoFragment = new TaskInfoFragment();
+            addFragmentBundle(taskInfoFragment);
 
-            fragmentTransaction.add(R.id.detailed_task_content, checkListFragment, FragmentTag.CHECK_LIST);
+            fragmentTransaction.add(R.id.detailed_task_content, taskInfoFragment, FragmentTag.TASK_INFO);
         }
 
-        mCurrentFragment = checkListFragment;
+        mCurrentFragment = taskInfoFragment;
         fragmentTransaction.commit();
     }
 
@@ -230,6 +238,12 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     @Override
     public void onTabChanged(String tabId) {
         switch (mDetailedTaskTabHost.getCurrentTab()) {
+            case TabPosition.TASK_INFO:
+                if (mCurrentFragment instanceof TaskInfoFragment) return;
+                replaceTo(TaskInfoFragment.class, FragmentTag.TASK_INFO);
+
+                break;
+
             case TabPosition.CHECK:
                 if (mCurrentFragment instanceof CheckListFragment) return;
                 replaceTo(CheckListFragment.class, FragmentTag.CHECK_LIST);

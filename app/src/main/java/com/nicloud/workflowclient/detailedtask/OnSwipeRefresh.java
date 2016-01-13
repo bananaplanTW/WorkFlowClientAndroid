@@ -9,6 +9,5 @@ import java.util.List;
  */
 public interface OnSwipeRefresh {
     void swapData(List<BaseData> dataSet);
-    void refresh();
     void setSwipeRefreshLayout(boolean isRefresh);
 }

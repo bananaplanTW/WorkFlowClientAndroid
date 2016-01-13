@@ -146,11 +146,6 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
     }
 
     @Override
-    public void refresh() {
-        mFileLogListAdapter.notifyDataSetChanged();
-    }
-
-    @Override
     public void setSwipeRefreshLayout(boolean isRefresh) {
         mFileLogSwipeRefreshLayout.setRefreshing(isRefresh);
     }
