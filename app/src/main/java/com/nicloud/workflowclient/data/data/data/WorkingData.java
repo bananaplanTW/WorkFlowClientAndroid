@@ -171,6 +171,10 @@ public final class WorkingData implements DataSubject {
     }
 
     public Worker getWorkerById(String workerId) {
+        if (getUserId().equals(workerId)) {
+            return mLoginWorker;
+        }
+
         for (Worker worker : mWorkers) {
             if (worker.id.equals(workerId)) return worker;
         }

@@ -12,6 +12,8 @@ import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.activity.LoadingActivityUserIconCommand;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.activity.RecordData;
+import com.nicloud.workflowclient.data.data.data.Worker;
+import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.Date;
@@ -56,12 +58,15 @@ public class TextLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         RecordData recordData = (RecordData) mTextLogData.get(position);
+        Worker reporter = WorkingData.getInstance(mContext).getWorkerById(recordData.reporter);
         TextLogItemViewHolder vh = (TextLogItemViewHolder) holder;
 
-        if (recordData.avatar != null) {
-            vh.icon.setImageBitmap(recordData.avatar);
+        if (reporter != null && reporter.avatar != null) {
+            vh.icon.setImageDrawable(reporter.avatar);
 
         } else {
+            vh.icon.setImageResource(R.drawable.ic_worker_black);
+
             LoadingActivityUserIconCommand loadingActivityUserIconCommand
                     = new LoadingActivityUserIconCommand(mContext, recordData.avatarUri, recordData, vh.icon);
             loadingActivityUserIconCommand.execute();

@@ -10,8 +10,7 @@
         android:layout_width="@dimen/worker_avatar_width_height"
         android:layout_height="@dimen/worker_avatar_width_height"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/ic_worker_black" />
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:id="@+id/log_user_name"
