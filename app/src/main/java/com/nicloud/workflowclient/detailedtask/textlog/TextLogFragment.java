@@ -7,14 +7,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
+import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.OnRefreshDetailedTask;
 import com.nicloud.workflowclient.detailedtask.OnSwipeRefresh;
+import com.nicloud.workflowclient.serveraction.UploadService;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -23,7 +28,7 @@ import java.util.List;
 /**
  * Created by logicmelody on 2016/1/11.
  */
-public class TextLogFragment extends Fragment implements OnSwipeRefresh {
+public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.OnClickListener {
 
     public static final String EXTRA_TEXT_LOG = "extra_text_log";
 
@@ -35,6 +40,11 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh {
     private LinearLayoutManager mTextLogListLayoutManager;
     private TextLogAdapter mTextLogAdapter;
     private List<BaseData> mTextDataSet = new ArrayList<>();
+
+    private EditText mTextLogBox;
+    private TextView mAddTextLogButton;
+
+    private String mTaskId;
 
     private OnRefreshDetailedTask mOnRefreshDetailedTask;
 
@@ -55,14 +65,16 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
+        ArrayList<BaseData> dataSet = getArguments().getParcelableArrayList(EXTRA_TEXT_LOG);
+        mTextDataSet.clear();
+        mTextDataSet.addAll(dataSet);
         initialize();
     }
 
     private void initialize() {
-        ArrayList<BaseData> dataSet = getArguments().getParcelableArrayList(EXTRA_TEXT_LOG);
-        mTextDataSet.clear();
-        mTextDataSet.addAll(dataSet);
         findViews();
+        setupViews();
         setupSwipeRefreshLayout();
         setupTextLogList();
     }
@@ -70,6 +82,12 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh {
     private void findViews() {
         mTextLogSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.text_log_swipe_refresh_container);
         mTextLogList = (RecyclerView) getView().findViewById(R.id.text_log_list);
+        mTextLogBox = (EditText) getView().findViewById(R.id.add_text_log_box);
+        mAddTextLogButton = (TextView) getView().findViewById(R.id.add_text_log_button);
+    }
+
+    private void setupViews() {
+        mAddTextLogButton.setOnClickListener(this);
     }
 
     private void setupSwipeRefreshLayout() {
@@ -114,5 +132,22 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh {
     @Override
     public void setSwipeRefreshLayout(boolean isRefresh) {
         mTextLogSwipeRefreshLayout.setRefreshing(isRefresh);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.add_text_log_button:
+                addTextLog();
+                break;
+        }
+    }
+
+    private void addTextLog() {
+        String editContent = mTextLogBox.getText().toString();
+        if (TextUtils.isEmpty(editContent)) return;
+
+        mContext.startService(UploadService.generateUploadTextIntent(mContext, mTaskId, editContent));
+        mTextLogBox.setText("");
     }
 }
