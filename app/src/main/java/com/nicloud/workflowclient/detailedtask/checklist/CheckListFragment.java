@@ -16,10 +16,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.data.CheckItem;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.OnRefreshDetailedTask;
+import com.nicloud.workflowclient.detailedtask.OnSwipeRefresh;
 import com.nicloud.workflowclient.serveraction.ActionService;
 import com.nicloud.workflowclient.serveraction.ActionCompletedReceiver;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
@@ -31,7 +33,8 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/12/8.
  */
-public class CheckListFragment extends Fragment implements ActionCompletedReceiver.OnServerActionCompletedListener {
+public class CheckListFragment extends Fragment implements OnSwipeRefresh,
+        ActionCompletedReceiver.OnServerActionCompletedListener {
 
     private Context mContext;
     private ActionCompletedReceiver mActionCompletedReceiver;
@@ -50,16 +53,6 @@ public class CheckListFragment extends Fragment implements ActionCompletedReceiv
 
     private OnRefreshDetailedTask mOnRefreshDetailedTask;
 
-
-    public void swapData() {
-        mDataSet.clear();
-        mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
-        mCheckListAdapter.notifyDataSetChanged();
-    }
-
-    public void setSwipeRefreshLayout(boolean isRefreshing) {
-        mCheckListSwipeRefreshLayout.setRefreshing(isRefreshing);
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -160,5 +153,22 @@ public class CheckListFragment extends Fragment implements ActionCompletedReceiv
 
             mCheckListAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void swapData(List<BaseData> dataSet) {
+        mDataSet.clear();
+        mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
+        mCheckListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void refresh() {
+
+    }
+
+    @Override
+    public void setSwipeRefreshLayout(boolean isRefreshing) {
+        mCheckListSwipeRefreshLayout.setRefreshing(isRefreshing);
     }
 }

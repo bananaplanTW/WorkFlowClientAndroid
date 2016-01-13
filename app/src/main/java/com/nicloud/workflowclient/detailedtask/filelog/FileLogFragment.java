@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.detailedtask.OnRefreshDetailedTask;
+import com.nicloud.workflowclient.detailedtask.OnSwipeRefresh;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.List;
 /**
  * Created by logicmelody on 2016/1/12.
  */
-public class FileLogFragment extends Fragment {
+public class FileLogFragment extends Fragment implements OnSwipeRefresh {
 
     public static final String EXTRA_FILE_LOG = "extra_file_log";
 
@@ -37,22 +38,6 @@ public class FileLogFragment extends Fragment {
 
     private OnRefreshDetailedTask mOnRefreshDetailedTask;
 
-
-    public void swapData(List<BaseData> dataSet) {
-        mFileLogData.clear();
-        mFileLogData.addAll(dataSet);
-        mFileLogListAdapter.notifyDataSetChanged();
-
-        //setNoLogTextVisibility();
-    }
-
-    public void refresh() {
-        mFileLogListAdapter.notifyDataSetChanged();
-    }
-
-    public void setSwipeRefreshLayout(boolean isRefresh) {
-        mFileLogSwipeRefreshLayout.setRefreshing(isRefresh);
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -110,5 +95,24 @@ public class FileLogFragment extends Fragment {
                 getResources().getDrawable(R.drawable.list_divider), false, true, false, 0));
         mFileLogList.setLayoutManager(mFileLogListLayoutManager);
         mFileLogList.setAdapter(mFileLogListAdapter);
+    }
+
+    @Override
+    public void swapData(List<BaseData> dataSet) {
+        mFileLogData.clear();
+        mFileLogData.addAll(dataSet);
+        mFileLogListAdapter.notifyDataSetChanged();
+
+        //setNoLogTextVisibility();
+    }
+
+    @Override
+    public void refresh() {
+        mFileLogListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setSwipeRefreshLayout(boolean isRefresh) {
+        mFileLogSwipeRefreshLayout.setRefreshing(isRefresh);
     }
 }

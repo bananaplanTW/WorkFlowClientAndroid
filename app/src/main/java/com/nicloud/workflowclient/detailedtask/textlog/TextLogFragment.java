@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.detailedtask.OnRefreshDetailedTask;
+import com.nicloud.workflowclient.detailedtask.OnSwipeRefresh;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.List;
 /**
  * Created by logicmelody on 2016/1/11.
  */
-public class TextLogFragment extends Fragment {
+public class TextLogFragment extends Fragment implements OnSwipeRefresh {
 
     public static final String EXTRA_TEXT_LOG = "extra_text_log";
 
@@ -37,22 +38,6 @@ public class TextLogFragment extends Fragment {
 
     private OnRefreshDetailedTask mOnRefreshDetailedTask;
 
-
-    public void swapData(List<BaseData> dataSet) {
-        mTextDataSet.clear();
-        mTextDataSet.addAll(dataSet);
-        mTextLogAdapter.notifyDataSetChanged();
-
-        //setNoLogTextVisibility();
-    }
-
-    public void refresh() {
-        mTextLogAdapter.notifyDataSetChanged();
-    }
-
-    public void setSwipeRefreshLayout(boolean isRefresh) {
-        mTextLogSwipeRefreshLayout.setRefreshing(isRefresh);
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -110,5 +95,24 @@ public class TextLogFragment extends Fragment {
                 getResources().getDrawable(R.drawable.list_divider), false, true, false, 0));
         mTextLogList.setLayoutManager(mTextLogListLayoutManager);
         mTextLogList.setAdapter(mTextLogAdapter);
+    }
+
+    @Override
+    public void swapData(List<BaseData> dataSet) {
+        mTextDataSet.clear();
+        mTextDataSet.addAll(dataSet);
+        mTextLogAdapter.notifyDataSetChanged();
+
+        //setNoLogTextVisibility();
+    }
+
+    @Override
+    public void refresh() {
+        mTextLogAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setSwipeRefreshLayout(boolean isRefresh) {
+        mTextLogSwipeRefreshLayout.setRefreshing(isRefresh);
     }
 }

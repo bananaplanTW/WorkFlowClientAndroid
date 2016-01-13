@@ -310,34 +310,22 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
         setTaskLogData(parseActivityJSONArray(activities));
         updateListAccordingToTab();
-        turnOffSwipeRefreshLayout();
+        ((OnSwipeRefresh) mCurrentFragment).setSwipeRefreshLayout(false);
     }
 
     private void updateListAccordingToTab() {
         switch (mDetailedTaskTabHost.getCurrentTab()) {
             case TabPosition.CHECK:
-                ((CheckListFragment) mCurrentFragment).swapData();
+                ((OnSwipeRefresh) mCurrentFragment).swapData(null);
                 break;
 
             case TabPosition.TEXT:
-                ((TextLogFragment) mCurrentFragment).swapData(mTextDataSet);
+                ((OnSwipeRefresh) mCurrentFragment).swapData(mTextDataSet);
                 break;
 
             case TabPosition.FILE:
-                ((FileLogFragment) mCurrentFragment).swapData(mFileDataSet);
+                ((OnSwipeRefresh) mCurrentFragment).swapData(mFileDataSet);
                 break;
-        }
-    }
-
-    private void turnOffSwipeRefreshLayout() {
-        if (mCurrentFragment instanceof TextLogFragment) {
-            ((TextLogFragment) mCurrentFragment).setSwipeRefreshLayout(false);
-
-        } else if (mCurrentFragment instanceof FileLogFragment) {
-            ((FileLogFragment) mCurrentFragment).setSwipeRefreshLayout(false);
-
-        } else if (mCurrentFragment instanceof CheckListFragment) {
-            ((CheckListFragment) mCurrentFragment).setSwipeRefreshLayout(false);
         }
     }
 
@@ -362,7 +350,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     @Override
     public void onFailLoadingData(boolean isFailCausedByInternet) {
         Utilities.showInternetConnectionWeakToast(this);
-        turnOffSwipeRefreshLayout();
+        ((OnSwipeRefresh) mCurrentFragment).setSwipeRefreshLayout(false);
     }
 
     private ArrayList<BaseData> parseActivityJSONArray(JSONArray activities) {
@@ -406,13 +394,13 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     @Override
     public void onFinishLoadingTaskById() {
         updateListAccordingToTab();
-        turnOffSwipeRefreshLayout();
+        ((OnSwipeRefresh) mCurrentFragment).setSwipeRefreshLayout(false);
     }
 
     @Override
     public void onFailLoadingTaskById(boolean isFailCausedByInternet) {
         Utilities.showInternetConnectionWeakToast(this);
-        turnOffSwipeRefreshLayout();
+        ((OnSwipeRefresh) mCurrentFragment).setSwipeRefreshLayout(false);
     }
 
     @Override
