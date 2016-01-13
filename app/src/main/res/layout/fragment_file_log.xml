@@ -45,13 +45,13 @@
             android:drawablePadding="@dimen/add_file_photo_button_drawable_padding"/>
 
         <TextView
-            android:id="@+id/add_photo_button"
+            android:id="@+id/take_photo_button"
             style="@style/AddLogButton"
             android:layout_width="@dimen/add_file_photo_button_width"
             android:layout_marginLeft="@dimen/add_file_photo_button_between_margin"
             android:gravity="center"
-            android:text="@string/add_photo_button_text"
-            android:drawableLeft="@drawable/ic_add_photo"
+            android:text="@string/take_photo_button_text"
+            android:drawableLeft="@drawable/ic_take_photo"
             android:drawablePadding="@dimen/add_file_photo_button_drawable_padding"/>
 
     </LinearLayout>

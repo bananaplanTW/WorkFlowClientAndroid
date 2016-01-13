@@ -81,6 +81,8 @@ public class FileLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.fileImage.setImageBitmap(photoData.photo);
 
         } else {
+            holder.fileImage.setImageResource(R.drawable.ic_file);
+
             LoadingPhotoDataCommand loadingPhotoDataCommand
                     = new LoadingPhotoDataCommand(mContext, photoData.photoUri, photoData, holder.fileImage);
             loadingPhotoDataCommand.execute();
@@ -102,6 +104,7 @@ public class FileLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         String fileInformation = fileData.uploaderName + " " +
                 Utilities.timestamp2Date(new Date(fileData.time), Utilities.DATE_FORMAT_YMD_HM_AMPM);
 
+        holder.fileImage.setImageResource(R.drawable.ic_file);
         holder.fileName.setText(fileData.fileName);
         holder.fileInformation.setText(fileInformation);
 

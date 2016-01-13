@@ -10,8 +10,7 @@
         android:layout_width="@dimen/log_file_item_width_height"
         android:layout_height="@dimen/log_file_item_width_height"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:src="@drawable/ic_file"/>
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/file_name"
