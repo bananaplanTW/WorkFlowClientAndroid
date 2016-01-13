@@ -10,9 +10,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
@@ -24,6 +26,7 @@ import com.nicloud.workflowclient.detailedtask.OnRefreshDetailedTask;
 import com.nicloud.workflowclient.detailedtask.OnSwipeRefresh;
 import com.nicloud.workflowclient.serveraction.ActionService;
 import com.nicloud.workflowclient.serveraction.ActionCompletedReceiver;
+import com.nicloud.workflowclient.serveraction.UploadService;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 import com.nicloud.workflowclient.utility.Utilities;
 
@@ -34,18 +37,20 @@ import java.util.List;
  * Created by logicmelody on 2015/12/8.
  */
 public class CheckListFragment extends Fragment implements OnSwipeRefresh,
-        ActionCompletedReceiver.OnServerActionCompletedListener {
+        ActionCompletedReceiver.OnServerActionCompletedListener, View.OnClickListener {
 
     private Context mContext;
     private ActionCompletedReceiver mActionCompletedReceiver;
 
+    private SwipeRefreshLayout mCheckListSwipeRefreshLayout;
     private RecyclerView mCheckList;
     private LinearLayoutManager mCheckListLayoutManager;
     private CheckListAdapter mCheckListAdapter;
 
-    private SwipeRefreshLayout mCheckListSwipeRefreshLayout;
-
     private TextView mNoCheckItemText;
+
+    private EditText mAddCheckItemBox;
+    private TextView mAddCheckItemButton;
 
     private String mTaskId;
 
@@ -91,6 +96,7 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
 
     private void initialize() {
         findViews();
+        setupViews();
         setupCheckList();
         setupSwipeRefreshLayout();
         setNoCheckItemTextVisibility();
@@ -99,7 +105,13 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
     private void findViews() {
         mCheckList = (RecyclerView) getView().findViewById(R.id.check_list);
         mCheckListSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.check_list_swipe_refresh_container);
+        mAddCheckItemBox = (EditText) getView().findViewById(R.id.add_check_item_box);
+        mAddCheckItemButton = (TextView) getView().findViewById(R.id.add_check_item_button);
         mNoCheckItemText = (TextView) getView().findViewById(R.id.check_list_no_item_text);
+    }
+
+    private void setupViews() {
+        mAddCheckItemButton.setOnClickListener(this);
     }
 
     private void setupCheckList() {
@@ -170,5 +182,18 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
     @Override
     public void setSwipeRefreshLayout(boolean isRefreshing) {
         mCheckListSwipeRefreshLayout.setRefreshing(isRefreshing);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.add_check_item_button:
+                String checkItem = mAddCheckItemBox.getText().toString();
+                if (TextUtils.isEmpty(checkItem)) return;
+
+                mContext.startService(UploadService.generateUploadCheckItemIntent(mContext, mTaskId, checkItem));
+                mAddCheckItemBox.setText("");
+                break;
+        }
     }
 }

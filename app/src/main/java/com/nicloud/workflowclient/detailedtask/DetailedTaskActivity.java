@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
@@ -387,10 +386,15 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     @Override
     public void onUploadCompletedListener(Intent intent) {
+        String fromAction = intent.getStringExtra(UploadService.ExtraKey.FROM_ACTION);
         boolean isUploadSuccessful = intent.getBooleanExtra(UploadService.ExtraKey.UPLOAD_SUCCESSFUL, false);
 
-        if (isUploadSuccessful) {
+        if ((UploadService.UploadAction.TEXT.equals(fromAction) || UploadService.UploadAction.FILE.equals(fromAction))
+                && isUploadSuccessful) {
             loadTaskActivities();
+
+        } else if (UploadService.UploadAction.CHECK_ITEM.equals(fromAction) && isUploadSuccessful) {
+            new LoadingTaskById(this, mTask.id, this).execute();
         }
     }
 }

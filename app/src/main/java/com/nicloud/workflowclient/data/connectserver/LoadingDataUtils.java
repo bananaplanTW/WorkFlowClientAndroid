@@ -80,6 +80,7 @@ public class LoadingDataUtils {
             public static final String COMMENT_IMAGE_ACTIVITY_TO_TASK = "/api/add-task-activity/image";
             public static final String COMMENT_FILE_ACTIVITY_TO_TASK = "/api/add-task-activity/file";
             public static final String COMMENT_TEXT_ACTIVITY_TO_TASK = "/api/add-task-activity/text";
+            public static final String ADD_CHECK_ITEM_TO_TASK = "/api/v2/task-todo";
 
             public static final String COMMENT_IMAGE_ACTIVITY_TO_TASK_WARNING = "/api/add-task-exception-activity/image";
             public static final String COMMENT_FILE_ACTIVITY_TO_TASK_WARNING = "/api/add-task-exception-activity/file";

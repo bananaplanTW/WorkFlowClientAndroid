@@ -29,6 +29,7 @@ public class UploadService extends IntentService {
     private static final String TAG = "UploadService";
 
     public static class UploadAction {
+        public static final String CHECK_ITEM = "upload_action_check_item";
         public static final String TEXT = "upload_action_text";
         public static final String PHOTO = "upload_action_photo";
         public static final String FILE = "upload_action_file";
@@ -37,16 +38,27 @@ public class UploadService extends IntentService {
 
     public static class ExtraKey {
         public static final String TASK_ID = "extra_task_id";
+        public static final String CHECK_ITEM_NAME = "extra_check_item_name";
         public static final String TEXT = "extra_text";
         public static final String PHOTO_PATH = "extra_photo_path";
         public static final String FILE_PATH = "extra_file_path";
         public static final String UPLOAD_SUCCESSFUL = "extra_upload_successful";
+        public static final String FROM_ACTION = "extra_from_action";
     }
 
     private NotificationManager mNotificationManager;
 
     private Handler mHandler;
 
+
+    public static Intent generateUploadCheckItemIntent(Context context, String taskId, String checkItemName) {
+        Intent intent = new Intent(context, UploadService.class);
+        intent.setAction(UploadAction.CHECK_ITEM);
+        intent.putExtra(ExtraKey.TASK_ID, taskId);
+        intent.putExtra(ExtraKey.CHECK_ITEM_NAME, checkItemName);
+
+        return intent;
+    }
 
     public static Intent generateUploadTextIntent(Context context, String taskId, String text) {
         Intent intent = new Intent(context, UploadService.class);
@@ -101,6 +113,9 @@ public class UploadService extends IntentService {
 
         } else if (UploadAction.FILE.equals(action)) {
             uploadFile(intent);
+
+        } else if (UploadAction.CHECK_ITEM.equals(action)) {
+            uploadCheckItem(intent);
         }
     }
 
@@ -111,6 +126,7 @@ public class UploadService extends IntentService {
         String text = intent.getStringExtra(ExtraKey.TEXT);
 
         Intent broadcastIntent = new Intent(UploadAction.UPLOAD_COMPLETED);
+        broadcastIntent.putExtra(ExtraKey.FROM_ACTION, UploadAction.TEXT);
 
         NotificationCompat.Builder builder
                 = generateUploadNotificationBuilder(WorkingData.getInstance(this).getTask(taskId).name,
@@ -165,6 +181,7 @@ public class UploadService extends IntentService {
         String photoPath = intent.getStringExtra(ExtraKey.PHOTO_PATH);
 
         Intent broadcastIntent = new Intent(UploadAction.UPLOAD_COMPLETED);
+        broadcastIntent.putExtra(ExtraKey.FROM_ACTION, UploadAction.PHOTO);
 
         NotificationCompat.Builder builder
                 = generateUploadNotificationBuilder(WorkingData.getInstance(this).getTask(taskId).name,
@@ -216,6 +233,7 @@ public class UploadService extends IntentService {
         String filePath = intent.getStringExtra(ExtraKey.FILE_PATH);
 
         Intent broadcastIntent = new Intent(UploadAction.UPLOAD_COMPLETED);
+        broadcastIntent.putExtra(ExtraKey.FROM_ACTION, UploadAction.FILE);
 
         NotificationCompat.Builder builder
                 = generateUploadNotificationBuilder(WorkingData.getInstance(this).getTask(taskId).name,
@@ -258,6 +276,46 @@ public class UploadService extends IntentService {
 
         uploadFailed(builder, getString(R.string.add_log_failed));
         mNotificationManager.notify(notificationId, builder.build());
+    }
+
+    private void uploadCheckItem(Intent intent) {
+        String taskId = intent.getStringExtra(ExtraKey.TASK_ID);
+        String checkItemName = intent.getStringExtra(ExtraKey.CHECK_ITEM_NAME);
+
+        Intent broadcastIntent = new Intent(UploadAction.UPLOAD_COMPLETED);
+        broadcastIntent.putExtra(ExtraKey.FROM_ACTION, UploadAction.CHECK_ITEM);
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-user-id", WorkingData.getUserId());
+        headers.put("x-auth-token", WorkingData.getAuthToken());
+
+        HashMap<String, String> bodies = new HashMap<>();
+        bodies.put("td", taskId);
+        bodies.put("todoName", checkItemName);
+
+        try {
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.ADD_CHECK_ITEM_TO_TASK, null);
+            String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+                if (jsonObject.getString("status").equals("success")) {
+                    broadcastIntent.putExtra(ExtraKey.UPLOAD_SUCCESSFUL, true);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+
+                    return;
+                }
+            }
+        }  catch (JSONException e) {
+            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Log.e(TAG, "Exception in uploadText() in UploadService");
+            e.printStackTrace();
+
+            return;
+        }
+
+        Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
     }
 
     private NotificationCompat.Builder generateUploadNotificationBuilder(String taskName, String contentText) {
