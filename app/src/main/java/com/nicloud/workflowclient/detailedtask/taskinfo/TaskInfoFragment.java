@@ -15,6 +15,7 @@ import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.OnSwipeRefresh;
+import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.List;
@@ -22,12 +23,13 @@ import java.util.List;
 /**
  * Created by logicmelody on 2016/1/13.
  */
-public class TaskInfoFragment extends Fragment implements OnSwipeRefresh {
+public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.OnClickListener {
 
     private Context mContext;
 
     private TextView mTaskDescription;
     private TextView mTaskDueDate;
+    private TextView mCompleteTaskButton;
 
     private Task mTask;
 
@@ -54,12 +56,18 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh {
 
     private void initialize() {
         findViews();
+        setupViews();
         setTaskInfo();
     }
 
     private void findViews() {
         mTaskDescription = (TextView) getView().findViewById(R.id.task_description);
         mTaskDueDate = (TextView) getView().findViewById(R.id.task_due_date);
+        mCompleteTaskButton = (TextView) getView().findViewById(R.id.complete_task_button);
+    }
+
+    private void setupViews() {
+        mCompleteTaskButton.setOnClickListener(this);
     }
 
     private void setTaskInfo() {
@@ -75,5 +83,14 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh {
     @Override
     public void setSwipeRefreshLayout(boolean isRefresh) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.complete_task_button:
+                Utilities.showDialog(getFragmentManager(), DisplayDialogFragment.DialogType.COMPLETE_TASK, mTask.id);
+                break;
+        }
     }
 }

@@ -30,6 +30,8 @@ import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
 import com.nicloud.workflowclient.detailedtask.filelog.FileLogFragment;
 import com.nicloud.workflowclient.detailedtask.taskinfo.TaskInfoFragment;
 import com.nicloud.workflowclient.detailedtask.textlog.TextLogFragment;
+import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclient.serveraction.ActionService;
 import com.nicloud.workflowclient.serveraction.UploadCompletedReceiver;
 import com.nicloud.workflowclient.serveraction.UploadService;
 import com.nicloud.workflowclient.utility.Utilities;
@@ -42,7 +44,8 @@ import java.util.ArrayList;
 
 public class DetailedTaskActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
         LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnRefreshDetailedTask,
-        LoadingTaskById.OnFinishLoadingTaskByIdListener, UploadCompletedReceiver.OnUploadCompletedListener {
+        LoadingTaskById.OnFinishLoadingTaskByIdListener, UploadCompletedReceiver.OnUploadCompletedListener,
+        DisplayDialogFragment.OnDialogActionListener {
 
     public static final String EXTRA_TASK_ID = "DetailedTaskActivity_extra_task_id";
 
@@ -410,5 +413,22 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         } else if (UploadService.UploadAction.CHECK_ITEM.equals(fromAction) && isUploadSuccessful) {
             new LoadingTaskById(this, mTask.id, this).execute();
         }
+    }
+
+    @Override
+    public void onCompleteTaskOk(String taskId) {
+        Intent intent = new Intent(this, ActionService.class);
+        intent.setAction(ActionService.ServerAction.COMPLETE_TASK);
+        intent.putExtra(ActionService.ExtraKey.TASK_ID, taskId);
+        intent.putExtra(ActionService.ExtraKey.TASK_NAME, WorkingData.getInstance(this).getTask(taskId).name);
+
+        startService(intent);
+        Utilities.dismissDialog(mFragmentManager);
+        finish();
+    }
+
+    @Override
+    public void onCompleteTaskCancel() {
+        Utilities.dismissDialog(mFragmentManager);
     }
 }
