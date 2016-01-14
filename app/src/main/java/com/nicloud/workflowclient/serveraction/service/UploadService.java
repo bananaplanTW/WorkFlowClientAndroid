@@ -181,7 +181,7 @@ public class UploadService extends IntentService {
         String photoPath = intent.getStringExtra(ExtraKey.PHOTO_PATH);
 
         Intent broadcastIntent = new Intent(UploadAction.UPLOAD_COMPLETED);
-        broadcastIntent.putExtra(ExtraKey.FROM_ACTION, UploadAction.PHOTO);
+        broadcastIntent.putExtra(ExtraKey.FROM_ACTION, UploadAction.FILE);
 
         NotificationCompat.Builder builder
                 = generateUploadNotificationBuilder(WorkingData.getInstance(this).getTask(taskId).name,
