@@ -31,9 +31,9 @@ import com.nicloud.workflowclient.detailedtask.filelog.FileLogFragment;
 import com.nicloud.workflowclient.detailedtask.taskinfo.TaskInfoFragment;
 import com.nicloud.workflowclient.detailedtask.textlog.TextLogFragment;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
-import com.nicloud.workflowclient.serveraction.ActionService;
-import com.nicloud.workflowclient.serveraction.UploadCompletedReceiver;
-import com.nicloud.workflowclient.serveraction.UploadService;
+import com.nicloud.workflowclient.serveraction.service.ActionService;
+import com.nicloud.workflowclient.serveraction.receiver.UploadCompletedReceiver;
+import com.nicloud.workflowclient.serveraction.service.UploadService;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import org.json.JSONArray;

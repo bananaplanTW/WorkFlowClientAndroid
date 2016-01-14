@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.serveraction;
+package com.nicloud.workflowclient.serveraction.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

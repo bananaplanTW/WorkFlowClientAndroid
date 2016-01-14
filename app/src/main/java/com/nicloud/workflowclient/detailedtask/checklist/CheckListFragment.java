@@ -24,9 +24,9 @@ import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.OnRefreshDetailedTask;
 import com.nicloud.workflowclient.detailedtask.OnSwipeRefresh;
-import com.nicloud.workflowclient.serveraction.ActionService;
-import com.nicloud.workflowclient.serveraction.ActionCompletedReceiver;
-import com.nicloud.workflowclient.serveraction.UploadService;
+import com.nicloud.workflowclient.serveraction.service.ActionService;
+import com.nicloud.workflowclient.serveraction.receiver.ActionCompletedReceiver;
+import com.nicloud.workflowclient.serveraction.service.UploadService;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 import com.nicloud.workflowclient.utility.Utilities;
 
