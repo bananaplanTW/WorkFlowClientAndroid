@@ -38,6 +38,7 @@
     <string name="wip_task_card_prepare_for_next_task">Prepare for next task</string>
     <string name="wip_task_card_choose_task">Please choose a task from below</string>
     <string name="wip_task_card_not_working_time">Not working time</string>
+    <string name="tasks_list_no_task">No task</string>
 
     <!-- Drawer menu -->
     <string name="drawer_open" translatable="false">drawer_open</string>

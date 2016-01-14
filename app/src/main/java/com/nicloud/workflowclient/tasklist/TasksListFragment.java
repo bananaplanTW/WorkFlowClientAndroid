@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.task.LoadingWorkerTasks;
@@ -43,6 +44,8 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
     private LinearLayoutManager mTasksListManager;
     private TasksListAdapter mTasksListAdapter;
     private List<TasksListItem> mTasksDataSet = new ArrayList<>();
+
+    private TextView mNoTaskText;
 
     private boolean mNeedRefresh = false;
 
@@ -129,11 +132,21 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
     private void findViews() {
         mFab = (FloatingActionButton) getView().findViewById(R.id.fab);
         mTasksList = (RecyclerView) getView().findViewById(R.id.tasks_list);
+        mNoTaskText = (TextView) getView().findViewById(R.id.tasks_list_no_task_text);
         mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.task_log_swipe_refresh_container);
     }
 
     private void setupViews() {
+        setNoTaskTextVisibility();
         mFab.setOnClickListener(this);
+    }
+
+    private void setNoTaskTextVisibility() {
+        if (mTasksDataSet.size() == 0) {
+            mNoTaskText.setVisibility(View.VISIBLE);
+        } else {
+            mNoTaskText.setVisibility(View.GONE);
+        }
     }
 
     private void setupTasksList() {
@@ -247,6 +260,7 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
         }
 
         mTasksListAdapter.notifyDataSetChanged();
+        setNoTaskTextVisibility();
     }
 
     @Override
