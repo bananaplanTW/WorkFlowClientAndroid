@@ -29,7 +29,7 @@ public class Task extends IdData {
     public String equipmentId;
 
     public Date startDate;  // The starting working date of this task
-    public Date endDate;
+    public Date dueDate;
     public Date assignDate;
 
     public long currentStartTime = 0L;
@@ -61,7 +61,7 @@ public class Task extends IdData {
                 Status status,
                 Date assignDate,
                 Date startDate,
-                Date endDate,
+                Date dueDate,
                 long expectedTime,
                 long startTime,
                 long spentTime,
@@ -81,7 +81,7 @@ public class Task extends IdData {
         this.spentTime = spentTime;
         this.assignDate = assignDate;
         this.startDate = startDate;
-        this.endDate = endDate;
+        this.dueDate = dueDate;
         //this.taskWarnings = taskWarnings;
         this.lastUpdatedTime = lastUpdatedTime;
         this.isDelayed = isDelayed;
@@ -121,7 +121,7 @@ public class Task extends IdData {
         this.spentTime = task.spentTime;
         this.assignDate = task.assignDate;
         this.startDate = task.startDate;
-        this.endDate = task.endDate;
+        this.dueDate = task.dueDate;
         //this.taskWarnings = task.taskWarnings;
         this.lastUpdatedTime = task.lastUpdatedTime;
         this.isDelayed = task.isDelayed;
@@ -184,8 +184,8 @@ public class Task extends IdData {
                 r = resources.getString(R.string.task_status_wip);
                 break;
             case DONE:
-                if (item.endDate != null) {
-                    r = Utilities.timestamp2Date(item.endDate, Utilities.DATE_FORMAT_MD) + " ";
+                if (item.dueDate != null) {
+                    r = Utilities.timestamp2Date(item.dueDate, Utilities.DATE_FORMAT_MD) + " ";
                 }
                 r += resources.getString(R.string.task_status_finished);
                 break;

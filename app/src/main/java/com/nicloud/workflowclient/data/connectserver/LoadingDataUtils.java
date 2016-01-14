@@ -884,7 +884,7 @@ public class LoadingDataUtils {
             long lastUpdatedTime = taskJson.getLong("updatedAt");
 
             Date startDate = getDateFromJson(taskJson, "startDate");
-            Date endDate = getDateFromJson(taskJson, "endDate");
+            Date endDate = getDateFromJson(taskJson, "dueDate");
             Date assignDate = getDateFromJson(taskJson, "dispatchedDate");
 
 //            List<TaskWarning> taskWarnings = new ArrayList<>();
