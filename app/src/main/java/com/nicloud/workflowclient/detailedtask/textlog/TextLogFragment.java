@@ -44,6 +44,8 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.On
     private EditText mTextLogBox;
     private TextView mAddTextLogButton;
 
+    private TextView mNoTextLog;
+
     private String mTaskId;
 
     private OnRefreshDetailedTask mOnRefreshDetailedTask;
@@ -83,11 +85,21 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.On
         mTextLogSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.text_log_swipe_refresh_container);
         mTextLogList = (RecyclerView) getView().findViewById(R.id.text_log_list);
         mTextLogBox = (EditText) getView().findViewById(R.id.add_text_log_box);
+        mNoTextLog = (TextView) getView().findViewById(R.id.text_log_list_no_item_text);
         mAddTextLogButton = (TextView) getView().findViewById(R.id.add_text_log_button);
     }
 
     private void setupViews() {
+        setNoTextLogVisibility();
         mAddTextLogButton.setOnClickListener(this);
+    }
+
+    private void setNoTextLogVisibility() {
+        if (mTextDataSet.size() == 0) {
+            mNoTextLog.setVisibility(View.VISIBLE);
+        } else {
+            mNoTextLog.setVisibility(View.GONE);
+        }
     }
 
     private void setupSwipeRefreshLayout() {
@@ -121,7 +133,7 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.On
         mTextDataSet.addAll(dataSet);
         mTextLogAdapter.notifyDataSetChanged();
 
-        //setNoLogTextVisibility();
+        setNoTextLogVisibility();
     }
 
     @Override

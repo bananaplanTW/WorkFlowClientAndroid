@@ -137,7 +137,6 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
     }
 
     private void setupViews() {
-        setNoTaskTextVisibility();
         mFab.setOnClickListener(this);
     }
 

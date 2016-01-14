@@ -99,7 +99,6 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
         setupViews();
         setupCheckList();
         setupSwipeRefreshLayout();
-        setNoCheckItemTextVisibility();
     }
 
     private void findViews() {
@@ -111,6 +110,7 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
     }
 
     private void setupViews() {
+        setNoCheckItemTextVisibility();
         mAddCheckItemButton.setOnClickListener(this);
     }
 
@@ -172,6 +172,8 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
         mDataSet.clear();
         mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
         mCheckListAdapter.notifyDataSetChanged();
+
+        setNoCheckItemTextVisibility();
     }
 
     @Override
