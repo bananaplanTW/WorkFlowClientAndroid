@@ -58,6 +58,15 @@ public class MessageService extends IntentService {
         return intent;
     }
 
+    public static Intent generateLoadMessageFromIntent(Context context, String workerId, long fromDateLong) {
+        Intent intent = new Intent(context, MessageService.class);
+        intent.setAction(Action.LOAD_MESSAGE_FROM);
+        intent.putExtra(ExtraKey.WORKER_ID, workerId);
+        intent.putExtra(ExtraKey.FROM_DATE_LONG, fromDateLong);
+
+        return intent;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();

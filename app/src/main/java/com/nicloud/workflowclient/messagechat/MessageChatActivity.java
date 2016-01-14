@@ -98,7 +98,52 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
     private void loadMessagesFirstLaunch() {
         if (getMessageCount() == 0) {
             startService(MessageService.generateLoadMessageNormalIntent(this, mWorkerId));
+
+        } else {
+            long lastMessageDate = getLastMessageDate();
+            startService(MessageService.generateLoadMessageFromIntent(this, mWorkerId, lastMessageDate));
         }
+    }
+
+    private int getMessageCount() {
+        Cursor cursor = null;
+        int messageCount = 0;
+
+        try {
+            cursor = getContentResolver().query(WorkFlowContract.Message.CONTENT_URI,
+                    mProjection, mSelection, mSelectionArgs, null);
+            if (cursor != null) {
+                messageCount = cursor.getCount();
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return messageCount;
+    }
+
+    private long getLastMessageDate() {
+        Cursor cursor = null;
+        long lastMessageDate = 0L;
+
+        try {
+            cursor = getContentResolver().query(WorkFlowContract.Message.CONTENT_URI,
+                    mProjection, mSelection, mSelectionArgs, null);
+            if (cursor != null) {
+                cursor.moveToLast();
+                lastMessageDate = cursor.getLong(TIME);
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return lastMessageDate;
     }
 
     private void findViews() {
@@ -172,26 +217,6 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private int getMessageCount() {
-        Cursor cursor = null;
-        int messageCount = 0;
-
-        try {
-            cursor = getContentResolver().query(WorkFlowContract.Message.CONTENT_URI,
-                    mProjection, mSelection, mSelectionArgs, null);
-            if (cursor != null) {
-                messageCount = cursor.getCount();
-            }
-
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return messageCount;
-    }
-
     private boolean isMessageListScrollToTop() {
         return mMessageListLayoutManager.findFirstVisibleItemPosition() == 0;
     }
@@ -261,7 +286,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
             String content = cursor.getString(CONTENT);
             String senderId = cursor.getString(SENDER_ID);
             String receiverId = cursor.getString(RECEIVER_ID);
-            long time = cursor.getInt(TIME);
+            long time = cursor.getLong(TIME);
 
             mMessageListData.add(new MessageItem(messageId, content, senderId, receiverId, time));
         }
