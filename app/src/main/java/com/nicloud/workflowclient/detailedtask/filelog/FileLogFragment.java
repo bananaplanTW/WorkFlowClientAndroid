@@ -64,6 +64,8 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
     private String mCurrentPhotoPath;
     private String mCurrentFilePath;
 
+    private TextView mNoFileText;
+
     private String mTaskId;
 
     private OnRefreshDetailedTask mOnRefreshDetailedTask;
@@ -102,13 +104,23 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
     private void findViews() {
         mFileLogSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.file_log_swipe_refresh_container);
         mFileLogList = (RecyclerView) getView().findViewById(R.id.file_log_list);
+        mNoFileText = (TextView) getView().findViewById(R.id.file_log_list_no_item_text);
         mAddFileButton = (TextView) getView().findViewById(R.id.add_file_button);
         mAddPhotoButton = (TextView) getView().findViewById(R.id.take_photo_button);
     }
 
     private void setupViews() {
+        setNoFileTextVisibility();
         mAddFileButton.setOnClickListener(this);
         mAddPhotoButton.setOnClickListener(this);
+    }
+
+    private void setNoFileTextVisibility() {
+        if (mFileLogData.size() == 0) {
+            mNoFileText.setVisibility(View.VISIBLE);
+        } else {
+            mNoFileText.setVisibility(View.GONE);
+        }
     }
 
     private void setupSwipeRefreshLayout() {
@@ -142,7 +154,7 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
         mFileLogData.addAll(dataSet);
         mFileLogListAdapter.notifyDataSetChanged();
 
-        //setNoLogTextVisibility();
+        setNoFileTextVisibility();
     }
 
     @Override
