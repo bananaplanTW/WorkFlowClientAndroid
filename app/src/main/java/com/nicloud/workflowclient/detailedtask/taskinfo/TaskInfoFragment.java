@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,8 +72,17 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
     }
 
     private void setTaskInfo() {
-        mTaskDescription.setText(mTask.description);
-        //mTaskDueDate.setText(Utilities.timestamp2Date(mTask.endDate, Utilities.DATE_FORMAT_YMD));
+        if (TextUtils.isEmpty(mTask.description)) {
+            mTaskDescription.setText(mContext.getString(R.string.task_info_task_no_description));
+        } else {
+            mTaskDescription.setText(mTask.description);
+        }
+
+        if (mTask.endDate == null) {
+            mTaskDueDate.setText(mContext.getString(R.string.task_info_task_no_due_date));
+        } else {
+            //mTaskDueDate.setText(Utilities.timestamp2Date(mTask.endDate, Utilities.DATE_FORMAT_YMD));
+        }
     }
 
     @Override

@@ -70,7 +70,9 @@
 
     <!-- Task info -->
     <string name="task_info_task_description">Task description</string>
+    <string name="task_info_task_no_description">No description</string>
     <string name="task_info_task_due_date">Due date</string>
+    <string name="task_info_task_no_due_date">No due date</string>
     <string name="task_info_complete_task_button_text">Complete task</string>
 
     <!-- Add Log container -->
