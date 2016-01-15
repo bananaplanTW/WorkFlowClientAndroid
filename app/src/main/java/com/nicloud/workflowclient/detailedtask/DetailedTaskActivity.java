@@ -313,6 +313,10 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     private void updateListAccordingToTab() {
         switch (mDetailedTaskTabHost.getCurrentTab()) {
+            case TabPosition.TASK_INFO:
+                ((OnSwipeRefresh) mCurrentFragment).swapData(null);
+                break;
+
             case TabPosition.CHECK:
                 ((OnSwipeRefresh) mCurrentFragment).swapData(null);
                 break;

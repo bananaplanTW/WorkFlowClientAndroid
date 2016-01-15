@@ -87,7 +87,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
 
     @Override
     public void swapData(List<BaseData> dataSet) {
-
+        setTaskInfo();
     }
 
     @Override

@@ -208,10 +208,9 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                Log.d("danny", "onScrolled");
 
                 if (isMessageListScrollToTop()) {
-                    //loadMessages(getMessageCount());
+                    Log.d("danny", "onScroll top");
                 }
             }
         });
