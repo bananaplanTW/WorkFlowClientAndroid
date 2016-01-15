@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.messagechat.LoadMessageReceiver;
+import com.nicloud.workflowclient.messagechat.LoadPromptMessageReceiver;
 import com.parse.ParsePushBroadcastReceiver;
 
 import org.json.JSONException;
@@ -37,8 +37,8 @@ public class ParsePushReceiver extends ParsePushBroadcastReceiver {
             String type = json.getString(JsonKey.TYPE);
 
             if (PushType.MESSAGE.equals(type)) {
-                intent.setAction(LoadMessageReceiver.ACTION_LOAD_MESSAGE);
-                intent.putExtra(LoadMessageReceiver.EXTRA_SENDER_ID, json.getString(JsonKey.SENDER_ID));
+                intent.setAction(LoadPromptMessageReceiver.ACTION_LOAD_PROMPT_MESSAGE);
+                intent.putExtra(LoadPromptMessageReceiver.EXTRA_SENDER_ID, json.getString(JsonKey.SENDER_ID));
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
 

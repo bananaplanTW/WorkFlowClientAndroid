@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
@@ -12,6 +13,7 @@ import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.utility.RestfulUtils;
 import com.nicloud.workflowclient.data.utility.URLUtils;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
+import com.nicloud.workflowclient.serveraction.receiver.MessageCompletedReceiver;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import org.json.JSONArray;
@@ -63,6 +65,15 @@ public class MessageService extends IntentService {
         intent.setAction(Action.LOAD_MESSAGE_FROM);
         intent.putExtra(ExtraKey.WORKER_ID, workerId);
         intent.putExtra(ExtraKey.FROM_DATE_LONG, fromDateLong);
+
+        return intent;
+    }
+
+    public static Intent generateLoadMessageBeforeIntent(Context context, String workerId, long beforeDateLong) {
+        Intent intent = new Intent(context, MessageService.class);
+        intent.setAction(Action.LOAD_MESSAGE_BEFORE);
+        intent.putExtra(ExtraKey.WORKER_ID, workerId);
+        intent.putExtra(ExtraKey.BEFORE_DATE_LONG, beforeDateLong);
 
         return intent;
     }
@@ -161,6 +172,8 @@ public class MessageService extends IntentService {
     }
 
     private void loadMessageBefore(Intent intent) {
+        Intent broadcastIntent = new Intent(MessageCompletedReceiver.ACTION_LOAD_BEFORE_MESSAGE_COMPLETED);
+
         if (RestfulUtils.isConnectToInternet(this)) {
             String workerId = intent.getStringExtra(ExtraKey.WORKER_ID);
             long beforeDateLong = intent.getLongExtra(ExtraKey.BEFORE_DATE_LONG, -1L);
@@ -181,12 +194,15 @@ public class MessageService extends IntentService {
 
             } catch (JSONException e) {
                 e.printStackTrace();
+                LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
                 Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             }
 
         } else {
             Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
     }
 
     private String getMessagesUrlBefore(String workerId, long beforeDateLong) {

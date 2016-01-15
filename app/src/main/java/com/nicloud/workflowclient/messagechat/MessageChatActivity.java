@@ -27,13 +27,15 @@ import android.widget.ImageView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
+import com.nicloud.workflowclient.serveraction.receiver.MessageCompletedReceiver;
 import com.nicloud.workflowclient.serveraction.service.MessageService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MessageChatActivity extends AppCompatActivity implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor>, LoadMessageReceiver.OnLoadMessageListener {
+        LoaderManager.LoaderCallbacks<Cursor>, LoadPromptMessageReceiver.OnLoadPromptMessageListener,
+        MessageCompletedReceiver.OnMessageCompletedListener {
 
     public static final String EXTRA_WORKER_ID = "extra_worker_id";
     public static final String EXTRA_WORKER_NAME = "extra_worker_name";
@@ -73,10 +75,18 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
     private EditText mMessageBox;
     private ImageView mSendButton;
 
-    private LoadMessageReceiver mLoadMessageReceiver;
+    private LoadPromptMessageReceiver mLoadPromptMessageReceiver;
 
     private List<MessageItem> mMessageListData = new ArrayList<>();
 
+    private MessageCompletedReceiver mMessageCompletedReceiver;
+
+    private int mPreviousMessageCount = 0;
+
+    private int mLastVisibleItemPosition = 0;
+
+    private boolean mIsNeedToScrollLast = true;
+    private boolean mIsLoadingBeforeMessages = false;
     private boolean mIsSendButtonBeenChanged = false;
 
 
@@ -93,7 +103,8 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
         mWorkerId = getIntent().getStringExtra(EXTRA_WORKER_ID);
         mWorkerName = getIntent().getStringExtra(EXTRA_WORKER_NAME);
         mSelectionArgs = new String[] {WorkingData.getUserId(), mWorkerId, mWorkerId, WorkingData.getUserId()};
-        mLoadMessageReceiver = new LoadMessageReceiver(this);
+        mLoadPromptMessageReceiver = new LoadPromptMessageReceiver(this);
+        mMessageCompletedReceiver = new MessageCompletedReceiver(this);
 
         findViews();
         setupViews();
@@ -128,6 +139,43 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
         }
 
         return messageCount;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageCompletedReceiver,
+                new IntentFilter(MessageCompletedReceiver.ACTION_LOAD_BEFORE_MESSAGE_COMPLETED));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLoadPromptMessageReceiver,
+                new IntentFilter(LoadPromptMessageReceiver.ACTION_LOAD_PROMPT_MESSAGE));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageCompletedReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoadPromptMessageReceiver);
+    }
+
+    private long getFirstMessageDate() {
+        Cursor cursor = null;
+        long firstMessageDate = 0L;
+
+        try {
+            cursor = getContentResolver().query(WorkFlowContract.Message.CONTENT_URI,
+                    mProjection, mSelection, mSelectionArgs, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                firstMessageDate = cursor.getLong(TIME);
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return firstMessageDate;
     }
 
     private long getLastMessageDate() {
@@ -214,32 +262,25 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (isMessageListScrollToTop()) {
-                    Log.d("danny", "onScroll top");
+                if (!mIsLoadingBeforeMessages && isMessageListScrollToTop()) {
+                    Log.d("danny", "Load before messages");
+                    mIsLoadingBeforeMessages = true;
+                    mIsNeedToScrollLast = false;
+                    mLastVisibleItemPosition = mMessageListLayoutManager.findLastVisibleItemPosition();
+
+//                    startService(MessageService.
+//                            generateLoadMessageBeforeIntent(MessageChatActivity.this, mWorkerId, getFirstMessageDate()));
                 }
             }
         });
     }
 
     private boolean isMessageListScrollToTop() {
-        return mMessageListLayoutManager.findFirstVisibleItemPosition() == 0;
-    }
+        int topBoundaryMargin =
+                getResources().getDimensionPixelSize(R.dimen.message_chat_message_list_boundary_margin);
 
-    private void messageListScrollToLast() {
-        mMessageList.scrollToPosition(mMessageListData.size() - 1);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter(LoadMessageReceiver.ACTION_LOAD_MESSAGE);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mLoadMessageReceiver, intentFilter);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoadMessageReceiver);
+        return mMessageList.getChildAt(0).getTop() == topBoundaryMargin &&
+               mMessageListLayoutManager.findFirstVisibleItemPosition() == 0;
     }
 
     @Override
@@ -309,7 +350,19 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
         }
 
         mMessageListAdapter.notifyDataSetChanged();
-        messageListScrollToLast();
+
+        if (mIsNeedToScrollLast) {
+            Log.d("danny", "Scroll to last");
+            mMessageList.scrollToPosition(mMessageListData.size() - 1);
+        } else {
+            mMessageList.scrollToPosition(30);
+        }
+
+        Log.d("danny", "cursor.getCount() = " + cursor.getCount());
+        Log.d("danny", "mPreviousMessageCount = " + mPreviousMessageCount);
+
+        mPreviousMessageCount = cursor.getCount();
+        mIsNeedToScrollLast = true;
     }
 
     @Override
@@ -318,10 +371,19 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void onLoadMessage(Intent intent) {
-        String senderId = intent.getStringExtra(LoadMessageReceiver.EXTRA_SENDER_ID);
+    public void onLoadPromptMessage(Intent intent) {
+        String senderId = intent.getStringExtra(LoadPromptMessageReceiver.EXTRA_SENDER_ID);
         if (!senderId.equals(mWorkerId)) return;
 
         startService(MessageService.generateLoadMessageFromIntent(this, mWorkerId, getLastMessageDate()));
+    }
+
+    @Override
+    public void onMessageCompleted(Intent intent) {
+        String action = intent.getAction();
+
+        if (MessageCompletedReceiver.ACTION_LOAD_BEFORE_MESSAGE_COMPLETED.equals(action)) {
+            mIsLoadingBeforeMessages = false;
+        }
     }
 }
