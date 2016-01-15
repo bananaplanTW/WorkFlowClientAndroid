@@ -67,9 +67,11 @@ public class TextLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             vh.icon.setImageResource(R.drawable.ic_worker_black);
 
-            LoadingActivityUserIconCommand loadingActivityUserIconCommand
-                    = new LoadingActivityUserIconCommand(mContext, recordData.avatarUri, recordData, vh.icon);
-            loadingActivityUserIconCommand.execute();
+            if (recordData.avatarUri != null) {
+                LoadingActivityUserIconCommand loadingActivityUserIconCommand
+                        = new LoadingActivityUserIconCommand(mContext, recordData.avatarUri, recordData, vh.icon);
+                loadingActivityUserIconCommand.execute();
+            }
         }
 
         vh.userName.setText(recordData.reporterName);
