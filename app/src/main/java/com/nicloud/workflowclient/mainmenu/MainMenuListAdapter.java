@@ -174,6 +174,9 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (mainMenuItem.mIsSelected) {
             mCurrentSelectedItem = mainMenuItem;
+            itemVH.view.setBackgroundColor(mContext.getResources().getColor(R.color.drawer_menu_item_selected_background_color));
+        } else {
+            itemVH.view.setBackgroundColor(mContext.getResources().getColor(R.color.drawer_menu_background_color));
         }
     }
 

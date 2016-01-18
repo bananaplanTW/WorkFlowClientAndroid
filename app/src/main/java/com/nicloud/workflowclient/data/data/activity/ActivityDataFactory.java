@@ -71,7 +71,7 @@ public class ActivityDataFactory {
                     comment.avatarUri = userIconBuilder.build();
 
                 } else {
-                    comment.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker_black)).getBitmap();
+                    comment.avatar = ((BitmapDrawable) context.getResources().getDrawable(R.drawable.ic_worker_black)).getBitmap();
                 }
 
                 return comment;
@@ -95,7 +95,7 @@ public class ActivityDataFactory {
                         photoData.avatarUri = userIconBuilder.build();
 
                     } else {
-                        photoData.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker_black)).getBitmap();
+                        photoData.avatar = ((BitmapDrawable) context.getResources().getDrawable(R.drawable.ic_worker_black)).getBitmap();
                     }
 
                     Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
@@ -118,7 +118,7 @@ public class ActivityDataFactory {
                         fileData.avatarUri = userIconBuilder.build();
 
                     } else {
-                        fileData.avatar = ((BitmapDrawable) context.getDrawable(R.drawable.ic_worker_black)).getBitmap();
+                        fileData.avatar = ((BitmapDrawable) context.getResources().getDrawable(R.drawable.ic_worker_black)).getBitmap();
                     }
 
                     Uri.Builder builder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
