@@ -60,7 +60,7 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private View mLeftDrawerView;
-    private View mRightDrawerView;
+    //private View mRightDrawerView;
 
     private MainMenuFragment mMainMenuFragment;
     private MessageMenuFragment mMessageMenuFragment;
@@ -194,7 +194,7 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
         mToolbar = (Toolbar) mMainActivity.findViewById(R.id.tool_bar);
         mDrawerLayout = (DrawerLayout) mMainActivity.findViewById(R.id.drawer_layout);
         mLeftDrawerView = mMainActivity.findViewById(R.id.drawer_menu_left_side_container);
-        mRightDrawerView = mMainActivity.findViewById(R.id.drawer_menu_right_side_container);
+        //mRightDrawerView = mMainActivity.findViewById(R.id.drawer_menu_right_side_container);
     }
 
     private void setupViews() {
@@ -232,17 +232,17 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     private void onOpenDrawer(View drawerView) {
         if (mLeftDrawerView == drawerView) {
 
-        } else if (mRightDrawerView == drawerView) {
-        }
+        } //else if (mRightDrawerView == drawerView) {
+        //}
     }
 
     private void onCloseDrawer(View drawerView) {
         if (mLeftDrawerView == drawerView) {
             onCloseMainMenuAction();
 
-        } else if (mRightDrawerView == drawerView) {
-            onCloseMessageMenuAction();
-        }
+        } //else if (mRightDrawerView == drawerView) {
+            //onCloseMessageMenuAction();
+        //}
     }
 
     private void onCloseMainMenuAction() {
@@ -293,11 +293,11 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
         }
 
         // MessageMenuFragment in the right side of the drawer menu
-        mMessageMenuFragment = (MessageMenuFragment) mFragmentManager.findFragmentByTag(FragmentTag.MESSAGE_MENU);
-        if (mMessageMenuFragment == null) {
-            mMessageMenuFragment = new MessageMenuFragment();
-            fragmentTransaction.add(R.id.drawer_menu_right_side_container, mMessageMenuFragment, FragmentTag.MESSAGE_MENU);
-        }
+//        mMessageMenuFragment = (MessageMenuFragment) mFragmentManager.findFragmentByTag(FragmentTag.MESSAGE_MENU);
+//        if (mMessageMenuFragment == null) {
+//            mMessageMenuFragment = new MessageMenuFragment();
+//            fragmentTransaction.add(R.id.drawer_menu_right_side_container, mMessageMenuFragment, FragmentTag.MESSAGE_MENU);
+//        }
 
         // Default fragment(TaskListFragment) when we launch app
         TasksListFragment tasksListFragment = (TasksListFragment) mFragmentManager.findFragmentByTag(FragmentTag.TASK_LIST);
