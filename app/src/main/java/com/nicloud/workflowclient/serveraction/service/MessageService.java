@@ -42,6 +42,7 @@ public class MessageService extends IntentService {
         public static final String WORKER_ID = "message_service_extra_worker_id";
         public static final String FROM_DATE_LONG = "message_service_extra_from_date";
         public static final String BEFORE_DATE_LONG = "message_service_extra_before_date";
+        public static final String SEND_MESSAGE_ID = "message_service_extra_send_message_id";
     }
 
     private Handler mHandler;
@@ -78,6 +79,15 @@ public class MessageService extends IntentService {
         return intent;
     }
 
+    public static Intent generateSendMessageIntent(Context context, String workerId, String message) {
+        Intent intent = new Intent(context, MessageService.class);
+        intent.setAction(Action.SEND_MESSAGE);
+        intent.putExtra(ExtraKey.WORKER_ID, workerId);
+        intent.putExtra(ExtraKey.SEND_MESSAGE_ID, message);
+
+        return intent;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
@@ -110,7 +120,7 @@ public class MessageService extends IntentService {
                 JSONObject messagesJson = new JSONObject(messagesJsonString);
                 if (messagesJson.getString("status").equals("success")) {
                     JSONArray messageArray = messagesJson.getJSONObject("result").getJSONArray("messages");
-                    insertMessagesToDb(messageArray);
+                    insertMessageToDb(messageArray);
                 }
 
             } catch (JSONException e) {
@@ -149,7 +159,7 @@ public class MessageService extends IntentService {
                 JSONObject messagesJson = new JSONObject(messagesJsonString);
                 if (messagesJson.getString("status").equals("success")) {
                     JSONArray messageArray = messagesJson.getJSONObject("result").getJSONArray("messages");
-                    insertMessagesToDb(messageArray);
+                    insertMessageToDb(messageArray);
                 }
 
             } catch (JSONException e) {
@@ -189,7 +199,7 @@ public class MessageService extends IntentService {
                 JSONObject messagesJson = new JSONObject(messagesJsonString);
                 if (messagesJson.getString("status").equals("success")) {
                     JSONArray messageArray = messagesJson.getJSONObject("result").getJSONArray("messages");
-                    insertMessagesToDb(messageArray);
+                    insertMessageToDb(messageArray);
                 }
 
             } catch (JSONException e) {
@@ -215,10 +225,40 @@ public class MessageService extends IntentService {
     }
 
     private void sendMessage(Intent intent) {
+        if (RestfulUtils.isConnectToInternet(this)) {
+            String workerId = intent.getStringExtra(ExtraKey.WORKER_ID);
+            String message = intent.getStringExtra(ExtraKey.SEND_MESSAGE_ID);
 
+            try {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-user-id", WorkingData.getUserId());
+                headers.put("x-auth-token", WorkingData.getAuthToken());
+
+                HashMap<String, String> bodies = new HashMap<>();
+                bodies.put("rud", workerId);
+                bodies.put("msg", message);
+
+                String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl, LoadingDataUtils.WorkingDataUrl.EndPoints.MESSAGES, null);
+                String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
+
+                if (responseString != null) {
+                    JSONObject jsonObject = new JSONObject(responseString);
+                    if (jsonObject.getString("status").equals("success")) {
+                        insertMessageToDb(jsonObject.getJSONObject("result"));
+                    }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            }
+
+        } else {
+            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+        }
     }
 
-    private void insertMessagesToDb(JSONArray messageArray) {
+    private void insertMessageToDb(JSONArray messageArray) {
         for (int i = 0 ; i < messageArray.length() ; i++) {
             JSONObject messageJson = null;
             try {
@@ -241,6 +281,28 @@ public class MessageService extends IntentService {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void insertMessageToDb(JSONObject jsonObject) {
+        try {
+            String messageId = jsonObject.getString("_id");
+            String senderId = jsonObject.getString("ownerId");
+            String receiverId = jsonObject.getString("employeeId");
+            String content = jsonObject.getString("content");
+            long time = jsonObject.getLong("createdAt");
+
+            ContentValues values = new ContentValues();
+            values.put(WorkFlowContract.Message.MESSAGE_ID, messageId);
+            values.put(WorkFlowContract.Message.CONTENT, content);
+            values.put(WorkFlowContract.Message.SENDER_ID, senderId);
+            values.put(WorkFlowContract.Message.RECEIVER_ID, receiverId);
+            values.put(WorkFlowContract.Message.TIME, time);
+
+            getContentResolver().insert(WorkFlowContract.Message.CONTENT_URI, values);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

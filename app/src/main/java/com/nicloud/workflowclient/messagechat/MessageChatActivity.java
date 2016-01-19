@@ -310,14 +310,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
 
         mMessageBox.setText(null);
 
-        ContentValues values = new ContentValues();
-        values.put(WorkFlowContract.Message.MESSAGE_ID, "gdthfkdsjie");
-        values.put(WorkFlowContract.Message.CONTENT, message);
-        values.put(WorkFlowContract.Message.SENDER_ID, WorkingData.getUserId());
-        values.put(WorkFlowContract.Message.RECEIVER_ID, mWorkerId);
-        values.put(WorkFlowContract.Message.TIME, System.currentTimeMillis());
-
-        getContentResolver().insert(WorkFlowContract.Message.CONTENT_URI, values);
+        startService(MessageService.generateSendMessageIntent(this, mWorkerId, message));
     }
 
     @Override
