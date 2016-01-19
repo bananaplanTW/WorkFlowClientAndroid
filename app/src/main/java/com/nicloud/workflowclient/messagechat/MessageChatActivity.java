@@ -3,8 +3,11 @@ package com.nicloud.workflowclient.messagechat;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageChatActivity extends AppCompatActivity implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>, LoadMessageReceiver.OnLoadMessageListener {
 
     public static final String EXTRA_WORKER_ID = "extra_worker_id";
     public static final String EXTRA_WORKER_NAME = "extra_worker_name";
@@ -70,6 +73,8 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
     private EditText mMessageBox;
     private ImageView mSendButton;
 
+    private LoadMessageReceiver mLoadMessageReceiver;
+
     private List<MessageItem> mMessageListData = new ArrayList<>();
 
     private boolean mIsSendButtonBeenChanged = false;
@@ -88,6 +93,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
         mWorkerId = getIntent().getStringExtra(EXTRA_WORKER_ID);
         mWorkerName = getIntent().getStringExtra(EXTRA_WORKER_NAME);
         mSelectionArgs = new String[] {WorkingData.getUserId(), mWorkerId, mWorkerId, WorkingData.getUserId()};
+        mLoadMessageReceiver = new LoadMessageReceiver(this);
 
         findViews();
         setupViews();
@@ -100,8 +106,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
             startService(MessageService.generateLoadMessageNormalIntent(this, mWorkerId));
 
         } else {
-            long lastMessageDate = getLastMessageDate();
-            startService(MessageService.generateLoadMessageFromIntent(this, mWorkerId, lastMessageDate));
+            startService(MessageService.generateLoadMessageFromIntent(this, mWorkerId, getLastMessageDate()));
         }
     }
 
@@ -225,6 +230,19 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(LoadMessageReceiver.ACTION_LOAD_MESSAGE);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLoadMessageReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLoadMessageReceiver);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -297,5 +315,13 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onLoadMessage(Intent intent) {
+        String senderId = intent.getStringExtra(LoadMessageReceiver.EXTRA_SENDER_ID);
+        if (!senderId.equals(mWorkerId)) return;
+
+        startService(MessageService.generateLoadMessageFromIntent(this, mWorkerId, getLastMessageDate()));
     }
 }
