@@ -39,6 +39,8 @@
                 android:id="@+id/message_box"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/message_chat_message_box_padding_left_right"
+                android:paddingBottom="@dimen/message_chat_message_box_padding_left_right"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/send_button"
                 android:background="@null"

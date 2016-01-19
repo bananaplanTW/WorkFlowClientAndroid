@@ -2,6 +2,7 @@ package com.nicloud.workflowclient.messagechat;
 
 import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -21,6 +22,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -29,6 +31,7 @@ import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.serveraction.receiver.MessageCompletedReceiver;
 import com.nicloud.workflowclient.serveraction.service.MessageService;
+import com.nicloud.workflowclient.utility.IMMResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -206,6 +209,9 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void setupViews() {
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        mMessageBox.requestFocus();
         mMessageBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -237,8 +243,33 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
+        mMessageBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isMessageListScrollToLastItem() && isSoftKeyboardShown(imm, mMessageBox)) {
+                    mMessageList.scrollToPosition(mMessageListData.size() - 1);
+                }
+            }
+        });
 
         mSendButton.setOnClickListener(this);
+    }
+
+    private boolean isSoftKeyboardShown(InputMethodManager imm, View v) {
+        IMMResult result = new IMMResult();
+        int res;
+
+        imm.showSoftInput(v, 0, result);
+
+        // if keyboard doesn't change, handle the key press
+        res = result.getResult();
+        if (res == InputMethodManager.RESULT_UNCHANGED_SHOWN ||
+                res == InputMethodManager.RESULT_UNCHANGED_HIDDEN) {
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void setupActionBar() {
@@ -281,6 +312,10 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
 
         return mMessageList.getChildAt(0).getTop() == topBoundaryMargin &&
                mMessageListLayoutManager.findFirstVisibleItemPosition() == 0;
+    }
+
+    private boolean isMessageListScrollToLastItem() {
+        return mMessageListLayoutManager.findLastVisibleItemPosition() == mMessageListData.size() - 1;
     }
 
     @Override
