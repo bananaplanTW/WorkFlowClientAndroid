@@ -23,6 +23,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/complete_task_button"
+        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:orientation="vertical">
 
@@ -30,8 +32,6 @@
             android:id="@+id/scheduled_task_task_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:ellipsize="end"
             android:textColor="@color/title_task_name_text_color"
             android:textSize="@dimen/title_information_text_size" />
 
@@ -39,8 +39,6 @@
             android:id="@+id/scheduled_task_case_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:ellipsize="end"
             android:textColor="@color/title_case_name_text_color"
             android:textSize="@dimen/title_information_text_size" />
 
