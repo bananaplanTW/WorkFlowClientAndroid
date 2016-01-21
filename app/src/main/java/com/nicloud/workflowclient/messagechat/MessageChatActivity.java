@@ -1,7 +1,6 @@
 package com.nicloud.workflowclient.messagechat;
 
 import android.app.LoaderManager;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -18,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -86,7 +84,8 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
 
     private int mPreviousMessageCount = 0;
 
-    private int mLastVisibleItemPosition = 0;
+    private int mFirstVisibleItemPosition = 0;
+    private int mFirstVisibleItemOffset = 0;
 
     private boolean mIsNeedToScrollLast = true;
     private boolean mIsLoadingBeforeMessages = false;
@@ -166,7 +165,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
 
         try {
             cursor = getContentResolver().query(WorkFlowContract.Message.CONTENT_URI,
-                    mProjection, mSelection, mSelectionArgs, null);
+                    mProjection, mSelection, mSelectionArgs, mSortOrder);
             if (cursor != null) {
                 cursor.moveToFirst();
                 firstMessageDate = cursor.getLong(TIME);
@@ -187,7 +186,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
 
         try {
             cursor = getContentResolver().query(WorkFlowContract.Message.CONTENT_URI,
-                    mProjection, mSelection, mSelectionArgs, null);
+                    mProjection, mSelection, mSelectionArgs, mSortOrder);
             if (cursor != null) {
                 cursor.moveToLast();
                 lastMessageDate = cursor.getLong(TIME);
@@ -294,13 +293,18 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
                 super.onScrolled(recyclerView, dx, dy);
 
                 if (!mIsLoadingBeforeMessages && isMessageListScrollToTop()) {
-                    Log.d("danny", "Load before messages");
                     mIsLoadingBeforeMessages = true;
                     mIsNeedToScrollLast = false;
-                    mLastVisibleItemPosition = mMessageListLayoutManager.findLastVisibleItemPosition();
 
-//                    startService(MessageService.
-//                            generateLoadMessageBeforeIntent(MessageChatActivity.this, mWorkerId, getFirstMessageDate()));
+                    mFirstVisibleItemPosition = mMessageListLayoutManager.findFirstVisibleItemPosition();
+                    View v = mMessageListLayoutManager.getChildAt(0);
+                    mFirstVisibleItemOffset =
+                            (v == null) ? 0 : (v.getTop() - mMessageListLayoutManager.getPaddingTop());
+                    mFirstVisibleItemOffset -=
+                            getResources().getDimensionPixelSize(R.dimen.message_chat_message_list_normal_margin);
+
+                    startService(MessageService.
+                            generateLoadMessageBeforeIntent(MessageChatActivity.this, mWorkerId, getFirstMessageDate()));
                 }
             }
         });
@@ -345,6 +349,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
 
         mMessageBox.setText(null);
 
+        mIsNeedToScrollLast = true;
         startService(MessageService.generateSendMessageIntent(this, mWorkerId, message));
     }
 
@@ -380,14 +385,11 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
         mMessageListAdapter.notifyDataSetChanged();
 
         if (mIsNeedToScrollLast) {
-            Log.d("danny", "Scroll to last");
             mMessageList.scrollToPosition(mMessageListData.size() - 1);
         } else {
-            mMessageList.scrollToPosition(30);
+            int position = cursor.getCount() - mPreviousMessageCount + mFirstVisibleItemPosition;
+            mMessageListLayoutManager.scrollToPositionWithOffset(position, mFirstVisibleItemOffset);
         }
-
-        Log.d("danny", "cursor.getCount() = " + cursor.getCount());
-        Log.d("danny", "mPreviousMessageCount = " + mPreviousMessageCount);
 
         mPreviousMessageCount = cursor.getCount();
         mIsNeedToScrollLast = true;
