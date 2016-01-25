@@ -19,7 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.cases.CaseFragment;
+import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
@@ -259,8 +259,9 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
 
             case MainMenuFragment.MainMenuItemType.CASE:
                 if (mCurrentContentFragment instanceof CaseFragment) {
-
-                };
+                    ((CaseFragment) mCurrentContentFragment).setCaseName(mClickedMainMenuItem.mCase.name);
+                    break;
+                }
                 replaceTo(CaseFragment.class, FragmentTag.CASE);
 
                 break;
@@ -316,6 +317,8 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
         if (fragment == null) {
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
+                putFragmentArguments(fragment);
+
                 fragmentTransaction.replace(R.id.content_container, fragment, fragmentTag);
             } catch (InstantiationException e) {
                 e.printStackTrace();
@@ -326,6 +329,15 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
 
         mCurrentContentFragment = fragment;
         fragmentTransaction.commit();
+    }
+
+    private void putFragmentArguments(Fragment fragment) {
+        if (fragment instanceof CaseFragment) {
+            Bundle bundle = new Bundle();
+            bundle.putString(CaseFragment.EXTRA_CASE_NAME, mClickedMainMenuItem.mCase.name);
+
+            fragment.setArguments(bundle);
+        }
     }
 
     @Override
