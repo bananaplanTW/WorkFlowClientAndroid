@@ -190,6 +190,9 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         CaseViewHolder itemVH = (CaseViewHolder) holder;
 
         itemVH.caseName.setText(mainMenuItem.mName);
+        itemVH.caseName.setTextColor(mainMenuItem.mCase.isCompleted ?
+                mContext.getResources().getColor(R.color.main_menu_case_completed_text_color) :
+                mContext.getResources().getColor(R.color.main_menu_case_uncompleted_text_color));
     }
 
     @Override

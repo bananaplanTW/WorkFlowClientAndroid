@@ -13,6 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/drawer_menu_item_text_size"
-        android:textColor="@drawable/selector_drawer_menu_item_text_color"/>
+        android:textColor="@drawable/selector_drawer_menu_item_text_color"
+        android:drawableLeft="@drawable/main_menu_case_dot"
+        android:drawablePadding="@dimen/main_menu_case_dot_drawable_padding"/>
 
 </LinearLayout>

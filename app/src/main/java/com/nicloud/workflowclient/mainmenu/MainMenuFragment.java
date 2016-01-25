@@ -175,17 +175,17 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
                 mContext.getString(R.string.main_menu_my_tasks),
                 null, MainMenuListAdapter.ItemViewType.ITEM, true));
 
-//        mDataSet.add(new MainMenuItem(-1, "", null, MainMenuListAdapter.ItemViewType.EMPTY, false));
-//
-//        mDataSet.add(new MainMenuItem(-1,
-//                mContext.getString(R.string.main_menu_cases),
-//                null, MainMenuListAdapter.ItemViewType.TITLE, false));
-//
-//        for (Case aCase : WorkingData.getInstance(mContext).getCases()) {
-//            mDataSet.add(new MainMenuItem(MainMenuItemType.CASE, aCase.name, aCase,
-//                    MainMenuListAdapter.ItemViewType.CASE, false));
-//        }
-//
+        mDataSet.add(new MainMenuItem(-1, "", null, MainMenuListAdapter.ItemViewType.EMPTY, false));
+
+        mDataSet.add(new MainMenuItem(-1,
+                mContext.getString(R.string.main_menu_cases),
+                null, MainMenuListAdapter.ItemViewType.TITLE, false));
+
+        for (Case aCase : WorkingData.getInstance(mContext).getCases()) {
+            mDataSet.add(new MainMenuItem(MainMenuItemType.CASE, aCase.name, aCase,
+                    MainMenuListAdapter.ItemViewType.CASE, false));
+        }
+
         mMainMenuListAdapter.notifyDataSetChanged();
     }
 
