@@ -177,7 +177,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
 
         mDataSet.add(new MainMenuItem(-1, "", null, MainMenuListAdapter.ItemViewType.EMPTY, false));
 
-        mDataSet.add(new MainMenuItem(-1,
+        mDataSet.add(new MainMenuItem(MainMenuItemType.CASE,
                 mContext.getString(R.string.main_menu_cases),
                 null, MainMenuListAdapter.ItemViewType.TITLE, false));
 

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/drawer_menu_item_height"
-    android:paddingLeft="@dimen/drawer_menu_list_padding"
+    android:paddingLeft="@dimen/main_menu_case_padding_left"
     android:paddingRight="@dimen/drawer_menu_list_padding"
     android:gravity="center_vertical"
     android:orientation="vertical"
@@ -15,6 +15,6 @@
         android:textSize="@dimen/drawer_menu_item_text_size"
         android:textColor="@drawable/selector_drawer_menu_item_text_color"
         android:drawableLeft="@drawable/main_menu_case_dot"
-        android:drawablePadding="@dimen/main_menu_case_dot_drawable_padding"/>
+        android:drawablePadding="@dimen/main_menu_item_drawable_padding"/>
 
 </LinearLayout>

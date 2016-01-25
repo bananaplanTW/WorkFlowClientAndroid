@@ -172,6 +172,11 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         itemVH.name.setText(mainMenuItem.mName);
         itemVH.view.setSelected(mainMenuItem.mIsSelected);
 
+        if (MainMenuFragment.MainMenuItemType.MY_TASKS == mainMenuItem.mType) {
+            itemVH.name.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_my_tasks, 0, 0, 0);
+            itemVH.name.setCompoundDrawablePadding(mContext.getResources().getDimensionPixelSize(R.dimen.main_menu_item_drawable_padding));
+        }
+
         if (mainMenuItem.mIsSelected) {
             mCurrentSelectedItem = mainMenuItem;
             itemVH.view.setBackgroundColor(mContext.getResources().getColor(R.color.drawer_menu_item_selected_background_color));
@@ -184,6 +189,11 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TitleViewHolder itemVH = (TitleViewHolder) holder;
 
         itemVH.title.setText(mainMenuItem.mName);
+
+        if (MainMenuFragment.MainMenuItemType.CASE == mainMenuItem.mType) {
+            itemVH.title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_case, 0, 0, 0);
+            itemVH.title.setCompoundDrawablePadding(mContext.getResources().getDimensionPixelSize(R.dimen.main_menu_item_drawable_padding));
+        }
     }
 
     private void onBindCase(RecyclerView.ViewHolder holder, MainMenuItem mainMenuItem) {
