@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.detailedtask;
+package com.nicloud.workflowclient.detailedtask.main;
 
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 

@@ -14,8 +14,8 @@ import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
-import com.nicloud.workflowclient.detailedtask.OnSwipeRefresh;
+import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
+import com.nicloud.workflowclient.detailedtask.main.OnSwipeRefresh;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.utility.Utilities;
 

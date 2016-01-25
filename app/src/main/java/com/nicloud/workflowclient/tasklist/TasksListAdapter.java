@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.Task;
-import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
+import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.utility.Utilities;
 

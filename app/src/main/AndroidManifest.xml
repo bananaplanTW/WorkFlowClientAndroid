@@ -47,7 +47,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".detailedtask.DetailedTaskActivity"
+            android:name=".detailedtask.main.DetailedTaskActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.WhiteBackground" />
         <activity

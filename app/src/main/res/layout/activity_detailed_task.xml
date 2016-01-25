@@ -67,8 +67,8 @@
 
             <include layout="@layout/horizontal_divider" />
 
-            <FrameLayout
-                android:id="@+id/detailed_task_content"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/detailed_task_viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

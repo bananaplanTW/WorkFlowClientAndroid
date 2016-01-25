@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.detailedtask;
+package com.nicloud.workflowclient.detailedtask.main;
 
 /**
  * Created by logicmelody on 2015/12/9.

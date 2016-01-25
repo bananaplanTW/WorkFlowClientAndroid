@@ -16,7 +16,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -29,7 +28,7 @@ import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.tasklog.DownloadFileFromURLCommand;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
-import com.nicloud.workflowclient.detailedtask.DetailedTaskActivity;
+import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
