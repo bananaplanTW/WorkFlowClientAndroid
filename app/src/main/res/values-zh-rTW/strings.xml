@@ -56,6 +56,10 @@
     <string name="file_log_no_log_text">無檔案</string>
     <string name="check_list_no_task_text">無代辦事項</string>
 
+    <!-- Case -->
+    <string name="case_tab_discussion">討論區</string>
+    <string name="case_tab_file">檔案</string>
+
     <!-- Task info -->
     <string name="task_info_task_description">卡片描述</string>
     <string name="task_info_task_no_description">無卡片描述</string>

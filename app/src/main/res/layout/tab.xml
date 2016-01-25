@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/detailed_task_tab_text"
+    android:id="@+id/tab_text"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="@drawable/selector_detailed_task_tab_background"
-    android:textColor="@drawable/selector_detailed_task_tab_text_color" />
+    android:background="@drawable/selector_tab_background"
+    android:textColor="@drawable/selector_tab_text_color" />

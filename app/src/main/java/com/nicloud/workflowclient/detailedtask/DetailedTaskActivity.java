@@ -34,6 +34,7 @@ import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.serveraction.service.ActionService;
 import com.nicloud.workflowclient.serveraction.receiver.UploadCompletedReceiver;
 import com.nicloud.workflowclient.serveraction.service.UploadService;
+import com.nicloud.workflowclient.utility.MainTabContentFactory;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import org.json.JSONArray;
@@ -91,24 +92,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private ArrayList<BaseData> mTextDataSet = new ArrayList<>();
     private ArrayList<BaseData> mFileDataSet = new ArrayList<>();
 
-
-    private class DetailedTaskTabContentFactory implements TabHost.TabContentFactory {
-
-        private Context mContext;
-
-        public DetailedTaskTabContentFactory(Context context) {
-            mContext = context;
-        }
-
-        @Override
-        public View createTabContent(String tag) {
-            View v = new View(mContext);
-            v.setMinimumWidth(0);
-            v.setMinimumHeight(0);
-            v.setVisibility(View.GONE);
-            return v;
-        }
-    }
 
     public static Intent generateActivityIntent(Context context, String taskId) {
         Intent intent = new Intent(context, DetailedTaskActivity.class);
@@ -179,12 +162,12 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     private void addTab(String tag) {
         mDetailedTaskTabHost.addTab(mDetailedTaskTabHost.newTabSpec(tag).setIndicator(getTabView(tag))
-                .setContent(new DetailedTaskTabContentFactory(this)));
+                .setContent(new MainTabContentFactory(this)));
     }
 
     private View getTabView(String tag) {
-        View tabView = LayoutInflater.from(this).inflate(R.layout.detailed_task_tab, null);
-        TextView tabText = (TextView) tabView.findViewById(R.id.detailed_task_tab_text);
+        View tabView = LayoutInflater.from(this).inflate(R.layout.tab, null);
+        TextView tabText = (TextView) tabView.findViewById(R.id.tab_text);
 
         String text = "";
         if(TabTag.TASK_INFO.equals(tag)) {

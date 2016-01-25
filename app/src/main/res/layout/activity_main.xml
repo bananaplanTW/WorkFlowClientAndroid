@@ -20,6 +20,8 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:titleTextAppearance="@style/AppTheme.Toolbar.Title" />
 
+        <include layout="@layout/horizontal_divider" />
+
         <!-- Main content view -->
         <FrameLayout
             android:id="@+id/content_container"

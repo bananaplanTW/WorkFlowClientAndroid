@@ -13,6 +13,11 @@
     <color name="green_button_background_color">#FF009789</color>
     <color name="no_internet_connection_text_color">@android:color/black</color>
 
+    <!-- Tab -->
+    <color name="tab_selected_color">#FF009789</color>
+    <color name="tab_text_color">#FF9B9B9B</color>
+    <color name="tab_text_selected_color">#FFFFFFFF</color>
+
     <!-- Drawer menu -->
     <color name="drawer_menu_background_color">#FF424242</color>
     <color name="drawer_menu_item_title_text_color">#FFFFFFFF</color>
@@ -51,10 +56,10 @@
     <color name="complete_task_button_background_color">#FF00B3A1</color>
 
     <!-- Detailed task -->
-    <color name="task_log_tab_selected_color">#FF009789</color>
-    <color name="task_log_tab_text_color">#FF9B9B9B</color>
-    <color name="task_log_tab_text_selected_color">#FFFFFFFF</color>
     <color name="log_item_text_color">#FF696969</color>
+
+    <!-- Case -->
+    <color name="case_background_color">#FFFFFFFF</color>
 
     <!-- Task info -->
     <color name="task_info_text_color">#FF696969</color>
