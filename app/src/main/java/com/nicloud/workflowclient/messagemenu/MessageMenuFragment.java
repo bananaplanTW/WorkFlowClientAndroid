@@ -38,10 +38,6 @@ public class MessageMenuFragment extends Fragment implements LoadingWorkers.OnFi
     private OnClickMessageMenuWorkerListener mOnClickMessageMenuWorkerListener;
 
 
-    public void clearSelectedMessageMenuItem() {
-        mMessageMenuListAdapter.clearSelectedMessageMenuItem();
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

@@ -97,13 +97,11 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private void onClickMainMenuItem(MainMenuItem clickedItem) {
         if (clickedItem.mIsSelected) return;
 
-        if (clickedItem.mType != MainMenuFragment.MainMenuItemType.CASE) {
-            clickedItem.mIsSelected = true;
-            if (mCurrentSelectedItem != null) {
-                mCurrentSelectedItem.mIsSelected = false;
-            }
-            mCurrentSelectedItem = clickedItem;
+        clickedItem.mIsSelected = true;
+        if (mCurrentSelectedItem != null) {
+            mCurrentSelectedItem.mIsSelected = false;
         }
+        mCurrentSelectedItem = clickedItem;
 
         notifyDataSetChanged();
 
@@ -170,7 +168,6 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ItemViewHolder itemVH = (ItemViewHolder) holder;
 
         itemVH.name.setText(mainMenuItem.mName);
-        itemVH.view.setSelected(mainMenuItem.mIsSelected);
 
         if (MainMenuFragment.MainMenuItemType.MY_TASKS == mainMenuItem.mType) {
             itemVH.name.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_my_tasks, 0, 0, 0);
@@ -203,6 +200,13 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         itemVH.caseName.setTextColor(mainMenuItem.mCase.isCompleted ?
                 mContext.getResources().getColor(R.color.main_menu_case_completed_text_color) :
                 mContext.getResources().getColor(R.color.main_menu_case_uncompleted_text_color));
+
+        if (mainMenuItem.mIsSelected) {
+            mCurrentSelectedItem = mainMenuItem;
+            itemVH.view.setBackgroundColor(mContext.getResources().getColor(R.color.drawer_menu_item_selected_background_color));
+        } else {
+            itemVH.view.setBackgroundColor(mContext.getResources().getColor(R.color.drawer_menu_background_color));
+        }
     }
 
     @Override

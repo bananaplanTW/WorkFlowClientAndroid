@@ -19,7 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.cases.CaseActivity;
+import com.nicloud.workflowclient.cases.CaseFragment;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
@@ -248,7 +248,7 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     private void onCloseMainMenuAction() {
         if (mClickedMainMenuItem == null) return;
 
-        mMessageMenuFragment.clearSelectedMessageMenuItem();
+        mActionBar.setTitle(mClickedMainMenuItem.mName);
 
         switch (mClickedMainMenuItem.mType) {
             case MainMenuFragment.MainMenuItemType.MY_TASKS:
@@ -258,11 +258,10 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
                 break;
 
             case MainMenuFragment.MainMenuItemType.CASE:
-                Intent intent = new Intent(mMainActivity, CaseActivity.class);
-                intent.putExtra(CaseActivity.EXTRA_CASE_ID, mClickedMainMenuItem.mType);
-                intent.putExtra(CaseActivity.EXTRA_CASE_NAME, mClickedMainMenuItem.mName);
+                if (mCurrentContentFragment instanceof CaseFragment) {
 
-                mMainActivity.startActivity(intent);
+                };
+                replaceTo(CaseFragment.class, FragmentTag.CASE);
 
                 break;
         }

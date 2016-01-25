@@ -53,9 +53,6 @@
         <activity
             android:name=".detailedtask.filelog.DisplayImageActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".cases.CaseActivity"
-            android:screenOrientation="portrait" />
         <activity android:name=".messagechat.MessageChatActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
