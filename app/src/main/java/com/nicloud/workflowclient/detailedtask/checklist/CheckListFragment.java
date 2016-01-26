@@ -76,6 +76,7 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
+        mDataSet.clear();
         mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
         mActionCompletedReceiver = new ActionCompletedReceiver(this);
         initialize();
