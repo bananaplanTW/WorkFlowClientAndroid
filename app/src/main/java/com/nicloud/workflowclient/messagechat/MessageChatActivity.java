@@ -242,6 +242,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
+        // TODO: Sometimes the list will not scroll to the last item when the soft keyboard is opened.
         mMessageBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

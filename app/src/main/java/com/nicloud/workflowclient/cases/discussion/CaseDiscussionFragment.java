@@ -6,13 +6,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
+import com.nicloud.workflowclient.utility.IMMResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,8 @@ public class CaseDiscussionFragment extends Fragment {
     private RecyclerView mDiscussionList;
     private LinearLayoutManager mDiscussionListLayoutManager;
     private DiscussionListAdapter mDiscussionListAdapter;
+
+    private EditText mDiscussionBox;
 
     private List<Discussion> mDiscussionData = new ArrayList<>();
 
@@ -59,12 +65,66 @@ public class CaseDiscussionFragment extends Fragment {
         mCaseId = getArguments().getString(CaseFragment.EXTRA_CASE_ID);
 
         findViews();
+        setupViews();
         setDiscussionData();
         setupDiscussionList();
     }
 
     private void findViews() {
         mDiscussionList = (RecyclerView) getView().findViewById(R.id.discussion_list);
+        mDiscussionBox = (EditText) getView().findViewById(R.id.discussion_box);
+    }
+
+    private void setupViews() {
+        final InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        mDiscussionBox.requestFocus();
+        mDiscussionBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        // TODO: Sometimes the list will not scroll to the last item when the soft keyboard is opened.
+        mDiscussionBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isDiscussionListScrollToLastItem() && isSoftKeyboardShown(imm, mDiscussionBox)) {
+                    mDiscussionList.scrollToPosition(mDiscussionData.size() - 1);
+                }
+            }
+        });
+    }
+
+    private boolean isDiscussionListScrollToLastItem() {
+        return mDiscussionListLayoutManager.findLastVisibleItemPosition() == mDiscussionData.size() - 1;
+    }
+
+    private boolean isSoftKeyboardShown(InputMethodManager imm, View v) {
+        IMMResult result = new IMMResult();
+        int res;
+
+        imm.showSoftInput(v, 0, result);
+
+        // if keyboard doesn't change, handle the key press
+        res = result.getResult();
+        if (res == InputMethodManager.RESULT_UNCHANGED_SHOWN ||
+                res == InputMethodManager.RESULT_UNCHANGED_HIDDEN) {
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void setDiscussionData() {
