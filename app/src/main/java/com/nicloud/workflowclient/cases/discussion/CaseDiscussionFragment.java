@@ -11,8 +11,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
@@ -24,7 +26,7 @@ import java.util.List;
 /**
  * Created by logicmelody on 2016/1/25.
  */
-public class CaseDiscussionFragment extends Fragment {
+public class CaseDiscussionFragment extends Fragment implements View.OnClickListener {
 
     private Context mContext;
 
@@ -33,10 +35,14 @@ public class CaseDiscussionFragment extends Fragment {
     private DiscussionListAdapter mDiscussionListAdapter;
 
     private EditText mDiscussionBox;
+    private ImageView mDiscussionAddFileButton;
+    private ImageView mDiscussionSendMessageButton;
 
     private List<Discussion> mDiscussionData = new ArrayList<>();
 
-    public String mCaseId;
+    private String mCaseId;
+
+    private boolean hasTextInDiscussionBox = false;
 
 
     public void setCaseId(String caseId) {
@@ -73,11 +79,11 @@ public class CaseDiscussionFragment extends Fragment {
     private void findViews() {
         mDiscussionList = (RecyclerView) getView().findViewById(R.id.discussion_list);
         mDiscussionBox = (EditText) getView().findViewById(R.id.discussion_box);
+        mDiscussionAddFileButton = (ImageView) getView().findViewById(R.id.discussion_add_file_button);
+        mDiscussionSendMessageButton = (ImageView) getView().findViewById(R.id.discussion_send_message_button);
     }
 
     private void setupViews() {
-        final InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-
         mDiscussionBox.requestFocus();
         mDiscussionBox.addTextChangedListener(new TextWatcher() {
             @Override
@@ -91,19 +97,33 @@ public class CaseDiscussionFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() == 0) {
+                    mDiscussionSendMessageButton.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.hide));
+                    mDiscussionAddFileButton.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.reveal));
 
-            }
-        });
-        // TODO: Sometimes the list will not scroll to the last item when the soft keyboard is opened.
-        mDiscussionBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isDiscussionListScrollToLastItem() && isSoftKeyboardShown(imm, mDiscussionBox)) {
-                    mDiscussionList.scrollToPosition(mDiscussionData.size() - 1);
+                    mDiscussionSendMessageButton.setVisibility(View.GONE);
+                    mDiscussionAddFileButton.setVisibility(View.VISIBLE);
+
+                    hasTextInDiscussionBox = false;
+
+                } else {
+                    if (hasTextInDiscussionBox) return;
+
+                    mDiscussionSendMessageButton.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.reveal));
+                    mDiscussionAddFileButton.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.hide));
+
+                    mDiscussionSendMessageButton.setVisibility(View.VISIBLE);
+                    mDiscussionAddFileButton.setVisibility(View.GONE);
+
+                    hasTextInDiscussionBox = true;
                 }
             }
         });
+        mDiscussionBox.setOnClickListener(this);
+
+        mDiscussionAddFileButton.setOnClickListener(this);
+        mDiscussionSendMessageButton.setOnClickListener(this);
     }
 
     private boolean isDiscussionListScrollToLastItem() {
@@ -142,5 +162,24 @@ public class CaseDiscussionFragment extends Fragment {
 
         mDiscussionList.setLayoutManager(mDiscussionListLayoutManager);
         mDiscussionList.setAdapter(mDiscussionListAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.discussion_box:
+                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (isDiscussionListScrollToLastItem() && isSoftKeyboardShown(imm, mDiscussionBox)) {
+                    mDiscussionList.scrollToPosition(mDiscussionData.size() - 1);
+                }
+
+                break;
+
+            case R.id.discussion_add_file_button:
+                break;
+
+            case R.id.discussion_send_message_button:
+                break;
+        }
     }
 }

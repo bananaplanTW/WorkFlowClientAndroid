@@ -228,7 +228,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
                     mSendButton.setImageResource(R.drawable.ic_send_disabled);
                     mSendButton.setBackground(null);
                     mSendButton.setAnimation(
-                            AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.message_send_button_reveal));
+                            AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.reveal));
                     mIsSendButtonBeenChanged = false;
 
                 } else {
@@ -237,7 +237,7 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
                     mSendButton.setImageResource(R.drawable.ic_send_enabled);
                     mSendButton.setBackgroundResource(R.drawable.send_button_enabled_background);
                     mSendButton.setAnimation(
-                            AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.message_send_button_reveal));
+                            AnimationUtils.loadAnimation(MessageChatActivity.this, R.anim.reveal));
                     mIsSendButtonBeenChanged = true;
                 }
             }
