@@ -13,14 +13,34 @@
 
     <include layout="@layout/horizontal_divider" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/discussion_send_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/discussion_send_container_min_height"
-        android:orientation="horizontal">
+        android:paddingLeft="@dimen/discussion_send_container_padding_left_right"
+        android:paddingRight="@dimen/discussion_send_container_padding_left_right">
 
+        <EditText
+            android:id="@+id/discussion_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingTop="@dimen/discussion_box_padding_left_right"
+            android:paddingBottom="@dimen/discussion_box_padding_left_right"
+            android:layout_toLeftOf="@+id/discussion_send_button"
+            android:layout_marginRight="@dimen/discussion_box_margin_right"
+            android:background="@null"
+            android:hint="@string/discussion_box_hint"/>
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/discussion_send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_send_disabled" />
+
+    </RelativeLayout>
 
 </LinearLayout>

@@ -133,4 +133,7 @@
     <!-- Message chat -->
     <string name="message_chat_message_box_hint">Send a message</string>
 
+    <!-- Discussion -->
+    <string name="discussion_box_hint">Send a message</string>
+
 </resources>

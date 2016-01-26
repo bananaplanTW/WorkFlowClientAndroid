@@ -170,6 +170,9 @@
 
     <!-- Discussion -->
     <dimen name="discussion_send_container_min_height">60dp</dimen>
+    <dimen name="discussion_send_container_padding_left_right">15dp</dimen>
+    <dimen name="discussion_box_margin_right">15dp</dimen>
+    <dimen name="discussion_box_padding_left_right">15dp</dimen>
     <dimen name="discussion_item_padding">15dp</dimen>
     <dimen name="discussion_item_worker_name_margin_left">10dp</dimen>
     <dimen name="discussion_item_time_margin_left">10dp</dimen>

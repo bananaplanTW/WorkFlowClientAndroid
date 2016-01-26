@@ -119,4 +119,7 @@
     <!-- Message chat -->
     <string name="message_chat_message_box_hint">寫訊息</string>
 
+    <!-- Discussion -->
+    <string name="discussion_box_hint">寫訊息</string>
+
 </resources>
