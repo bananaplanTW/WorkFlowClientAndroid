@@ -259,7 +259,7 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
 
             case MainMenuFragment.MainMenuItemType.CASE:
                 if (mCurrentContentFragment instanceof CaseFragment) {
-                    ((CaseFragment) mCurrentContentFragment).setCaseName(mClickedMainMenuItem.mCase.name);
+                    ((CaseFragment) mCurrentContentFragment).setCaseId(mClickedMainMenuItem.mCase.id);
                     break;
                 }
                 replaceTo(CaseFragment.class, FragmentTag.CASE);
@@ -334,7 +334,7 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     private void putFragmentArguments(Fragment fragment) {
         if (fragment instanceof CaseFragment) {
             Bundle bundle = new Bundle();
-            bundle.putString(CaseFragment.EXTRA_CASE_NAME, mClickedMainMenuItem.mCase.name);
+            bundle.putString(CaseFragment.EXTRA_CASE_ID, mClickedMainMenuItem.mCase.id);
 
             fragment.setArguments(bundle);
         }

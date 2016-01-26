@@ -30,9 +30,11 @@ public class CaseDiscussionFragment extends Fragment {
 
     private List<Discussion> mDiscussionData = new ArrayList<>();
 
+    public String mCaseId;
 
-    public void setCaseName(String caseName) {
 
+    public void setCaseId(String caseId) {
+        mCaseId = caseId;
     }
 
     @Override
@@ -54,6 +56,8 @@ public class CaseDiscussionFragment extends Fragment {
     }
 
     private void initialize() {
+        mCaseId = getArguments().getString(CaseFragment.EXTRA_CASE_ID);
+
         findViews();
         setDiscussionData();
         setupDiscussionList();

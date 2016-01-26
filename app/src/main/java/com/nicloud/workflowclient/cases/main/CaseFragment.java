@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class CaseFragment extends Fragment implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
 
-    public static final String EXTRA_CASE_NAME = "extra_case_name";
+    public static final String EXTRA_CASE_ID = "extra_case_id";
 
     private static final class FragmentTag {
         public static final String DISCUSSION = "fragment_tag_discussion";
@@ -49,11 +49,11 @@ public class CaseFragment extends Fragment implements TabHost.OnTabChangeListene
     private CasePagerAdapter mCasePagerAdapter;
     private List<Fragment> mCaseFragmentList = new ArrayList<>();
 
-    private String mCaseName;
+    private String mCaseId;
 
 
-    public void setCaseName(String caseName) {
-        ((CaseDiscussionFragment) mCaseFragmentList.get(FragmentPosition.DISCUSSION)).setCaseName(caseName);
+    public void setCaseId(String caseId) {
+        ((CaseDiscussionFragment) mCaseFragmentList.get(FragmentPosition.DISCUSSION)).setCaseId(caseId);
 
         mCasePagerAdapter.notifyDataSetChanged();
     }
@@ -77,7 +77,7 @@ public class CaseFragment extends Fragment implements TabHost.OnTabChangeListene
     }
 
     private void initialize() {
-        mCaseName = getArguments().getString(EXTRA_CASE_NAME);
+        mCaseId = getArguments().getString(EXTRA_CASE_ID);
 
         findViews();
         setupTabs();
@@ -137,7 +137,7 @@ public class CaseFragment extends Fragment implements TabHost.OnTabChangeListene
         }
 
         Bundle bundle = new Bundle();
-        bundle.putString(EXTRA_CASE_NAME, mCaseName);
+        bundle.putString(EXTRA_CASE_ID, mCaseId);
 
         caseDiscussionFragment.setArguments(bundle);
         caseFileFragment.setArguments(bundle);
