@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/discussion_item_padding">
+
+    <ImageView
+        android:id="@+id/discussion_item_worker_avatar"
+        android:layout_width="@dimen/worker_avatar_width_height"
+        android:layout_height="@dimen/worker_avatar_width_height"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/ic_worker_black"/>
+
+    <TextView
+        android:id="@+id/discussion_item_worker_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/discussion_item_worker_avatar"
+        android:layout_alignTop="@+id/discussion_item_worker_avatar"
+        android:layout_marginLeft="@dimen/discussion_item_worker_name_margin_left"
+        android:textColor="@color/discussion_item_worker_name_text_color" />
+
+    <TextView
+        android:id="@+id/discussion_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/discussion_item_worker_name"
+        android:layout_toRightOf="@+id/discussion_item_worker_name"
+        android:layout_marginLeft="@dimen/discussion_item_time_margin_left"
+        android:textColor="@color/discussion_item_time_text_color"
+        android:textSize="@dimen/discussion_item_time_text_size" />
+
+    <TextView
+        android:id="@+id/discussion_item_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/discussion_item_worker_name"
+        android:layout_below="@+id/discussion_item_worker_name"
+        android:textColor="@color/discussion_item_content_text_color" />
+
+</RelativeLayout>

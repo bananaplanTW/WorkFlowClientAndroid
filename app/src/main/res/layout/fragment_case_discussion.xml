@@ -4,9 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/case_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/discussion_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"/>
+
+    <include layout="@layout/horizontal_divider" />
+
+    <LinearLayout
+        android:id="@+id/discussion_send_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/discussion_send_container_min_height"
+        android:orientation="horizontal">
+
+
+    </LinearLayout>
 
 </LinearLayout>

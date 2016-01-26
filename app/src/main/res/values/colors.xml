@@ -97,4 +97,9 @@
     <color name="message_chat_message_me_content_background_color">#FFCFD8DC</color>
     <color name="message_chat_message_other_content_background_color">#FFFFFFFF</color>
 
+    <!-- Discussion -->
+    <color name="discussion_item_worker_name_text_color">#FF000000</color>
+    <color name="discussion_item_time_text_color">#FF8D8D8E</color>
+    <color name="discussion_item_content_text_color">#FF000000</color>
+
 </resources>

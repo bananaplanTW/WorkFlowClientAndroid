@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,9 @@ import android.widget.TextView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by logicmelody on 2016/1/25.
  */
@@ -19,13 +24,15 @@ public class CaseDiscussionFragment extends Fragment {
 
     private Context mContext;
 
-    private TextView mCaseNameText;
+    private RecyclerView mDiscussionList;
+    private LinearLayoutManager mDiscussionListLayoutManager;
+    private DiscussionListAdapter mDiscussionListAdapter;
 
-    private String mCaseName;
+    private List<Discussion> mDiscussionData = new ArrayList<>();
 
 
     public void setCaseName(String caseName) {
-        mCaseNameText.setText(caseName);
+
     }
 
     @Override
@@ -47,16 +54,29 @@ public class CaseDiscussionFragment extends Fragment {
     }
 
     private void initialize() {
-        mCaseName = getArguments().getString(CaseFragment.EXTRA_CASE_NAME);
         findViews();
-        setupViews();
+        setDiscussionData();
+        setupDiscussionList();
     }
 
     private void findViews() {
-        mCaseNameText = (TextView) getView().findViewById(R.id.case_name);
+        mDiscussionList = (RecyclerView) getView().findViewById(R.id.discussion_list);
     }
 
-    private void setupViews() {
-        mCaseNameText.setText(mCaseName);
+    private void setDiscussionData() {
+        mDiscussionData.add(new Discussion("123123", "Good day", 1233332131));
+        mDiscussionData.add(new Discussion("123123", "Good day", 1233332131));
+
+        for (int i = 0 ; i < 100 ; i ++) {
+            mDiscussionData.add(new Discussion("123123", "Good day", 1233332131));
+        }
+    }
+
+    private void setupDiscussionList() {
+        mDiscussionListLayoutManager = new LinearLayoutManager(mContext);
+        mDiscussionListAdapter = new DiscussionListAdapter(mContext, mDiscussionData);
+
+        mDiscussionList.setLayoutManager(mDiscussionListLayoutManager);
+        mDiscussionList.setAdapter(mDiscussionListAdapter);
     }
 }

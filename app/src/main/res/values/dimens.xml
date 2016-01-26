@@ -168,4 +168,11 @@
     <dimen name="message_chat_message_item_content_background_corner_radius">5dp</dimen>
     <dimen name="message_chat_message_other_item_content_margin_left">10dp</dimen>
 
+    <!-- Discussion -->
+    <dimen name="discussion_send_container_min_height">60dp</dimen>
+    <dimen name="discussion_item_padding">15dp</dimen>
+    <dimen name="discussion_item_worker_name_margin_left">10dp</dimen>
+    <dimen name="discussion_item_time_margin_left">10dp</dimen>
+    <dimen name="discussion_item_time_text_size">14dp</dimen>
+
 </resources>
