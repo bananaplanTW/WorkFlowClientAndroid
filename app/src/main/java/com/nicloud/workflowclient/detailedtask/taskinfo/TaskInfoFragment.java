@@ -1,5 +1,6 @@
 package com.nicloud.workflowclient.detailedtask.taskinfo;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
@@ -16,19 +19,25 @@ import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.main.OnSwipeRefresh;
+import com.nicloud.workflowclient.dialog.DatePickerFragment;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.utility.Utilities;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by logicmelody on 2016/1/13.
  */
-public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.OnClickListener {
+public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.OnClickListener,
+        DatePickerDialog.OnDateSetListener {
+
+    private static final String TAG_FRAGMENT_DATE_PICKER = "tag_fragment_date_picker";
+    private static final int DIALOG_REQUEST_FROM_TASK_INFO = 13;
 
     private Context mContext;
 
-    private TextView mTaskDescription;
+    private EditText mTaskDescription;
     private TextView mTaskDueDate;
     private TextView mCompleteTaskButton;
 
@@ -62,18 +71,19 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
     }
 
     private void findViews() {
-        mTaskDescription = (TextView) getView().findViewById(R.id.task_description);
+        mTaskDescription = (EditText) getView().findViewById(R.id.task_description);
         mTaskDueDate = (TextView) getView().findViewById(R.id.task_due_date);
         mCompleteTaskButton = (TextView) getView().findViewById(R.id.complete_task_button);
     }
 
     private void setupViews() {
         mCompleteTaskButton.setOnClickListener(this);
+        mTaskDueDate.setOnClickListener(this);
     }
 
     private void setTaskInfo() {
         if (TextUtils.isEmpty(mTask.description)) {
-            mTaskDescription.setText(mContext.getString(R.string.task_info_task_no_description));
+            mTaskDescription.setHint(mContext.getString(R.string.task_info_task_no_description));
         } else {
             mTaskDescription.setText(mTask.description);
         }
@@ -98,9 +108,37 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.task_due_date:
+                showDatePicker();
+                break;
+
             case R.id.complete_task_button:
                 Utilities.showDialog(getFragmentManager(), DisplayDialogFragment.DialogType.COMPLETE_TASK, mTask.id);
                 break;
         }
+    }
+
+    private void showDatePicker() {
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.setTargetFragment(this, DIALOG_REQUEST_FROM_TASK_INFO);
+        if (mTask.dueDate != null) {
+            Bundle bundle = new Bundle();
+            Calendar c = Calendar.getInstance();
+            c.setTime(mTask.dueDate);
+
+            bundle.putInt(DatePickerFragment.EXTRA_DATE_YEAR, c.get(Calendar.YEAR));
+            bundle.putInt(DatePickerFragment.EXTRA_DATE_MONTH, c.get(Calendar.MONTH));
+            bundle.putInt(DatePickerFragment.EXTRA_DATE_DAY, c.get(Calendar.DAY_OF_MONTH));
+
+            datePickerFragment.setArguments(bundle);
+        }
+
+        datePickerFragment.show(getChildFragmentManager(), TAG_FRAGMENT_DATE_PICKER);
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        mTaskDueDate.setText(String.format(mContext.getString(R.string.date_format_yyyy_mm_dd),
+                String.valueOf(year), String.valueOf(monthOfYear), String.valueOf(dayOfMonth)));
     }
 }

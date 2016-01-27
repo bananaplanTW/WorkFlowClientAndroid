@@ -28,6 +28,7 @@
     <string name="error_account_password">Account or password is not correct.</string>
     <string name="retry">Retry</string>
     <string name="date_format_mm_dd_yyyy" translatable="false">%1$s/%2$s/%3$s</string>
+    <string name="date_format_yyyy_mm_dd" translatable="false">%1$s/%2$s/%3$s</string>
     <string name="date_format_mm_dd">%1$s/%2$s</string>
     <string name="complete_task">Complete Task: %1$s</string>
 
