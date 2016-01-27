@@ -19,6 +19,7 @@ public class WorkFlowProvider extends ContentProvider {
 
     private static final class UriMatcherIndex {
         public static final int MESSAGE = 0;
+        public static final int DISCUSSION = 1;
     }
 
     private static final UriMatcher sUriMatcher;
@@ -26,6 +27,7 @@ public class WorkFlowProvider extends ContentProvider {
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         sUriMatcher.addURI(WorkFlowContract.AUTHORITY, WorkFlowContract.Message.TABLE_NAME, UriMatcherIndex.MESSAGE);
+        sUriMatcher.addURI(WorkFlowContract.AUTHORITY, WorkFlowContract.Discussion.TABLE_NAME, UriMatcherIndex.DISCUSSION);
     }
 
     private WorkFlowDatabaseHelper mWorkFlowDatabaseHelper;
@@ -47,6 +49,10 @@ public class WorkFlowProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case UriMatcherIndex.MESSAGE:
                 queryBuilder.setTables(WorkFlowContract.Message.TABLE_NAME);
+                break;
+
+            case UriMatcherIndex.DISCUSSION:
+                queryBuilder.setTables(WorkFlowContract.Discussion.TABLE_NAME);
                 break;
 
             default:
@@ -76,6 +82,10 @@ public class WorkFlowProvider extends ContentProvider {
                 id = db.insert(WorkFlowContract.Message.TABLE_NAME, null, values);
                 break;
 
+            case UriMatcherIndex.DISCUSSION:
+                id = db.insert(WorkFlowContract.Discussion.TABLE_NAME, null, values);
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -93,7 +103,10 @@ public class WorkFlowProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case UriMatcherIndex.MESSAGE:
                 rowsDeleted = db.delete(WorkFlowContract.Message.TABLE_NAME, selection, selectionArgs);
+                break;
 
+            case UriMatcherIndex.DISCUSSION:
+                rowsDeleted = db.delete(WorkFlowContract.Discussion.TABLE_NAME, selection, selectionArgs);
                 break;
 
             default:
@@ -113,7 +126,10 @@ public class WorkFlowProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case UriMatcherIndex.MESSAGE:
                 rowsUpdated = db.update(WorkFlowContract.Message.TABLE_NAME, values, selection, selectionArgs);
+                break;
 
+            case UriMatcherIndex.DISCUSSION:
+                rowsUpdated = db.update(WorkFlowContract.Discussion.TABLE_NAME, values, selection, selectionArgs);
                 break;
 
             default:

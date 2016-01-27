@@ -1,15 +1,21 @@
 package com.nicloud.workflowclient.cases.discussion;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +28,7 @@ import android.widget.ImageView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
-import com.nicloud.workflowclient.serveraction.service.UploadService;
+import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.IMMResult;
 import com.nicloud.workflowclient.utility.Utilities;
 
@@ -33,11 +39,32 @@ import java.util.List;
 /**
  * Created by logicmelody on 2016/1/25.
  */
-public class CaseDiscussionFragment extends Fragment implements View.OnClickListener {
+public class CaseDiscussionFragment extends Fragment implements View.OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = "CaseDiscussionFragment";
 
     private static final int REQUEST_PICK_FILE = 100;
+    private static final int LOADER_ID = 101;
+
+    private static final String[] mProjection = new String[] {
+            WorkFlowContract.Discussion._ID,
+            WorkFlowContract.Discussion.DISCUSSION_ID,
+            WorkFlowContract.Discussion.CASE_ID,
+            WorkFlowContract.Discussion.WORKER_ID,
+            WorkFlowContract.Discussion.CONTENT,
+            WorkFlowContract.Discussion.TYPE,
+            WorkFlowContract.Discussion.TIME,
+    };
+    private static final int ID = 0;
+    private static final int DISCUSSION_ID = 1;
+    private static final int CASE_ID = 2;
+    private static final int WORKER_ID = 3;
+    private static final int CONTENT = 4;
+    private static final int TYPE = 5;
+    private static final int TIME = 6;
+
+    private static final String mSortOrder = WorkFlowContract.Discussion.TIME;
 
     private Context mContext;
 
@@ -49,7 +76,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
     private ImageView mDiscussionAddFileButton;
     private ImageView mDiscussionSendMessageButton;
 
-    private List<Discussion> mDiscussionData = new ArrayList<>();
+    private List<DiscussionItem> mDiscussionData = new ArrayList<>();
 
     private String mCaseId;
     private String mCurrentFilePath;
@@ -77,6 +104,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initialize();
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     private void initialize() {
@@ -84,7 +112,6 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
         findViews();
         setupViews();
-        setDiscussionData();
         setupDiscussionList();
     }
 
@@ -159,15 +186,6 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
         }
     }
 
-    private void setDiscussionData() {
-        mDiscussionData.add(new Discussion("123123", "Good day", 1233332131));
-        mDiscussionData.add(new Discussion("123123", "Good day", 1233332131));
-
-        for (int i = 0 ; i < 100 ; i ++) {
-            mDiscussionData.add(new Discussion("123123", "Good day", 1233332131));
-        }
-    }
-
     private void setupDiscussionList() {
         mDiscussionListLayoutManager = new LinearLayoutManager(mContext);
         mDiscussionListAdapter = new DiscussionListAdapter(mContext, mDiscussionData);
@@ -193,9 +211,28 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
                 break;
 
             case R.id.discussion_send_message_button:
+                sendMessage();
 
                 break;
         }
+    }
+
+    private void sendMessage() {
+        String message = mDiscussionBox.getText().toString();
+
+        if (TextUtils.isEmpty(message)) return;
+
+        mDiscussionBox.setText(null);
+
+        ContentValues values = new ContentValues();
+        values.put(WorkFlowContract.Discussion.DISCUSSION_ID, "dddddddddddd");
+        values.put(WorkFlowContract.Discussion.CASE_ID, "ccccccccccc");
+        values.put(WorkFlowContract.Discussion.WORKER_ID, "wwwwwwwwwwww");
+        values.put(WorkFlowContract.Discussion.CONTENT, message);
+        values.put(WorkFlowContract.Discussion.TYPE, WorkFlowContract.Discussion.Type.MESSAGE);
+        values.put(WorkFlowContract.Discussion.TIME, System.currentTimeMillis());
+
+        mContext.getContentResolver().insert(WorkFlowContract.Discussion.CONTENT_URI, values);
     }
 
     private void pickupFile() {
@@ -261,5 +298,44 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
         }
 
         mCurrentFilePath = null;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader cursorLoader
+                = new CursorLoader(mContext, WorkFlowContract.Discussion.CONTENT_URI,
+                mProjection, null, null, mSortOrder);
+
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) return;
+
+        setDiscussionData(cursor);
+    }
+
+    private void setDiscussionData(Cursor cursor) {
+        mDiscussionData.clear();
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(ID);
+            String discussionId = cursor.getString(DISCUSSION_ID);
+            String caseId = cursor.getString(CASE_ID);
+            String workerId = cursor.getString(WORKER_ID);
+            String content = cursor.getString(CONTENT);
+            int type = cursor.getInt(TYPE);
+            long time = cursor.getLong(TIME);
+
+            mDiscussionData.add(new DiscussionItem(discussionId, caseId, workerId, content, type, time));
+        }
+
+        mDiscussionListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

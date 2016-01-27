@@ -24,4 +24,24 @@ public class WorkFlowContract {
         public static final String RECEIVER_ID = "receiver_id";
         public static final String TIME = "time";
     }
+
+    public static final class Discussion implements BaseColumns {
+
+        public static final class Type {
+            public static final int MESSAGE = 0;
+            public static final int IMAGE = 1;
+            public static final int FILE = 2;
+        }
+
+        public static final String TABLE_NAME = "discussion";
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_NAME);
+
+        // DB columns
+        public static final String DISCUSSION_ID = "discussion_id";
+        public static final String CASE_ID = "case_id";
+        public static final String WORKER_ID = "worker_id";
+        public static final String CONTENT = "content";
+        public static final String TYPE = "type";
+        public static final String TIME = "time";
+    }
 }

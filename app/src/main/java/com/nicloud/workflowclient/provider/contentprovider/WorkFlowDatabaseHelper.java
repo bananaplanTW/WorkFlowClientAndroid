@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.nicloud.workflowclient.provider.database.DiscussionTable;
 import com.nicloud.workflowclient.provider.database.MessageTable;
 
 import java.util.ArrayList;
@@ -42,11 +43,13 @@ public class WorkFlowDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         MessageTable.onCreate(db);
+        DiscussionTable.onCreate(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         MessageTable.onUpgrade(db, oldVersion, newVersion);
+        DiscussionTable.onUpgrade(db, oldVersion, newVersion);
     }
 
     public ArrayList<Cursor> getData(String Query){

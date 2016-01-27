@@ -21,7 +21,7 @@ public class DiscussionListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private Context mContext;
 
-    private List<Discussion> mDiscussionData;
+    private List<DiscussionItem> mDiscussionData;
 
 
     private class DiscussionItemViewHolder extends RecyclerView.ViewHolder {
@@ -40,7 +40,7 @@ public class DiscussionListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    public DiscussionListAdapter(Context context, List<Discussion> discussionData) {
+    public DiscussionListAdapter(Context context, List<DiscussionItem> discussionData) {
         mContext = context;
         mDiscussionData = discussionData;
     }
