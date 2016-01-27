@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
@@ -22,7 +23,7 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public static class ItemViewType {
         public static final int ITEM = 0;
-        public static final int TITLE = 1;
+        public static final int CASE_TITLE = 1;
         public static final int EMPTY = 2;
         public static final int CASE = 3;
     }
@@ -56,14 +57,23 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    private class TitleViewHolder extends RecyclerView.ViewHolder {
+    private class CaseTitleViewHolder extends RecyclerView.ViewHolder {
 
         public TextView title;
+        public ImageView createCaseButton;
 
 
-        public TitleViewHolder(View itemView) {
+        public CaseTitleViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.menu_title);
+            title = (TextView) itemView.findViewById(R.id.menu_case_title);
+            createCaseButton = (ImageView) itemView.findViewById(R.id.create_case_button);
+
+            createCaseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
 
@@ -134,8 +144,8 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case ItemViewType.EMPTY:
                 return new EmptyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.menu_empty, parent, false));
 
-            case ItemViewType.TITLE:
-                return new TitleViewHolder(LayoutInflater.from(mContext).inflate(R.layout.menu_title, parent, false));
+            case ItemViewType.CASE_TITLE:
+                return new CaseTitleViewHolder(LayoutInflater.from(mContext).inflate(R.layout.menu_case_title, parent, false));
 
             case ItemViewType.CASE:
                 return new CaseViewHolder(LayoutInflater.from(mContext).inflate(R.layout.main_menu_case, parent, false));
@@ -154,8 +164,8 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 onBindItem(holder, mainMenuItem);
                 break;
 
-            case ItemViewType.TITLE:
-                onBindTitle(holder, mainMenuItem);
+            case ItemViewType.CASE_TITLE:
+                onBindCaseTitle(holder, mainMenuItem);
                 break;
 
             case ItemViewType.CASE:
@@ -182,8 +192,8 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    private void onBindTitle(RecyclerView.ViewHolder holder, MainMenuItem mainMenuItem) {
-        TitleViewHolder itemVH = (TitleViewHolder) holder;
+    private void onBindCaseTitle(RecyclerView.ViewHolder holder, MainMenuItem mainMenuItem) {
+        CaseTitleViewHolder itemVH = (CaseTitleViewHolder) holder;
 
         itemVH.title.setText(mainMenuItem.mName);
 

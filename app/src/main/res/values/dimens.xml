@@ -82,6 +82,7 @@
     <dimen name="main_menu_item_drawable_padding">10dp</dimen>
     <dimen name="main_menu_case_padding_left">30dp</dimen>
     <dimen name="main_menu_case_dot_width_height">15dp</dimen>
+    <dimen name="main_menu_create_case_button_padding">10dp</dimen>
 
     <!-- Message menu -->
     <dimen name="message_menu_width">300dp</dimen>

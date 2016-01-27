@@ -55,7 +55,7 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         public TitleViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.menu_title);
+            title = (TextView) itemView.findViewById(R.id.menu_case_title);
         }
     }
 
@@ -108,7 +108,7 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 return new EmptyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.menu_empty, parent, false));
 
             case ItemViewType.TITLE:
-                return new TitleViewHolder(LayoutInflater.from(mContext).inflate(R.layout.menu_title, parent, false));
+                return new TitleViewHolder(LayoutInflater.from(mContext).inflate(R.layout.menu_case_title, parent, false));
 
             case ItemViewType.WORKER:
                 return new WorkerViewHolder(LayoutInflater.from(mContext).inflate(R.layout.message_menu_worker, parent, false));
