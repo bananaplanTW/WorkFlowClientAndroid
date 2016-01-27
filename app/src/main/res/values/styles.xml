@@ -31,6 +31,13 @@
     </style>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppDialogTheme" parent="Theme.AppCompat.Light.DialogWhenLarge">
+    </style>
+    <style name="AppDialogTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 
     <style name="WipTaskCardButtonStyle">
         <item name="android:layout_width">0dp</item>

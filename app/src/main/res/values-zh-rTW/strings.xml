@@ -122,4 +122,7 @@
     <!-- Discussion -->
     <string name="discussion_box_hint">寫訊息</string>
 
+    <!-- Create case -->
+    <string name="create_case">新增案件</string>
+
 </resources>

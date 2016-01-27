@@ -137,4 +137,7 @@
     <!-- Discussion -->
     <string name="discussion_box_hint">Send a message</string>
 
+    <!-- Create case -->
+    <string name="create_case">Create case</string>
+
 </resources>

@@ -71,7 +71,7 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             createCaseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    mContext.startActivity(CreateCaseActivity.generateCreateCaseIntent(mContext));
                 }
             });
         }
