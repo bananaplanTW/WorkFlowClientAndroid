@@ -1,6 +1,9 @@
 package com.nicloud.workflowclient.cases.discussion;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +22,11 @@ import android.widget.ImageView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
+import com.nicloud.workflowclient.serveraction.service.UploadService;
 import com.nicloud.workflowclient.utility.IMMResult;
+import com.nicloud.workflowclient.utility.Utilities;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +34,10 @@ import java.util.List;
  * Created by logicmelody on 2016/1/25.
  */
 public class CaseDiscussionFragment extends Fragment implements View.OnClickListener {
+
+    private static final String TAG = "CaseDiscussionFragment";
+
+    private static final int REQUEST_PICK_FILE = 100;
 
     private Context mContext;
 
@@ -41,6 +52,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
     private List<Discussion> mDiscussionData = new ArrayList<>();
 
     private String mCaseId;
+    private String mCurrentFilePath;
 
     private boolean hasTextInDiscussionBox = false;
 
@@ -176,10 +188,78 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
                 break;
 
             case R.id.discussion_add_file_button:
+                pickupFile();
+
                 break;
 
             case R.id.discussion_send_message_button:
+
                 break;
         }
+    }
+
+    private void pickupFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"), REQUEST_PICK_FILE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Log.d(TAG, "No Activity to handle file");
+            ex.printStackTrace();
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) return;
+
+        switch (requestCode) {
+            case REQUEST_PICK_FILE:
+                onFilePicked(data);
+
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void onFilePicked(Intent intent) {
+        Uri uri = intent.getData();
+        String path = null;
+
+        try {
+            path = Utilities.getPath(mContext, uri);
+        } catch (URISyntaxException e) {
+            Log.d(TAG, "File attach failed");
+            e.printStackTrace();
+        }
+
+//        if (TextUtils.isEmpty(path)) return;
+//
+//        String ownerId = WorkingData.getUserId();
+//        FileData file = (FileData) DataFactory.genData(ownerId, BaseData.TYPE.FILE);
+//
+//        file.uploader = ownerId;
+//        file.time = Calendar.getInstance().getTime();
+//        file.fileName = path.substring(path.lastIndexOf('/') + 1);
+//        file.filePath = uri;
+//        addRecord(getSelectedWorker(), file);
+
+        mCurrentFilePath = path;
+        syncingFileActivity();
+    }
+
+    private void syncingFileActivity() {
+        if (Utilities.isImage(mCurrentFilePath)) {
+            //mContext.startService(UploadService.generateUploadPhotoIntent(mContext, mTaskId, mCurrentFilePath));
+
+        } else {
+            //mContext.startService(UploadService.generateUploadFileIntent(mContext, mTaskId, mCurrentFilePath));
+        }
+
+        mCurrentFilePath = null;
     }
 }
