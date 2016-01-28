@@ -86,7 +86,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
     private RecyclerView mDiscussionList;
     private LinearLayoutManager mDiscussionListLayoutManager;
-    private DiscussionListAdapter mDiscussionListAdapter;
+    private DiscussionAdapter mDiscussionAdapter;
 
     private EditText mDiscussionBox;
     private ImageView mDiscussionAddFileButton;
@@ -230,10 +230,10 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
     private void setupDiscussionList() {
         mDiscussionListLayoutManager = new LinearLayoutManager(mContext);
-        mDiscussionListAdapter = new DiscussionListAdapter(mContext, mDiscussionData);
+        mDiscussionAdapter = new DiscussionAdapter(mContext, mDiscussionData);
 
         mDiscussionList.setLayoutManager(mDiscussionListLayoutManager);
-        mDiscussionList.setAdapter(mDiscussionListAdapter);
+        mDiscussionList.setAdapter(mDiscussionAdapter);
     }
 
     private void loadDiscussionFirstLaunch() {
@@ -422,7 +422,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
                                                    content, fileName, fileUri, fileThumbUri, type, createdTime));
         }
 
-        mDiscussionListAdapter.notifyDataSetChanged();
+        mDiscussionAdapter.notifyDataSetChanged();
 
         if (mIsNeedToScrollLast) {
             mDiscussionList.scrollToPosition(mDiscussionData.size() - 1);
