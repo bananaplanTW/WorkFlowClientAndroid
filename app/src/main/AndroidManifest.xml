@@ -52,7 +52,7 @@
             android:theme="@style/AppTheme.WhiteBackground"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".detailedtask.filelog.DisplayImageActivity"
+            android:name=".utility.DisplayImageActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".messagechat.MessageChatActivity"

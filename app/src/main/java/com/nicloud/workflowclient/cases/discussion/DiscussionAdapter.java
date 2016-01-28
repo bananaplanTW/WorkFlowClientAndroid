@@ -2,6 +2,7 @@ package com.nicloud.workflowclient.cases.discussion;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.messagemenu.MessageMenuListAdapter;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
+import com.nicloud.workflowclient.utility.DisplayImageActivity;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.Date;
@@ -36,6 +39,7 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private class ViewHolderBase extends RecyclerView.ViewHolder {
 
+        public View view;
         public ImageView workerAvatar;
         public TextView workerName;
         public TextView time;
@@ -43,6 +47,7 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public ViewHolderBase(View itemView) {
             super(itemView);
+            view= itemView;
             workerAvatar = (ImageView) itemView.findViewById(R.id.discussion_item_worker_avatar);
             workerName = (TextView) itemView.findViewById(R.id.discussion_item_worker_name);
             time = (TextView) itemView.findViewById(R.id.discussion_item_time);
@@ -59,8 +64,23 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private class ImageViewHolder extends ViewHolderBase {
 
+        public ImageView thumbnail;
+
         public ImageViewHolder(View itemView) {
             super(itemView);
+            thumbnail = (ImageView) itemView.findViewById(R.id.discussion_thumbnail);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DiscussionItem item = mDiscussionData.get(getAdapterPosition());
+                    Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+                    imageBuilder.path(item.fileUri);
+
+                    mContext.startActivity(DisplayImageActivity
+                            .launchDisplayImageActivity(mContext, item.fileName, imageBuilder.build().toString()));
+                }
+            });
         }
     }
 

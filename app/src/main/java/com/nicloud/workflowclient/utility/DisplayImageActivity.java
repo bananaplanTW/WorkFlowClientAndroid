@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.detailedtask.filelog;
+package com.nicloud.workflowclient.utility;
 
 import android.content.Context;
 import android.content.Intent;
@@ -47,6 +47,7 @@ public class DisplayImageActivity extends AppCompatActivity {
     private void initialize(Intent intent) {
         mTitle = intent.getStringExtra(EXTRA_TITLE);
         mImageUrl = intent.getStringExtra(EXTRA_IMAGE_URL);
+
         findViews();
         setupActionBar();
         setupViews();
