@@ -9,6 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.data.connectserver.activity.LoadingActivityUserIconCommand;
+import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
+import com.nicloud.workflowclient.data.data.data.Worker;
+import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.Date;
@@ -54,11 +58,19 @@ public class DiscussionListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         DiscussionItemViewHolder itemVH = (DiscussionItemViewHolder) holder;
+        Worker worker = WorkingData.getInstance(mContext).getWorkerById(mDiscussionData.get(position).workerId);
 
-        itemVH.workerName.setText(mDiscussionData.get(position).workerId);
+        itemVH.workerName.setText(mDiscussionData.get(position).workerName);
         itemVH.time.setText(Utilities.timestamp2Date(
-                new Date(mDiscussionData.get(position).time), Utilities.DATE_FORMAT_YMD_HM_AMPM));
+                new Date(mDiscussionData.get(position).createdTime), Utilities.DATE_FORMAT_YMD_HM_AMPM));
         itemVH.content.setText(mDiscussionData.get(position).content);
+
+        if (worker != null && worker.avatar != null) {
+            itemVH.workerAvatar.setImageDrawable(worker.avatar);
+
+        } else {
+            itemVH.workerAvatar.setImageResource(R.drawable.ic_worker_black);
+        }
     }
 
     @Override

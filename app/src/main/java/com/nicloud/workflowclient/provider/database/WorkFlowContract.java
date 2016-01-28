@@ -40,8 +40,11 @@ public class WorkFlowContract {
         public static final String DISCUSSION_ID = "discussion_id";
         public static final String CASE_ID = "case_id";
         public static final String WORKER_ID = "worker_id";
+        public static final String WORKER_NAME = "worker_name";
+        public static final String WORKER_AVATAR_URI = "worker_avatar_uri";
         public static final String CONTENT = "content";
         public static final String TYPE = "type";
-        public static final String TIME = "time";
+        public static final String CREATED_TIME = "created_time";
+        public static final String UPDATED_TIME = "updated_time";
     }
 }

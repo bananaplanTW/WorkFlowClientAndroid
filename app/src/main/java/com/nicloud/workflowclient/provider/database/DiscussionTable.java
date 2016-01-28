@@ -14,9 +14,12 @@ public class DiscussionTable {
             + WorkFlowContract.Discussion.DISCUSSION_ID + " TEXT NOT NULL, "
             + WorkFlowContract.Discussion.CASE_ID + " TEXT NOT NULL, "
             + WorkFlowContract.Discussion.WORKER_ID + " TEXT NOT NULL, "
+            + WorkFlowContract.Discussion.WORKER_NAME + " TEXT NOT NULL, "
+            + WorkFlowContract.Discussion.WORKER_AVATAR_URI + " TEXT NOT NULL, "
             + WorkFlowContract.Discussion.CONTENT + " TEXT NOT NULL, "
-            + WorkFlowContract.Discussion.TYPE + " INTEGER NOT NULL, "
-            + WorkFlowContract.Discussion.TIME + " INTEGER NOT NULL"
+            + WorkFlowContract.Discussion.TYPE + " TEXT NOT NULL, "
+            + WorkFlowContract.Discussion.CREATED_TIME + " INTEGER NOT NULL, "
+            + WorkFlowContract.Discussion.UPDATED_TIME + " INTEGER NOT NULL"
             + ");";
 
 

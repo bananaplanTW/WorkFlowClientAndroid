@@ -59,6 +59,7 @@ public class LoadingDataUtils {
             public static final String WARNINGS = "/api/exceptions";
             public static final String TASK_WARNINGS = "/api/task-exceptions";
             public static final String MESSAGES = "/api/chatting/employee";
+            public static final String DISCUSSION = "/api/case-message";
 
             public static final String WORKER_ACTIVITIES = "/api/employee/activities";
             public static final String TASK_ACTIVITIES = "/api/task/activities";
