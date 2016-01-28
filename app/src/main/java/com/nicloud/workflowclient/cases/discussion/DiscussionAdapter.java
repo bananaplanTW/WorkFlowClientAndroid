@@ -88,6 +88,16 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public FileViewHolder(View itemView) {
             super(itemView);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DiscussionItem item = mDiscussionData.get(getAdapterPosition());
+                    Uri.Builder fileBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+                    fileBuilder.path(item.fileUri);
+
+                    Utilities.downloadFile(mContext, fileBuilder.build().toString(), item.fileName);
+                }
+            });
         }
     }
 
