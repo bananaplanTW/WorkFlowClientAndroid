@@ -297,6 +297,8 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
         if (TextUtils.isEmpty(message)) return;
 
         mDiscussionBox.setText(null);
+
+        mContext.startService(CaseDiscussionService.generateSendMessageIntent(mContext, mCaseId, message));
     }
 
     private void pickupFile() {

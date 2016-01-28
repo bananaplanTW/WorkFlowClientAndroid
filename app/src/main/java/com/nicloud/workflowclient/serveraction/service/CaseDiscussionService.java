@@ -263,11 +263,11 @@ public class CaseDiscussionService extends IntentService {
                 headers.put("x-auth-token", WorkingData.getAuthToken());
 
                 HashMap<String, String> bodies = new HashMap<>();
-                bodies.put("caseId", caseId);
+                bodies.put("cd", caseId);
                 bodies.put("msg", message);
 
                 String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
-                        LoadingDataUtils.WorkingDataUrl.EndPoints.DISCUSSION, null);
+                        LoadingDataUtils.WorkingDataUrl.EndPoints.SEND_DISCUSSION_MESSAGE, null);
                 String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
 
                 if (responseString != null) {
