@@ -3,6 +3,7 @@ package com.nicloud.workflowclient.cases.discussion;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -40,7 +42,7 @@ import java.util.List;
  * Created by logicmelody on 2016/1/25.
  */
 public class CaseDiscussionFragment extends Fragment implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>, LoadPromptDiscussionReceiver.OnLoadPromptDiscussionListener {
 
     private static final String TAG = "CaseDiscussionFragment";
 
@@ -92,6 +94,8 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
     private List<DiscussionItem> mDiscussionData = new ArrayList<>();
 
+    private LoadPromptDiscussionReceiver mLoadPromptDiscussionReceiver;
+
     private String mCaseId;
     private String mCurrentFilePath;
 
@@ -130,7 +134,21 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(LoadPromptDiscussionReceiver.ACTION_LOAD_PROMPT_DISCUSSION);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mLoadPromptDiscussionReceiver, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mLoadPromptDiscussionReceiver);
+    }
+
     private void initialize() {
+        mLoadPromptDiscussionReceiver = new LoadPromptDiscussionReceiver(this);
         mCaseId = getArguments().getString(CaseFragment.EXTRA_CASE_ID);
         mSelectionArgs = new String[] {mCaseId};
 
@@ -416,5 +434,11 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onLoadPromptDiscussion(Intent intent) {
+        mContext.startService(
+                CaseDiscussionService.generateLoadDiscussionFromIntent(mContext, mCaseId, getLastDiscussionTime()));
     }
 }
