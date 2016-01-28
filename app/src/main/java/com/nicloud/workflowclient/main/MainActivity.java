@@ -1,5 +1,6 @@
 package com.nicloud.workflowclient.main;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -75,6 +76,11 @@ public class MainActivity extends AppCompatActivity implements TasksListFragment
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

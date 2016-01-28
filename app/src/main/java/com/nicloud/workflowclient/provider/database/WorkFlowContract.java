@@ -28,9 +28,9 @@ public class WorkFlowContract {
     public static final class Discussion implements BaseColumns {
 
         public static final class Type {
-            public static final int MESSAGE = 0;
-            public static final int IMAGE = 1;
-            public static final int FILE = 2;
+            public static final String MESSAGE = "text";
+            public static final String IMAGE = "image";
+            public static final String FILE = "file";
         }
 
         public static final String TABLE_NAME = "discussion";
@@ -43,6 +43,9 @@ public class WorkFlowContract {
         public static final String WORKER_NAME = "worker_name";
         public static final String WORKER_AVATAR_URI = "worker_avatar_uri";
         public static final String CONTENT = "content";
+        public static final String FILE_NAME = "file_name";
+        public static final String FILE_URI = "file_uri";
+        public static final String FILE_THUMB_URI = "file_thumb_uri";
         public static final String TYPE = "type";
         public static final String CREATED_TIME = "created_time";
         public static final String UPDATED_TIME = "updated_time";

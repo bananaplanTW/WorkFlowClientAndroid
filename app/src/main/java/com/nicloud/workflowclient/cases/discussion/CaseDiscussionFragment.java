@@ -44,7 +44,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
     private static final String TAG = "CaseDiscussionFragment";
 
-    private static final int REQUEST_PICK_FILE = 100;
+    public static final int REQUEST_PICK_FILE = 143;
     private static final int LOADER_ID = 101;
 
     private static final String[] mProjection = new String[] {
@@ -56,6 +56,9 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
             WorkFlowContract.Discussion.WORKER_AVATAR_URI,
             WorkFlowContract.Discussion.CONTENT,
             WorkFlowContract.Discussion.TYPE,
+            WorkFlowContract.Discussion.FILE_NAME,
+            WorkFlowContract.Discussion.FILE_URI,
+            WorkFlowContract.Discussion.FILE_THUMB_URI,
             WorkFlowContract.Discussion.CREATED_TIME,
     };
     private static final int ID = 0;
@@ -66,7 +69,10 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
     private static final int WORKER_AVATAR_URI = 5;
     private static final int CONTENT = 6;
     private static final int TYPE = 7;
-    private static final int CREATED_TIME = 8;
+    private static final int FILE_NAME = 8;
+    private static final int FILE_URI = 9;
+    private static final int FILE_THUMB_URI = 10;
+    private static final int CREATED_TIME = 11;
 
     private static final String mSelection = WorkFlowContract.Discussion.CASE_ID + " = ?";
 
@@ -299,13 +305,15 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
-            startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"), REQUEST_PICK_FILE);
+            getParentFragment().
+                    startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"), REQUEST_PICK_FILE);
         } catch (android.content.ActivityNotFoundException ex) {
             Log.d(TAG, "No Activity to handle file");
             ex.printStackTrace();
         }
     }
 
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK) return;
@@ -313,7 +321,6 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
         switch (requestCode) {
             case REQUEST_PICK_FILE:
                 onFilePicked(data);
-
                 break;
 
             default:
@@ -349,10 +356,10 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
     private void syncingFileActivity() {
         if (Utilities.isImage(mCurrentFilePath)) {
-            //mContext.startService(UploadService.generateUploadPhotoIntent(mContext, mTaskId, mCurrentFilePath));
+            mContext.startService(CaseDiscussionService.generateSendImageIntent(mContext, mCaseId, mCurrentFilePath));
 
         } else {
-            //mContext.startService(UploadService.generateUploadFileIntent(mContext, mTaskId, mCurrentFilePath));
+            mContext.startService(CaseDiscussionService.generateSendFileIntent(mContext, mCaseId, mCurrentFilePath));
         }
 
         mCurrentFilePath = null;
@@ -385,11 +392,14 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
             String workerName = cursor.getString(WORKER_NAME);
             String workerAvatarUri = cursor.getString(WORKER_AVATAR_URI);
             String content = cursor.getString(CONTENT);
-            int type = cursor.getInt(TYPE);
+            String fileName = cursor.getString(FILE_NAME);
+            String fileUri = cursor.getString(FILE_URI);
+            String fileThumbUri = cursor.getString(FILE_THUMB_URI);
+            String type = cursor.getString(TYPE);
             long createdTime = cursor.getLong(CREATED_TIME);
 
             mDiscussionData.add(new DiscussionItem(discussionId, caseId, workerId, workerName, workerAvatarUri,
-                                                   content, type, createdTime));
+                                                   content, fileName, fileUri, fileThumbUri, type, createdTime));
         }
 
         mDiscussionListAdapter.notifyDataSetChanged();

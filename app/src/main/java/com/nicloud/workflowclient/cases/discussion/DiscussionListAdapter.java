@@ -13,6 +13,7 @@ import com.nicloud.workflowclient.data.connectserver.activity.LoadingActivityUse
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.Utilities;
 
 import java.util.Date;
@@ -59,17 +60,27 @@ public class DiscussionListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         DiscussionItemViewHolder itemVH = (DiscussionItemViewHolder) holder;
         Worker worker = WorkingData.getInstance(mContext).getWorkerById(mDiscussionData.get(position).workerId);
+        String type = mDiscussionData.get(position).type;
 
         itemVH.workerName.setText(mDiscussionData.get(position).workerName);
         itemVH.time.setText(Utilities.timestamp2Date(
                 new Date(mDiscussionData.get(position).createdTime), Utilities.DATE_FORMAT_YMD_HM_AMPM));
-        itemVH.content.setText(mDiscussionData.get(position).content);
 
         if (worker != null && worker.avatar != null) {
             itemVH.workerAvatar.setImageDrawable(worker.avatar);
 
         } else {
             itemVH.workerAvatar.setImageResource(R.drawable.ic_worker_black);
+        }
+
+        if (WorkFlowContract.Discussion.Type.MESSAGE.equals(type)) {
+            itemVH.content.setText(mDiscussionData.get(position).content);
+
+        } else if (WorkFlowContract.Discussion.Type.IMAGE.equals(type)) {
+            itemVH.content.setText(mDiscussionData.get(position).fileName);
+
+        } else if (WorkFlowContract.Discussion.Type.FILE.equals(type)) {
+            itemVH.content.setText(mDiscussionData.get(position).fileName);
         }
     }
 

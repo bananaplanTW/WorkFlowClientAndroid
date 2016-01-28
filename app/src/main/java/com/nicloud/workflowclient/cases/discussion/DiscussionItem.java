@@ -15,19 +15,28 @@ public class DiscussionItem {
     public String workerAvatarUri;
 
     public String content;
-    public int type = WorkFlowContract.Discussion.Type.MESSAGE;
+    public String type = WorkFlowContract.Discussion.Type.MESSAGE;
+
+    public String fileName;
+    public String fileUri;
+    public String fileThumbUri;
+
     public long createdTime = 0L;
 
 
     public DiscussionItem(String discussionId, String caseId,
                           String workerId, String workerName, String workerAvatarUri,
-                          String content, int type, long createdTime) {
+                          String content, String fileName, String fileUri, String fileThumbUri,
+                          String type, long createdTime) {
         this.discussionId = discussionId;
         this.caseId = caseId;
         this.workerId = workerId;
         this.workerName = workerName;
         this.workerAvatarUri = workerAvatarUri;
         this.content = content;
+        this.fileName = fileName;
+        this.fileUri = fileUri;
+        this.fileThumbUri = fileThumbUri;
         this.type = type;
         this.createdTime = createdTime;
     }

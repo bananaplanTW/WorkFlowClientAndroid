@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
+import com.nicloud.workflowclient.utility.JsonUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +21,7 @@ public class ActivityDataFactory {
             throws JSONException {
 
         String type = recordJSON.getString("type");
-        String avatarThumbUrl = LoadingDataUtils.getStringFromJson(recordJSON, "iconThumbUrl");
+        String avatarThumbUrl = JsonUtils.getStringFromJson(recordJSON, "iconThumbUrl");
 
         switch (type) {
             case "checkIn":

@@ -9,6 +9,7 @@ import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.utility.RestfulUtils;
+import com.nicloud.workflowclient.utility.JsonUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +60,11 @@ public class LoadingDataUtils {
             public static final String WARNINGS = "/api/exceptions";
             public static final String TASK_WARNINGS = "/api/task-exceptions";
             public static final String MESSAGES = "/api/chatting/employee";
+
             public static final String DISCUSSION = "/api/case-message";
+            public static final String SEND_DISCUSSION_MESSAGE = "/api/case-message/text";
+            public static final String SEND_DISCUSSION_IMAGE = "/api/case-message/image";
+            public static final String SEND_DISCUSSION_FILE = "/api/case-message/file";
 
             public static final String WORKER_ACTIVITIES = "/api/employee/activities";
             public static final String TASK_ACTIVITIES = "/api/task/activities";
@@ -343,7 +348,7 @@ public class LoadingDataUtils {
             String taskJsonString = RestfulUtils.restfulGetRequest(getTasksByWorkerUrl(workerId), headers);
 
             JSONObject taskJson = new JSONObject(taskJsonString).getJSONObject("result");
-            JSONArray scheduledTaskJsonList = getJsonArrayFromJson(taskJson, "scheduledTasks");
+            JSONArray scheduledTaskJsonList = JsonUtils.getJsonArrayFromJson(taskJson, "scheduledTasks");
 
             WorkingData.getInstance(context).clearTasks();
             if (scheduledTaskJsonList != null) {
@@ -829,11 +834,11 @@ public class LoadingDataUtils {
         try {
             String id = workerJson.getString("_id");
             String name = workerJson.getJSONObject("profile").getString("name");
-            String departmentId = getStringFromJson(workerJson, "groupId");
-            String departmentName = getStringFromJson(workerJson, "groupName");
-            String address = getStringFromJson(workerJson, "address");
-            String phone = getStringFromJson(workerJson, "phone");
-            String avatarUrl = getStringFromJson(workerJson, "iconThumbUrl");
+            String departmentId = JsonUtils.getStringFromJson(workerJson, "groupId");
+            String departmentName = JsonUtils.getStringFromJson(workerJson, "groupName");
+            String address = JsonUtils.getStringFromJson(workerJson, "address");
+            String phone = JsonUtils.getStringFromJson(workerJson, "phone");
+            String avatarUrl = JsonUtils.getStringFromJson(workerJson, "iconThumbUrl");
 
             long lastUpdatedTime = workerJson.getLong("updatedAt");
 
@@ -857,16 +862,16 @@ public class LoadingDataUtils {
     private static Task retrieveTaskFromJson(Context context, JSONObject taskJson) {
         try {
             //JSONArray warningJsonList = taskJson.getJSONArray("taskExceptions");
-            JSONArray checkListJsonList = getJsonArrayFromJson(taskJson, "todos");
-            JSONObject equipmentJson = getJsonObjectFromJson(taskJson, "resource");
-            JSONObject taskTimecardJson = getJsonObjectFromJson(taskJson, "taskTimecard");
+            JSONArray checkListJsonList = JsonUtils.getJsonArrayFromJson(taskJson, "todos");
+            JSONObject equipmentJson = JsonUtils.getJsonObjectFromJson(taskJson, "resource");
+            JSONObject taskTimecardJson = JsonUtils.getJsonObjectFromJson(taskJson, "taskTimecard");
 
             String id = taskJson.getString("_id");
-            String description = getStringFromJson(taskJson, "description");
+            String description = JsonUtils.getStringFromJson(taskJson, "description");
             String name = taskJson.getString("name");
             String caseName = taskJson.getString("caseName");
             String caseId = taskJson.getString("caseId");
-            String workerId = getStringFromJson(taskJson, "employeeId");
+            String workerId = JsonUtils.getStringFromJson(taskJson, "employeeId");
             String equipmentId = "";
 
             if (equipmentJson != null) {
@@ -884,9 +889,9 @@ public class LoadingDataUtils {
             long spentTime = taskJson.getLong("spentTime");
             long lastUpdatedTime = taskJson.getLong("updatedAt");
 
-            Date startDate = getDateFromJson(taskJson, "startDate");
-            Date endDate = getDateFromJson(taskJson, "dueDate");
-            Date assignDate = getDateFromJson(taskJson, "dispatchedDate");
+            Date startDate = JsonUtils.getDateFromJson(taskJson, "startDate");
+            Date endDate = JsonUtils.getDateFromJson(taskJson, "dueDate");
+            Date assignDate = JsonUtils.getDateFromJson(taskJson, "dispatchedDate");
 
 //            List<TaskWarning> taskWarnings = new ArrayList<>();
 //            for (int w = 0 ; w < warningJsonList.length() ; w++) {
@@ -897,7 +902,7 @@ public class LoadingDataUtils {
 //                taskWarnings.add(WorkingData.getInstance(context).getTaskWarningById(warningId));
 //            }
 
-            boolean isDelayed = getBooleanFromJson(taskJson, "delay");
+            boolean isDelayed = JsonUtils.getBooleanFromJson(taskJson, "delay");
 
             ArrayList<CheckItem> checkList = new ArrayList<>();
 
@@ -927,7 +932,7 @@ public class LoadingDataUtils {
                     isDelayed,
                     checkList);
 
-            JSONObject scheduledTaskAlert = getJsonObjectFromJson(taskJson, "scheduledTaskAlert");
+            JSONObject scheduledTaskAlert = JsonUtils.getJsonObjectFromJson(taskJson, "scheduledTaskAlert");
             if (scheduledTaskAlert != null) {
                 task.nextNotifyTime = scheduledTaskAlert.getLong("willAlertAt");
             }
@@ -1155,22 +1160,4 @@ public class LoadingDataUtils {
 //    }
 //
 //
-    public static Date getDateFromJson(JSONObject jsonObject, String key) throws JSONException {
-        return jsonObject.has(key) ? new Date(jsonObject.getLong(key)) : null;
-    }
-    public static String getStringFromJson(JSONObject jsonObject, String key) throws JSONException {
-        return jsonObject.has(key) ? jsonObject.getString(key) : "";
-    }
-    public static long getLongFromJson(JSONObject jsonObject, String key) throws JSONException {
-        return jsonObject.has(key) ? jsonObject.getLong(key) : 0L;
-    }
-    public static boolean getBooleanFromJson(JSONObject jsonObject, String key) throws JSONException {
-        return jsonObject.has(key) ? jsonObject.getBoolean(key) : false;
-    }
-    public static JSONObject getJsonObjectFromJson(JSONObject jsonObject, String key) throws JSONException {
-        return jsonObject.has(key) ? jsonObject.getJSONObject(key) : null;
-    }
-    public static JSONArray getJsonArrayFromJson(JSONObject jsonObject, String key) throws JSONException {
-        return jsonObject.has(key) ? jsonObject.getJSONArray(key) : null;
-    }
 }
