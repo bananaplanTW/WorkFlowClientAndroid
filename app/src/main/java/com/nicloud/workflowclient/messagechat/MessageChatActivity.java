@@ -27,8 +27,8 @@ import android.widget.ImageView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
-import com.nicloud.workflowclient.serveraction.receiver.MessageCompletedReceiver;
-import com.nicloud.workflowclient.serveraction.service.MessageService;
+import com.nicloud.workflowclient.backgroundtask.receiver.MessageCompletedReceiver;
+import com.nicloud.workflowclient.backgroundtask.service.MessageService;
 import com.nicloud.workflowclient.utility.IMMResult;
 
 import java.util.ArrayList;

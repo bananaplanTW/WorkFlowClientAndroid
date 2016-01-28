@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
 import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
@@ -165,8 +166,22 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private void onBindImage(ImageViewHolder imageVH, DiscussionItem item) {
+        // Content
         imageVH.content.setText(item.fileName);
         imageVH.content.setPaintFlags(imageVH.content.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        // Image thumbnail
+        if (item.fileThumb != null) {
+            imageVH.thumbnail.setImageDrawable(item.fileThumb);
+
+        } else {
+            imageVH.thumbnail.setImageDrawable(null);
+
+            Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+            imageBuilder.path(item.fileUri);
+
+            new LoadImageTask(mContext, imageBuilder.build(), imageVH.thumbnail, item.fileThumb).execute();
+        }
     }
 
     private void onBindFile(FileViewHolder fileVH, DiscussionItem item) {

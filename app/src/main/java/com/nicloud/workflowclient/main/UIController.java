@@ -28,8 +28,8 @@ import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagechat.MessageChatActivity;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.provider.debug.AndroidDatabaseManager;
-import com.nicloud.workflowclient.serveraction.receiver.ActionCompletedReceiver;
-import com.nicloud.workflowclient.serveraction.service.ActionService;
+import com.nicloud.workflowclient.backgroundtask.receiver.ActionCompletedReceiver;
+import com.nicloud.workflowclient.backgroundtask.service.ActionService;
 import com.nicloud.workflowclient.tasklist.TasksListFragment;
 import com.nicloud.workflowclient.utility.Utilities;
 

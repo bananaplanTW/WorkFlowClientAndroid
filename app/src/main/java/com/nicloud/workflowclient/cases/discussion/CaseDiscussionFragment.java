@@ -30,7 +30,7 @@ import android.widget.ImageView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
-import com.nicloud.workflowclient.serveraction.service.CaseDiscussionService;
+import com.nicloud.workflowclient.backgroundtask.service.CaseDiscussionService;
 import com.nicloud.workflowclient.utility.IMMResult;
 import com.nicloud.workflowclient.utility.Utilities;
 

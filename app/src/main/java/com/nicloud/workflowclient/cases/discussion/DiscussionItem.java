@@ -1,5 +1,7 @@
 package com.nicloud.workflowclient.cases.discussion;
 
+import android.graphics.drawable.Drawable;
+
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 
 /**
@@ -20,6 +22,7 @@ public class DiscussionItem {
     public String fileName;
     public String fileUri;
     public String fileThumbUri;
+    public Drawable fileThumb = null;
 
     public long createdTime = 0L;
 

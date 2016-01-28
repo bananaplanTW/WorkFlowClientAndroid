@@ -68,16 +68,16 @@
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".serveraction.service.ActionService"
+            android:name=".backgroundtask.service.ActionService"
             android:exported="false" />
         <service
-            android:name=".serveraction.service.UploadService"
+            android:name=".backgroundtask.service.UploadService"
             android:exported="false" />
         <service
-            android:name=".serveraction.service.MessageService"
+            android:name=".backgroundtask.service.MessageService"
             android:exported="false" />
         <service
-            android:name=".serveraction.service.CaseDiscussionService"
+            android:name=".backgroundtask.service.CaseDiscussionService"
             android:exported="false" />
 
         <!-- Parse -->

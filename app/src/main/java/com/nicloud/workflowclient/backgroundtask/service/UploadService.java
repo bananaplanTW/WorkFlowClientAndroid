@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.serveraction.service;
+package com.nicloud.workflowclient.backgroundtask.service;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
