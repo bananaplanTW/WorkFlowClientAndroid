@@ -25,7 +25,7 @@ import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.detailedtask.filelog.FileLogListAdapter;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -226,7 +226,7 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener {
     private void onPhotoCaptured() {
         // compress photo
         File photoFile = new File(mCurrentPhotoPath.replace("file:", ""));
-        Bitmap bitmap = Utilities.scaleBitmap(mContext, photoFile.getAbsolutePath());
+        Bitmap bitmap = Utils.scaleBitmap(mContext, photoFile.getAbsolutePath());
         if (bitmap == null) return;
 
         scanPhotoToGallery();
@@ -258,7 +258,7 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener {
         String path = null;
 
         try {
-            path = Utilities.getPath(mContext, uri);
+            path = Utils.getPath(mContext, uri);
         } catch (URISyntaxException e) {
             Log.d(TAG, "File attach failed");
             e.printStackTrace();
@@ -280,7 +280,7 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void syncingFileActivity() {
-        if (Utilities.isImage(mCurrentFilePath)) {
+        if (Utils.isImage(mCurrentFilePath)) {
             //mContext.startService(UploadService.generateUploadPhotoIntent(mContext, mTaskId, mCurrentFilePath));
 
         } else {

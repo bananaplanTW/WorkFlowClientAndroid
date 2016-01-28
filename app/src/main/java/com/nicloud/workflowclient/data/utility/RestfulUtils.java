@@ -5,7 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -152,7 +152,7 @@ public class RestfulUtils {
     public static String restfulPostFileRequest(String urlString, HashMap<String, String> headerPairs, String filePath) {
         String responseString = "";
 
-        String mimeType = Utilities.getMimeType(filePath);
+        String mimeType = Utils.getMimeType(filePath);
 Log.d(TAG, "uploading file mimeType : " + mimeType);
         File f = new File(filePath);
         Request.Builder builder = new Request.Builder();

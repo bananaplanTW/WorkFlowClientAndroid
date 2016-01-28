@@ -14,7 +14,7 @@ import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.activity.RecordData;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.Date;
 import java.util.List;
@@ -76,7 +76,7 @@ public class TextLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         vh.userName.setText(recordData.reporterName);
         vh.description.setText(recordData.description);
-        vh.timeStamp.setText(Utilities.timestamp2Date(new Date(recordData.time), Utilities.DATE_FORMAT_YMD_HM_AMPM));
+        vh.timeStamp.setText(Utils.timestamp2Date(new Date(recordData.time), Utils.DATE_FORMAT_YMD_HM_AMPM));
     }
 
     @Override

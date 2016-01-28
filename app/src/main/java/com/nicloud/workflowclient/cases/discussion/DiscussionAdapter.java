@@ -15,10 +15,9 @@ import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
 import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.messagemenu.MessageMenuListAdapter;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.DisplayImageActivity;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.Date;
 import java.util.List;
@@ -96,7 +95,7 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Uri.Builder fileBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
                     fileBuilder.path(item.fileUri);
 
-                    Utilities.downloadFile(mContext, fileBuilder.build().toString(), item.fileName);
+                    Utils.downloadFile(mContext, fileBuilder.build().toString(), item.fileName);
                 }
             });
         }
@@ -146,8 +145,8 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         baseVH.workerName.setText(mDiscussionData.get(position).workerName);
 
         // Created time
-        baseVH.time.setText(Utilities.timestamp2Date(
-                new Date(mDiscussionData.get(position).createdTime), Utilities.DATE_FORMAT_YMD_HM_AMPM));
+        baseVH.time.setText(Utils.timestamp2Date(
+                new Date(mDiscussionData.get(position).createdTime), Utils.DATE_FORMAT_YMD_HM_AMPM));
 
         // Others
         if (WorkFlowContract.Discussion.Type.MESSAGE.equals(type)) {

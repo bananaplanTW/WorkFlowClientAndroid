@@ -15,7 +15,7 @@ import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.activity.FileData;
 import com.nicloud.workflowclient.data.data.activity.PhotoData;
 import com.nicloud.workflowclient.utility.DisplayImageActivity;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.Date;
 import java.util.List;
@@ -73,7 +73,7 @@ public class FileLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void onBindPhotoLog(FileLogItemViewHolder holder, int position) {
         final PhotoData photoData = (PhotoData) mFileLogData.get(position);
         String fileInformation = photoData.uploaderName + " " +
-                Utilities.timestamp2Date(new Date(photoData.time), Utilities.DATE_FORMAT_YMD_HM_AMPM);
+                Utils.timestamp2Date(new Date(photoData.time), Utils.DATE_FORMAT_YMD_HM_AMPM);
 
         holder.fileName.setText(photoData.fileName);
         holder.fileInformation.setText(fileInformation);
@@ -103,7 +103,7 @@ public class FileLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void onBindFileLog(FileLogItemViewHolder holder, int position) {
         final FileData fileData = (FileData) mFileLogData.get(position);
         String fileInformation = fileData.uploaderName + " " +
-                Utilities.timestamp2Date(new Date(fileData.time), Utilities.DATE_FORMAT_YMD_HM_AMPM);
+                Utils.timestamp2Date(new Date(fileData.time), Utils.DATE_FORMAT_YMD_HM_AMPM);
 
         holder.fileImage.setImageResource(R.drawable.ic_file);
         holder.fileName.setText(fileData.fileName);
@@ -112,7 +112,7 @@ public class FileLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utilities.downloadFile(mContext, fileData.filePath.toString(), fileData.fileName);
+                Utils.downloadFile(mContext, fileData.filePath.toString(), fileData.fileName);
             }
         });
     }

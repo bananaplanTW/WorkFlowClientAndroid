@@ -21,7 +21,7 @@ import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.main.OnSwipeRefresh;
 import com.nicloud.workflowclient.dialog.DatePickerFragment;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.Calendar;
 import java.util.List;
@@ -91,7 +91,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
         if (mTask.dueDate == null) {
             mTaskDueDate.setText(mContext.getString(R.string.task_info_task_no_due_date));
         } else {
-            mTaskDueDate.setText(Utilities.timestamp2Date(mTask.dueDate, Utilities.DATE_FORMAT_YMD));
+            mTaskDueDate.setText(Utils.timestamp2Date(mTask.dueDate, Utils.DATE_FORMAT_YMD));
         }
     }
 
@@ -113,7 +113,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
                 break;
 
             case R.id.complete_task_button:
-                Utilities.showDialog(getFragmentManager(), DisplayDialogFragment.DialogType.COMPLETE_TASK, mTask.id);
+                Utils.showDialog(getFragmentManager(), DisplayDialogFragment.DialogType.COMPLETE_TASK, mTask.id);
                 break;
         }
     }

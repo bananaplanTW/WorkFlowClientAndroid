@@ -13,7 +13,7 @@ import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             completeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utilities.showDialog(mFragmentManager,
+                    Utils.showDialog(mFragmentManager,
                             DisplayDialogFragment.DialogType.COMPLETE_TASK,
                             mDataSet.get(getAdapterPosition()).id);
                 }

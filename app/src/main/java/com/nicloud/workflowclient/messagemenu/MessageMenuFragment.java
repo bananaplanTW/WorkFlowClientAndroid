@@ -14,7 +14,7 @@ import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkers;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +100,6 @@ public class MessageMenuFragment extends Fragment implements LoadingWorkers.OnFi
 
     @Override
     public void onFailLoadingWorkers(boolean isFailCausedByInternet) {
-        Utilities.showInternetConnectionWeakToast(mContext);
+        Utils.showInternetConnectionWeakToast(mContext);
     }
 }

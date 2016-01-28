@@ -32,7 +32,7 @@ import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.backgroundtask.service.CaseDiscussionService;
 import com.nicloud.workflowclient.utility.IMMResult;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -353,7 +353,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
         String path = null;
 
         try {
-            path = Utilities.getPath(mContext, uri);
+            path = Utils.getPath(mContext, uri);
         } catch (URISyntaxException e) {
             Log.d(TAG, "File attach failed");
             e.printStackTrace();
@@ -375,7 +375,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
     }
 
     private void syncingFileActivity() {
-        if (Utilities.isImage(mCurrentFilePath)) {
+        if (Utils.isImage(mCurrentFilePath)) {
             mContext.startService(CaseDiscussionService.generateSendImageIntent(mContext, mCaseId, mCurrentFilePath));
 
         } else {

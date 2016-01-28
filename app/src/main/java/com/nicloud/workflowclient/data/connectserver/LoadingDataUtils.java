@@ -9,7 +9,7 @@ import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.utility.RestfulUtils;
-import com.nicloud.workflowclient.utility.JsonUtils;
+import com.nicloud.workflowclient.utility.utils.JsonUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

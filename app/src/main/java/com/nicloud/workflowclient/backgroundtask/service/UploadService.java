@@ -14,7 +14,8 @@ import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.utility.RestfulUtils;
 import com.nicloud.workflowclient.data.utility.URLUtils;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.NotificationUtils;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -120,7 +121,7 @@ public class UploadService extends IntentService {
     }
 
     private void uploadText(Intent intent) {
-        int notificationId = Utilities.generateNotificationId();
+        int notificationId = Utils.generateNotificationId();
 
         String taskId = intent.getStringExtra(ExtraKey.TASK_ID);
         String text = intent.getStringExtra(ExtraKey.TEXT);
@@ -129,8 +130,9 @@ public class UploadService extends IntentService {
         broadcastIntent.putExtra(ExtraKey.FROM_ACTION, UploadAction.TEXT);
 
         NotificationCompat.Builder builder
-                = generateUploadNotificationBuilder(WorkingData.getInstance(this).getTask(taskId).name,
-                                                    getString(R.string.add_log_uploading_text));
+                = NotificationUtils.
+                generateUploadNotificationBuilder(this,
+                        WorkingData.getInstance(this).getTask(taskId).name, getString(R.string.add_log_uploading_text));
         mNotificationManager.notify(notificationId, builder.build());
 
         HashMap<String, String> headers = new HashMap<>();
@@ -149,10 +151,10 @@ public class UploadService extends IntentService {
             if (responseString != null) {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
-                    uploadSuccessfully(builder, getString(R.string.add_log_complete_text));
+                    NotificationUtils.uploadSuccessfully(builder, getString(R.string.add_log_complete_text));
                     mNotificationManager.notify(notificationId, builder.build());
 
-                    Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.add_log_complete_text));
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.add_log_complete_text));
 
                     broadcastIntent.putExtra(ExtraKey.UPLOAD_SUCCESSFUL, true);
                     LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
@@ -164,18 +166,18 @@ public class UploadService extends IntentService {
             Log.e(TAG, "Exception in uploadText() in UploadService");
             e.printStackTrace();
 
-            uploadFailed(builder, getString(R.string.add_log_failed));
+            NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
             mNotificationManager.notify(notificationId, builder.build());
 
             return;
         }
 
-        uploadFailed(builder, getString(R.string.add_log_failed));
+        NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
         mNotificationManager.notify(notificationId, builder.build());
     }
 
     private void uploadPhoto(Intent intent) {
-        int notificationId = Utilities.generateNotificationId();
+        int notificationId = Utils.generateNotificationId();
 
         String taskId = intent.getStringExtra(ExtraKey.TASK_ID);
         String photoPath = intent.getStringExtra(ExtraKey.PHOTO_PATH);
@@ -184,8 +186,9 @@ public class UploadService extends IntentService {
         broadcastIntent.putExtra(ExtraKey.FROM_ACTION, UploadAction.FILE);
 
         NotificationCompat.Builder builder
-                = generateUploadNotificationBuilder(WorkingData.getInstance(this).getTask(taskId).name,
-                getString(R.string.add_log_uploading_photo));
+                = NotificationUtils.
+                generateUploadNotificationBuilder(this, WorkingData.getInstance(this).getTask(taskId).name,
+                        getString(R.string.uploading_image));
         mNotificationManager.notify(notificationId, builder.build());
 
         HashMap<String, String> headers = new HashMap<>();
@@ -201,10 +204,10 @@ public class UploadService extends IntentService {
             if (responseString != null) {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
-                    uploadSuccessfully(builder, getString(R.string.add_log_complete_photo));
+                    NotificationUtils.uploadSuccessfully(builder, getString(R.string.complete_uploading_image));
                     mNotificationManager.notify(notificationId, builder.build());
 
-                    Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.add_log_complete_photo));
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.complete_uploading_image));
 
                     broadcastIntent.putExtra(ExtraKey.UPLOAD_SUCCESSFUL, true);
                     LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
@@ -216,18 +219,18 @@ public class UploadService extends IntentService {
             Log.e(TAG, "Exception in uploadText() in UploadService");
             e.printStackTrace();
 
-            uploadFailed(builder, getString(R.string.add_log_failed));
+            NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
             mNotificationManager.notify(notificationId, builder.build());
 
             return;
         }
 
-        uploadFailed(builder, getString(R.string.add_log_failed));
+        NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
         mNotificationManager.notify(notificationId, builder.build());
     }
 
     private void uploadFile(Intent intent) {
-        int notificationId = Utilities.generateNotificationId();
+        int notificationId = Utils.generateNotificationId();
 
         String taskId = intent.getStringExtra(ExtraKey.TASK_ID);
         String filePath = intent.getStringExtra(ExtraKey.FILE_PATH);
@@ -236,8 +239,9 @@ public class UploadService extends IntentService {
         broadcastIntent.putExtra(ExtraKey.FROM_ACTION, UploadAction.FILE);
 
         NotificationCompat.Builder builder
-                = generateUploadNotificationBuilder(WorkingData.getInstance(this).getTask(taskId).name,
-                getString(R.string.add_log_uploading_file));
+                = NotificationUtils.
+                generateUploadNotificationBuilder(this,
+                        WorkingData.getInstance(this).getTask(taskId).name, getString(R.string.uploading_file));
         mNotificationManager.notify(notificationId, builder.build());
 
         HashMap<String, String> headers = new HashMap<>();
@@ -253,10 +257,10 @@ public class UploadService extends IntentService {
             if (responseString != null) {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
-                    uploadSuccessfully(builder, getString(R.string.add_log_complete_file));
+                    NotificationUtils.uploadSuccessfully(builder, getString(R.string.complete_uploading_file));
                     mNotificationManager.notify(notificationId, builder.build());
 
-                    Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.add_log_complete_file));
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.complete_uploading_file));
 
                     broadcastIntent.putExtra(ExtraKey.UPLOAD_SUCCESSFUL, true);
                     LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
@@ -268,13 +272,13 @@ public class UploadService extends IntentService {
             Log.e(TAG, "Exception in uploadText() in UploadService");
             e.printStackTrace();
 
-            uploadFailed(builder, getString(R.string.add_log_failed));
+            NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
             mNotificationManager.notify(notificationId, builder.build());
 
             return;
         }
 
-        uploadFailed(builder, getString(R.string.add_log_failed));
+        NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
         mNotificationManager.notify(notificationId, builder.build());
     }
 
@@ -308,35 +312,13 @@ public class UploadService extends IntentService {
                 }
             }
         }  catch (JSONException e) {
-            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             Log.e(TAG, "Exception in uploadText() in UploadService");
             e.printStackTrace();
 
             return;
         }
 
-        Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
-    }
-
-    private NotificationCompat.Builder generateUploadNotificationBuilder(String taskName, String contentText) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_nicloud_notification)
-                .setContentTitle(taskName)
-                .setContentText(contentText)
-                .setProgress(0, 0, true);
-
-        return builder;
-    }
-
-    private void uploadSuccessfully(NotificationCompat.Builder builder, String successfulText) {
-        builder.setSmallIcon(R.drawable.ic_notification_done)
-                .setContentText(successfulText)
-                .setProgress(0, 0, false);
-    }
-
-    private void uploadFailed(NotificationCompat.Builder builder, String failedText) {
-        builder.setSmallIcon(R.drawable.ic_notification_failed)
-                .setContentText(failedText)
-                .setProgress(0, 0, false);
+        Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
     }
 }

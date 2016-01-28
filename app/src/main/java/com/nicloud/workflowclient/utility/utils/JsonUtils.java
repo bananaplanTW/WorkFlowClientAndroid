@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.utility;
+package com.nicloud.workflowclient.utility.utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

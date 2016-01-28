@@ -28,7 +28,7 @@ import com.nicloud.workflowclient.backgroundtask.service.ActionService;
 import com.nicloud.workflowclient.backgroundtask.receiver.ActionCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +161,7 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
             if (isActionSuccessful) {
                 WorkingData.getInstance(mContext).getTask(taskId).checkList.get(index).isChecked = checked;
             } else {
-                Utilities.showInternetConnectionWeakToast(mContext);
+                Utils.showInternetConnectionWeakToast(mContext);
             }
 
             mCheckListAdapter.notifyDataSetChanged();

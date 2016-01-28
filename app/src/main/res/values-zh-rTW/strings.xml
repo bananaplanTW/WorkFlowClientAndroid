@@ -75,12 +75,12 @@
     <string name="add_file_button_text">上傳檔案</string>
     <string name="take_photo_button_text">拍照</string>
     <string name="add_log_complete_text">訊息記錄完成</string>
-    <string name="add_log_complete_photo">照片上傳完成</string>
-    <string name="add_log_complete_file">檔案上傳完成</string>
+    <string name="complete_uploading_image">照片上傳完成</string>
+    <string name="complete_uploading_file">檔案上傳完成</string>
     <string name="add_log_uploading_text">上傳訊息中...</string>
-    <string name="add_log_uploading_photo">上傳照片中...</string>
-    <string name="add_log_uploading_file">上傳檔案中...</string>
-    <string name="add_log_failed">上傳失敗, 請再試一次</string>
+    <string name="uploading_image">上傳照片中...</string>
+    <string name="uploading_file">上傳檔案中...</string>
+    <string name="upload_failed">上傳失敗, 請再試一次</string>
 
     <!-- Dialog -->
     <string name="dialog_complete_task_text">確定要完成工作？</string>

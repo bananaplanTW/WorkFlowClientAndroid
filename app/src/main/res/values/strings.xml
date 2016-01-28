@@ -90,12 +90,12 @@
     <string name="add_file_button_text">Upload file</string>
     <string name="take_photo_button_text">Take photo</string>
     <string name="add_log_complete_text">Record message successfully</string>
-    <string name="add_log_complete_photo">Record photo successfully</string>
-    <string name="add_log_complete_file">Record file successfully</string>
+    <string name="complete_uploading_image">Record photo successfully</string>
+    <string name="complete_uploading_file">Record file successfully</string>
     <string name="add_log_uploading_text">Uploading text...</string>
-    <string name="add_log_uploading_photo">Uploading photo...</string>
-    <string name="add_log_uploading_file">Uploading file...</string>
-    <string name="add_log_failed">Upload failed, please try again</string>
+    <string name="uploading_image">Uploading photo...</string>
+    <string name="uploading_file">Uploading file...</string>
+    <string name="upload_failed">Upload failed, please try again</string>
 
     <!-- Dialog -->
     <string name="dialog_complete_task_text">Do you want to complete the task?</string>

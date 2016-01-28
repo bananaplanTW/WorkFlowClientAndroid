@@ -24,7 +24,7 @@ import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
 import com.nicloud.workflowclient.data.data.data.Case;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.login.LoginActivity;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 import com.parse.ParsePush;
 
 import java.util.ArrayList;
@@ -191,6 +191,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onFailLoadingCases(boolean isFailCausedByInternet) {
-        Utilities.showInternetConnectionWeakToast(mContext);
+        Utils.showInternetConnectionWeakToast(mContext);
     }
 }

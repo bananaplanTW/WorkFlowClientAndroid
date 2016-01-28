@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.nicloud.workflowclient.data.data.observer.DataObserver;
 import com.nicloud.workflowclient.data.data.observer.DataSubject;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +109,7 @@ public final class WorkingData implements DataSubject {
 
     public Task getTask(String taskId) {
         for (Task task : mTasks) {
-            if (Utilities.isSameId(task.id, taskId)) {
+            if (Utils.isSameId(task.id, taskId)) {
                 return task;
             }
         }
@@ -123,7 +123,7 @@ public final class WorkingData implements DataSubject {
 
     public void updateTask(Task task, String taskId) {
         for (Task scheduledTask : mTasks) {
-            if (Utilities.isSameId(scheduledTask.id, taskId)) {
+            if (Utils.isSameId(scheduledTask.id, taskId)) {
                 scheduledTask.update(task);
                 return;
             }

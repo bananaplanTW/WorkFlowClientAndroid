@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.utility;
+package com.nicloud.workflowclient.utility.utils;
 
 import android.app.Activity;
 import android.content.ContentUris;
@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by logicmelody on 2015/11/18.
  */
-public class Utilities {
+public class Utils {
 
     public static final String DATE_FORMAT_YMD = "yyyy/MM/dd";
     public static final String DATE_FORMAT_MD = "MM/dd";

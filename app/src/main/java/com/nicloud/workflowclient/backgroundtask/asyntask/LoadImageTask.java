@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.nicloud.workflowclient.data.utility.RestfulUtils;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,7 +42,7 @@ public class LoadImageTask extends AsyncTask<Void, Void, Drawable> {
     @Override
     protected Drawable doInBackground(Void... voids) {
         if (RestfulUtils.isConnectToInternet(mContext)) {
-            String fileName = Utilities.SHA1(mUri.toString());
+            String fileName = Utils.SHA1(mUri.toString());
             if (TextUtils.isEmpty(fileName)) {
                 // fallback
                 fileName = mUri.toString().substring(
@@ -68,7 +68,7 @@ public class LoadImageTask extends AsyncTask<Void, Void, Drawable> {
                             output.close();
                         }
                     }
-                    Bitmap bitmap = Utilities.scaleBitmap(mContext, file.getAbsolutePath());
+                    Bitmap bitmap = Utils.scaleBitmap(mContext, file.getAbsolutePath());
                     return new BitmapDrawable(mContext.getResources(), bitmap);
                 } catch (MalformedURLException e) {
                     cancel(true);

@@ -35,7 +35,7 @@ import com.nicloud.workflowclient.backgroundtask.service.ActionService;
 import com.nicloud.workflowclient.backgroundtask.receiver.UploadCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
 import com.nicloud.workflowclient.utility.MainTabContentFactory;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -323,7 +323,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     @Override
     public void onFailLoadingData(boolean isFailCausedByInternet) {
-        Utilities.showInternetConnectionWeakToast(this);
+        Utils.showInternetConnectionWeakToast(this);
         ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
     }
 
@@ -373,7 +373,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     @Override
     public void onFailLoadingTaskById(boolean isFailCausedByInternet) {
-        Utilities.showInternetConnectionWeakToast(this);
+        Utils.showInternetConnectionWeakToast(this);
         ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
     }
 
@@ -399,13 +399,13 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         intent.putExtra(ActionService.ExtraKey.TASK_NAME, WorkingData.getInstance(this).getTask(taskId).name);
 
         startService(intent);
-        Utilities.dismissDialog(mFragmentManager);
+        Utils.dismissDialog(mFragmentManager);
         finish();
     }
 
     @Override
     public void onCompleteTaskCancel() {
-        Utilities.dismissDialog(mFragmentManager);
+        Utils.dismissDialog(mFragmentManager);
     }
 
     @Override

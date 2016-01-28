@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -185,7 +185,7 @@ public class Task extends IdData {
                 break;
             case DONE:
                 if (item.dueDate != null) {
-                    r = Utilities.timestamp2Date(item.dueDate, Utilities.DATE_FORMAT_MD) + " ";
+                    r = Utils.timestamp2Date(item.dueDate, Utils.DATE_FORMAT_MD) + " ";
                 }
                 r += resources.getString(R.string.task_status_finished);
                 break;

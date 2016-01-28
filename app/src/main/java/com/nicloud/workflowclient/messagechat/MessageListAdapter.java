@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.List;
 
@@ -95,7 +94,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         MessageItem messageItem = mMessageItemData.get(position);
 
-        if (Utilities.isMe(messageItem.senderId)) {
+        if (Utils.isMe(messageItem.senderId)) {
             onBindMeViewHolder((MeViewHolder) holder, messageItem);
 
         } else {
@@ -122,7 +121,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        return Utilities.isMe(mMessageItemData.get(position).senderId) ? ItemViewType.ME : ItemViewType.OTHER;
+        return Utils.isMe(mMessageItemData.get(position).senderId) ? ItemViewType.ME : ItemViewType.OTHER;
     }
 
     @Override

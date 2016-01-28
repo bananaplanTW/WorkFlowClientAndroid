@@ -21,7 +21,7 @@ import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.data.observer.DataObserver;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +81,7 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
 
     private void showInternetConnectionWeakToast() {
         mSwipeRefreshLayout.setRefreshing(false);
-        Utilities.showInternetConnectionWeakToast(mContext);
+        Utils.showInternetConnectionWeakToast(mContext);
     }
 
     @Override

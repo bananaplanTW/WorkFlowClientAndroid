@@ -14,7 +14,7 @@ import com.nicloud.workflowclient.data.utility.RestfulUtils;
 import com.nicloud.workflowclient.data.utility.URLUtils;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.backgroundtask.receiver.MessageCompletedReceiver;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -125,11 +125,11 @@ public class MessageService extends IntentService {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             }
 
         } else {
-            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
     }
 
@@ -164,11 +164,11 @@ public class MessageService extends IntentService {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             }
 
         } else {
-            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
     }
 
@@ -205,11 +205,11 @@ public class MessageService extends IntentService {
             } catch (JSONException e) {
                 e.printStackTrace();
                 LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-                Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             }
 
         } else {
-            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
@@ -250,11 +250,11 @@ public class MessageService extends IntentService {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             }
 
         } else {
-            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
     }
 

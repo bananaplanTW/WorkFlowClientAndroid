@@ -1,10 +1,12 @@
 package com.nicloud.workflowclient.backgroundtask.service;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.nicloud.workflowclient.R;
@@ -14,8 +16,9 @@ import com.nicloud.workflowclient.data.utility.RestfulUtils;
 import com.nicloud.workflowclient.data.utility.URLUtils;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.backgroundtask.receiver.MessageCompletedReceiver;
-import com.nicloud.workflowclient.utility.JsonUtils;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.JsonUtils;
+import com.nicloud.workflowclient.utility.utils.NotificationUtils;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +52,7 @@ public class CaseDiscussionService extends IntentService {
         public static final String FILE_PATH = "case_discussion_service_extra_file_path";
     }
 
+    private NotificationManager mNotificationManager;
     private Handler mHandler;
 
 
@@ -111,6 +115,12 @@ public class CaseDiscussionService extends IntentService {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    }
+
+    @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
 
@@ -153,11 +163,11 @@ public class CaseDiscussionService extends IntentService {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             }
 
         } else {
-            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
     }
 
@@ -192,11 +202,11 @@ public class CaseDiscussionService extends IntentService {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             }
 
         } else {
-            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
     }
 
@@ -233,11 +243,11 @@ public class CaseDiscussionService extends IntentService {
             } catch (JSONException e) {
                 e.printStackTrace();
                 LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-                Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             }
 
         } else {
-            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
@@ -279,18 +289,25 @@ public class CaseDiscussionService extends IntentService {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             }
 
         } else {
-            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
     }
 
     private void sendDiscussionImage(Intent intent) {
         if (RestfulUtils.isConnectToInternet(this)) {
+            int notificationId = Utils.generateNotificationId();
+
             String caseId = intent.getStringExtra(ExtraKey.CASE_ID);
             String filePath = intent.getStringExtra(ExtraKey.FILE_PATH);
+
+            NotificationCompat.Builder builder = NotificationUtils.
+                    generateUploadNotificationBuilder(this,
+                            WorkingData.getInstance(this).getCaseById(caseId).name, getString(R.string.uploading_image));
+            mNotificationManager.notify(notificationId, builder.build());
 
             try {
                 HashMap<String, String> headers = new HashMap<>();
@@ -307,23 +324,37 @@ public class CaseDiscussionService extends IntentService {
                     JSONObject jsonObject = new JSONObject(responseString);
                     if (jsonObject.getString("status").equals("success")) {
                         insertDiscussionToDb(jsonObject.getJSONObject("result"));
+
+                        NotificationUtils.uploadSuccessfully(builder, getString(R.string.complete_uploading_image));
+                        mNotificationManager.notify(notificationId, builder.build());
+                        Utils.showToastInNonUiThread(mHandler, this, getString(R.string.complete_uploading_image));
                     }
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+
+                NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
+                mNotificationManager.notify(notificationId, builder.build());
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             }
 
         } else {
-            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
     }
 
     private void sendDiscussionFile(Intent intent) {
         if (RestfulUtils.isConnectToInternet(this)) {
+            int notificationId = Utils.generateNotificationId();
+
             String caseId = intent.getStringExtra(ExtraKey.CASE_ID);
             String filePath = intent.getStringExtra(ExtraKey.FILE_PATH);
+
+            NotificationCompat.Builder builder = NotificationUtils.
+                    generateUploadNotificationBuilder(this,
+                            WorkingData.getInstance(this).getCaseById(caseId).name, getString(R.string.uploading_file));
+            mNotificationManager.notify(notificationId, builder.build());
 
             try {
                 HashMap<String, String> headers = new HashMap<>();
@@ -340,16 +371,23 @@ public class CaseDiscussionService extends IntentService {
                     JSONObject jsonObject = new JSONObject(responseString);
                     if (jsonObject.getString("status").equals("success")) {
                         insertDiscussionToDb(jsonObject.getJSONObject("result"));
+
+                        NotificationUtils.uploadSuccessfully(builder, getString(R.string.complete_uploading_file));
+                        mNotificationManager.notify(notificationId, builder.build());
+                        Utils.showToastInNonUiThread(mHandler, this, getString(R.string.complete_uploading_file));
                     }
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+
+                NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
+                mNotificationManager.notify(notificationId, builder.build());
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
             }
 
         } else {
-            Utilities.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
     }
 

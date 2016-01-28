@@ -31,7 +31,7 @@ import com.nicloud.workflowclient.provider.debug.AndroidDatabaseManager;
 import com.nicloud.workflowclient.backgroundtask.receiver.ActionCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.ActionService;
 import com.nicloud.workflowclient.tasklist.TasksListFragment;
-import com.nicloud.workflowclient.utility.Utilities;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 
 /**
@@ -85,11 +85,11 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
         intent.putExtra(ActionService.ExtraKey.TASK_NAME, WorkingData.getInstance(mMainActivity).getTask(taskId).name);
 
         mMainActivity.startService(intent);
-        Utilities.dismissDialog(mFragmentManager);
+        Utils.dismissDialog(mFragmentManager);
     }
 
     public void onCompleteTaskCancel() {
-        Utilities.dismissDialog(mFragmentManager);
+        Utils.dismissDialog(mFragmentManager);
     }
 
     public void onRefreshInTaskList() {
@@ -344,7 +344,7 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                Utilities.showDialog(mFragmentManager, DisplayDialogFragment.DialogType.CHECK_IN_OUT, null);
+                Utils.showDialog(mFragmentManager, DisplayDialogFragment.DialogType.CHECK_IN_OUT, null);
 
                 break;
         }
@@ -359,10 +359,10 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
         if (action.equals(ActionService.ServerAction.COMPLETE_TASK)) {
             if (isActionSuccessful) {
                 ((TasksListFragment) mCurrentContentFragment).loadWorkerTasks();
-                Utilities.showCompleteTaskToast(mMainActivity, taskName);
+                Utils.showCompleteTaskToast(mMainActivity, taskName);
 
             } else {
-                Utilities.showInternetConnectionWeakToast(mMainActivity);
+                Utils.showInternetConnectionWeakToast(mMainActivity);
             }
         }
     }
