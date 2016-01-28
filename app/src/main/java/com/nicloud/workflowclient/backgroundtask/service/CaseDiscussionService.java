@@ -11,11 +11,11 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
+import com.nicloud.workflowclient.backgroundtask.receiver.CaseDiscussionCompletedReceiver;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.utility.utils.RestfulUtils;
 import com.nicloud.workflowclient.utility.utils.URLUtils;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
-import com.nicloud.workflowclient.backgroundtask.receiver.MessageCompletedReceiver;
 import com.nicloud.workflowclient.utility.utils.JsonUtils;
 import com.nicloud.workflowclient.utility.utils.NotificationUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
@@ -220,7 +220,7 @@ public class CaseDiscussionService extends IntentService {
     }
 
     private void loadDiscussionBefore(Intent intent) {
-        Intent broadcastIntent = new Intent(MessageCompletedReceiver.ACTION_LOAD_BEFORE_MESSAGE_COMPLETED);
+        Intent broadcastIntent = new Intent(CaseDiscussionCompletedReceiver.ACTION_LOAD_BEFORE_DISCUSSION_COMPLETED);
 
         if (RestfulUtils.isConnectToInternet(this)) {
             String caseId = intent.getStringExtra(ExtraKey.CASE_ID);
@@ -408,7 +408,7 @@ public class CaseDiscussionService extends IntentService {
             String caseId = jsonObject.getString("caseId");
             String workerId = jsonObject.getString("ownerId");
             String workerName = jsonObject.getString("ownerName");
-            String workerAvatarUri = jsonObject.getString("iconThumbUrl");
+            String workerAvatarUri = JsonUtils.getStringFromJson(jsonObject, "iconThumbUrl");
             String content = jsonObject.getString("content");
             String type = jsonObject.getString("contentType");
             String fileName = JsonUtils.getStringFromJson(jsonObject, "name");

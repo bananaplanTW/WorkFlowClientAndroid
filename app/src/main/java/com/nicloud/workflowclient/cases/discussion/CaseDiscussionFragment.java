@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.backgroundtask.receiver.CaseDiscussionCompletedReceiver;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.cases.main.OnSetCaseId;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
@@ -44,7 +45,7 @@ import java.util.List;
  */
 public class CaseDiscussionFragment extends Fragment implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, LoadPromptDiscussionReceiver.OnLoadPromptDiscussionListener,
-        OnSetCaseId {
+        OnSetCaseId, CaseDiscussionCompletedReceiver.OnLoadCaseDiscussionCompletedListener {
 
     private static final String TAG = "CaseDiscussionFragment";
 
@@ -95,6 +96,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
     private List<DiscussionItem> mDiscussionData = new ArrayList<>();
 
     private LoadPromptDiscussionReceiver mLoadPromptDiscussionReceiver;
+    private CaseDiscussionCompletedReceiver mCaseDiscussionCompletedReceiver;
 
     private String mCaseId;
     private String mCurrentFilePath;
@@ -153,16 +155,22 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
         super.onStart();
         IntentFilter intentFilter = new IntentFilter(LoadPromptDiscussionReceiver.ACTION_LOAD_PROMPT_DISCUSSION);
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mLoadPromptDiscussionReceiver, intentFilter);
+
+        IntentFilter intentFilter2 =
+                new IntentFilter(CaseDiscussionCompletedReceiver.ACTION_LOAD_BEFORE_DISCUSSION_COMPLETED);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mCaseDiscussionCompletedReceiver, intentFilter2);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mLoadPromptDiscussionReceiver);
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mCaseDiscussionCompletedReceiver);
     }
 
     private void initialize() {
         mLoadPromptDiscussionReceiver = new LoadPromptDiscussionReceiver(this);
+        mCaseDiscussionCompletedReceiver = new CaseDiscussionCompletedReceiver(this);
         mCaseId = getArguments().getString(CaseFragment.EXTRA_CASE_ID);
         mSelectionArgs = new String[] {mCaseId};
 
@@ -250,6 +258,51 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
         mDiscussionList.setLayoutManager(mDiscussionListLayoutManager);
         mDiscussionList.setAdapter(mDiscussionAdapter);
+        mDiscussionList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (!mIsLoadingBeforeMessages && isDiscussionListScrollToTop()) {
+                    mIsLoadingBeforeMessages = true;
+                    mIsNeedToScrollLast = false;
+
+                    mFirstVisibleItemPosition = mDiscussionListLayoutManager.findFirstVisibleItemPosition();
+                    View v = mDiscussionListLayoutManager.getChildAt(0);
+                    mFirstVisibleItemOffset =
+                            (v == null) ? 0 : (v.getTop() - mDiscussionListLayoutManager.getPaddingTop());
+
+                    mContext.startService(CaseDiscussionService.
+                            generateLoadDiscussionBeforeIntent(mContext, mCaseId, getFirstDiscussionTime()));
+                }
+            }
+        });
+    }
+
+    private boolean isDiscussionListScrollToTop() {
+        return mDiscussionListLayoutManager.getChildAt(0).getTop() == 0 &&
+               mDiscussionListLayoutManager.findFirstVisibleItemPosition() == 0;
+    }
+
+    private long getFirstDiscussionTime() {
+        Cursor cursor = null;
+        long firstMessageDate = 0L;
+
+        try {
+            cursor = mContext.getContentResolver().query(WorkFlowContract.Discussion.CONTENT_URI,
+                    mProjection, mSelection, mSelectionArgs, mSortOrder);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                firstMessageDate = cursor.getLong(CREATED_TIME);
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return firstMessageDate;
     }
 
     private void loadDiscussionFirstLaunch() {
@@ -442,8 +495,13 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
         if (mIsNeedToScrollLast) {
             mDiscussionList.scrollToPosition(mDiscussionData.size() - 1);
+
+        } else {
+            int position = cursor.getCount() - mPreviousDiscussionCount + mFirstVisibleItemPosition;
+            mDiscussionListLayoutManager.scrollToPositionWithOffset(position, mFirstVisibleItemOffset);
         }
 
+        mPreviousDiscussionCount = cursor.getCount();
         mIsNeedToScrollLast = true;
     }
 
@@ -456,5 +514,14 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
     public void onLoadPromptDiscussion(Intent intent) {
         mContext.startService(
                 CaseDiscussionService.generateLoadDiscussionFromIntent(mContext, mCaseId, getLastDiscussionTime()));
+    }
+
+    @Override
+    public void onLoadCaseDiscussionCompleted(Intent intent) {
+        String action = intent.getAction();
+
+        if (CaseDiscussionCompletedReceiver.ACTION_LOAD_BEFORE_DISCUSSION_COMPLETED.equals(action)) {
+            mIsLoadingBeforeMessages = false;
+        }
     }
 }
