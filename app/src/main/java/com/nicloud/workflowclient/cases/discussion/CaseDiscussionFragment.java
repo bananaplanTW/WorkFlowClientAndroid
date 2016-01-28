@@ -185,6 +185,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
                     mDiscussionSendMessageButton.setVisibility(View.GONE);
                     mDiscussionAddFileButton.setVisibility(View.VISIBLE);
+                    mDiscussionAddFileButton.bringToFront();
 
                     hasTextInDiscussionBox = false;
 
@@ -195,6 +196,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
                     mDiscussionAddFileButton.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.hide));
 
                     mDiscussionSendMessageButton.setVisibility(View.VISIBLE);
+                    mDiscussionSendMessageButton.bringToFront();
                     mDiscussionAddFileButton.setVisibility(View.GONE);
 
                     hasTextInDiscussionBox = true;
