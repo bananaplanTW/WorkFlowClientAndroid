@@ -13,9 +13,9 @@ import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
-import com.nicloud.workflowclient.tasklist.TaskListFragment;
+import com.nicloud.workflowclient.mytasklist.MyTaskListFragment;
 
-public class MainActivity extends AppCompatActivity implements TaskListFragment.OnRefreshInTaskList,
+public class MainActivity extends AppCompatActivity implements MyTaskListFragment.OnRefreshInTaskList,
         MainMenuFragment.OnClickMainMenuItemListener, MessageMenuFragment.OnClickMessageMenuWorkerListener,
         DisplayDialogFragment.OnDialogActionListener {
 

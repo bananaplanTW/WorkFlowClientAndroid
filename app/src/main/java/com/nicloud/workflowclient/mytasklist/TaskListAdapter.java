@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.tasklist;
+package com.nicloud.workflowclient.mytasklist;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/11/11.
  */
-public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private FragmentManager mFragmentManager;
@@ -67,7 +67,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
 
-    public TasksListAdapter(Context context, FragmentManager fm, List<Task> dataSet) {
+    public TaskListAdapter(Context context, FragmentManager fm, List<Task> dataSet) {
         mContext = context;
         mFragmentManager = fm;
         mDataSet = dataSet;
@@ -83,10 +83,6 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (holder == null) return;
 
         TaskViewHolder taskVH = (TaskViewHolder) holder;
-
-        if (position == 0) {
-            taskVH.view.setBackgroundResource(R.drawable.scheduled_task_first_card_background);
-        }
 
         taskVH.taskName.setText(mDataSet.get(position).name);
         taskVH.caseName.setText(mDataSet.get(position).caseName);

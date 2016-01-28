@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.tasklist;
+package com.nicloud.workflowclient.mytasklist;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/12/21.
  */
-public class TaskListFragment extends Fragment implements DataObserver, View.OnClickListener {
+public class MyTaskListFragment extends Fragment implements DataObserver, View.OnClickListener {
 
     public interface OnRefreshInTaskList {
         void onRefreshInTaskList();
@@ -42,7 +42,7 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
 
     private RecyclerView mTaskList;
     private LinearLayoutManager mTaskListManager;
-    private TasksListAdapter mTaskListAdapter;
+    private TaskListAdapter mTaskListAdapter;
     private List<Task> mTaskDataSet = new ArrayList<>();
 
     private TextView mNoTaskText;
@@ -133,7 +133,7 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
         mFab = (FloatingActionButton) getView().findViewById(R.id.fab);
         mTaskList = (RecyclerView) getView().findViewById(R.id.task_list);
         mNoTaskText = (TextView) getView().findViewById(R.id.task_list_no_task_text);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.task_log_swipe_refresh_container);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.task_list_swipe_refresh_container);
     }
 
     private void setupViews() {
@@ -150,7 +150,7 @@ public class TaskListFragment extends Fragment implements DataObserver, View.OnC
 
     private void setupTasksList() {
         mTaskListManager = new LinearLayoutManager(mContext);
-        mTaskListAdapter = new TasksListAdapter(mContext, mFm, mTaskDataSet);
+        mTaskListAdapter = new TaskListAdapter(mContext, mFm, mTaskDataSet);
 
         mTaskList.setLayoutManager(mTaskListManager);
         mTaskList.addItemDecoration(
