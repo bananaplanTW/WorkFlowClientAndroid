@@ -35,7 +35,7 @@ public final class WorkingData implements DataSubject {
     private Worker mLoginWorker;
 
     // TODO: Implement DB
-    private List<Task> mScheduledTasks = new ArrayList<>();
+    private List<Task> mTasks = new ArrayList<>();
     private List<Case> mCases = new ArrayList<>();
     private List<Worker> mWorkers = new ArrayList<>();
 
@@ -87,30 +87,30 @@ public final class WorkingData implements DataSubject {
         return mLoginWorker;
     }
 
-    public void addScheduledTask(Task task) {
-        mScheduledTasks.add(task);
+    public void addTask(Task task) {
+        mTasks.add(task);
     }
 
-    public void addAllScheduledTasks(List<Task> scheduledTasks) {
-        mScheduledTasks.addAll(scheduledTasks);
+    public void addAllTasks(List<Task> scheduledTasks) {
+        mTasks.addAll(scheduledTasks);
     }
 
-    public void clearScheduledTasks() {
-        mScheduledTasks.clear();
+    public void clearTasks() {
+        mTasks.clear();
     }
 
-    public void removeScheduledTask(int position) {
-        mScheduledTasks.remove(position);
+    public void removeTask(int position) {
+        mTasks.remove(position);
     }
 
-    public List<Task> getScheduledTasks() {
-        return mScheduledTasks;
+    public List<Task> getTasks() {
+        return mTasks;
     }
 
     public Task getTask(String taskId) {
-        for (Task scheduledTask : mScheduledTasks) {
-            if (Utilities.isSameId(scheduledTask.id, taskId)) {
-                return scheduledTask;
+        for (Task task : mTasks) {
+            if (Utilities.isSameId(task.id, taskId)) {
+                return task;
             }
         }
 
@@ -118,11 +118,11 @@ public final class WorkingData implements DataSubject {
     }
 
     public void resetTasks() {
-        mScheduledTasks.clear();
+        mTasks.clear();
     }
 
     public void updateTask(Task task, String taskId) {
-        for (Task scheduledTask : mScheduledTasks) {
+        for (Task scheduledTask : mTasks) {
             if (Utilities.isSameId(scheduledTask.id, taskId)) {
                 scheduledTask.update(task);
                 return;

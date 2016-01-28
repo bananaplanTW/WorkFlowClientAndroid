@@ -43,7 +43,7 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
     private RecyclerView mTasksList;
     private LinearLayoutManager mTasksListManager;
     private TasksListAdapter mTasksListAdapter;
-    private List<TasksListItem> mTasksDataSet = new ArrayList<>();
+    private List<Task> mTasksDataSet = new ArrayList<>();
 
     private TextView mNoTaskText;
 
@@ -248,14 +248,8 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
     private void setScheduledTasksData() {
         mTasksDataSet.clear();
 
-        // WIP task
-        //mTasksDataSet.add(new TasksListItem(new Task(mMainActivity.getString(R.string.wip_task)), ItemViewType.TITLE));
-        //mTasksDataSet.add(new TasksListItem(WorkingData.getInstance(mMainActivity).getWipTask(), ItemViewType.WIP_TASK));
-
-        // Scheduled task
-        //mTasksDataSet.add(new TasksListItem(new Task(mContext.getString(R.string.next_task)), TasksListAdapter.ItemViewType.TITLE));
-        for (Task scheduledTask : WorkingData.getInstance(mContext).getScheduledTasks()) {
-            mTasksDataSet.add(new TasksListItem(scheduledTask, TasksListAdapter.ItemViewType.SCHEDULED_TASK));
+        for (Task task : WorkingData.getInstance(mContext).getTasks()) {
+            mTasksDataSet.add(task);
         }
 
         mTasksListAdapter.notifyDataSetChanged();

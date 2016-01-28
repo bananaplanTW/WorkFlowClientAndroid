@@ -22,35 +22,18 @@ import java.util.List;
  */
 public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static class ItemViewType {
-        public static final int TITLE = 0;
-        public static final int WIP_TASK = 1;
-        public static final int SCHEDULED_TASK = 2;
-    }
-
     private Context mContext;
     private FragmentManager mFragmentManager;
-    private List<TasksListItem> mDataSet;
+    private List<Task> mDataSet;
 
-
-    private class TitleViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView title;
-
-        public TitleViewHolder(View view) {
-            super(view);
-            title = (TextView) view.findViewById(R.id.task_list_title);
-        }
-    }
-
-    private class ScheduledTaskViewHolder extends RecyclerView.ViewHolder {
+    private class TaskViewHolder extends RecyclerView.ViewHolder {
 
         public View view;
         public TextView taskName;
         public TextView caseName;
         public ImageView completeButton;
 
-        public ScheduledTaskViewHolder(View view) {
+        public TaskViewHolder(View view) {
             super(view);
             findViews(view);
             setupViews();
@@ -58,8 +41,8 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         private void findViews(View view) {
             this.view = view;
-            taskName = (TextView) view.findViewById(R.id.scheduled_task_task_name);
-            caseName = (TextView) view.findViewById(R.id.scheduled_task_case_name);
+            taskName = (TextView) view.findViewById(R.id.task_card_name);
+            caseName = (TextView) view.findViewById(R.id.task_card_case_name);
             completeButton = (ImageView) view.findViewById(R.id.complete_task_button);
         }
 
@@ -68,7 +51,7 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View v) {
                     mContext.startActivity(
-                            DetailedTaskActivity.generateActivityIntent(mContext, mDataSet.get(getAdapterPosition()).task.id));
+                            DetailedTaskActivity.generateActivityIntent(mContext, mDataSet.get(getAdapterPosition()).id));
                 }
             });
 
@@ -77,13 +60,14 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 public void onClick(View v) {
                     Utilities.showDialog(mFragmentManager,
                             DisplayDialogFragment.DialogType.COMPLETE_TASK,
-                            mDataSet.get(getAdapterPosition()).task.id);
+                            mDataSet.get(getAdapterPosition()).id);
                 }
             });
         }
     }
 
-    public TasksListAdapter(Context context, FragmentManager fm, List<TasksListItem> dataSet) {
+
+    public TasksListAdapter(Context context, FragmentManager fm, List<Task> dataSet) {
         mContext = context;
         mFragmentManager = fm;
         mDataSet = dataSet;
@@ -91,59 +75,21 @@ public class TasksListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case ItemViewType.TITLE:
-                return new TitleViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_list_title, parent, false));
-
-            case ItemViewType.SCHEDULED_TASK:
-                return new ScheduledTaskViewHolder(LayoutInflater.from(mContext).inflate(R.layout.scheduled_task_card,
-                                                   parent, false));
-
-            default:
-                return null;
-        }
+        return new TaskViewHolder(LayoutInflater.from(mContext).inflate(R.layout.task_card, parent, false));
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder == null) return;
 
-        Task task = mDataSet.get(position).task;
+        TaskViewHolder taskVH = (TaskViewHolder) holder;
 
-        switch (mDataSet.get(position).itemViewType) {
-            case ItemViewType.TITLE:
-                bindTitleViewHolder((TitleViewHolder) holder, task);
-                break;
-
-            case ItemViewType.SCHEDULED_TASK:
-                bindScheduledTaskViewHolder((ScheduledTaskViewHolder) holder, task, position);
-                break;
-        }
-    }
-
-    private void bindTitleViewHolder(TitleViewHolder holder, Task task) {
-        holder.title.setText(task.name);
-    }
-
-    private void bindScheduledTaskViewHolder(ScheduledTaskViewHolder holder, Task task, int position) {
         if (position == 0) {
-            holder.view.setBackgroundResource(R.drawable.scheduled_task_first_card_background);
+            taskVH.view.setBackgroundResource(R.drawable.scheduled_task_first_card_background);
         }
 
-        holder.taskName.setText(task.name);
-        holder.caseName.setText(task.caseName);
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        int itemViewType = mDataSet.get(position).itemViewType;
-
-        if (ItemViewType.TITLE == itemViewType || ItemViewType.TITLE == itemViewType) {
-            return ItemViewType.TITLE;
-
-        } else {
-            return ItemViewType.SCHEDULED_TASK;
-        }
+        taskVH.taskName.setText(mDataSet.get(position).name);
+        taskVH.caseName.setText(mDataSet.get(position).caseName);
     }
 
     @Override

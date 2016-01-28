@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 
 /**
@@ -345,11 +344,11 @@ public class LoadingDataUtils {
             JSONObject taskJson = new JSONObject(taskJsonString).getJSONObject("result");
             JSONArray scheduledTaskJsonList = getJsonArrayFromJson(taskJson, "scheduledTasks");
 
-            WorkingData.getInstance(context).clearScheduledTasks();
+            WorkingData.getInstance(context).clearTasks();
             if (scheduledTaskJsonList != null) {
                 for (int i = 0; i < scheduledTaskJsonList.length(); i++) {
                     JSONObject scheduledTaskJson = scheduledTaskJsonList.getJSONObject(i);
-                    WorkingData.getInstance(context).addScheduledTask(retrieveTaskFromJson(context, scheduledTaskJson));
+                    WorkingData.getInstance(context).addTask(retrieveTaskFromJson(context, scheduledTaskJson));
                 }
             }
 
