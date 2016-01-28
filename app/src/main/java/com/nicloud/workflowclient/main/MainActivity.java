@@ -2,7 +2,6 @@ package com.nicloud.workflowclient.main;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,9 +13,9 @@ import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
-import com.nicloud.workflowclient.tasklist.TasksListFragment;
+import com.nicloud.workflowclient.tasklist.TaskListFragment;
 
-public class MainActivity extends AppCompatActivity implements TasksListFragment.OnRefreshInTasksList,
+public class MainActivity extends AppCompatActivity implements TaskListFragment.OnRefreshInTaskList,
         MainMenuFragment.OnClickMainMenuItemListener, MessageMenuFragment.OnClickMessageMenuWorkerListener,
         DisplayDialogFragment.OnDialogActionListener {
 
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements TasksListFragment
     }
 
     @Override
-    public void onRefreshInTasksList() {
+    public void onRefreshInTaskList() {
         mUIController.onRefreshInTaskList();
     }
 

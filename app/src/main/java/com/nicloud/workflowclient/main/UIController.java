@@ -30,7 +30,7 @@ import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.provider.debug.AndroidDatabaseManager;
 import com.nicloud.workflowclient.backgroundtask.receiver.ActionCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.ActionService;
-import com.nicloud.workflowclient.tasklist.TasksListFragment;
+import com.nicloud.workflowclient.tasklist.TaskListFragment;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 
@@ -252,8 +252,8 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
 
         switch (mClickedMainMenuItem.mType) {
             case MainMenuFragment.MainMenuItemType.MY_TASKS:
-                if (mCurrentContentFragment instanceof TasksListFragment) break;
-                replaceTo(TasksListFragment.class, FragmentTag.TASK_LIST);
+                if (mCurrentContentFragment instanceof TaskListFragment) break;
+                replaceTo(TaskListFragment.class, FragmentTag.TASK_LIST);
 
                 break;
 
@@ -300,13 +300,13 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
         }
 
         // Default fragment(TaskListFragment) when we launch app
-        TasksListFragment tasksListFragment = (TasksListFragment) mFragmentManager.findFragmentByTag(FragmentTag.TASK_LIST);
-        if (tasksListFragment == null) {
-            tasksListFragment = new TasksListFragment();
-            fragmentTransaction.add(R.id.content_container, tasksListFragment, FragmentTag.TASK_LIST);
+        TaskListFragment taskListFragment = (TaskListFragment) mFragmentManager.findFragmentByTag(FragmentTag.TASK_LIST);
+        if (taskListFragment == null) {
+            taskListFragment = new TaskListFragment();
+            fragmentTransaction.add(R.id.content_container, taskListFragment, FragmentTag.TASK_LIST);
         }
 
-        mCurrentContentFragment = tasksListFragment;
+        mCurrentContentFragment = taskListFragment;
         fragmentTransaction.commit();
     }
 
@@ -358,7 +358,7 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
 
         if (action.equals(ActionService.ServerAction.COMPLETE_TASK)) {
             if (isActionSuccessful) {
-                ((TasksListFragment) mCurrentContentFragment).loadWorkerTasks();
+                ((TaskListFragment) mCurrentContentFragment).loadWorkerTasks();
                 Utils.showCompleteTaskToast(mMainActivity, taskName);
 
             } else {

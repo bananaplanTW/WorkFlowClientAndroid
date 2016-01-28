@@ -29,10 +29,10 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/12/21.
  */
-public class TasksListFragment extends Fragment implements DataObserver, View.OnClickListener {
+public class TaskListFragment extends Fragment implements DataObserver, View.OnClickListener {
 
-    public interface OnRefreshInTasksList {
-        void onRefreshInTasksList();
+    public interface OnRefreshInTaskList {
+        void onRefreshInTaskList();
     }
 
     private Context mContext;
@@ -40,10 +40,10 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
 
     private FloatingActionButton mFab;
 
-    private RecyclerView mTasksList;
-    private LinearLayoutManager mTasksListManager;
-    private TasksListAdapter mTasksListAdapter;
-    private List<Task> mTasksDataSet = new ArrayList<>();
+    private RecyclerView mTaskList;
+    private LinearLayoutManager mTaskListManager;
+    private TasksListAdapter mTaskListAdapter;
+    private List<Task> mTaskDataSet = new ArrayList<>();
 
     private TextView mNoTaskText;
 
@@ -51,7 +51,7 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private OnRefreshInTasksList mOnRefreshInTasksList;
+    private OnRefreshInTaskList mOnRefreshInTaskList;
 
     private LoadingWorkerTasks.OnFinishLoadingDataListener mOnFinishLoadingDataListener = new LoadingWorkerTasks.OnFinishLoadingDataListener() {
         @Override
@@ -88,13 +88,13 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        mOnRefreshInTasksList = (OnRefreshInTasksList) context;
+        mOnRefreshInTaskList = (OnRefreshInTaskList) context;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tasks_list, container, false);
+        return inflater.inflate(R.layout.fragment_task_list, container, false);
     }
 
     @Override
@@ -131,8 +131,8 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
 
     private void findViews() {
         mFab = (FloatingActionButton) getView().findViewById(R.id.fab);
-        mTasksList = (RecyclerView) getView().findViewById(R.id.tasks_list);
-        mNoTaskText = (TextView) getView().findViewById(R.id.tasks_list_no_task_text);
+        mTaskList = (RecyclerView) getView().findViewById(R.id.task_list);
+        mNoTaskText = (TextView) getView().findViewById(R.id.task_list_no_task_text);
         mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.task_log_swipe_refresh_container);
     }
 
@@ -141,7 +141,7 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
     }
 
     private void setNoTaskTextVisibility() {
-        if (mTasksDataSet.size() == 0) {
+        if (mTaskDataSet.size() == 0) {
             mNoTaskText.setVisibility(View.VISIBLE);
         } else {
             mNoTaskText.setVisibility(View.GONE);
@@ -149,16 +149,16 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
     }
 
     private void setupTasksList() {
-        mTasksListManager = new LinearLayoutManager(mContext);
-        mTasksListAdapter = new TasksListAdapter(mContext, mFm, mTasksDataSet);
+        mTaskListManager = new LinearLayoutManager(mContext);
+        mTaskListAdapter = new TasksListAdapter(mContext, mFm, mTaskDataSet);
 
-        mTasksList.setLayoutManager(mTasksListManager);
-        mTasksList.addItemDecoration(
+        mTaskList.setLayoutManager(mTaskListManager);
+        mTaskList.addItemDecoration(
                 new DividerItemDecoration(mContext.getResources().getDrawable(R.drawable.list_divider),
                         true, true, true, mContext.getResources().getDimensionPixelSize(R.dimen.tasks_list_padding_bottom)));
-        mTasksList.setAdapter(mTasksListAdapter);
+        mTaskList.setAdapter(mTaskListAdapter);
 
-        mTasksList.setOnTouchListener(new View.OnTouchListener() {
+        mTaskList.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getActionMasked()) {
@@ -190,7 +190,7 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
     }
 
     private boolean isFirstItemOnTheTopOfTheList() {
-        return mTasksListManager.findFirstVisibleItemPosition() == 0;
+        return mTaskListManager.findFirstVisibleItemPosition() == 0;
     }
 
     private void setupSwipeRefresh() {
@@ -198,7 +198,7 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
 
             @Override
             public void onRefresh() {
-                mOnRefreshInTasksList.onRefreshInTasksList();
+                mOnRefreshInTaskList.onRefreshInTaskList();
                 loadWorkerTasks();
             }
         });
@@ -246,13 +246,13 @@ public class TasksListFragment extends Fragment implements DataObserver, View.On
     }
 
     private void setScheduledTasksData() {
-        mTasksDataSet.clear();
+        mTaskDataSet.clear();
 
         for (Task task : WorkingData.getInstance(mContext).getTasks()) {
-            mTasksDataSet.add(task);
+            mTaskDataSet.add(task);
         }
 
-        mTasksListAdapter.notifyDataSetChanged();
+        mTaskListAdapter.notifyDataSetChanged();
         setNoTaskTextVisibility();
     }
 

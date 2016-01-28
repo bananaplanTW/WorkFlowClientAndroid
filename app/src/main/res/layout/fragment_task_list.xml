@@ -13,20 +13,20 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/tasks_list"
+            android:id="@+id/task_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            android:background="@drawable/tasks_list_background"/>
+            android:background="@drawable/task_list_background"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
-        android:id="@+id/tasks_list_no_task_text"
+        android:id="@+id/task_list_no_task_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/tasks_list_no_task"
+        android:text="@string/task_list_no_task"
         android:textSize="@dimen/empty_text_size"
         android:visibility="gone"/>
 
@@ -38,7 +38,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_check_in_out"
         app:fabSize="normal"
-        app:layout_anchor="@id/tasks_list"
+        app:layout_anchor="@id/task_list"
         app:layout_anchorGravity="bottom|right|end"
         android:visibility="gone"/>
 
