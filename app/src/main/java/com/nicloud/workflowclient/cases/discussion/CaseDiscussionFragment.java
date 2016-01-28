@@ -99,6 +99,9 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
     public void setCaseId(String caseId) {
         mCaseId = caseId;
+        mSelectionArgs[0] = mCaseId;
+        loadDiscussionFirstLaunch();
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -119,57 +122,6 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
         initialize();
         loadDiscussionFirstLaunch();
         getLoaderManager().initLoader(LOADER_ID, null, this);
-    }
-
-    private void loadDiscussionFirstLaunch() {
-        if (getDiscussionCount() == 0) {
-            mContext.startService(CaseDiscussionService.generateLoadDiscussionNormalIntent(mContext, mCaseId));
-
-        } else {
-            mContext.startService(
-                    CaseDiscussionService.generateLoadDiscussionFromIntent(mContext, mCaseId, getLastDiscussionTime()));
-        }
-    }
-
-    private int getDiscussionCount() {
-        Cursor cursor = null;
-        int messageCount = 0;
-
-        try {
-            cursor = mContext.getContentResolver().query(WorkFlowContract.Discussion.CONTENT_URI,
-                    mProjection, mSelection, mSelectionArgs, null);
-            if (cursor != null) {
-                messageCount = cursor.getCount();
-            }
-
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return messageCount;
-    }
-
-    private long getLastDiscussionTime() {
-        Cursor cursor = null;
-        long lastMessageDate = 0L;
-
-        try {
-            cursor = mContext.getContentResolver().query(WorkFlowContract.Discussion.CONTENT_URI,
-                    mProjection, mSelection, mSelectionArgs, mSortOrder);
-            if (cursor != null) {
-                cursor.moveToLast();
-                lastMessageDate = cursor.getLong(CREATED_TIME);
-            }
-
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return lastMessageDate;
     }
 
     private void initialize() {
@@ -258,6 +210,57 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
         mDiscussionList.setLayoutManager(mDiscussionListLayoutManager);
         mDiscussionList.setAdapter(mDiscussionListAdapter);
+    }
+
+    private void loadDiscussionFirstLaunch() {
+        if (getDiscussionCount() == 0) {
+            mContext.startService(CaseDiscussionService.generateLoadDiscussionNormalIntent(mContext, mCaseId));
+
+        } else {
+            mContext.startService(
+                    CaseDiscussionService.generateLoadDiscussionFromIntent(mContext, mCaseId, getLastDiscussionTime()));
+        }
+    }
+
+    private int getDiscussionCount() {
+        Cursor cursor = null;
+        int messageCount = 0;
+
+        try {
+            cursor = mContext.getContentResolver().query(WorkFlowContract.Discussion.CONTENT_URI,
+                    mProjection, mSelection, mSelectionArgs, null);
+            if (cursor != null) {
+                messageCount = cursor.getCount();
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return messageCount;
+    }
+
+    private long getLastDiscussionTime() {
+        Cursor cursor = null;
+        long lastMessageDate = 0L;
+
+        try {
+            cursor = mContext.getContentResolver().query(WorkFlowContract.Discussion.CONTENT_URI,
+                    mProjection, mSelection, mSelectionArgs, mSortOrder);
+            if (cursor != null) {
+                cursor.moveToLast();
+                lastMessageDate = cursor.getLong(CREATED_TIME);
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return lastMessageDate;
     }
 
     @Override
