@@ -288,16 +288,9 @@ public class LoadingDataUtils {
                     caseName,
                     caseId,
                     workerId,
-                    assignDate,
-                    startDate,
                     endDate,
                     lastUpdatedTime,
                     checkList);
-
-            JSONObject scheduledTaskAlert = JsonUtils.getJsonObjectFromJson(taskJson, "scheduledTaskAlert");
-            if (scheduledTaskAlert != null) {
-                task.nextNotifyTime = scheduledTaskAlert.getLong("willAlertAt");
-            }
 
             return task;
 

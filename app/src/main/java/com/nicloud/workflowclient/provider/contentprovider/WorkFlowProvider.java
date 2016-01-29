@@ -20,6 +20,8 @@ public class WorkFlowProvider extends ContentProvider {
     private static final class UriMatcherIndex {
         public static final int MESSAGE = 0;
         public static final int DISCUSSION = 1;
+        public static final int TASK = 2;
+        public static final int CHECK_LIST = 3;
     }
 
     private static final UriMatcher sUriMatcher;
@@ -28,6 +30,8 @@ public class WorkFlowProvider extends ContentProvider {
 
         sUriMatcher.addURI(WorkFlowContract.AUTHORITY, WorkFlowContract.Message.TABLE_NAME, UriMatcherIndex.MESSAGE);
         sUriMatcher.addURI(WorkFlowContract.AUTHORITY, WorkFlowContract.Discussion.TABLE_NAME, UriMatcherIndex.DISCUSSION);
+        sUriMatcher.addURI(WorkFlowContract.AUTHORITY, WorkFlowContract.Task.TABLE_NAME, UriMatcherIndex.TASK);
+        sUriMatcher.addURI(WorkFlowContract.AUTHORITY, WorkFlowContract.CheckList.TABLE_NAME, UriMatcherIndex.CHECK_LIST);
     }
 
     private WorkFlowDatabaseHelper mWorkFlowDatabaseHelper;
@@ -53,6 +57,14 @@ public class WorkFlowProvider extends ContentProvider {
 
             case UriMatcherIndex.DISCUSSION:
                 queryBuilder.setTables(WorkFlowContract.Discussion.TABLE_NAME);
+                break;
+
+            case UriMatcherIndex.TASK:
+                queryBuilder.setTables(WorkFlowContract.Task.TABLE_NAME);
+                break;
+
+            case UriMatcherIndex.CHECK_LIST:
+                queryBuilder.setTables(WorkFlowContract.CheckList.TABLE_NAME);
                 break;
 
             default:
@@ -86,6 +98,14 @@ public class WorkFlowProvider extends ContentProvider {
                 id = db.insert(WorkFlowContract.Discussion.TABLE_NAME, null, values);
                 break;
 
+            case UriMatcherIndex.TASK:
+                id = db.insert(WorkFlowContract.Task.TABLE_NAME, null, values);
+                break;
+
+            case UriMatcherIndex.CHECK_LIST:
+                id = db.insert(WorkFlowContract.CheckList.TABLE_NAME, null, values);
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -109,6 +129,14 @@ public class WorkFlowProvider extends ContentProvider {
                 rowsDeleted = db.delete(WorkFlowContract.Discussion.TABLE_NAME, selection, selectionArgs);
                 break;
 
+            case UriMatcherIndex.TASK:
+                rowsDeleted = db.delete(WorkFlowContract.Task.TABLE_NAME, selection, selectionArgs);
+                break;
+
+            case UriMatcherIndex.CHECK_LIST:
+                rowsDeleted = db.delete(WorkFlowContract.CheckList.TABLE_NAME, selection, selectionArgs);
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -130,6 +158,14 @@ public class WorkFlowProvider extends ContentProvider {
 
             case UriMatcherIndex.DISCUSSION:
                 rowsUpdated = db.update(WorkFlowContract.Discussion.TABLE_NAME, values, selection, selectionArgs);
+                break;
+
+            case UriMatcherIndex.TASK:
+                rowsUpdated = db.update(WorkFlowContract.Task.TABLE_NAME, values, selection, selectionArgs);
+                break;
+
+            case UriMatcherIndex.CHECK_LIST:
+                rowsUpdated = db.update(WorkFlowContract.CheckList.TABLE_NAME, values, selection, selectionArgs);
                 break;
 
             default:

@@ -1,14 +1,7 @@
 package com.nicloud.workflowclient.data.data.data;
 
-import android.content.Context;
-import android.content.res.Resources;
-
-import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.utility.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Data in a task item
@@ -44,8 +37,6 @@ public class Task extends IdData {
                 String caseName,
                 String caseId,
                 String workerId,
-                Date assignDate,
-                Date startDate,
                 Date dueDate,
                 long lastUpdatedTime,
                 ArrayList<CheckItem> checkList) {
@@ -55,8 +46,6 @@ public class Task extends IdData {
         this.caseName = caseName;
         this.caseId = caseId;
         this.workerId = workerId;
-        this.assignDate = assignDate;
-        this.startDate = startDate;
         this.dueDate = dueDate;
         this.lastUpdatedTime = lastUpdatedTime;
         this.checkList = checkList;
@@ -73,10 +62,6 @@ public class Task extends IdData {
         this.caseName = task.caseName;
         this.caseId = task.caseId;
         this.workerId = task.workerId;
-        this.startTime = task.startTime;
-        this.spentTime = task.spentTime;
-        this.assignDate = task.assignDate;
-        this.startDate = task.startDate;
         this.dueDate = task.dueDate;
         this.lastUpdatedTime = task.lastUpdatedTime;
         this.checkList = task.checkList;

@@ -50,4 +50,30 @@ public class WorkFlowContract {
         public static final String CREATED_TIME = "created_time";
         public static final String UPDATED_TIME = "updated_time";
     }
+
+    public static final class Task implements BaseColumns {
+
+        public static final String TABLE_NAME = "task";
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_NAME);
+
+        // DB columns
+        public static final String TASK_ID = "task_id";
+        public static final String TASK_NAME = "task_name";
+        public static final String TASK_DESCRIPTION = "task_description";
+        public static final String CASE_ID = "case_id";
+        public static final String CASE_NAME = "case_name";
+        public static final String WORKER_ID = "worker_id";
+        public static final String CREATED_TIME = "created_time";
+    }
+
+    public static final class CheckList implements BaseColumns {
+
+        public static final String TABLE_NAME = "checklist";
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_NAME);
+
+        // DB columns
+        public static final String CHECK_NAME = "check_name";
+        public static final String IS_CHECKED = "is_checked";
+        public static final String TASK_ID = "task_id";
+    }
 }
