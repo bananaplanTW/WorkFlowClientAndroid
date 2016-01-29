@@ -21,9 +21,12 @@ import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.data.observer.DataObserver;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
+import com.nicloud.workflowclient.utility.TaskListAdapter;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -251,6 +254,24 @@ public class MyTaskListFragment extends Fragment implements DataObserver, View.O
         for (Task task : WorkingData.getInstance(mContext).getTasks()) {
             mTaskDataSet.add(task);
         }
+
+        Collections.sort(mTaskDataSet, new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                if (task1.dueDate == null && task2.dueDate != null) {
+                    return 1;
+
+                } else if (task1.dueDate != null && task2.dueDate == null) {
+                    return -1;
+
+                } else if (task1.dueDate == null && task2.dueDate == null) {
+                    return -((int) (task1.lastUpdatedTime - task2.lastUpdatedTime));
+
+                } else {
+                    return (int) (task1.dueDate.getTime() - task2.dueDate.getTime());
+                }
+            }
+        });
 
         mTaskListAdapter.notifyDataSetChanged();
         setNoTaskTextVisibility();
