@@ -41,7 +41,7 @@
     <dimen name="task_card_name_container_padding">10dp</dimen>
     <dimen name="task_card_padding_top_bottom">10dp</dimen>
     <dimen name="task_card_padding_left_right">21dp</dimen>
-    <dimen name="task_card_due_date_width">100dp</dimen>
+    <dimen name="task_card_due_date_width">70dp</dimen>
 
     <!-- Drawer menu -->
     <dimen name="drawer_menu_list_padding">20dp</dimen>

@@ -37,6 +37,8 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/task_card_name_container_padding"
             android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/complete_task_button"
             android:orientation="vertical">
 
             <TextView
