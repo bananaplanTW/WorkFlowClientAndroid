@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.mytasklist;
+package com.nicloud.workflowclient.tasklist.my;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,8 +20,8 @@ import com.nicloud.workflowclient.data.connectserver.task.LoadingWorkerTasks;
 import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.data.observer.DataObserver;
-import com.nicloud.workflowclient.utility.DividerItemDecoration;
-import com.nicloud.workflowclient.utility.TaskListAdapter;
+import com.nicloud.workflowclient.tasklist.main.TaskListAdapter;
+import com.nicloud.workflowclient.tasklist.main.TaskListItem;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
@@ -46,9 +46,10 @@ public class MyTaskListFragment extends Fragment implements DataObserver, View.O
     private RecyclerView mTaskList;
     private LinearLayoutManager mTaskListManager;
     private TaskListAdapter mTaskListAdapter;
-    private List<Task> mTaskDataSet = new ArrayList<>();
 
     private TextView mNoTaskText;
+
+    private List<TaskListItem> mTaskDataSet = new ArrayList<>();
 
     private boolean mNeedRefresh = false;
 
@@ -156,9 +157,6 @@ public class MyTaskListFragment extends Fragment implements DataObserver, View.O
         mTaskListAdapter = new TaskListAdapter(mContext, mFm, mTaskDataSet);
 
         mTaskList.setLayoutManager(mTaskListManager);
-        mTaskList.addItemDecoration(
-                new DividerItemDecoration(mContext.getResources().getDrawable(R.drawable.list_divider),
-                        true, true, true, mContext.getResources().getDimensionPixelSize(R.dimen.tasks_list_padding_bottom)));
         mTaskList.setAdapter(mTaskListAdapter);
 
         mTaskList.setOnTouchListener(new View.OnTouchListener() {
@@ -252,26 +250,46 @@ public class MyTaskListFragment extends Fragment implements DataObserver, View.O
         mTaskDataSet.clear();
 
         for (Task task : WorkingData.getInstance(mContext).getTasks()) {
-            mTaskDataSet.add(task);
+            mTaskDataSet.add(new TaskListItem(task, false, false));
         }
 
-        Collections.sort(mTaskDataSet, new Comparator<Task>() {
+        Collections.sort(mTaskDataSet, new Comparator<TaskListItem>() {
             @Override
-            public int compare(Task task1, Task task2) {
-                if (task1.dueDate == null && task2.dueDate != null) {
+            public int compare(TaskListItem taskItem1, TaskListItem taskItem2) {
+                if (taskItem1.task.dueDate == null && taskItem2.task.dueDate != null) {
                     return 1;
 
-                } else if (task1.dueDate != null && task2.dueDate == null) {
+                } else if (taskItem1.task.dueDate != null && taskItem2.task.dueDate == null) {
                     return -1;
 
-                } else if (task1.dueDate == null && task2.dueDate == null) {
-                    return -((int) (task1.lastUpdatedTime - task2.lastUpdatedTime));
+                } else if (taskItem1.task.dueDate == null && taskItem2.task.dueDate == null) {
+                    return -((int) (taskItem1.task.lastUpdatedTime - taskItem2.task.lastUpdatedTime));
 
                 } else {
-                    return (int) (task1.dueDate.getTime() - task2.dueDate.getTime());
+                    return (int) (taskItem1.task.dueDate.getTime() - taskItem2.task.dueDate.getTime());
                 }
             }
         });
+
+        TaskListItem previousTaskItem = null;
+        for (int i = 0 ; i < mTaskDataSet.size() ; i++) {
+            TaskListItem taskItem = mTaskDataSet.get(i);
+            if (i == 0) {
+                taskItem.showDueDate = true;
+                previousTaskItem = taskItem;
+                continue;
+
+            } else if (i == mTaskDataSet.size() - 1) {
+                taskItem.showDueDateUnderline = true;
+                break;
+
+            } else if (!previousTaskItem.task.dueDate.equals(taskItem.task.dueDate)) {
+                taskItem.showDueDate = true;
+                previousTaskItem.showDueDateUnderline = true;
+            }
+
+            previousTaskItem = taskItem;
+        }
 
         mTaskListAdapter.notifyDataSetChanged();
         setNoTaskTextVisibility();

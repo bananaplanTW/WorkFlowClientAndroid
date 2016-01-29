@@ -38,21 +38,14 @@
     <color name="login_container_background_stroke_color">#FF979797</color>
 
     <!-- Main -->
-    <color name="working_time_container_text_color">#FF000000</color>
-    <color name="working_time_container_background_color">#FFFFFFFF</color>
     <color name="tasks_list_title_text_color">#FF4A4A4A</color>
     <color name="task_card_background_color">#FFFFFFFF</color>
     <color name="task_card_pressed_background_color">#FFF0F0F0</color>
+    <color name="task_card_due_date_normal_text_color">#FF55ACEE</color>
+    <color name="task_card_due_date_delay_text_color">#FFD9534F</color>
     <color name="title_task_name_text_color">#FF000000</color>
     <color name="title_case_name_text_color">#FF9B9B9B</color>
-    <color name="wip_task_card_button_text_color">#FF696969</color>
-    <color name="wip_task_card_no_wip_task_text_color">#FF4A4A4A</color>
-    <color name="wip_task_card_status_text_color">#FF000000</color>
     <color name="no_wip_task_card_background_color">#FF9BD5D0</color>
-    <color name="scheduled_task_card_content_text_color">#FF000000</color>
-    <color name="scheduled_task_card_index_stroke_color">#FF979797</color>
-    <color name="scheduled_task_card_status_pause_background_color">#FFF0AD4E</color>
-    <color name="scheduled_task_card_status_text_color">#FFFFFFFF</color>
     <color name="complete_task_button_background_color">#FF00B3A1</color>
 
     <!-- Detailed task -->

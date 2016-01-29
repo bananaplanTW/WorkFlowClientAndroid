@@ -38,6 +38,6 @@
         app:layout_anchorGravity="bottom|right|end"
         android:visibility="gone"/>
 
-    <!-- app:layout_behavior="com.nicloud.workflowclient.tasklist.ScrollAwareFabBehavior" -->
+    <!-- app:layout_behavior="com.nicloud.workflowclient.tasklist.main.ScrollAwareFabBehavior" -->
 
 </android.support.design.widget.CoordinatorLayout>

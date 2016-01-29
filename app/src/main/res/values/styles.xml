@@ -39,22 +39,6 @@
     </style>
 
 
-    <style name="WipTaskCardButtonStyle">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">?selectableItemBackground</item>
-    </style>
-    <style name="WipTaskCardButtonTextStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/wip_task_card_button_text_color</item>
-        <item name="android:textSize">@dimen/wip_task_card_button_text_size</item>
-        <item name="android:drawablePadding">@dimen/wip_task_card_button_drawable_padding</item>
-    </style>
-
-
     <style name="ButtonStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

@@ -30,7 +30,7 @@ import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.provider.debug.AndroidDatabaseManager;
 import com.nicloud.workflowclient.backgroundtask.receiver.ActionCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.ActionService;
-import com.nicloud.workflowclient.mytasklist.MyTaskListFragment;
+import com.nicloud.workflowclient.tasklist.my.MyTaskListFragment;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 

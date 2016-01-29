@@ -36,10 +36,8 @@
     <string name="parse_nicloud_application_client_key" translatable="false">q3j2FwlBY8pyS33yg0T7DsQ4JWK2LcFcdbtDGjl6</string>
 
     <!-- Main -->
-    <string name="wip_task_card_prepare_for_next_task">Prepare for next task</string>
-    <string name="wip_task_card_choose_task">Please choose a task from below</string>
-    <string name="wip_task_card_not_working_time">Not working time</string>
     <string name="task_list_no_task">No task</string>
+    <string name="task_card_no_due_date">No due date</string>
 
     <!-- Drawer menu -->
     <string name="drawer_open" translatable="false">drawer_open</string>

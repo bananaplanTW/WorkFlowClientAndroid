@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.utility;
+package com.nicloud.workflowclient.tasklist.main;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
@@ -24,13 +24,16 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Context mContext;
     private FragmentManager mFragmentManager;
-    private List<Task> mDataSet;
+    private List<TaskListItem> mDataSet;
 
     private class TaskViewHolder extends RecyclerView.ViewHolder {
 
         public View view;
+        public View dueDateUnderline;
+        public View contentUnderline;
         public TextView taskName;
         public TextView caseName;
+        public TextView dueDate;
         public ImageView completeButton;
 
         public TaskViewHolder(View view) {
@@ -41,8 +44,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         private void findViews(View view) {
             this.view = view;
+            dueDateUnderline = view.findViewById(R.id.task_card_due_date_underline);
+            contentUnderline = view.findViewById(R.id.task_card_content_underline);
             taskName = (TextView) view.findViewById(R.id.task_card_name);
             caseName = (TextView) view.findViewById(R.id.task_card_case_name);
+            dueDate = (TextView) view.findViewById(R.id.task_card_due_date);
             completeButton = (ImageView) view.findViewById(R.id.complete_task_button);
         }
 
@@ -51,7 +57,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View v) {
                     mContext.startActivity(
-                            DetailedTaskActivity.generateActivityIntent(mContext, mDataSet.get(getAdapterPosition()).id));
+                            DetailedTaskActivity.generateActivityIntent(mContext,
+                                                                        mDataSet.get(getAdapterPosition()).task.id));
                 }
             });
 
@@ -60,14 +67,14 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View v) {
                     Utils.showDialog(mFragmentManager,
                             DisplayDialogFragment.DialogType.COMPLETE_TASK,
-                            mDataSet.get(getAdapterPosition()).id);
+                            mDataSet.get(getAdapterPosition()).task.id);
                 }
             });
         }
     }
 
 
-    public TaskListAdapter(Context context, FragmentManager fm, List<Task> dataSet) {
+    public TaskListAdapter(Context context, FragmentManager fm, List<TaskListItem> dataSet) {
         mContext = context;
         mFragmentManager = fm;
         mDataSet = dataSet;
@@ -83,9 +90,43 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder == null) return;
 
         TaskViewHolder taskVH = (TaskViewHolder) holder;
+        Task task = mDataSet.get(position).task;
 
-        taskVH.taskName.setText(mDataSet.get(position).name);
-        taskVH.caseName.setText(mDataSet.get(position).caseName);
+        taskVH.taskName.setText(task.name);
+        taskVH.caseName.setText(task.caseName);
+
+        // Due date underline
+        if (mDataSet.get(position).showDueDateUnderline) {
+            taskVH.dueDateUnderline.setVisibility(View.VISIBLE);
+
+        } else {
+            taskVH.dueDateUnderline.setVisibility(View.GONE);
+        }
+
+        // Due date
+        if (mDataSet.get(position).showDueDate) {
+            taskVH.dueDate.setVisibility(View.VISIBLE);
+
+            if (task.dueDate != null) {
+                taskVH.dueDate.setText(Utils.timestamp2Date(task.dueDate, Utils.DATE_FORMAT_MD));
+
+                if (task.dueDate.getTime() > System.currentTimeMillis()) {
+                    taskVH.dueDate.setTextColor(
+                            mContext.getResources().getColor(R.color.task_card_due_date_normal_text_color));
+
+                } else {
+                    taskVH.dueDate.setTextColor(
+                            mContext.getResources().getColor(R.color.task_card_due_date_delay_text_color));
+                }
+
+            } else {
+                taskVH.dueDate.setText(mContext.getString(R.string.task_card_no_due_date));
+                taskVH.dueDate.setTextColor(mContext.getResources().getColor(R.color.task_card_due_date_normal_text_color));
+            }
+
+        } else {
+            taskVH.dueDate.setVisibility(View.GONE);
+        }
     }
 
     @Override

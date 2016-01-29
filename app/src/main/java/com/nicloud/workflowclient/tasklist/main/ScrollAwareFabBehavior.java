@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.mytasklist;
+package com.nicloud.workflowclient.tasklist.main;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;

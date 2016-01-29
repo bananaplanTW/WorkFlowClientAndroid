@@ -25,10 +25,8 @@
     <string name="complete_task">已完成工作: %1$s</string>
 
     <!-- Main -->
-    <string name="wip_task_card_prepare_for_next_task">準備下一項工作中</string>
-    <string name="wip_task_card_choose_task">點取下方工作開始工作</string>
-    <string name="wip_task_card_not_working_time">非上班時段</string>
     <string name="task_list_no_task">無工作</string>
+    <string name="task_card_no_due_date">無設定期限</string>
 
     <!-- Main menu -->
     <string name="main_menu_my_tasks">我的工作</string>
