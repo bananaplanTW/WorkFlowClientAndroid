@@ -163,7 +163,6 @@ public class TaskService extends IntentService {
                 cursor.close();
             }
         }
-
     }
 
     private void getTasksFromServer(JSONArray taskJsonList, ArrayList<Task> taskList, Map<String, Task> taskMap) {

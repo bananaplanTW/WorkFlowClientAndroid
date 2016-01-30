@@ -22,7 +22,6 @@ import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.data.data.data.Worker;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
@@ -32,6 +31,7 @@ import com.nicloud.workflowclient.provider.debug.AndroidDatabaseManager;
 import com.nicloud.workflowclient.backgroundtask.receiver.ActionCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.ActionService;
 import com.nicloud.workflowclient.tasklist.my.MyTaskListFragment;
+import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 
@@ -83,7 +83,7 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
         Intent intent = new Intent(mMainActivity, ActionService.class);
         intent.setAction(ActionService.ServerAction.COMPLETE_TASK);
         intent.putExtra(ActionService.ExtraKey.TASK_ID, taskId);
-        intent.putExtra(ActionService.ExtraKey.TASK_NAME, WorkingData.getInstance(mMainActivity).getTask(taskId).name);
+        intent.putExtra(ActionService.ExtraKey.TASK_NAME, DbUtils.getTaskNameById(mMainActivity, taskId));
 
         mMainActivity.startService(intent);
         Utils.dismissDialog(mFragmentManager);
