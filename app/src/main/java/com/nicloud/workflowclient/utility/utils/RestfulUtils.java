@@ -1,11 +1,10 @@
-package com.nicloud.workflowclient.data.utility;
+package com.nicloud.workflowclient.utility.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.nicloud.workflowclient.utility.utils.Utils;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;

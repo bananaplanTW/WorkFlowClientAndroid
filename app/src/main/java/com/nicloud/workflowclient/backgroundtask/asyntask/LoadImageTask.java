@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
-import com.nicloud.workflowclient.data.utility.RestfulUtils;
+import com.nicloud.workflowclient.utility.utils.RestfulUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.io.File;

@@ -8,10 +8,10 @@ import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
+import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.data.utility.RestfulUtils;
-import com.nicloud.workflowclient.data.utility.URLUtils;
+import com.nicloud.workflowclient.utility.utils.RestfulUtils;
+import com.nicloud.workflowclient.utility.utils.URLUtils;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.backgroundtask.receiver.MessageCompletedReceiver;
 import com.nicloud.workflowclient.utility.utils.Utils;

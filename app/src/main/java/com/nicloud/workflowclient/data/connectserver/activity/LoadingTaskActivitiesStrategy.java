@@ -2,9 +2,9 @@ package com.nicloud.workflowclient.data.connectserver.activity;
 
 import android.util.Log;
 
-import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
-import com.nicloud.workflowclient.data.utility.RestfulUtils;
-import com.nicloud.workflowclient.data.utility.URLUtils;
+import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
+import com.nicloud.workflowclient.utility.utils.RestfulUtils;
+import com.nicloud.workflowclient.utility.utils.URLUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

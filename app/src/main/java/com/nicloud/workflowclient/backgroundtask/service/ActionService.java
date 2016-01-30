@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
+import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.data.utility.RestfulUtils;
-import com.nicloud.workflowclient.data.utility.URLUtils;
+import com.nicloud.workflowclient.utility.utils.RestfulUtils;
+import com.nicloud.workflowclient.utility.utils.URLUtils;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
 
 import org.json.JSONException;

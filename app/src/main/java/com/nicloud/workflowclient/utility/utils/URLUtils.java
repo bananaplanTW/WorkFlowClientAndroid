@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.data.utility;
+package com.nicloud.workflowclient.utility.utils;
 
 import java.util.HashMap;
 import java.util.Iterator;

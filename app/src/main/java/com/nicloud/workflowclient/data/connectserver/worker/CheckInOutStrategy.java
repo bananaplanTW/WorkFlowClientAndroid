@@ -4,10 +4,10 @@ import android.location.Location;
 import android.util.Log;
 
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
+import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.data.connectserver.restful.IPostRequestStrategy;
-import com.nicloud.workflowclient.data.utility.RestfulUtils;
-import com.nicloud.workflowclient.data.utility.URLUtils;
+import com.nicloud.workflowclient.utility.utils.RestfulUtils;
+import com.nicloud.workflowclient.utility.utils.URLUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;

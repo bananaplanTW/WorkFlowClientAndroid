@@ -3,9 +3,8 @@ package com.nicloud.workflowclient.data.connectserver.cases;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.data.utility.RestfulUtils;
+import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
+import com.nicloud.workflowclient.utility.utils.RestfulUtils;
 
 
 /**
