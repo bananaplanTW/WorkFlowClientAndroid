@@ -32,6 +32,8 @@ import com.nicloud.workflowclient.tasklist.main.TaskListAdapter;
 import com.nicloud.workflowclient.tasklist.main.TaskListItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -286,23 +288,23 @@ public class MyTaskListFragment extends Fragment implements View.OnClickListener
             mTaskDataSet.add(new TaskListItem(task, false, false));
         }
 
-//        Collections.sort(mTaskDataSet, new Comparator<TaskListItem>() {
-//            @Override
-//            public int compare(TaskListItem taskItem1, TaskListItem taskItem2) {
-//                if (taskItem1.task.dueDate.getTime() == -1L && taskItem2.task.dueDate.getTime() != -1L) {
-//                    return 1;
-//
-//                } else if (taskItem1.task.dueDate.getTime() != -1L && taskItem2.task.dueDate.getTime() == -1L) {
-//                    return -1;
-//
-//                } else if (taskItem1.task.dueDate.getTime() == -1L && taskItem2.task.dueDate.getTime() == -1L) {
-//                    return -((int) (taskItem1.task.lastUpdatedTime - taskItem2.task.lastUpdatedTime));
-//
-//                } else {
-//                    return (int) (taskItem1.task.dueDate.getTime() - taskItem2.task.dueDate.getTime());
-//                }
-//            }
-//        });
+        Collections.sort(mTaskDataSet, new Comparator<TaskListItem>() {
+            @Override
+            public int compare(TaskListItem taskItem1, TaskListItem taskItem2) {
+                if (taskItem1.task.dueDate.getTime() == -1L && taskItem2.task.dueDate.getTime() != -1L) {
+                    return 1;
+
+                } else if (taskItem1.task.dueDate.getTime() != -1L && taskItem2.task.dueDate.getTime() == -1L) {
+                    return -1;
+
+                } else if (taskItem1.task.dueDate.getTime() == -1L && taskItem2.task.dueDate.getTime() == -1L) {
+                    return -((int) (taskItem1.task.lastUpdatedTime - taskItem2.task.lastUpdatedTime));
+
+                } else {
+                    return (int) (taskItem1.task.dueDate.getTime() - taskItem2.task.dueDate.getTime());
+                }
+            }
+        });
 
         TaskListItem previousTaskItem = null;
         for (int i = 0 ; i < mTaskDataSet.size() ; i++) {
