@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
@@ -90,9 +91,6 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
 
     public void onCompleteTaskCancel() {
         Utils.dismissDialog(mFragmentManager);
-    }
-
-    public void onRefreshInTaskList() {
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -358,7 +356,8 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
 
         if (action.equals(ActionService.ServerAction.COMPLETE_TASK)) {
             if (isActionSuccessful) {
-                ((MyTaskListFragment) mCurrentContentFragment).loadWorkerTasks();
+                // TODO: Delete task in db
+                mMainActivity.startService(TaskService.generateLoadMyTasksIntent(mMainActivity, false));
                 Utils.showCompleteTaskToast(mMainActivity, taskName);
 
             } else {

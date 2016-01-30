@@ -107,7 +107,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (mDataSet.get(position).showDueDate) {
             taskVH.dueDate.setVisibility(View.VISIBLE);
 
-            if (task.dueDate != null) {
+            if (task.dueDate.getTime() == -1L || task.dueDate == null) {
+                taskVH.dueDate.setText(mContext.getString(R.string.task_card_no_due_date));
+                taskVH.dueDate.setTextColor(mContext.getResources().getColor(R.color.task_card_due_date_normal_text_color));
+
+            } else {
                 taskVH.dueDate.setText(Utils.timestamp2Date(task.dueDate, Utils.DATE_FORMAT_MD));
 
                 if (task.dueDate.getTime() > System.currentTimeMillis()) {
@@ -118,10 +122,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     taskVH.dueDate.setTextColor(
                             mContext.getResources().getColor(R.color.task_card_due_date_delay_text_color));
                 }
-
-            } else {
-                taskVH.dueDate.setText(mContext.getString(R.string.task_card_no_due_date));
-                taskVH.dueDate.setTextColor(mContext.getResources().getColor(R.color.task_card_due_date_normal_text_color));
             }
 
         } else {

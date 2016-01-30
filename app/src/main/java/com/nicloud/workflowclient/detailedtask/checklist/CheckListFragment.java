@@ -77,7 +77,7 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
         super.onActivityCreated(savedInstanceState);
         mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
         mDataSet.clear();
-        mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
+        //mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
         mActionCompletedReceiver = new ActionCompletedReceiver(this);
         initialize();
     }
@@ -159,7 +159,7 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
             boolean checked = intent.getBooleanExtra(ActionService.ExtraKey.CHECK_ITEM_CHECKED, false);
 
             if (isActionSuccessful) {
-                WorkingData.getInstance(mContext).getTask(taskId).checkList.get(index).isChecked = checked;
+                //WorkingData.getInstance(mContext).getTask(taskId).checkList.get(index).isChecked = checked;
             } else {
                 Utils.showInternetConnectionWeakToast(mContext);
             }
@@ -171,7 +171,7 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
     @Override
     public void swapData(List<BaseData> dataSet) {
         mDataSet.clear();
-        mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
+        //mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
         mCheckListAdapter.notifyDataSetChanged();
 
         setNoCheckItemTextVisibility();

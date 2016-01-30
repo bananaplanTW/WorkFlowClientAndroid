@@ -63,7 +63,8 @@ public class WorkFlowContract {
         public static final String CASE_ID = "case_id";
         public static final String CASE_NAME = "case_name";
         public static final String WORKER_ID = "worker_id";
-        public static final String CREATED_TIME = "created_time";
+        public static final String DUE_DATE = "due_date";
+        public static final String UPDATED_TIME = "updated_time";
     }
 
     public static final class CheckList implements BaseColumns {

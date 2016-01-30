@@ -1,11 +1,18 @@
 package com.nicloud.workflowclient.tasklist.my;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,27 +23,54 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.connectserver.task.LoadingWorkerTasks;
+import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
+import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.data.data.observer.DataObserver;
+import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.tasklist.main.TaskListAdapter;
 import com.nicloud.workflowclient.tasklist.main.TaskListItem;
-import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by logicmelody on 2015/12/21.
  */
-public class MyTaskListFragment extends Fragment implements DataObserver, View.OnClickListener {
+public class MyTaskListFragment extends Fragment implements View.OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor>, TaskCompletedReceiver.OnLoadTaskCompletedListener {
 
-    public interface OnRefreshInTaskList {
-        void onRefreshInTaskList();
-    }
+    private static final int LOADER_ID = 573;
+
+    private static final String[] mProjection = new String[] {
+            WorkFlowContract.Task._ID,
+            WorkFlowContract.Task.TASK_ID,
+            WorkFlowContract.Task.TASK_NAME,
+            WorkFlowContract.Task.TASK_DESCRIPTION,
+            WorkFlowContract.Task.CASE_ID,
+            WorkFlowContract.Task.CASE_NAME,
+            WorkFlowContract.Task.WORKER_ID,
+            WorkFlowContract.Task.DUE_DATE,
+            WorkFlowContract.Task.UPDATED_TIME
+    };
+    private static final int ID = 0;
+    private static final int TASK_ID = 1;
+    private static final int TASK_NAME = 2;
+    private static final int TASK_DESCRIPTION = 3;
+    private static final int CASE_ID = 4;
+    private static final int CASE_NAME = 5;
+    private static final int WORKER_ID = 6;
+    private static final int DUE_DATE = 7;
+    private static final int UPDATED_TIME = 8;
+
+    private static final String mSelection = WorkFlowContract.Task.WORKER_ID + " = ?";
+
+    private static String[] mSelectionArgs;
+
+    private static final String mSortOrder = WorkFlowContract.Task.DUE_DATE;
 
     private Context mContext;
     private FragmentManager mFm;
@@ -49,50 +83,19 @@ public class MyTaskListFragment extends Fragment implements DataObserver, View.O
 
     private TextView mNoTaskText;
 
+    private TaskCompletedReceiver mTaskCompletedReceiver;
+
     private List<TaskListItem> mTaskDataSet = new ArrayList<>();
 
     private boolean mNeedRefresh = false;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private OnRefreshInTaskList mOnRefreshInTaskList;
-
-    private LoadingWorkerTasks.OnFinishLoadingDataListener mOnFinishLoadingDataListener = new LoadingWorkerTasks.OnFinishLoadingDataListener() {
-        @Override
-        public void onFinishLoadingData() {
-            if (!WorkingData.getInstance(mContext).hasLoadedTasks()) {
-                forceHideRefreshSpinner();
-                WorkingData.getInstance(mContext).setHasLoadedTasks(true);
-
-            } else {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-
-            //mFab.show();
-            WorkingData.getInstance(mContext).updateData();
-        }
-
-        @Override
-        public void onFailLoadingData(boolean isFailCausedByInternet) {
-            showInternetConnectionWeakToast();
-        }
-    };
-
-
-    public void loadWorkerTasks() {
-        new LoadingWorkerTasks(mContext, mOnFinishLoadingDataListener).execute();
-    }
-
-    private void showInternetConnectionWeakToast() {
-        mSwipeRefreshLayout.setRefreshing(false);
-        Utils.showInternetConnectionWeakToast(mContext);
-    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        mOnRefreshInTaskList = (OnRefreshInTaskList) context;
     }
 
     @Nullable
@@ -102,35 +105,39 @@ public class MyTaskListFragment extends Fragment implements DataObserver, View.O
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initialize();
+
+        if (!WorkingData.getInstance(mContext).hasLoadedTasks()) {
+            loadDataInFirstLaunch();
+        }
+
+        getLoaderManager().initLoader(LOADER_ID, null, this);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        WorkingData.getInstance(mContext).registerDataObserver(this);
+        IntentFilter intentFilter = new IntentFilter(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mTaskCompletedReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        WorkingData.getInstance(mContext).removeDataObserver(this);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initialize();
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mTaskCompletedReceiver);
     }
 
     private void initialize() {
         mFm = getFragmentManager();
+        mSelectionArgs = new String[] {WorkingData.getUserId()};
+        mTaskCompletedReceiver = new TaskCompletedReceiver(this);
+
         findViews();
         setupViews();
         setupTasksList();
         setupSwipeRefresh();
-
-        if (!WorkingData.getInstance(mContext).hasLoadedTasks()) {
-            loadDataInFirstLaunch();
-        } else {
-            setScheduledTasksData();
-        }
     }
 
     private void findViews() {
@@ -199,8 +206,7 @@ public class MyTaskListFragment extends Fragment implements DataObserver, View.O
 
             @Override
             public void onRefresh() {
-                mOnRefreshInTaskList.onRefreshInTaskList();
-                loadWorkerTasks();
+                mContext.startService(TaskService.generateLoadMyTasksIntent(mContext, false));
             }
         });
 
@@ -212,7 +218,7 @@ public class MyTaskListFragment extends Fragment implements DataObserver, View.O
 
     private void loadDataInFirstLaunch() {
         forceShowRefreshSpinner();
-        loadWorkerTasks();
+        mContext.startService(TaskService.generateLoadMyTasksIntent(mContext, true));
     }
 
     /**
@@ -242,34 +248,63 @@ public class MyTaskListFragment extends Fragment implements DataObserver, View.O
     }
 
     @Override
-    public void updateData() {
-        setScheduledTasksData();
+    public void onClick(View v) {
+
     }
 
-    private void setScheduledTasksData() {
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader cursorLoader
+                = new CursorLoader(mContext, WorkFlowContract.Task.CONTENT_URI,
+                mProjection, mSelection, mSelectionArgs, mSortOrder);
+
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) return;
+
+        setTaskListData(cursor);
+    }
+
+    private void setTaskListData(Cursor cursor) {
         mTaskDataSet.clear();
 
-        for (Task task : WorkingData.getInstance(mContext).getTasks()) {
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(ID);
+            String taskId = cursor.getString(TASK_ID);
+            String taskName = cursor.getString(TASK_NAME);
+            String taskDescription = cursor.getString(TASK_DESCRIPTION);
+            String caseId = cursor.getString(CASE_ID);
+            String caseName = cursor.getString(CASE_NAME);
+            String workerId = cursor.getString(WORKER_ID);
+            long dueDate = cursor.getLong(DUE_DATE);
+            long lastUpdatedTime = cursor.getLong(UPDATED_TIME);
+
+            Task task = new Task(taskId, taskName, taskDescription, caseName,
+                                 caseId, workerId, new Date(dueDate), lastUpdatedTime);
+
             mTaskDataSet.add(new TaskListItem(task, false, false));
         }
 
-        Collections.sort(mTaskDataSet, new Comparator<TaskListItem>() {
-            @Override
-            public int compare(TaskListItem taskItem1, TaskListItem taskItem2) {
-                if (taskItem1.task.dueDate == null && taskItem2.task.dueDate != null) {
-                    return 1;
-
-                } else if (taskItem1.task.dueDate != null && taskItem2.task.dueDate == null) {
-                    return -1;
-
-                } else if (taskItem1.task.dueDate == null && taskItem2.task.dueDate == null) {
-                    return -((int) (taskItem1.task.lastUpdatedTime - taskItem2.task.lastUpdatedTime));
-
-                } else {
-                    return (int) (taskItem1.task.dueDate.getTime() - taskItem2.task.dueDate.getTime());
-                }
-            }
-        });
+//        Collections.sort(mTaskDataSet, new Comparator<TaskListItem>() {
+//            @Override
+//            public int compare(TaskListItem taskItem1, TaskListItem taskItem2) {
+//                if (taskItem1.task.dueDate.getTime() == -1L && taskItem2.task.dueDate.getTime() != -1L) {
+//                    return 1;
+//
+//                } else if (taskItem1.task.dueDate.getTime() != -1L && taskItem2.task.dueDate.getTime() == -1L) {
+//                    return -1;
+//
+//                } else if (taskItem1.task.dueDate.getTime() == -1L && taskItem2.task.dueDate.getTime() == -1L) {
+//                    return -((int) (taskItem1.task.lastUpdatedTime - taskItem2.task.lastUpdatedTime));
+//
+//                } else {
+//                    return (int) (taskItem1.task.dueDate.getTime() - taskItem2.task.dueDate.getTime());
+//                }
+//            }
+//        });
 
         TaskListItem previousTaskItem = null;
         for (int i = 0 ; i < mTaskDataSet.size() ; i++) {
@@ -296,7 +331,20 @@ public class MyTaskListFragment extends Fragment implements DataObserver, View.O
     }
 
     @Override
-    public void onClick(View v) {
+    public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onLoadTaskCompleted(Intent intent) {
+        String from = intent.getStringExtra(TaskCompletedReceiver.EXTRA_FROM);
+
+        if (TaskCompletedReceiver.From.MY_TASK_FIRST.equals(from)) {
+            forceHideRefreshSpinner();
+            WorkingData.getInstance(mContext).setHasLoadedTasks(true);
+
+        } else if (TaskCompletedReceiver.From.MY_TASK.equals(from)) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 }

@@ -20,7 +20,7 @@ public class JsonUtils {
     }
 
     public static long getLongFromJson(JSONObject jsonObject, String key) throws JSONException {
-        return jsonObject.has(key) ? jsonObject.getLong(key) : 0L;
+        return jsonObject.has(key) ? jsonObject.getLong(key) : -1L;
     }
 
     public static boolean getBooleanFromJson(JSONObject jsonObject, String key) throws JSONException {

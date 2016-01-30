@@ -16,15 +16,7 @@ public class Task extends IdData {
     public String caseName;
     public String workerId;
 
-    public Date startDate;  // The starting working date of this task
     public Date dueDate;
-    public Date assignDate;
-
-    public long startTime = 0L;  // The starting time of this working section
-    public long spentTime = 0L;
-    public long nextNotifyTime = 0L;
-
-    public ArrayList<CheckItem> checkList = new ArrayList<>();
 
 
     public Task(String title) {
@@ -38,8 +30,7 @@ public class Task extends IdData {
                 String caseId,
                 String workerId,
                 Date dueDate,
-                long lastUpdatedTime,
-                ArrayList<CheckItem> checkList) {
+                long lastUpdatedTime) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -48,7 +39,6 @@ public class Task extends IdData {
         this.workerId = workerId;
         this.dueDate = dueDate;
         this.lastUpdatedTime = lastUpdatedTime;
-        this.checkList = checkList;
     }
 
     public Task(String id, String name) {
@@ -64,6 +54,5 @@ public class Task extends IdData {
         this.workerId = task.workerId;
         this.dueDate = task.dueDate;
         this.lastUpdatedTime = task.lastUpdatedTime;
-        this.checkList = task.checkList;
     }
 }

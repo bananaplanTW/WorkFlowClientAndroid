@@ -15,8 +15,8 @@ import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.tasklist.my.MyTaskListFragment;
 
-public class MainActivity extends AppCompatActivity implements MyTaskListFragment.OnRefreshInTaskList,
-        MainMenuFragment.OnClickMainMenuItemListener, MessageMenuFragment.OnClickMessageMenuWorkerListener,
+public class MainActivity extends AppCompatActivity implements MainMenuFragment.OnClickMainMenuItemListener,
+        MessageMenuFragment.OnClickMessageMenuWorkerListener,
         DisplayDialogFragment.OnDialogActionListener {
 
     private UIController mUIController;
@@ -80,11 +80,6 @@ public class MainActivity extends AppCompatActivity implements MyTaskListFragmen
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onRefreshInTaskList() {
-        mUIController.onRefreshInTaskList();
     }
 
     @Override

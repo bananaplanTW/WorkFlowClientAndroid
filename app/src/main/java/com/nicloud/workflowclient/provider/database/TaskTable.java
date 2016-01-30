@@ -17,7 +17,8 @@ public class TaskTable {
             + WorkFlowContract.Task.CASE_ID + " TEXT NOT NULL, "
             + WorkFlowContract.Task.CASE_NAME + " TEXT NOT NULL, "
             + WorkFlowContract.Task.WORKER_ID + " TEXT, "
-            + WorkFlowContract.Task.CREATED_TIME + " INTEGER NOT NULL"
+            + WorkFlowContract.Task.DUE_DATE + " INTEGER, "
+            + WorkFlowContract.Task.UPDATED_TIME + " INTEGER NOT NULL"
             + ");";
 
     public static void onCreate(SQLiteDatabase database) {

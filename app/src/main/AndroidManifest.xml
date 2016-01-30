@@ -79,6 +79,9 @@
         <service
             android:name=".backgroundtask.service.CaseDiscussionService"
             android:exported="false" />
+        <service
+            android:name=".backgroundtask.service.TaskService"
+            android:exported="false" />
 
         <!-- Parse -->
         <service android:name="com.parse.PushService" />
