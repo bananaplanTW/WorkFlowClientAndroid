@@ -88,7 +88,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
             mTaskDescription.setText(mTask.description);
         }
 
-        if (mTask.dueDate == null) {
+        if (mTask.dueDate.getTime() == -1L) {
             mTaskDueDate.setText(mContext.getString(R.string.task_info_task_no_due_date));
         } else {
             mTaskDueDate.setText(Utils.timestamp2Date(mTask.dueDate, Utils.DATE_FORMAT_YMD));
