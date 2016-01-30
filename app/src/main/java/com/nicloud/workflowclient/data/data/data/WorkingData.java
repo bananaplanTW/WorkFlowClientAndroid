@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.nicloud.workflowclient.data.data.observer.DataObserver;
 import com.nicloud.workflowclient.data.data.observer.DataSubject;
-import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ public final class WorkingData implements DataSubject {
     public static final String AUTH_TOKEN = "authToken";
 
     private volatile static WorkingData sWorkingData = null;
-    private static int sDataIdCount = -1;
 
     private Context mContext;
 
@@ -85,49 +83,6 @@ public final class WorkingData implements DataSubject {
 
     public Worker getLoginWorker() {
         return mLoginWorker;
-    }
-
-    public void addTask(Task task) {
-        mTasks.add(task);
-    }
-
-    public void addAllTasks(List<Task> scheduledTasks) {
-        mTasks.addAll(scheduledTasks);
-    }
-
-    public void clearTasks() {
-        mTasks.clear();
-    }
-
-    public void removeTask(int position) {
-        mTasks.remove(position);
-    }
-
-    public List<Task> getTasks() {
-        return mTasks;
-    }
-
-    public Task getTask(String taskId) {
-        for (Task task : mTasks) {
-            if (Utils.isSameId(task.id, taskId)) {
-                return task;
-            }
-        }
-
-        return null;
-    }
-
-    public void resetTasks() {
-        mTasks.clear();
-    }
-
-    public void updateTask(Task task, String taskId) {
-        for (Task scheduledTask : mTasks) {
-            if (Utils.isSameId(scheduledTask.id, taskId)) {
-                scheduledTask.update(task);
-                return;
-            }
-        }
     }
 
     public void addCase(Case aCase) {

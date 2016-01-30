@@ -25,7 +25,6 @@ import com.nicloud.workflowclient.data.connectserver.task.LoadingTaskById;
 import com.nicloud.workflowclient.data.data.activity.ActivityDataFactory;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.data.Task;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
 import com.nicloud.workflowclient.detailedtask.filelog.FileLogFragment;
 import com.nicloud.workflowclient.detailedtask.taskinfo.TaskInfoFragment;
@@ -35,6 +34,7 @@ import com.nicloud.workflowclient.backgroundtask.service.ActionService;
 import com.nicloud.workflowclient.backgroundtask.receiver.UploadCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
 import com.nicloud.workflowclient.utility.MainTabContentFactory;
+import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import org.json.JSONArray;
@@ -117,7 +117,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     private void initialize() {
         mFragmentManager = getSupportFragmentManager();
-        mTask = WorkingData.getInstance(this).getTask(getIntent().getStringExtra(EXTRA_TASK_ID));
+        mTask = DbUtils.getTaskById(this, getIntent().getStringExtra(EXTRA_TASK_ID));
         mUploadCompletedReceiver = new UploadCompletedReceiver(this);
         findViews();
         setupActionBar();
@@ -396,7 +396,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         Intent intent = new Intent(this, ActionService.class);
         intent.setAction(ActionService.ServerAction.COMPLETE_TASK);
         intent.putExtra(ActionService.ExtraKey.TASK_ID, taskId);
-        intent.putExtra(ActionService.ExtraKey.TASK_NAME, WorkingData.getInstance(this).getTask(taskId).name);
+        intent.putExtra(ActionService.ExtraKey.TASK_NAME, DbUtils.getTaskNameById(this, taskId));
 
         startService(intent);
         Utils.dismissDialog(mFragmentManager);

@@ -24,6 +24,7 @@ import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
 import com.nicloud.workflowclient.data.data.data.Case;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.login.LoginActivity;
+import com.nicloud.workflowclient.provider.contentprovider.WorkFlowDatabaseHelper;
 import com.nicloud.workflowclient.utility.utils.Utils;
 import com.parse.ParsePush;
 
@@ -150,7 +151,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
                 ParsePush.unsubscribeInBackground("user_" + WorkingData.getUserId());
                 //ParseUtils.removeLoginWorkerToParse();
 
-                WorkingData.getInstance(mContext).resetTasks();
+                WorkFlowDatabaseHelper.deleteAllTablesData(mContext);
                 WorkingData.resetAccount();
 
                 SharedPreferences sharedPreferences = mContext.getSharedPreferences(WorkingData.SHARED_PREFERENCE_KEY, 0);

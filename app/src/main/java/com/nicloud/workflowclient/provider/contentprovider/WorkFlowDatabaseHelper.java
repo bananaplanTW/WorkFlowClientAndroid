@@ -12,6 +12,7 @@ import com.nicloud.workflowclient.provider.database.CheckListTable;
 import com.nicloud.workflowclient.provider.database.DiscussionTable;
 import com.nicloud.workflowclient.provider.database.MessageTable;
 import com.nicloud.workflowclient.provider.database.TaskTable;
+import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,14 @@ public class WorkFlowDatabaseHelper extends SQLiteOpenHelper {
         }
 
         return sWorkFlowDatabaseHelper;
+    }
+
+    public static void deleteAllTablesData(Context context) {
+        SQLiteDatabase db = WorkFlowDatabaseHelper.getInstance(context).getWritableDatabase();
+        db.delete(WorkFlowContract.Message.TABLE_NAME, null, null);
+        db.delete(WorkFlowContract.Discussion.TABLE_NAME, null, null);
+        db.delete(WorkFlowContract.Task.TABLE_NAME, null, null);
+        db.delete(WorkFlowContract.CheckList.TABLE_NAME, null, null);
     }
 
     @Override

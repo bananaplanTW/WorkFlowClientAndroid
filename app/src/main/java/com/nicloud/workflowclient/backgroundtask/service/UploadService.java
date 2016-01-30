@@ -14,6 +14,7 @@ import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.utility.RestfulUtils;
 import com.nicloud.workflowclient.data.utility.URLUtils;
+import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.NotificationUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
@@ -132,7 +133,7 @@ public class UploadService extends IntentService {
         NotificationCompat.Builder builder
                 = NotificationUtils.
                 generateUploadNotificationBuilder(this,
-                        WorkingData.getInstance(this).getTask(taskId).name, getString(R.string.add_log_uploading_text));
+                        DbUtils.getTaskNameById(this, taskId), getString(R.string.add_log_uploading_text));
         mNotificationManager.notify(notificationId, builder.build());
 
         HashMap<String, String> headers = new HashMap<>();
@@ -187,7 +188,7 @@ public class UploadService extends IntentService {
 
         NotificationCompat.Builder builder
                 = NotificationUtils.
-                generateUploadNotificationBuilder(this, WorkingData.getInstance(this).getTask(taskId).name,
+                generateUploadNotificationBuilder(this, DbUtils.getTaskNameById(this, taskId),
                         getString(R.string.uploading_image));
         mNotificationManager.notify(notificationId, builder.build());
 
@@ -241,7 +242,7 @@ public class UploadService extends IntentService {
         NotificationCompat.Builder builder
                 = NotificationUtils.
                 generateUploadNotificationBuilder(this,
-                        WorkingData.getInstance(this).getTask(taskId).name, getString(R.string.uploading_file));
+                        DbUtils.getTaskNameById(this, taskId), getString(R.string.uploading_file));
         mNotificationManager.notify(notificationId, builder.build());
 
         HashMap<String, String> headers = new HashMap<>();
