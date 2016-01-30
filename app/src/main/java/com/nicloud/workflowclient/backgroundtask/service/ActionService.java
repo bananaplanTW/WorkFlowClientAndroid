@@ -9,6 +9,7 @@ import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.utility.RestfulUtils;
 import com.nicloud.workflowclient.data.utility.URLUtils;
+import com.nicloud.workflowclient.utility.utils.DbUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,13 +62,8 @@ public class ActionService extends IntentService {
 
     private void checkItem(Intent intent) {
         String taskId = intent.getStringExtra(ExtraKey.TASK_ID);
-        int index = intent.getIntExtra(ExtraKey.CHECK_ITEM_INDEX, 0);
+        int position = intent.getIntExtra(ExtraKey.CHECK_ITEM_INDEX, 0);
         boolean checked = intent.getBooleanExtra(ExtraKey.CHECK_ITEM_CHECKED, false);
-
-        Intent broadcastIntent = new Intent(ServerAction.CHECK_ITEM);
-        broadcastIntent.putExtra(ExtraKey.TASK_ID, taskId);
-        broadcastIntent.putExtra(ExtraKey.CHECK_ITEM_INDEX, index);
-        broadcastIntent.putExtra(ExtraKey.CHECK_ITEM_CHECKED, checked);
 
         try {
             HashMap<String, String> headers = new HashMap<>();
@@ -76,7 +72,7 @@ public class ActionService extends IntentService {
 
             HashMap<String, String> bodies = new HashMap<>();
             bodies.put("td", taskId);
-            bodies.put("tx", String.valueOf(index));
+            bodies.put("tx", String.valueOf(position));
             bodies.put("tc", String.valueOf(checked));
 
             String urlString = URLUtils
@@ -86,24 +82,16 @@ public class ActionService extends IntentService {
             if (responseString != null) {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
-                    broadcastIntent.putExtra(ExtraKey.ACTION_SUCCESSFUL, true);
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-
+                    DbUtils.setCheckItem(this, taskId, position, checked);
                     return;
                 }
             }
         }  catch (JSONException e) {
-            broadcastIntent.putExtra(ExtraKey.ACTION_SUCCESSFUL, false);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-
             Log.e(TAG, "Exception in checkitem() in ActionService");
             e.printStackTrace();
 
             return;
         }
-
-        broadcastIntent.putExtra(ExtraKey.ACTION_SUCCESSFUL, false);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
     }
 
     private void completeTask(Intent intent) {

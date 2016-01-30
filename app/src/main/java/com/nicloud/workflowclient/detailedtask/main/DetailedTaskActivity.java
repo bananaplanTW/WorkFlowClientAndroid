@@ -18,13 +18,14 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
+import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.data.connectserver.activity.ILoadingActivitiesStrategy;
 import com.nicloud.workflowclient.data.connectserver.activity.LoadingActivitiesAsyncTask;
 import com.nicloud.workflowclient.data.connectserver.activity.LoadingTaskActivitiesStrategy;
-import com.nicloud.workflowclient.data.connectserver.task.LoadingTaskById;
 import com.nicloud.workflowclient.data.data.activity.ActivityDataFactory;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
-import com.nicloud.workflowclient.data.data.data.Task;
+import com.nicloud.workflowclient.tasklist.main.Task;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
 import com.nicloud.workflowclient.detailedtask.filelog.FileLogFragment;
 import com.nicloud.workflowclient.detailedtask.taskinfo.TaskInfoFragment;
@@ -46,8 +47,8 @@ import java.util.List;
 
 public class DetailedTaskActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
         LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnRefreshDetailedTask,
-        LoadingTaskById.OnFinishLoadingTaskByIdListener, UploadCompletedReceiver.OnUploadCompletedListener,
-        DisplayDialogFragment.OnDialogActionListener, ViewPager.OnPageChangeListener {
+        UploadCompletedReceiver.OnUploadCompletedListener, DisplayDialogFragment.OnDialogActionListener,
+        ViewPager.OnPageChangeListener, TaskCompletedReceiver.OnLoadTaskCompletedListener {
 
     public static final String EXTRA_TASK_ID = "DetailedTaskActivity_extra_task_id";
 
@@ -362,19 +363,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     @Override
     public void onRefreshDetailedTask() {
         loadTaskActivities();
-        new LoadingTaskById(this, mTask.id, this).execute();
-    }
-
-    @Override
-    public void onFinishLoadingTaskById() {
-        updateListAccordingToTab();
-        ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
-    }
-
-    @Override
-    public void onFailLoadingTaskById(boolean isFailCausedByInternet) {
-        Utils.showInternetConnectionWeakToast(this);
-        ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
+        startService(TaskService.generateLoadTaskByIdIntent(this, mTask.id));
     }
 
     @Override
@@ -387,7 +376,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
             loadTaskActivities();
 
         } else if (UploadService.UploadAction.CHECK_ITEM.equals(fromAction) && isUploadSuccessful) {
-            new LoadingTaskById(this, mTask.id, this).execute();
+            startService(TaskService.generateLoadTaskByIdIntent(this, mTask.id));
         }
     }
 
@@ -421,5 +410,11 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onLoadTaskCompleted(Intent intent) {
+        updateListAccordingToTab();
+        ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
     }
 }

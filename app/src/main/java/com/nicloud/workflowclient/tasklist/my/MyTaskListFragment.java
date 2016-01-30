@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.TaskService;
-import com.nicloud.workflowclient.data.data.data.Task;
+import com.nicloud.workflowclient.tasklist.main.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.tasklist.main.TaskListAdapter;
@@ -281,7 +281,7 @@ public class MyTaskListFragment extends Fragment implements View.OnClickListener
             long lastUpdatedTime = cursor.getLong(UPDATED_TIME);
 
             Task task = new Task(taskId, taskName, taskDescription, caseName,
-                                 caseId, workerId, new Date(dueDate), lastUpdatedTime);
+                                 caseId, workerId, new Date(dueDate), null, lastUpdatedTime);
 
             mTaskDataSet.add(new TaskListItem(task, false, false));
         }

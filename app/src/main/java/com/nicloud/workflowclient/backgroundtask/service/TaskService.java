@@ -1,29 +1,22 @@
 package com.nicloud.workflowclient.backgroundtask.service;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.backgroundtask.receiver.MessageCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
 import com.nicloud.workflowclient.data.connectserver.LoadingDataUtils;
-import com.nicloud.workflowclient.data.data.data.Task;
+import com.nicloud.workflowclient.detailedtask.checklist.CheckItem;
+import com.nicloud.workflowclient.tasklist.main.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.utility.RestfulUtils;
-import com.nicloud.workflowclient.data.utility.URLUtils;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.utils.JsonUtils;
-import com.nicloud.workflowclient.utility.utils.NotificationUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import org.json.JSONArray;
@@ -31,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,10 +37,12 @@ public class TaskService extends IntentService {
 
     public static final class Action {
         public static final String LOAD_MY_TASKS = "task_service_load_my_tasks";
+        public static final String LOAD_TASK_BY_ID = "task_service_load_task_by_id";
     }
 
     public static final class ExtraKey {
         public static final String BOOLEAN_FIRST_LOAD_MY_TASKS = "extra_first_load_my_tasks";
+        public static final String STRING_TASK_ID = "extra_task_id";
     }
 
     private static final String[] mProjection = new String[] {
@@ -86,12 +80,23 @@ public class TaskService extends IntentService {
         return intent;
     }
 
+    public static Intent generateLoadTaskByIdIntent(Context context, String taskId) {
+        Intent intent = new Intent(context, TaskService.class);
+        intent.setAction(Action.LOAD_TASK_BY_ID);
+        intent.putExtra(ExtraKey.STRING_TASK_ID, taskId);
+
+        return intent;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
 
         if (Action.LOAD_MY_TASKS.equals(action)) {
             loadMyTasks(intent);
+
+        } else if (Action.LOAD_TASK_BY_ID.equals(action)) {
+            loadTaskById(intent);
         }
     }
 
@@ -125,8 +130,45 @@ public class TaskService extends IntentService {
                 getMyTasksFromDb(WorkingData.getUserId(), tasksFromDb, tasksFromDbMap);
                 getTasksFromServer(taskJsonList, tasksFromServer, tasksFromServerMap);
 
-                insertAndUpdateTaskToDb(tasksFromDbMap, tasksFromServer);
-                deleteTaskFromDb(tasksFromServerMap, tasksFromDb);
+                insertAndUpdateTasksToDb(tasksFromDbMap, tasksFromServer);
+                deleteTasksFromDb(tasksFromServerMap, tasksFromDb);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            }
+
+        } else {
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+        }
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+    }
+
+    private void loadTaskById(Intent intent) {
+        String taskId = intent.getStringExtra(ExtraKey.STRING_TASK_ID);
+
+        Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
+        broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.DETAILED_TASK);
+
+        if (RestfulUtils.isConnectToInternet(this)) {
+            try {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-user-id", WorkingData.getUserId());
+                headers.put("x-auth-token", WorkingData.getAuthToken());
+
+                String taskJsonString =
+                        RestfulUtils.restfulGetRequest(getTaskByIdUrl(taskId), headers);
+
+                JSONObject taskJson = new JSONObject(taskJsonString).getJSONObject("result");
+
+                if (taskJson == null) return;
+
+                Task task = Task.retrieveTaskFromJson(taskJson);
+
+                updateTaskToDb(task);
+                updateCheckListToDb(task.id, task.checkList);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -169,18 +211,8 @@ public class TaskService extends IntentService {
         for (int i = 0 ; i < taskJsonList.length() ; i++) {
             try {
                 JSONObject jsonObject = taskJsonList.getJSONObject(i);
+                Task task = Task.retrieveTaskFromJson(jsonObject);
 
-                String taskId = jsonObject.getString("_id");
-                String name = jsonObject.getString("name");
-                String description = JsonUtils.getStringFromJson(jsonObject, "description");
-                String caseName = jsonObject.getString("caseName");
-                String caseId = jsonObject.getString("caseId");
-                String workerId = JsonUtils.getStringFromJson(jsonObject, "employeeId");
-                long dueDate = JsonUtils.getLongFromJson(jsonObject, "dueDate");
-                long lastUpdatedTime = jsonObject.getLong("updatedAt");
-
-                Task task = new Task(taskId, name, description, caseName, caseId,
-                                     workerId, new Date(dueDate), lastUpdatedTime);
                 taskList.add(task);
                 taskMap.put(task.id, task);
 
@@ -194,35 +226,41 @@ public class TaskService extends IntentService {
         return LoadingDataUtils.WorkingDataUrl.TASKS_BY_WORKER + workerId;
     }
 
-    private void insertAndUpdateTaskToDb(Map<String, TaskInDb> tasksFromDbMap, List<Task> tasksFromServer) {
+    private String getTaskByIdUrl(String taskId) {
+        return LoadingDataUtils.WorkingDataUrl.TASK_BY_ID + taskId;
+    }
+
+    private void insertAndUpdateTasksToDb(Map<String, TaskInDb> tasksFromDbMap, List<Task> tasksFromServer) {
         for (Task task : tasksFromServer) {
             if (!tasksFromDbMap.containsKey(task.id)) {
                 insertTaskToDb(task);
+                insertCheckListToDb(task.checkList);
 
             } else {
                 if (task.lastUpdatedTime <= tasksFromDbMap.get(task.id).lastUpdatedTime) continue;
 
-                updateTaskToDb(task.id, task);
+                updateTaskToDb(task);
+                updateCheckListToDb(task.id, task.checkList);
             }
         }
     }
 
-    private void deleteTaskFromDb(Map<String, Task> tasksFromServerMap, ArrayList<TaskInDb> tasksFromDb) {
+    private void deleteTasksFromDb(Map<String, Task> tasksFromServerMap, ArrayList<TaskInDb> tasksFromDb) {
         for (TaskInDb taskInDb : tasksFromDb) {
             if (!tasksFromServerMap.containsKey(taskInDb.taskId)) {
                 deleteTaskFromDb(taskInDb.taskId);
+                deleteCheckListFromDb(taskInDb.taskId);
             }
         }
     }
 
     private void insertTaskToDb(Task task) {
-        // TODO: Insert check list table
         getContentResolver().insert(WorkFlowContract.Task.CONTENT_URI, convertTaskToContentValues(task));
     }
 
-    private void updateTaskToDb(String taskId, Task task) {
+    private void updateTaskToDb(Task task) {
         String selection =  WorkFlowContract.Task.TASK_ID + " = ?";
-        String[] selectionArgs = new String[] {taskId};
+        String[] selectionArgs = new String[] {task.id};
 
         getContentResolver().update(WorkFlowContract.Task.CONTENT_URI,
                 convertTaskToContentValues(task), selection, selectionArgs);
@@ -233,6 +271,25 @@ public class TaskService extends IntentService {
         String[] selectionArgs = new String[] {taskId};
 
         getContentResolver().delete(WorkFlowContract.Task.CONTENT_URI, selection, selectionArgs);
+    }
+
+    private void insertCheckListToDb(List<CheckItem> checkList) {
+        for (CheckItem checkItem : checkList) {
+            getContentResolver().insert(WorkFlowContract.CheckList.CONTENT_URI,
+                                        convertCheckItemToContentValues(checkItem));
+        }
+    }
+
+    private void updateCheckListToDb(String taskId, List<CheckItem> checkList) {
+        deleteCheckListFromDb(taskId);
+        insertCheckListToDb(checkList);
+    }
+
+    private void deleteCheckListFromDb(String taskId) {
+        String selection =  WorkFlowContract.CheckList.TASK_ID + " = ?";
+        String[] selectionArgs = new String[] {taskId};
+
+        getContentResolver().delete(WorkFlowContract.CheckList.CONTENT_URI, selection, selectionArgs);
     }
 
     private ContentValues convertTaskToContentValues(Task task) {
@@ -246,6 +303,17 @@ public class TaskService extends IntentService {
         values.put(WorkFlowContract.Task.WORKER_ID, task.workerId);
         values.put(WorkFlowContract.Task.DUE_DATE, task.dueDate.getTime());
         values.put(WorkFlowContract.Task.UPDATED_TIME, task.lastUpdatedTime);
+
+        return values;
+    }
+
+    private ContentValues convertCheckItemToContentValues(CheckItem checkItem) {
+        ContentValues values = new ContentValues();
+
+        values.put(WorkFlowContract.CheckList.CHECK_NAME, checkItem.name);
+        values.put(WorkFlowContract.CheckList.IS_CHECKED, checkItem.isChecked);
+        values.put(WorkFlowContract.CheckList.TASK_ID, checkItem.taskId);
+        values.put(WorkFlowContract.CheckList.POSITION, checkItem.position);
 
         return values;
     }

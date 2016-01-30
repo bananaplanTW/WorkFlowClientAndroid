@@ -76,5 +76,6 @@ public class WorkFlowContract {
         public static final String CHECK_NAME = "check_name";
         public static final String IS_CHECKED = "is_checked";
         public static final String TASK_ID = "task_id";
+        public static final String POSITION = "position";
     }
 }

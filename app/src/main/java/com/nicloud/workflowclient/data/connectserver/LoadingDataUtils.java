@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.nicloud.workflowclient.data.data.data.Case;
-import com.nicloud.workflowclient.data.data.data.CheckItem;
-import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.data.utility.RestfulUtils;
@@ -15,8 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 
@@ -116,49 +112,6 @@ public class LoadingDataUtils {
         }
     }
 
-//    public static void loadTasksByWorker(Context context, String workerId) {
-//        try {
-//            HashMap<String, String> headers = new HashMap<>();
-//            headers.put("x-user-id", WorkingData.getUserId());
-//            headers.put("x-auth-token", WorkingData.getAuthToken());
-//
-//            String taskJsonString = RestfulUtils.restfulGetRequest(getTasksByWorkerUrl(workerId), headers);
-//
-//            JSONObject taskJson = new JSONObject(taskJsonString).getJSONObject("result");
-//            JSONArray scheduledTaskJsonList = JsonUtils.getJsonArrayFromJson(taskJson, "scheduledTasks");
-//
-//            WorkingData.getInstance(context).clearTasks();
-//            if (scheduledTaskJsonList != null) {
-//                for (int i = 0; i < scheduledTaskJsonList.length(); i++) {
-//                    JSONObject scheduledTaskJson = scheduledTaskJsonList.getJSONObject(i);
-//                    WorkingData.getInstance(context).addTask(retrieveTaskFromJson(context, scheduledTaskJson));
-//                }
-//            }
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public static void loadTaskById(Context context, String taskId) {
-//        try {
-//            HashMap<String, String> headers = new HashMap<>();
-//            headers.put("x-user-id", WorkingData.getUserId());
-//            headers.put("x-auth-token", WorkingData.getAuthToken());
-//
-//            String taskJsonString = RestfulUtils.restfulGetRequest(getTaskByIdUrl(taskId), headers);
-//
-//            JSONObject taskJson = new JSONObject(taskJsonString).getJSONObject("result");
-//
-//            if (taskJson == null) return;
-//
-//            WorkingData.getInstance(context).getTask(taskId).update(retrieveTaskFromJson(context, taskJson));
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     private static void addCaseToWorkingData(Context context, JSONObject caseJson) {
         try {
             String caseId = caseJson.getString("_id");
@@ -254,58 +207,5 @@ public class LoadingDataUtils {
         }
 
         return null;
-    }
-
-//    private static Task retrieveTaskFromJson(Context context, JSONObject taskJson) {
-//        try {
-//            JSONArray checkListJsonList = JsonUtils.getJsonArrayFromJson(taskJson, "todos");
-//
-//            String id = taskJson.getString("_id");
-//            String description = JsonUtils.getStringFromJson(taskJson, "description");
-//            String name = taskJson.getString("name");
-//            String caseName = taskJson.getString("caseName");
-//            String caseId = taskJson.getString("caseId");
-//            String workerId = JsonUtils.getStringFromJson(taskJson, "employeeId");
-//            long lastUpdatedTime = taskJson.getLong("updatedAt");
-//
-//            Date startDate = JsonUtils.getDateFromJson(taskJson, "startDate");
-//            Date endDate = JsonUtils.getDateFromJson(taskJson, "dueDate");
-//            Date assignDate = JsonUtils.getDateFromJson(taskJson, "dispatchedDate");
-//
-//            ArrayList<CheckItem> checkList = new ArrayList<>();
-//
-//            if (checkListJsonList != null) {
-//                for (int i = 0 ;  i < checkListJsonList.length() ; i++) {
-//                    JSONObject checkItemJson = checkListJsonList.getJSONObject(i);
-//                    checkList.add(new CheckItem(checkItemJson.getString("name"), checkItemJson.getBoolean("checked")));
-//                }
-//            }
-//
-//            Task task = new Task(
-//                    id,
-//                    name,
-//                    description,
-//                    caseName,
-//                    caseId,
-//                    workerId,
-//                    endDate,
-//                    lastUpdatedTime);
-//
-//            return task;
-//
-//        } catch (JSONException e) {
-//            Log.e(TAG, "Exception in retrieveTaskFromJson()");
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
-
-    private static String getTasksByWorkerUrl(String workerId) {
-        return WorkingDataUrl.TASKS_BY_WORKER + workerId;
-    }
-
-    private static String getTaskByIdUrl(String taskId) {
-        return WorkingDataUrl.TASK_BY_ID + taskId;
     }
 }

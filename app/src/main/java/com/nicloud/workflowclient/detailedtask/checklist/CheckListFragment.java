@@ -3,9 +3,13 @@ package com.nicloud.workflowclient.detailedtask.checklist;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,15 +23,15 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
-import com.nicloud.workflowclient.data.data.data.CheckItem;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.main.OnRefreshDetailedTask;
 import com.nicloud.workflowclient.detailedtask.main.OnSwipeRefresh;
 import com.nicloud.workflowclient.backgroundtask.service.ActionService;
 import com.nicloud.workflowclient.backgroundtask.receiver.ActionCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
+import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
+import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
@@ -36,11 +40,29 @@ import java.util.List;
 /**
  * Created by logicmelody on 2015/12/8.
  */
-public class CheckListFragment extends Fragment implements OnSwipeRefresh,
-        ActionCompletedReceiver.OnServerActionCompletedListener, View.OnClickListener {
+public class CheckListFragment extends Fragment implements OnSwipeRefresh, View.OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int LOADER_ID = 387;
+
+    private static final String[] mProjection = new String[] {
+            WorkFlowContract.CheckList._ID,
+            WorkFlowContract.CheckList.CHECK_NAME,
+            WorkFlowContract.CheckList.IS_CHECKED,
+            WorkFlowContract.CheckList.TASK_ID,
+            WorkFlowContract.CheckList.POSITION
+    };
+    private static final int ID = 0;
+    private static final int CHECK_NAME = 1;
+    private static final int IS_CHECKED = 2;
+    private static final int TASK_ID = 3;
+    private static final int POSITION = 4;
+
+    private static final String mSelection = WorkFlowContract.CheckList.TASK_ID + " = ?";
+    private static String[] mSelectionArgs;
+    private static String mSortOrder = WorkFlowContract.CheckList.POSITION;
 
     private Context mContext;
-    private ActionCompletedReceiver mActionCompletedReceiver;
 
     private SwipeRefreshLayout mCheckListSwipeRefreshLayout;
     private RecyclerView mCheckList;
@@ -75,27 +97,14 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
-        mDataSet.clear();
-        //mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
-        mActionCompletedReceiver = new ActionCompletedReceiver(this);
         initialize();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter(ActionService.ServerAction.CHECK_ITEM);
-        LocalBroadcastManager.getInstance(mContext).registerReceiver(mActionCompletedReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mActionCompletedReceiver);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     private void initialize() {
+        mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
+        mSelectionArgs = new String[] {mTaskId};
+
         findViews();
         setupViews();
         setupCheckList();
@@ -149,32 +158,8 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
     }
 
     @Override
-    public void onServerActionCompleted(Intent intent) {
-        String action = intent.getAction();
-        boolean isActionSuccessful = intent.getBooleanExtra(ActionService.ExtraKey.ACTION_SUCCESSFUL, false);
-
-        if (ActionService.ServerAction.CHECK_ITEM.equals(action)) {
-            String taskId = intent.getStringExtra(ActionService.ExtraKey.TASK_ID);
-            int index = intent.getIntExtra(ActionService.ExtraKey.CHECK_ITEM_INDEX, 0);
-            boolean checked = intent.getBooleanExtra(ActionService.ExtraKey.CHECK_ITEM_CHECKED, false);
-
-            if (isActionSuccessful) {
-                //WorkingData.getInstance(mContext).getTask(taskId).checkList.get(index).isChecked = checked;
-            } else {
-                Utils.showInternetConnectionWeakToast(mContext);
-            }
-
-            mCheckListAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
     public void swapData(List<BaseData> dataSet) {
-        mDataSet.clear();
-        //mDataSet.addAll(WorkingData.getInstance(mContext).getTask(mTaskId).checkList);
-        mCheckListAdapter.notifyDataSetChanged();
 
-        setNoCheckItemTextVisibility();
     }
 
     @Override
@@ -193,5 +178,40 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh,
                 mAddCheckItemBox.setText("");
                 break;
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(mContext, WorkFlowContract.CheckList.CONTENT_URI,
+                mProjection, mSelection, mSelectionArgs, mSortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) return;
+
+        setCheckListData(cursor);
+    }
+
+    private void setCheckListData(Cursor cursor) {
+        mDataSet.clear();
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(ID);
+            String checkName = cursor.getString(CHECK_NAME);
+            boolean isChecked = cursor.getInt(IS_CHECKED) == 1;
+            String taskId = cursor.getString(TASK_ID);
+            int position = cursor.getInt(POSITION);
+
+            mDataSet.add(new CheckItem(checkName, taskId, isChecked, position));
+        }
+
+        mCheckListAdapter.notifyDataSetChanged();
+        setNoCheckItemTextVisibility();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

@@ -2,9 +2,6 @@ package com.nicloud.workflowclient.data.data.data;
 
 import android.content.Context;
 
-import com.nicloud.workflowclient.data.data.observer.DataObserver;
-import com.nicloud.workflowclient.data.data.observer.DataSubject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +9,7 @@ import java.util.List;
 /**
  * Created by Ben on 2015/7/18.
  */
-public final class WorkingData implements DataSubject {
+public final class WorkingData {
 
     private static final String TAG = "WorkingData";
 
@@ -25,15 +22,12 @@ public final class WorkingData implements DataSubject {
 
     private Context mContext;
 
-    private List<DataObserver> mDataObservers = new ArrayList<>();
-
     private static String sUserId;
     private static String sAuthToken;
 
     private Worker mLoginWorker;
 
     // TODO: Implement DB
-    private List<Task> mTasks = new ArrayList<>();
     private List<Case> mCases = new ArrayList<>();
     private List<Worker> mWorkers = new ArrayList<>();
 
@@ -159,30 +153,5 @@ public final class WorkingData implements DataSubject {
 
     public void setHasLoadedTasks(boolean hasLoadedTasks) {
         mHasLoadedTasks = hasLoadedTasks;
-    }
-
-
-    public void updateData() {
-        notifyDataObservers();
-    }
-
-    @Override
-    public void registerDataObserver(DataObserver o) {
-        mDataObservers.add(o);
-    }
-
-    @Override
-    public void removeDataObserver(DataObserver o) {
-        int index = mDataObservers.indexOf(o);
-        if (index >= 0) {
-            mDataObservers.remove(index);
-        }
-    }
-
-    @Override
-    public void notifyDataObservers() {
-        for (DataObserver dataObserver : mDataObservers) {
-            dataObserver.updateData();
-        }
     }
 }

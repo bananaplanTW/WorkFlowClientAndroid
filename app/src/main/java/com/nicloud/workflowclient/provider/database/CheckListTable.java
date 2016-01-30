@@ -13,7 +13,8 @@ public class CheckListTable {
             + WorkFlowContract.CheckList._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + WorkFlowContract.CheckList.CHECK_NAME + " TEXT NOT NULL, "
             + WorkFlowContract.CheckList.IS_CHECKED + " INTEGER NOT NULL, "
-            + WorkFlowContract.CheckList.TASK_ID + " TEXT NOT NULL"
+            + WorkFlowContract.CheckList.TASK_ID + " TEXT NOT NULL, "
+            + WorkFlowContract.CheckList.POSITION + " INTEGER NOT NULL"
             + ");";
 
     public static void onCreate(SQLiteDatabase database) {

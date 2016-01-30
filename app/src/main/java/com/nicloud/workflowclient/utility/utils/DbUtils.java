@@ -1,9 +1,10 @@
 package com.nicloud.workflowclient.utility.utils;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.nicloud.workflowclient.data.data.data.Task;
+import com.nicloud.workflowclient.tasklist.main.Task;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 
 import java.util.Date;
@@ -80,6 +81,7 @@ public class DbUtils {
                                 cursor.getString(CASE_ID),
                                 cursor.getString(WORKER_ID),
                                 new Date(cursor.getLong(DUE_DATE)),
+                                null,
                                 cursor.getLong(UPDATED_TIME));
             }
 
@@ -90,5 +92,16 @@ public class DbUtils {
         }
 
         return task;
+    }
+
+    public static void setCheckItem(Context context, String taskId, int position, boolean isChecked) {
+        String selection =  WorkFlowContract.CheckList.TASK_ID + " = ? AND " +
+                            WorkFlowContract.CheckList.POSITION + " = ?";
+        String[] selectionArgs = new String[] {taskId, String.valueOf(position)};
+
+        ContentValues values = new ContentValues();
+        values.put(WorkFlowContract.CheckList.IS_CHECKED, isChecked);
+
+        context.getContentResolver().update(WorkFlowContract.CheckList.CONTENT_URI, values, selection, selectionArgs);
     }
 }

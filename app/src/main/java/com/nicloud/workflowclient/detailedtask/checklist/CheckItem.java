@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.data.data.data;
+package com.nicloud.workflowclient.detailedtask.checklist;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,17 +9,23 @@ import android.os.Parcelable;
 public class CheckItem implements Parcelable {
 
     public String name;
+    public String taskId;
     public boolean isChecked = false;
+    public int position;
 
 
-    public CheckItem(String name, boolean isChecked) {
+    public CheckItem(String name, String taskId, boolean isChecked, int position) {
         this.name = name;
+        this.taskId = taskId;
         this.isChecked = isChecked;
+        this.position = position;
     }
 
     protected CheckItem(Parcel in) {
         name = in.readString();
+        taskId = in.readString();
         isChecked = in.readByte() != 0;
+        position = in.readInt();
     }
 
     public static final Creator<CheckItem> CREATOR = new Creator<CheckItem>() {
@@ -42,6 +48,8 @@ public class CheckItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
+        dest.writeString(taskId);
         dest.writeByte((byte) (isChecked ? 1 : 0));
+        dest.writeInt(position);
     }
 }
