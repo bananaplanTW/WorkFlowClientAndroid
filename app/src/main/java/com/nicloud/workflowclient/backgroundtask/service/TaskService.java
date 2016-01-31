@@ -91,7 +91,7 @@ public class TaskService extends IntentService {
         return intent;
     }
 
-    public static Intent generateLoadCaseTasksByIdIntent(Context context, String caseId, boolean isFirstLoad) {
+    public static Intent generateLoadCaseTasksIntent(Context context, String caseId, boolean isFirstLoad) {
         Intent intent = new Intent(context, TaskService.class);
         intent.setAction(Action.LOAD_CASE_TASKS);
         intent.putExtra(ExtraKey.STRING_CASE_ID, caseId);
@@ -255,8 +255,8 @@ public class TaskService extends IntentService {
     }
 
     private void getMyTasksFromDb(String workerId, ArrayList<TaskInDb> taskList, Map<String, TaskInDb> taskMap) {
-        String selection =  WorkFlowContract.Task.WORKER_ID + " = ?";
-        String[] selectionArgs = new String[] {workerId};
+        String selection =  WorkFlowContract.Task.WORKER_ID + " = ? AND " + WorkFlowContract.Task.STATUS + " != ?";
+        String[] selectionArgs = new String[] {workerId, WorkFlowContract.Task.Status.DONE};
         Cursor cursor = null;
 
         try {

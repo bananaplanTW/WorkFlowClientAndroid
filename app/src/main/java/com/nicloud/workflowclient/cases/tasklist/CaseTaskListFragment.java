@@ -21,7 +21,7 @@ public class CaseTaskListFragment extends TaskListFragmentBase {
     public void setCaseId(String caseId) {
         mCaseId = caseId;
         mSelectionArgs[0] = mCaseId;
-        mContext.startService(TaskService.generateLoadCaseTasksByIdIntent(mContext, mCaseId, true));
+        mContext.startService(TaskService.generateLoadCaseTasksIntent(mContext, mCaseId, true));
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
@@ -51,6 +51,6 @@ public class CaseTaskListFragment extends TaskListFragmentBase {
 
     @Override
     public void loadTasks() {
-        mContext.startService(TaskService.generateLoadCaseTasksByIdIntent(mContext, mCaseId, false));
+        mContext.startService(TaskService.generateLoadCaseTasksIntent(mContext, mCaseId, false));
     }
 }

@@ -19,8 +19,7 @@ public class MyTaskListFragment extends TaskListFragmentBase {
 
     @Override
     public String getSelection() {
-        return WorkFlowContract.Task.WORKER_ID + " = ? AND " +
-               WorkFlowContract.Task.STATUS + " != ?" ;
+        return WorkFlowContract.Task.WORKER_ID + " = ? AND " + WorkFlowContract.Task.STATUS + " != ?" ;
     }
 
     @Override
