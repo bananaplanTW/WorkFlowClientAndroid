@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
-import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 
@@ -43,7 +42,7 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
     public abstract int getLoaderId();
     public abstract String getSelection();
     public abstract String[] getSelectionArgs();
-    public abstract void swipeRefresh(Context context);
+    public abstract void loadTasks(Context context);
 
     private static int LOADER_ID;
 
@@ -214,7 +213,7 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
 
             @Override
             public void onRefresh() {
-                swipeRefresh(mContext);
+                loadTasks(mContext);
             }
         });
 
@@ -226,7 +225,7 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
 
     private void loadDataInFirstLaunch() {
         forceShowRefreshSpinner();
-        mContext.startService(TaskService.generateLoadMyTasksIntent(mContext, true));
+        loadTasks(mContext);
     }
 
     /**

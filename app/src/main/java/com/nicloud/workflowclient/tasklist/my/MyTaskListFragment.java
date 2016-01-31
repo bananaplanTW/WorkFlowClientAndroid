@@ -30,7 +30,7 @@ public class MyTaskListFragment extends TaskListFragmentBase {
     }
 
     @Override
-    public void swipeRefresh(Context context) {
+    public void loadTasks(Context context) {
         context.startService(TaskService.generateLoadMyTasksIntent(context, false));
     }
 }
