@@ -1,12 +1,10 @@
 package com.nicloud.workflowclient.cases.tasklist;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.tasklist.main.TaskListFragmentBase;
 
@@ -21,7 +19,10 @@ public class CaseTaskListFragment extends TaskListFragmentBase {
 
 
     public void setCaseId(String caseId) {
-
+        mCaseId = caseId;
+        mSelectionArgs[0] = mCaseId;
+        mContext.startService(TaskService.generateLoadCaseTasksByIdIntent(mContext, mCaseId, true));
+        getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -40,16 +41,16 @@ public class CaseTaskListFragment extends TaskListFragmentBase {
 
     @Override
     public String getSelection() {
-        return WorkFlowContract.Task.WORKER_ID + " = ?";
+        return WorkFlowContract.Task.CASE_ID + " = ? AND " + WorkFlowContract.Task.STATUS + " != ?" ;
     }
 
     @Override
     public String[] getSelectionArgs() {
-        return new String[] {WorkingData.getUserId()};
+        return new String[] {mCaseId, WorkFlowContract.Task.Status.DONE};
     }
 
     @Override
-    public void loadTasks(Context context) {
-        context.startService(TaskService.generateLoadMyTasksIntent(context, false));
+    public void loadTasks() {
+        mContext.startService(TaskService.generateLoadCaseTasksByIdIntent(mContext, mCaseId, false));
     }
 }

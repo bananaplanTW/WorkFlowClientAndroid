@@ -50,7 +50,8 @@ public class DbUtils {
                 WorkFlowContract.Task.CASE_NAME,
                 WorkFlowContract.Task.WORKER_ID,
                 WorkFlowContract.Task.DUE_DATE,
-                WorkFlowContract.Task.UPDATED_TIME
+                WorkFlowContract.Task.UPDATED_TIME,
+                WorkFlowContract.Task.STATUS
         };
         int ID = 0;
         int TASK_ID = 1;
@@ -61,6 +62,7 @@ public class DbUtils {
         int WORKER_ID = 6;
         int DUE_DATE = 7;
         int UPDATED_TIME = 8;
+        int STATUS = 9;
 
         String selection = WorkFlowContract.Task.TASK_ID + " = ?";
         String[] selectionArgs = new String[] {taskId};
@@ -80,6 +82,7 @@ public class DbUtils {
                                 cursor.getString(CASE_NAME),
                                 cursor.getString(CASE_ID),
                                 cursor.getString(WORKER_ID),
+                                cursor.getString(STATUS),
                                 new Date(cursor.getLong(DUE_DATE)),
                                 null,
                                 cursor.getLong(UPDATED_TIME));

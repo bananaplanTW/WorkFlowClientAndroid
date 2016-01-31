@@ -42,7 +42,7 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
     public abstract int getLoaderId();
     public abstract String getSelection();
     public abstract String[] getSelectionArgs();
-    public abstract void loadTasks(Context context);
+    public abstract void loadTasks();
 
     private static int LOADER_ID;
 
@@ -55,7 +55,8 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
             WorkFlowContract.Task.CASE_NAME,
             WorkFlowContract.Task.WORKER_ID,
             WorkFlowContract.Task.DUE_DATE,
-            WorkFlowContract.Task.UPDATED_TIME
+            WorkFlowContract.Task.UPDATED_TIME,
+            WorkFlowContract.Task.STATUS
     };
     private static final int ID = 0;
     private static final int TASK_ID = 1;
@@ -66,12 +67,13 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
     private static final int WORKER_ID = 6;
     private static final int DUE_DATE = 7;
     private static final int UPDATED_TIME = 8;
+    private static final int STATUS = 9;
 
     private static String mSelection;
-    private static String[] mSelectionArgs;
+    protected static String[] mSelectionArgs;
     private static final String mSortOrder = WorkFlowContract.Task.DUE_DATE;
 
-    private Context mContext;
+    protected Context mContext;
     private FragmentManager mFm;
 
     private FloatingActionButton mFab;
@@ -213,7 +215,7 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
 
             @Override
             public void onRefresh() {
-                loadTasks(mContext);
+                loadTasks();
             }
         });
 
@@ -225,7 +227,7 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
 
     private void loadDataInFirstLaunch() {
         forceShowRefreshSpinner();
-        loadTasks(mContext);
+        loadTasks();
     }
 
     /**
@@ -288,11 +290,12 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
             String caseId = cursor.getString(CASE_ID);
             String caseName = cursor.getString(CASE_NAME);
             String workerId = cursor.getString(WORKER_ID);
+            String status = cursor.getString(STATUS);
             long dueDate = cursor.getLong(DUE_DATE);
             long lastUpdatedTime = cursor.getLong(UPDATED_TIME);
 
             Task task = new Task(taskId, taskName, taskDescription, caseName,
-                                 caseId, workerId, new Date(dueDate), null, lastUpdatedTime);
+                                 caseId, workerId, status, new Date(dueDate), null, lastUpdatedTime);
 
             mTaskDataSet.add(new TaskListItem(task, false, false));
         }
@@ -348,11 +351,11 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
     public void onLoadTaskCompleted(Intent intent) {
         String from = intent.getStringExtra(TaskCompletedReceiver.EXTRA_FROM);
 
-        if (TaskCompletedReceiver.From.MY_TASK_FIRST.equals(from)) {
+        if (TaskCompletedReceiver.From.LOAD_FIRST.equals(from)) {
             forceHideRefreshSpinner();
             WorkingData.getInstance(mContext).setHasLoadedTasks(true);
 
-        } else if (TaskCompletedReceiver.From.MY_TASK.equals(from)) {
+        } else if (TaskCompletedReceiver.From.LOAD_NORMAL.equals(from)) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
     }

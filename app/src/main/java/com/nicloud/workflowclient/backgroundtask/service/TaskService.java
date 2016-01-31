@@ -17,6 +17,7 @@ import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.utility.utils.RestfulUtils;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.utils.JsonUtils;
+import com.nicloud.workflowclient.utility.utils.URLUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import org.json.JSONArray;
@@ -38,11 +39,13 @@ public class TaskService extends IntentService {
     public static final class Action {
         public static final String LOAD_MY_TASKS = "task_service_load_my_tasks";
         public static final String LOAD_TASK_BY_ID = "task_service_load_task_by_id";
+        public static final String LOAD_CASE_TASKS = "task_service_load_case_tasks";
     }
 
     public static final class ExtraKey {
-        public static final String BOOLEAN_FIRST_LOAD_MY_TASKS = "extra_first_load_my_tasks";
+        public static final String BOOLEAN_FIRST_LOAD_TASKS = "extra_first_load_my_tasks";
         public static final String STRING_TASK_ID = "extra_task_id";
+        public static final String STRING_CASE_ID = "extra_case_id";
     }
 
     private static final String[] mProjection = new String[] {
@@ -75,7 +78,7 @@ public class TaskService extends IntentService {
     public static Intent generateLoadMyTasksIntent(Context context, boolean isFirstLoad) {
         Intent intent = new Intent(context, TaskService.class);
         intent.setAction(Action.LOAD_MY_TASKS);
-        intent.putExtra(ExtraKey.BOOLEAN_FIRST_LOAD_MY_TASKS, isFirstLoad);
+        intent.putExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, isFirstLoad);
 
         return intent;
     }
@@ -84,6 +87,15 @@ public class TaskService extends IntentService {
         Intent intent = new Intent(context, TaskService.class);
         intent.setAction(Action.LOAD_TASK_BY_ID);
         intent.putExtra(ExtraKey.STRING_TASK_ID, taskId);
+
+        return intent;
+    }
+
+    public static Intent generateLoadCaseTasksByIdIntent(Context context, String caseId, boolean isFirstLoad) {
+        Intent intent = new Intent(context, TaskService.class);
+        intent.setAction(Action.LOAD_CASE_TASKS);
+        intent.putExtra(ExtraKey.STRING_CASE_ID, caseId);
+        intent.putExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, isFirstLoad);
 
         return intent;
     }
@@ -97,17 +109,20 @@ public class TaskService extends IntentService {
 
         } else if (Action.LOAD_TASK_BY_ID.equals(action)) {
             loadTaskById(intent);
+
+        } else if (Action.LOAD_CASE_TASKS.equals(action)) {
+            loadCaseTasks(intent);
         }
     }
 
     private void loadMyTasks(Intent intent) {
         Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
-        boolean isFirstLoadMyTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_MY_TASKS, true);
-        if (isFirstLoadMyTasks) {
-            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.MY_TASK_FIRST);
+        boolean isFirstLoadTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
+        if (isFirstLoadTasks) {
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_FIRST);
 
         } else {
-            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.MY_TASK);
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_NORMAL);
         }
 
         if (RestfulUtils.isConnectToInternet(this)) {
@@ -151,6 +166,13 @@ public class TaskService extends IntentService {
 
         Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
         broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.DETAILED_TASK);
+        boolean isFirstLoadMyTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
+        if (isFirstLoadMyTasks) {
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_FIRST);
+
+        } else {
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_NORMAL);
+        }
 
         if (RestfulUtils.isConnectToInternet(this)) {
             try {
@@ -169,6 +191,55 @@ public class TaskService extends IntentService {
 
                 updateTaskToDb(task);
                 updateCheckListToDb(task.id, task.checkList);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            }
+
+        } else {
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+        }
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+    }
+
+    private void loadCaseTasks(Intent intent) {
+        String caseId = intent.getStringExtra(ExtraKey.STRING_CASE_ID);
+
+        Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
+        boolean isFirstLoadTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
+        if (isFirstLoadTasks) {
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_FIRST);
+
+        } else {
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_NORMAL);
+        }
+
+        if (RestfulUtils.isConnectToInternet(this)) {
+            try {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-user-id", WorkingData.getUserId());
+                headers.put("x-auth-token", WorkingData.getAuthToken());
+
+                String taskJsonString =
+                        RestfulUtils.restfulGetRequest(getCaseTasksUrl(caseId), headers);
+
+                JSONArray taskJsonList = JsonUtils.getJsonArrayFromJson(new JSONObject(taskJsonString), "result");
+
+                if (taskJsonList != null) {
+                    ArrayList<TaskInDb> tasksFromDb = new ArrayList<>();
+                    ArrayList<Task> tasksFromServer = new ArrayList<>();
+                    Map<String, TaskInDb> tasksFromDbMap = new HashMap<>();
+                    Map<String, Task> tasksFromServerMap = new HashMap<>();
+
+                    getCaseTasksFromDb(caseId, tasksFromDb, tasksFromDbMap);
+                    getTasksFromServer(taskJsonList, tasksFromServer, tasksFromServerMap);
+
+                    insertAndUpdateTasksToDb(tasksFromDbMap, tasksFromServer);
+                    deleteTasksFromDb(tasksFromServerMap, tasksFromDb);
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -207,6 +278,30 @@ public class TaskService extends IntentService {
         }
     }
 
+    private void getCaseTasksFromDb(String caseId, ArrayList<TaskInDb> taskList, Map<String, TaskInDb> taskMap) {
+        String selection =  WorkFlowContract.Task.CASE_ID + " = ?";
+        String[] selectionArgs = new String[] {caseId};
+        Cursor cursor = null;
+
+        try {
+            cursor = getContentResolver().query(WorkFlowContract.Task.CONTENT_URI,
+                    mProjection, selection, selectionArgs, null);
+
+            if (cursor != null && cursor.getCount() != 0) {
+                while (cursor.moveToNext()) {
+                    TaskInDb taskInDb = new TaskInDb(cursor.getString(TASK_ID), cursor.getLong(UPDATED_TIME));
+                    taskList.add(taskInDb);
+                    taskMap.put(taskInDb.taskId, taskInDb);
+                }
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
     private void getTasksFromServer(JSONArray taskJsonList, ArrayList<Task> taskList, Map<String, Task> taskMap) {
         for (int i = 0 ; i < taskJsonList.length() ; i++) {
             try {
@@ -228,6 +323,14 @@ public class TaskService extends IntentService {
 
     private String getTaskByIdUrl(String taskId) {
         return LoadingDataUtils.WorkingDataUrl.TASK_BY_ID + taskId;
+    }
+
+    private String getCaseTasksUrl(String caseId) {
+        HashMap<String, String> queries = new HashMap<>();
+        queries.put("caseId", caseId);
+
+        return URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                LoadingDataUtils.WorkingDataUrl.EndPoints.TASKS, queries);
     }
 
     private void insertAndUpdateTasksToDb(Map<String, TaskInDb> tasksFromDbMap, List<Task> tasksFromServer) {
@@ -303,6 +406,7 @@ public class TaskService extends IntentService {
         values.put(WorkFlowContract.Task.WORKER_ID, task.workerId);
         values.put(WorkFlowContract.Task.DUE_DATE, task.dueDate.getTime());
         values.put(WorkFlowContract.Task.UPDATED_TIME, task.lastUpdatedTime);
+        values.put(WorkFlowContract.Task.STATUS, task.status);
 
         return values;
     }

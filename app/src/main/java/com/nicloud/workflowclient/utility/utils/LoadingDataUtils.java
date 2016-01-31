@@ -37,6 +37,7 @@ public class LoadingDataUtils {
 
         public static final class EndPoints {
             public static final String LOGIN_WORKER = "/api/self";
+            public static final String TASKS = "/api/tasks";
             public static final String CHECK_TASK = "/api/v2/check-task-todo";
             public static final String MESSAGES = "/api/chatting/employee";
 

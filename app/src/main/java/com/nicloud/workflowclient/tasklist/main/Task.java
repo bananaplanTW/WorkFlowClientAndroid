@@ -24,6 +24,7 @@ public class Task extends IdData {
     public String caseId;
     public String caseName;
     public String workerId;
+    public String status;
 
     public Date dueDate;
 
@@ -36,6 +37,7 @@ public class Task extends IdData {
                 String caseName,
                 String caseId,
                 String workerId,
+                String status,
                 Date dueDate,
                 List<CheckItem> checkList,
                 long lastUpdatedTime) {
@@ -45,6 +47,7 @@ public class Task extends IdData {
         this.caseName = caseName;
         this.caseId = caseId;
         this.workerId = workerId;
+        this.status = status;
         this.dueDate = dueDate;
         this.checkList = checkList;
         this.lastUpdatedTime = lastUpdatedTime;
@@ -59,6 +62,7 @@ public class Task extends IdData {
         String caseName = jsonObject.getString("caseName");
         String caseId = jsonObject.getString("caseId");
         String workerId = JsonUtils.getStringFromJson(jsonObject, "employeeId");
+        String status = jsonObject.getString("status");
         long dueDate = JsonUtils.getLongFromJson(jsonObject, "dueDate");
         long lastUpdatedTime = jsonObject.getLong("updatedAt");
 
@@ -74,6 +78,6 @@ public class Task extends IdData {
         }
 
         return new Task(taskId, name, description, caseName, caseId,
-                        workerId, new Date(dueDate), checkList, lastUpdatedTime);
+                        workerId, status, new Date(dueDate), checkList, lastUpdatedTime);
     }
 }

@@ -1,7 +1,5 @@
 package com.nicloud.workflowclient.tasklist.my;
 
-import android.content.Context;
-
 import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
@@ -21,16 +19,17 @@ public class MyTaskListFragment extends TaskListFragmentBase {
 
     @Override
     public String getSelection() {
-        return WorkFlowContract.Task.WORKER_ID + " = ?";
+        return WorkFlowContract.Task.WORKER_ID + " = ? AND " +
+               WorkFlowContract.Task.STATUS + " != ?" ;
     }
 
     @Override
     public String[] getSelectionArgs() {
-        return new String[] {WorkingData.getUserId()};
+        return new String[] {WorkingData.getUserId(), WorkFlowContract.Task.Status.DONE};
     }
 
     @Override
-    public void loadTasks(Context context) {
-        context.startService(TaskService.generateLoadMyTasksIntent(context, false));
+    public void loadTasks() {
+        mContext.startService(TaskService.generateLoadMyTasksIntent(mContext, false));
     }
 }

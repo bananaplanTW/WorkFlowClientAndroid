@@ -14,8 +14,8 @@ public class TaskCompletedReceiver extends BroadcastReceiver {
     public static final String EXTRA_FROM = "extra_task_receive_from";
 
     public static final class From {
-        public static final String MY_TASK_FIRST = "from_my_task_first";
-        public static final String MY_TASK = "from_my_task";
+        public static final String LOAD_FIRST = "from_my_task_first";
+        public static final String LOAD_NORMAL = "from_my_task";
         public static final String DETAILED_TASK = "from_detailed_task";
     }
 

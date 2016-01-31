@@ -53,6 +53,10 @@ public class WorkFlowContract {
 
     public static final class Task implements BaseColumns {
 
+        public static final class Status {
+            public static final String DONE = "done";
+        }
+
         public static final String TABLE_NAME = "task";
         public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_NAME);
 
@@ -65,6 +69,7 @@ public class WorkFlowContract {
         public static final String WORKER_ID = "worker_id";
         public static final String DUE_DATE = "due_date";
         public static final String UPDATED_TIME = "updated_time";
+        public static final String STATUS = "status";
     }
 
     public static final class CheckList implements BaseColumns {
