@@ -6,7 +6,11 @@ import android.support.annotation.Nullable;
 import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
+import com.nicloud.workflowclient.tasklist.main.TaskListAdapter;
 import com.nicloud.workflowclient.tasklist.main.TaskListFragmentBase;
+import com.nicloud.workflowclient.tasklist.main.TaskListItem;
+
+import java.util.List;
 
 /**
  * Created by logicmelody on 2016/1/31.
@@ -47,6 +51,11 @@ public class CaseTaskListFragment extends TaskListFragmentBase {
     @Override
     public String[] getSelectionArgs() {
         return new String[] {mCaseId, WorkFlowContract.Task.Status.DONE};
+    }
+
+    @Override
+    public TaskListAdapter getTaskListAdapter(List<TaskListItem> dataSet) {
+        return new TaskListAdapter(mContext, getFragmentManager(), dataSet, false);
     }
 
     @Override

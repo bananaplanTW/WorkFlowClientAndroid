@@ -23,7 +23,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Context mContext;
     private FragmentManager mFragmentManager;
+
     private List<TaskListItem> mDataSet;
+
+    private boolean mIsMyTaskList = false;
 
     private class TaskViewHolder extends RecyclerView.ViewHolder {
 
@@ -73,10 +76,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-    public TaskListAdapter(Context context, FragmentManager fm, List<TaskListItem> dataSet) {
+    public TaskListAdapter(Context context, FragmentManager fm, List<TaskListItem> dataSet, boolean isMyTaskList) {
         mContext = context;
         mFragmentManager = fm;
         mDataSet = dataSet;
+        mIsMyTaskList = isMyTaskList;
     }
 
     @Override
@@ -126,6 +130,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else {
             taskVH.dueDate.setVisibility(View.GONE);
         }
+
+        // Completed button
+        taskVH.completeButton.setVisibility(mIsMyTaskList ? View.VISIBLE : View.GONE);
     }
 
     @Override

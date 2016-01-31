@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -42,6 +41,7 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
     public abstract int getLoaderId();
     public abstract String getSelection();
     public abstract String[] getSelectionArgs();
+    public abstract TaskListAdapter getTaskListAdapter(List<TaskListItem> dataSet);
     public abstract void loadTasks();
 
     private static int LOADER_ID;
@@ -74,7 +74,6 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
     private static final String mSortOrder = WorkFlowContract.Task.DUE_DATE;
 
     protected Context mContext;
-    private FragmentManager mFm;
 
     private FloatingActionButton mFab;
 
@@ -137,7 +136,6 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
     }
 
     private void initialize() {
-        mFm = getFragmentManager();
         LOADER_ID = getLoaderId();
         mSelection = getSelection();
         mSelectionArgs = getSelectionArgs();
@@ -170,7 +168,7 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
 
     private void setupTasksList() {
         mTaskListManager = new LinearLayoutManager(mContext);
-        mTaskListAdapter = new TaskListAdapter(mContext, mFm, mTaskDataSet);
+        mTaskListAdapter = getTaskListAdapter(mTaskDataSet);
 
         mTaskList.setLayoutManager(mTaskListManager);
         mTaskList.setAdapter(mTaskListAdapter);
