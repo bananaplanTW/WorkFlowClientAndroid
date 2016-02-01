@@ -107,4 +107,16 @@ public class WorkFlowContract {
         public static final String CREATED_TIME = "created_time";
         public static final String UPDATED_TIME = "updated_time";
     }
+
+    public static final class Case implements BaseColumns {
+
+        public static final String TABLE_NAME = "cases";
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_NAME);
+
+        // DB columns
+        public static final String CASE_ID = "case_id";
+        public static final String CASE_NAME = "case_name";
+        public static final String IS_COMPLETED = "is_completed";
+        public static final String UPDATED_TIME = "updated_time";
+    }
 }

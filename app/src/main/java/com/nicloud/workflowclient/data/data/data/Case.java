@@ -1,5 +1,8 @@
 package com.nicloud.workflowclient.data.data.data;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by logicmelody on 2016/1/4.
  */
@@ -15,9 +18,12 @@ public class Case extends IdData {
         this.lastUpdatedTime = updatedAt;
     }
 
-    public void update(Case aCase) {
-        this.name = aCase.name;
-        this.isCompleted = aCase.isCompleted;
-        this.lastUpdatedTime = aCase.lastUpdatedTime;
+    public static Case retrieveCaseFromJson(JSONObject caseJson) throws JSONException {
+        String id = caseJson.getString("_id");
+        String name = caseJson.getString("name");
+        boolean isCompleted = caseJson.getBoolean("completed");
+        long updatedAt = caseJson.getLong("updatedAt");
+
+        return new Case(id, name, isCompleted, updatedAt);
     }
 }

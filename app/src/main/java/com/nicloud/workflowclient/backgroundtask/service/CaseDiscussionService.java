@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.backgroundtask.receiver.CaseDiscussionCompletedReceiver;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
@@ -306,7 +307,7 @@ public class CaseDiscussionService extends IntentService {
 
             NotificationCompat.Builder builder = NotificationUtils.
                     generateUploadNotificationBuilder(this,
-                            WorkingData.getInstance(this).getCaseById(caseId).name, getString(R.string.uploading_image));
+                            DbUtils.getCaseById(this, caseId).name, getString(R.string.uploading_image));
             mNotificationManager.notify(notificationId, builder.build());
 
             try {
@@ -353,7 +354,7 @@ public class CaseDiscussionService extends IntentService {
 
             NotificationCompat.Builder builder = NotificationUtils.
                     generateUploadNotificationBuilder(this,
-                            WorkingData.getInstance(this).getCaseById(caseId).name, getString(R.string.uploading_file));
+                            DbUtils.getCaseById(this, caseId).name, getString(R.string.uploading_file));
             mNotificationManager.notify(notificationId, builder.build());
 
             try {

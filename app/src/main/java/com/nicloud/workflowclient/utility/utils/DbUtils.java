@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.nicloud.workflowclient.data.data.data.Case;
 import com.nicloud.workflowclient.tasklist.main.Task;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 
@@ -106,5 +107,47 @@ public class DbUtils {
         values.put(WorkFlowContract.CheckList.IS_CHECKED, isChecked);
 
         context.getContentResolver().update(WorkFlowContract.CheckList.CONTENT_URI, values, selection, selectionArgs);
+    }
+
+    public static Case getCaseById(Context context, String caseId) {
+        String[] projection = new String[] {
+                WorkFlowContract.Case._ID,
+                WorkFlowContract.Case.CASE_ID,
+                WorkFlowContract.Case.CASE_NAME,
+                WorkFlowContract.Case.IS_COMPLETED,
+                WorkFlowContract.Case.UPDATED_TIME
+        };
+        int ID = 0;
+        int CASE_ID = 1;
+        int CASE_NAME = 2;
+        int IS_COMPLETED = 3;
+        int UPDATED_TIME = 4;
+
+        String selection = WorkFlowContract.Case.CASE_ID + " = ?";
+        String[] selectionArgs = new String[] {caseId};
+
+        Case aCase = null;
+        Cursor cursor = null;
+
+        try {
+            cursor = context.getContentResolver().query(WorkFlowContract.Case.CONTENT_URI,
+                    projection, selection, selectionArgs, null);
+
+            if (cursor != null && cursor.getCount() != 0) {
+                cursor.moveToFirst();
+
+                aCase = new Case(cursor.getString(CASE_ID),
+                                 cursor.getString(CASE_NAME),
+                                 cursor.getInt(IS_COMPLETED) == 1,
+                                 cursor.getLong(UPDATED_TIME));
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return aCase;
     }
 }

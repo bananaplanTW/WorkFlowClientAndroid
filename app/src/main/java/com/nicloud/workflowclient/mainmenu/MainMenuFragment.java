@@ -3,11 +3,15 @@ package com.nicloud.workflowclient.mainmenu;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,14 +22,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
+import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
-import com.nicloud.workflowclient.data.connectserver.cases.LoadingCases;
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
 import com.nicloud.workflowclient.data.data.data.Case;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.login.LoginActivity;
 import com.nicloud.workflowclient.provider.contentprovider.WorkFlowDatabaseHelper;
-import com.nicloud.workflowclient.utility.utils.Utils;
 import com.parse.ParsePush;
 
 import java.util.ArrayList;
@@ -35,7 +39,7 @@ import java.util.List;
  * Created by logicmelody on 2015/12/21.
  */
 public class MainMenuFragment extends Fragment implements View.OnClickListener,
-        LoadingCases.OnFinishLoadingCasesListener {
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     public interface OnClickMainMenuItemListener {
         void onClickMainMenuItem(MainMenuItem item);
@@ -45,6 +49,23 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
         public static final int MY_TASKS = 0;
         public static final int CASE = 1;
     }
+
+    private static final int LOADER_ID = 536;
+
+    private static final String[] mProjection = new String[] {
+            WorkFlowContract.Case._ID,
+            WorkFlowContract.Case.CASE_ID,
+            WorkFlowContract.Case.CASE_NAME,
+            WorkFlowContract.Case.IS_COMPLETED,
+            WorkFlowContract.Case.UPDATED_TIME
+    };
+    private static final int ID = 0;
+    private static final int CASE_ID = 1;
+    private static final int CASE_NAME = 2;
+    private static final int IS_COMPLETED = 3;
+    private static final int UPDATED_TIME = 4;
+
+    private static final String mSortOrder = WorkFlowContract.Case.CASE_NAME;
 
     private Context mContext;
 
@@ -82,7 +103,9 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mContext.startService(GeneralService.generateLoadCasesIntent(mContext));
         initialize();
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     private void initialize() {
@@ -90,7 +113,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
         loadWorkerAvatar();
         setupWorkerViews();
         setupMainMenuList();
-        loadCases();
     }
 
     private void findViews() {
@@ -140,10 +162,6 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
         mMainMenuList.setAdapter(mMainMenuListAdapter);
     }
 
-    private void loadCases() {
-        new LoadingCases(mContext, this).execute();
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -165,11 +183,18 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onFinishLoadingCases() {
-        setMainMenuListData();
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(mContext, WorkFlowContract.Case.CONTENT_URI, mProjection, null, null, mSortOrder);
     }
 
-    private void setMainMenuListData() {
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) return;
+
+        setMainMenuListData(cursor);
+    }
+
+    private void setMainMenuListData(Cursor cursor) {
         mDataSet.clear();
 
         mDataSet.add(new MainMenuItem(MainMenuItemType.MY_TASKS,
@@ -182,16 +207,24 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
                 mContext.getString(R.string.main_menu_cases),
                 null, MainMenuListAdapter.ItemViewType.CASE_TITLE, false));
 
-        for (Case aCase : WorkingData.getInstance(mContext).getCases()) {
-            mDataSet.add(new MainMenuItem(MainMenuItemType.CASE, aCase.name, aCase,
-                    MainMenuListAdapter.ItemViewType.CASE, false));
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(ID);
+            String caseId = cursor.getString(CASE_ID);
+            String caseName = cursor.getString(CASE_NAME);
+            boolean isCompleted = cursor.getInt(IS_COMPLETED) == 1;
+            long updatedTime = cursor.getLong(UPDATED_TIME);
+
+            Case aCase = new Case(caseId, caseName, isCompleted, updatedTime);
+
+            mDataSet.add(new MainMenuItem(MainMenuItemType.CASE, caseName, aCase,
+                                          MainMenuListAdapter.ItemViewType.CASE, false));
         }
 
         mMainMenuListAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onFailLoadingCases(boolean isFailCausedByInternet) {
-        Utils.showInternetConnectionWeakToast(mContext);
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

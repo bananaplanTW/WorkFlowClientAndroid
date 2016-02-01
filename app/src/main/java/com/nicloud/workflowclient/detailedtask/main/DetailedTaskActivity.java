@@ -31,7 +31,7 @@ import com.nicloud.workflowclient.detailedtask.filelog.FileLogFragment;
 import com.nicloud.workflowclient.detailedtask.taskinfo.TaskInfoFragment;
 import com.nicloud.workflowclient.detailedtask.textlog.TextLogFragment;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
-import com.nicloud.workflowclient.backgroundtask.service.ActionService;
+import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.backgroundtask.receiver.UploadCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
 import com.nicloud.workflowclient.utility.MainTabContentFactory;
@@ -382,10 +382,10 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     @Override
     public void onCompleteTaskOk(String taskId) {
-        Intent intent = new Intent(this, ActionService.class);
-        intent.setAction(ActionService.ServerAction.COMPLETE_TASK);
-        intent.putExtra(ActionService.ExtraKey.TASK_ID, taskId);
-        intent.putExtra(ActionService.ExtraKey.TASK_NAME, DbUtils.getTaskNameById(this, taskId));
+        Intent intent = new Intent(this, GeneralService.class);
+        intent.setAction(GeneralService.Action.COMPLETE_TASK);
+        intent.putExtra(GeneralService.ExtraKey.TASK_ID, taskId);
+        intent.putExtra(GeneralService.ExtraKey.TASK_NAME, DbUtils.getTaskNameById(this, taskId));
 
         startService(intent);
         Utils.dismissDialog(mFragmentManager);

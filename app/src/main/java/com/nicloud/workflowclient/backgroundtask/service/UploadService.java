@@ -361,7 +361,7 @@ public class UploadService extends IntentService {
 
         NotificationCompat.Builder builder
                 = NotificationUtils.generateUploadNotificationBuilder(this,
-                WorkingData.getInstance(this).getCaseById(caseId).name, getString(R.string.uploading_file));
+                DbUtils.getCaseById(this, caseId).name, getString(R.string.uploading_file));
         mNotificationManager.notify(notificationId, builder.build());
 
         HashMap<String, String> headers = new HashMap<>();
@@ -412,7 +412,7 @@ public class UploadService extends IntentService {
 
         NotificationCompat.Builder builder
                 = NotificationUtils.generateUploadNotificationBuilder(this,
-                WorkingData.getInstance(this).getCaseById(caseId).name, getString(R.string.uploading_file));
+                DbUtils.getCaseById(this, caseId).name, getString(R.string.uploading_file));
         mNotificationManager.notify(notificationId, builder.build());
 
         HashMap<String, String> headers = new HashMap<>();

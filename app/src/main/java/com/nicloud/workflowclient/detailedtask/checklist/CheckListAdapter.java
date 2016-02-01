@@ -11,7 +11,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.backgroundtask.service.ActionService;
+import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 
 import java.util.List;
 
@@ -63,11 +63,11 @@ public class CheckListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         private void changeCheckItemCheckStatus(boolean isChecked) {
-            Intent intent = new Intent(mContext, ActionService.class);
-            intent.setAction(ActionService.ServerAction.CHECK_ITEM);
-            intent.putExtra(ActionService.ExtraKey.TASK_ID, mTaskId);
-            intent.putExtra(ActionService.ExtraKey.CHECK_ITEM_INDEX, getAdapterPosition());
-            intent.putExtra(ActionService.ExtraKey.CHECK_ITEM_CHECKED, isChecked);
+            Intent intent = new Intent(mContext, GeneralService.class);
+            intent.setAction(GeneralService.Action.CHECK_ITEM);
+            intent.putExtra(GeneralService.ExtraKey.TASK_ID, mTaskId);
+            intent.putExtra(GeneralService.ExtraKey.CHECK_ITEM_INDEX, getAdapterPosition());
+            intent.putExtra(GeneralService.ExtraKey.CHECK_ITEM_CHECKED, isChecked);
 
             mContext.startService(intent);
         }

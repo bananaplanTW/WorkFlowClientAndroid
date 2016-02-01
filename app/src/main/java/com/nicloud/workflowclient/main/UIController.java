@@ -30,11 +30,12 @@ import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
+import com.nicloud.workflowclient.mainmenu.MainMenuListAdapter;
 import com.nicloud.workflowclient.messagechat.MessageChatActivity;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.provider.debug.AndroidDatabaseManager;
 import com.nicloud.workflowclient.backgroundtask.receiver.ActionCompletedReceiver;
-import com.nicloud.workflowclient.backgroundtask.service.ActionService;
+import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.tasklist.my.MyTaskListFragment;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
@@ -87,10 +88,10 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     }
 
     public void onCompleteTaskOk(String taskId) {
-        Intent intent = new Intent(mMainActivity, ActionService.class);
-        intent.setAction(ActionService.ServerAction.COMPLETE_TASK);
-        intent.putExtra(ActionService.ExtraKey.TASK_ID, taskId);
-        intent.putExtra(ActionService.ExtraKey.TASK_NAME, DbUtils.getTaskNameById(mMainActivity, taskId));
+        Intent intent = new Intent(mMainActivity, GeneralService.class);
+        intent.setAction(GeneralService.Action.COMPLETE_TASK);
+        intent.putExtra(GeneralService.ExtraKey.TASK_ID, taskId);
+        intent.putExtra(GeneralService.ExtraKey.TASK_NAME, DbUtils.getTaskNameById(mMainActivity, taskId));
 
         mMainActivity.startService(intent);
         Utils.dismissDialog(mFragmentManager);
@@ -105,7 +106,7 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     }
 
     public void onStart() {
-        IntentFilter intentFilter = new IntentFilter(ActionService.ServerAction.COMPLETE_TASK);
+        IntentFilter intentFilter = new IntentFilter(GeneralService.Action.COMPLETE_TASK);
         LocalBroadcastManager.getInstance(mMainActivity).registerReceiver(mActionCompletedReceiver, intentFilter);
     }
 
@@ -188,6 +189,9 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     private void initialize() {
         mFragmentManager = mMainActivity.getSupportFragmentManager();
         mActionCompletedReceiver = new ActionCompletedReceiver(this);
+        mClickedMainMenuItem = new MainMenuItem(MainMenuFragment.MainMenuItemType.MY_TASKS,
+                                                mMainActivity.getString(R.string.main_menu_my_tasks),
+                                                null, MainMenuListAdapter.ItemViewType.ITEM, true);
 
         loadWorkers();
         findViews();
@@ -361,10 +365,10 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     @Override
     public void onServerActionCompleted(Intent intent) {
         String action = intent.getAction();
-        String taskName = intent.getStringExtra(ActionService.ExtraKey.TASK_NAME);
-        boolean isActionSuccessful = intent.getBooleanExtra(ActionService.ExtraKey.ACTION_SUCCESSFUL, false);
+        String taskName = intent.getStringExtra(GeneralService.ExtraKey.TASK_NAME);
+        boolean isActionSuccessful = intent.getBooleanExtra(GeneralService.ExtraKey.ACTION_SUCCESSFUL, false);
 
-        if (action.equals(ActionService.ServerAction.COMPLETE_TASK)) {
+        if (action.equals(GeneralService.Action.COMPLETE_TASK)) {
             if (isActionSuccessful) {
                 // TODO: Delete task in db
                 mMainActivity.startService(TaskService.generateLoadMyTasksIntent(mMainActivity, false));

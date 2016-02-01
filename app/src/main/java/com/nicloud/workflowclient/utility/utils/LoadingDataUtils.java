@@ -29,7 +29,6 @@ public class LoadingDataUtils {
     public static final class WorkingDataUrl {
 
         public static final String WORKERS = sBaseUrl + "/api/employees";
-        public static final String CASES = sBaseUrl + "/api/cases";
         public static final String TASK_BY_ID = sBaseUrl + "/api/task?taskId=";
         public static final String TASKS_BY_WORKER = sBaseUrl + "/api/employee/tasks?employeeId=";
 
@@ -39,6 +38,7 @@ public class LoadingDataUtils {
             public static final String CHECK_TASK = "/api/v2/check-task-todo";
             public static final String MESSAGES = "/api/chatting/employee";
 
+            public static final String CASES = "/api/cases";
             public static final String CASE_FILES = "/api/case-attachment";
             public static final String CASE_UPLOAD_FILE = "/api/case-attachment/file";
             public static final String CASE_UPLOAD_IMAGE = "/api/case-attachment/image";
@@ -62,31 +62,6 @@ public class LoadingDataUtils {
             public static final String LOGIN = "/api/login";
 
             public static final String CHECKIN_OUT = "/api/checkin-out/employee";
-        }
-    }
-
-    /**
-     * Load all cases data from server.
-     *
-     * @param context
-     */
-    public static void loadCases(Context context) {
-        try {
-            HashMap<String, String> headers = new HashMap<>();
-            headers.put("x-user-id", WorkingData.getUserId());
-            headers.put("x-auth-token", WorkingData.getAuthToken());
-
-            String caseJsonListString = RestfulUtils.restfulGetRequest(WorkingDataUrl.CASES, headers);
-            JSONArray caseJsonList = new JSONObject(caseJsonListString).getJSONArray("result");
-
-            for (int i = 0; i < caseJsonList.length(); i++) {
-                JSONObject caseJson = caseJsonList.getJSONObject(i);
-                addCaseToWorkingData(context, caseJson);
-            }
-
-        } catch (JSONException e) {
-            Log.e(TAG, "Exception in loadCases()");
-            e.printStackTrace();
         }
     }
 
@@ -115,29 +90,6 @@ public class LoadingDataUtils {
         }
     }
 
-    private static void addCaseToWorkingData(Context context, JSONObject caseJson) {
-        try {
-            String caseId = caseJson.getString("_id");
-            long lastUpdatedTime = caseJson.getLong("updatedAt");
-            boolean hasCase = WorkingData.getInstance(context).hasCase(caseId);
-
-            if (hasCase &&
-                    WorkingData.getInstance(context).getCaseById(caseId).lastUpdatedTime >= lastUpdatedTime) {
-                return;
-            }
-
-            if (hasCase) {
-                WorkingData.getInstance(context).updateCase(caseId, retrieveCaseFromJson(caseJson));
-            } else {
-                WorkingData.getInstance(context).addCase(retrieveCaseFromJson(caseJson));
-            }
-
-        } catch (JSONException e) {
-            Log.e(TAG, "Exception in addCaseToWorkingData()");
-            e.printStackTrace();
-        }
-    }
-
     private static void addWorkerToWorkingData(Context context, JSONObject workerJson) {
         try {
             String workerId = workerJson.getString("_id");
@@ -159,27 +111,6 @@ public class LoadingDataUtils {
             Log.e(TAG, "Exception in addWorkerToWorkingData()");
             e.printStackTrace();
         }
-    }
-
-    private static Case retrieveCaseFromJson(JSONObject caseJson) {
-        try {
-            String id = caseJson.getString("_id");
-            String name = caseJson.getString("name");
-            boolean isCompleted = caseJson.getBoolean("completed");
-            long updatedAt = caseJson.getLong("updatedAt");
-
-            return new Case(
-                    id,
-                    name,
-                    isCompleted,
-                    updatedAt);
-
-        } catch (JSONException e) {
-            Log.e(TAG, "Exception in retrieveCaseFromJson()");
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     public static Worker retrieveWorkerFromJson(Context context, JSONObject workerJson) {

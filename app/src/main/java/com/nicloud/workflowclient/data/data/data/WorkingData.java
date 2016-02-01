@@ -28,7 +28,6 @@ public final class WorkingData {
     private Worker mLoginWorker;
 
     // TODO: Implement DB
-    private List<Case> mCases = new ArrayList<>();
     private List<Worker> mWorkers = new ArrayList<>();
 
     private boolean mHasLoadedTasks = false;
@@ -77,38 +76,6 @@ public final class WorkingData {
 
     public Worker getLoginWorker() {
         return mLoginWorker;
-    }
-
-    public void addCase(Case aCase) {
-        mCases.add(aCase);
-    }
-
-    public void updateCase(String caseId, Case aCase) {
-        getCaseById(caseId).update(aCase);
-    }
-
-    public Case getCaseById(String caseId) {
-        for (Case aCase : mCases) {
-            if (aCase.id.equals(caseId)) return aCase;
-        }
-
-        return null;
-    }
-
-    public List<Case> getCases() {
-        return mCases;
-    }
-
-    public boolean hasCase(String caseId) {
-        for (Case aCase : mCases) {
-            if (aCase.id.equals(caseId)) return true;
-        }
-
-        return false;
-    }
-
-    public void clearCases() {
-        mCases.clear();
     }
 
     public void addWorker(Worker worker) {

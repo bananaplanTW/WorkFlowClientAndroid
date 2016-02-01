@@ -68,7 +68,7 @@
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".backgroundtask.service.ActionService"
+            android:name=".backgroundtask.service.GeneralService"
             android:exported="false" />
         <service
             android:name=".backgroundtask.service.UploadService"
