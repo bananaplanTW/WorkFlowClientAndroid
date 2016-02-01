@@ -54,7 +54,7 @@ public class FileLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new FileLogItemViewHolder(LayoutInflater.from(mContext).inflate(R.layout.file_log_item, parent, false));
+        return new FileLogItemViewHolder(LayoutInflater.from(mContext).inflate(R.layout.file_item, parent, false));
     }
 
     @Override

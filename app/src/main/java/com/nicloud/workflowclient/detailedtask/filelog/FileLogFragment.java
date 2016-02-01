@@ -81,7 +81,7 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_file_log, container, false);
+        return inflater.inflate(R.layout.fragment_file_list, container, false);
     }
 
     @Override
@@ -102,9 +102,9 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
     }
 
     private void findViews() {
-        mFileLogSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.file_log_swipe_refresh_container);
-        mFileLogList = (RecyclerView) getView().findViewById(R.id.file_log_list);
-        mNoFileText = (TextView) getView().findViewById(R.id.file_log_list_no_item_text);
+        mFileLogSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.file_list_swipe_refresh_container);
+        mFileLogList = (RecyclerView) getView().findViewById(R.id.file_list);
+        mNoFileText = (TextView) getView().findViewById(R.id.file_list_no_item_text);
         mAddFileButton = (TextView) getView().findViewById(R.id.add_file_button);
         mAddPhotoButton = (TextView) getView().findViewById(R.id.take_photo_button);
     }

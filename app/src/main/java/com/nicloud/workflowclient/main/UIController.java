@@ -244,8 +244,6 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     }
 
     private void onCloseMainMenuAction() {
-        if (mClickedMainMenuItem == null) return;
-
         mActionBar.setTitle(mClickedMainMenuItem.mName);
 
         switch (mClickedMainMenuItem.mType) {
@@ -258,14 +256,13 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
             case MainMenuFragment.MainMenuItemType.CASE:
                 if (mCurrentContentFragment instanceof CaseFragment) {
                     ((CaseFragment) mCurrentContentFragment).setCaseId(mClickedMainMenuItem.mCase.id);
+
                     break;
                 }
                 replaceTo(CaseFragment.class, FragmentTag.CASE);
 
                 break;
         }
-
-        mClickedMainMenuItem = null;
     }
 
     private void onCloseMessageMenuAction() {

@@ -83,4 +83,28 @@ public class WorkFlowContract {
         public static final String TASK_ID = "task_id";
         public static final String POSITION = "position";
     }
+
+    public static final class File implements BaseColumns {
+
+        public static final class Type {
+            public static final String IMAGE = "image";
+            public static final String FILE = "file";
+        }
+
+        public static final String TABLE_NAME = "file";
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_NAME);
+
+        // DB columns
+        public static final String FILE_ID = "file_id";
+        public static final String FILE_NAME = "file_name";
+        public static final String FILE_TYPE = "file_type";
+        public static final String FILE_URL = "file_url";
+        public static final String FILE_THUMB_URL = "file_thumb_url";
+        public static final String OWNER_ID = "owner_id";
+        public static final String OWNER_NAME = "owner_name";
+        public static final String CASE_ID = "case_id";
+        public static final String TASK_ID = "task_id";
+        public static final String CREATED_TIME = "created_time";
+        public static final String UPDATED_TIME = "updated_time";
+    }
 }

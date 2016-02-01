@@ -66,7 +66,7 @@
     <string name="detailed_task_upload_file">Upload file %1$s</string>
     <string name="detailed_task_upload_photo">Upload photo %1$s</string>
     <string name="text_log_no_log_text">No text</string>
-    <string name="file_log_no_log_text">No file</string>
+    <string name="file_list_no_log_text">No file</string>
     <string name="check_list_no_task_text">No task</string>
 
     <!-- Case -->

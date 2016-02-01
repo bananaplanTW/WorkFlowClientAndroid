@@ -13,7 +13,6 @@ import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
-import com.nicloud.workflowclient.tasklist.my.MyTaskListFragment;
 
 public class MainActivity extends AppCompatActivity implements MainMenuFragment.OnClickMainMenuItemListener,
         MessageMenuFragment.OnClickMessageMenuWorkerListener,

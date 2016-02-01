@@ -82,6 +82,9 @@
         <service
             android:name=".backgroundtask.service.TaskService"
             android:exported="false" />
+        <service
+            android:name=".backgroundtask.service.FileService"
+            android:exported="false" />
 
         <!-- Parse -->
         <service android:name="com.parse.PushService" />

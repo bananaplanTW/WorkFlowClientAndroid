@@ -29,6 +29,7 @@ import android.widget.ImageView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
+import com.nicloud.workflowclient.cases.main.OnSetCaseId;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.backgroundtask.service.CaseDiscussionService;
 import com.nicloud.workflowclient.utility.IMMResult;
@@ -42,7 +43,8 @@ import java.util.List;
  * Created by logicmelody on 2016/1/25.
  */
 public class CaseDiscussionFragment extends Fragment implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor>, LoadPromptDiscussionReceiver.OnLoadPromptDiscussionListener {
+        LoaderManager.LoaderCallbacks<Cursor>, LoadPromptDiscussionReceiver.OnLoadPromptDiscussionListener,
+        OnSetCaseId {
 
     private static final String TAG = "CaseDiscussionFragment";
 
@@ -77,9 +79,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
     private static final int CREATED_TIME = 11;
 
     private static final String mSelection = WorkFlowContract.Discussion.CASE_ID + " = ?";
-
     private static String[] mSelectionArgs;
-
     private static final String mSortOrder = WorkFlowContract.Discussion.CREATED_TIME;
 
     private Context mContext;
@@ -107,9 +107,16 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
     private boolean mIsLoadingBeforeMessages = false;
 
 
+    @Override
     public void setCaseId(String caseId) {
         mCaseId = caseId;
-        mSelectionArgs[0] = mCaseId;
+
+        if (mSelectionArgs == null) {
+            mSelectionArgs = new String[] {mCaseId};
+        } else {
+            mSelectionArgs[0] = mCaseId;
+        }
+
         loadDiscussionFirstLaunch();
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
@@ -131,7 +138,14 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
         super.onActivityCreated(savedInstanceState);
         initialize();
         loadDiscussionFirstLaunch();
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+
+        Loader<CursorLoader> loader = getLoaderManager().getLoader(LOADER_ID);
+        if (loader != null && !loader.isReset()) {
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
+
+        } else {
+            getLoaderManager().initLoader(LOADER_ID, null, this);
+        }
     }
 
     @Override

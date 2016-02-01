@@ -41,6 +41,8 @@ public class LoadingDataUtils {
             public static final String CHECK_TASK = "/api/v2/check-task-todo";
             public static final String MESSAGES = "/api/chatting/employee";
 
+            public static final String CASE_FILES = "/api/case-attachment";
+
             public static final String DISCUSSION = "/api/case-message";
             public static final String SEND_DISCUSSION_MESSAGE = "/api/case-message/text";
             public static final String SEND_DISCUSSION_IMAGE = "/api/case-message/image";

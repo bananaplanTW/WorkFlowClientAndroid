@@ -22,6 +22,7 @@ public class WorkFlowProvider extends ContentProvider {
         public static final int DISCUSSION = 1;
         public static final int TASK = 2;
         public static final int CHECK_LIST = 3;
+        public static final int FILE = 4;
     }
 
     private static final UriMatcher sUriMatcher;
@@ -32,6 +33,7 @@ public class WorkFlowProvider extends ContentProvider {
         sUriMatcher.addURI(WorkFlowContract.AUTHORITY, WorkFlowContract.Discussion.TABLE_NAME, UriMatcherIndex.DISCUSSION);
         sUriMatcher.addURI(WorkFlowContract.AUTHORITY, WorkFlowContract.Task.TABLE_NAME, UriMatcherIndex.TASK);
         sUriMatcher.addURI(WorkFlowContract.AUTHORITY, WorkFlowContract.CheckList.TABLE_NAME, UriMatcherIndex.CHECK_LIST);
+        sUriMatcher.addURI(WorkFlowContract.AUTHORITY, WorkFlowContract.File.TABLE_NAME, UriMatcherIndex.FILE);
     }
 
     private WorkFlowDatabaseHelper mWorkFlowDatabaseHelper;
@@ -65,6 +67,10 @@ public class WorkFlowProvider extends ContentProvider {
 
             case UriMatcherIndex.CHECK_LIST:
                 queryBuilder.setTables(WorkFlowContract.CheckList.TABLE_NAME);
+                break;
+
+            case UriMatcherIndex.FILE:
+                queryBuilder.setTables(WorkFlowContract.File.TABLE_NAME);
                 break;
 
             default:
@@ -106,6 +112,10 @@ public class WorkFlowProvider extends ContentProvider {
                 id = db.insert(WorkFlowContract.CheckList.TABLE_NAME, null, values);
                 break;
 
+            case UriMatcherIndex.FILE:
+                id = db.insert(WorkFlowContract.File.TABLE_NAME, null, values);
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -137,6 +147,10 @@ public class WorkFlowProvider extends ContentProvider {
                 rowsDeleted = db.delete(WorkFlowContract.CheckList.TABLE_NAME, selection, selectionArgs);
                 break;
 
+            case UriMatcherIndex.FILE:
+                rowsDeleted = db.delete(WorkFlowContract.File.TABLE_NAME, selection, selectionArgs);
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -166,6 +180,10 @@ public class WorkFlowProvider extends ContentProvider {
 
             case UriMatcherIndex.CHECK_LIST:
                 rowsUpdated = db.update(WorkFlowContract.CheckList.TABLE_NAME, values, selection, selectionArgs);
+                break;
+
+            case UriMatcherIndex.FILE:
+                rowsUpdated = db.update(WorkFlowContract.File.TABLE_NAME, values, selection, selectionArgs);
                 break;
 
             default:

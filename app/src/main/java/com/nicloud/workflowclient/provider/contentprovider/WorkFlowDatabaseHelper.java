@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.nicloud.workflowclient.provider.database.CheckListTable;
 import com.nicloud.workflowclient.provider.database.DiscussionTable;
+import com.nicloud.workflowclient.provider.database.FileTable;
 import com.nicloud.workflowclient.provider.database.MessageTable;
 import com.nicloud.workflowclient.provider.database.TaskTable;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
@@ -49,6 +50,7 @@ public class WorkFlowDatabaseHelper extends SQLiteOpenHelper {
         db.delete(WorkFlowContract.Discussion.TABLE_NAME, null, null);
         db.delete(WorkFlowContract.Task.TABLE_NAME, null, null);
         db.delete(WorkFlowContract.CheckList.TABLE_NAME, null, null);
+        db.delete(WorkFlowContract.File.TABLE_NAME, null, null);
     }
 
     @Override
@@ -57,6 +59,7 @@ public class WorkFlowDatabaseHelper extends SQLiteOpenHelper {
         DiscussionTable.onCreate(db);
         TaskTable.onCreate(db);
         CheckListTable.onCreate(db);
+        FileTable.onCreate(db);
     }
 
     @Override
@@ -65,6 +68,7 @@ public class WorkFlowDatabaseHelper extends SQLiteOpenHelper {
         DiscussionTable.onUpgrade(db, oldVersion, newVersion);
         TaskTable.onUpgrade(db, oldVersion, newVersion);
         CheckListTable.onUpgrade(db, oldVersion, newVersion);
+        FileTable.onUpgrade(db, oldVersion, newVersion);
     }
 
     public ArrayList<Cursor> getData(String Query){

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
+import com.nicloud.workflowclient.cases.main.OnSetCaseId;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.tasklist.main.TaskListAdapter;
 import com.nicloud.workflowclient.tasklist.main.TaskListFragmentBase;
@@ -15,16 +16,23 @@ import java.util.List;
 /**
  * Created by logicmelody on 2016/1/31.
  */
-public class CaseTaskListFragment extends TaskListFragmentBase {
+public class CaseTaskListFragment extends TaskListFragmentBase implements OnSetCaseId {
 
     private static final int LOADER_ID = 963;
 
     private String mCaseId;
 
 
+    @Override
     public void setCaseId(String caseId) {
         mCaseId = caseId;
-        mSelectionArgs[0] = mCaseId;
+
+        if (mSelectionArgs == null) {
+            mSelectionArgs = new String[] {mCaseId};
+        } else {
+            mSelectionArgs[0] = mCaseId;
+        }
+
         mContext.startService(TaskService.generateLoadCaseTasksIntent(mContext, mCaseId, true));
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
