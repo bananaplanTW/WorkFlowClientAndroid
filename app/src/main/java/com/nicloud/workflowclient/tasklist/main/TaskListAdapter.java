@@ -7,9 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.data.data.data.Worker;
+import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.utility.utils.Utils;
@@ -33,10 +36,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public View view;
         public View dueDateUnderline;
         public View contentUnderline;
+        public View taskCardNameContainer;
+        public View ownerContainer;
         public TextView taskName;
         public TextView caseName;
         public TextView dueDate;
         public ImageView completeButton;
+        public ImageView ownerAvatar;
 
         public TaskViewHolder(View view) {
             super(view);
@@ -48,10 +54,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.view = view;
             dueDateUnderline = view.findViewById(R.id.task_card_due_date_underline);
             contentUnderline = view.findViewById(R.id.task_card_content_underline);
+            taskCardNameContainer = view.findViewById(R.id.task_card_name_container);
+            ownerContainer = view.findViewById(R.id.task_card_owner_container);
             taskName = (TextView) view.findViewById(R.id.task_card_name);
             caseName = (TextView) view.findViewById(R.id.task_card_case_name);
             dueDate = (TextView) view.findViewById(R.id.task_card_due_date);
             completeButton = (ImageView) view.findViewById(R.id.complete_task_button);
+            ownerAvatar = (ImageView) view.findViewById(R.id.owner_avatar);
         }
 
         private void setupViews() {
@@ -94,9 +103,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         TaskViewHolder taskVH = (TaskViewHolder) holder;
         Task task = mDataSet.get(position).task;
-
-        taskVH.taskName.setText(task.name);
-        taskVH.caseName.setText(task.caseName);
+        Worker worker = WorkingData.getInstance(mContext).getWorkerById(task.workerId);
 
         // Due date underline
         if (mDataSet.get(position).showDueDateUnderline) {
@@ -131,8 +138,34 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             taskVH.dueDate.setVisibility(View.GONE);
         }
 
+        // Task card name container
+        RelativeLayout.LayoutParams params =
+                (RelativeLayout.LayoutParams) taskVH.taskCardNameContainer.getLayoutParams();
+        params.addRule(RelativeLayout.LEFT_OF, mIsMyTaskList ?
+                taskVH.completeButton.getId() : taskVH.ownerContainer.getId());
+
+        taskVH.taskName.setText(task.name);
+        taskVH.caseName.setText(task.caseName);
+        taskVH.taskCardNameContainer.setLayoutParams(params);
+
         // Completed button
         taskVH.completeButton.setVisibility(mIsMyTaskList ? View.VISIBLE : View.GONE);
+
+        // Owner container
+        if (mIsMyTaskList) {
+            taskVH.ownerContainer.setVisibility(View.GONE);
+
+        } else {
+            taskVH.ownerContainer.setVisibility(View.VISIBLE);
+
+            // Owner avatar
+            if (worker != null && worker.avatar != null) {
+                taskVH.ownerAvatar.setImageDrawable(worker.avatar);
+
+            } else {
+                taskVH.ownerAvatar.setImageResource(R.drawable.ic_worker_black);
+            }
+        }
     }
 
     @Override

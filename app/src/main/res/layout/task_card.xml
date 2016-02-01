@@ -38,7 +38,6 @@
             android:padding="@dimen/task_card_name_container_padding"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/complete_task_button"
             android:orientation="vertical">
 
             <TextView
@@ -62,10 +61,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/complete_task_button_margin_right"
+            android:layout_marginRight="@dimen/task_card_padding_left_right"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_complete_task"
             android:background="@drawable/complete_task_button_background"/>
+
+        <LinearLayout
+            android:id="@+id/task_card_owner_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/task_card_padding_left_right"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/owner_avatar"
+                android:layout_width="@dimen/case_task_card_owner_avatar_width_height"
+                android:layout_height="@dimen/case_task_card_owner_avatar_width_height" />
+
+        </LinearLayout>
 
         <View
             android:id="@+id/task_card_content_underline"
