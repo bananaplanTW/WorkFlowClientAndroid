@@ -1,8 +1,6 @@
 package com.nicloud.workflowclient.detailedtask.checklist;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,13 +23,9 @@ import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.main.OnRefreshDetailedTask;
 import com.nicloud.workflowclient.detailedtask.main.OnSwipeRefresh;
-import com.nicloud.workflowclient.backgroundtask.service.ActionService;
-import com.nicloud.workflowclient.backgroundtask.receiver.ActionCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
-import com.nicloud.workflowclient.utility.utils.DbUtils;
-import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,7 +167,7 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh, View.
                 String checkItem = mAddCheckItemBox.getText().toString();
                 if (TextUtils.isEmpty(checkItem)) return;
 
-                mContext.startService(UploadService.generateUploadCheckItemIntent(mContext, mTaskId, checkItem));
+                mContext.startService(UploadService.generateUploadTaskCheckItemIntent(mContext, mTaskId, checkItem));
                 mAddCheckItemBox.setText("");
                 break;
         }

@@ -371,11 +371,11 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         String fromAction = intent.getStringExtra(UploadService.ExtraKey.FROM_ACTION);
         boolean isUploadSuccessful = intent.getBooleanExtra(UploadService.ExtraKey.UPLOAD_SUCCESSFUL, false);
 
-        if ((UploadService.UploadAction.TEXT.equals(fromAction) || UploadService.UploadAction.FILE.equals(fromAction))
-                && isUploadSuccessful) {
+        if ((UploadService.UploadAction.TASK_TEXT.equals(fromAction) ||
+             UploadService.UploadAction.TASK_FILE.equals(fromAction)) && isUploadSuccessful) {
             loadTaskActivities();
 
-        } else if (UploadService.UploadAction.CHECK_ITEM.equals(fromAction) && isUploadSuccessful) {
+        } else if (UploadService.UploadAction.TASK_CHECK_ITEM.equals(fromAction) && isUploadSuccessful) {
             startService(TaskService.generateLoadTaskByIdIntent(this, mTask.id));
         }
     }

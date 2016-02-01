@@ -154,7 +154,7 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.On
         String editContent = mTextLogBox.getText().toString();
         if (TextUtils.isEmpty(editContent)) return;
 
-        mContext.startService(UploadService.generateUploadTextIntent(mContext, mTaskId, editContent));
+        mContext.startService(UploadService.generateUploadTaskTextIntent(mContext, mTaskId, editContent));
         mTextLogBox.setText("");
     }
 }

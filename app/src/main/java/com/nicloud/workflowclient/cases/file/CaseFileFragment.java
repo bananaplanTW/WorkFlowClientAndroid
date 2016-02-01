@@ -330,7 +330,7 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
     private void syncingPhotoActivity() {
         String realPath = mCurrentPhotoPath.substring(mCurrentPhotoPath.indexOf(':') + 1);
 
-        //mContext.startService(UploadService.generateUploadPhotoIntent(mContext, mTaskId, realPath));
+        //mContext.startService(UploadService.generateUploadTaskPhotoIntent(mContext, mTaskId, realPath));
 
         mCurrentPhotoPath = null;
     }
@@ -352,10 +352,10 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
 
     private void syncingFileActivity() {
         if (Utils.isImage(mCurrentFilePath)) {
-            //mContext.startService(UploadService.generateUploadPhotoIntent(mContext, mTaskId, mCurrentFilePath));
+            //mContext.startService(UploadService.generateUploadTaskPhotoIntent(mContext, mTaskId, mCurrentFilePath));
 
         } else {
-            //mContext.startService(UploadService.generateUploadFileIntent(mContext, mTaskId, mCurrentFilePath));
+            //mContext.startService(UploadService.generateUploadTaskFileIntent(mContext, mTaskId, mCurrentFilePath));
         }
 
         mCurrentFilePath = null;
