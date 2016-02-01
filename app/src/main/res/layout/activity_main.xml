@@ -42,6 +42,7 @@
         android:background="@color/drawer_menu_background_color" />
 
     <!-- Navigation drawer in right side -->
+    <!--
     <FrameLayout
         android:id="@+id/drawer_menu_right_side_container"
         android:layout_width="@dimen/message_menu_width"
@@ -50,5 +51,6 @@
         android:clickable="true"
         android:layout_gravity="end"
         android:background="@color/drawer_menu_background_color" />
+        -->
 
 </android.support.v4.widget.DrawerLayout>
