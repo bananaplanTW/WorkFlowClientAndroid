@@ -35,11 +35,14 @@ public class UploadService extends IntentService {
         public static final String TASK_TEXT = "upload_action_task_text";
         public static final String TASK_PHOTO = "upload_action_task_photo";
         public static final String TASK_FILE = "upload_action_task_file";
+        public static final String CASE_PHOTO = "upload_action_case_photo";
+        public static final String CASE_FILE = "upload_action_case_file";
         public static final String UPLOAD_COMPLETED = "upload_action_completed";
     }
 
     public static class ExtraKey {
         public static final String TASK_ID = "extra_task_id";
+        public static final String CASE_ID = "extra_case_id";
         public static final String CHECK_ITEM_NAME = "extra_check_item_name";
         public static final String TEXT = "extra_text";
         public static final String PHOTO_PATH = "extra_photo_path";
@@ -89,6 +92,24 @@ public class UploadService extends IntentService {
         return intent;
     }
 
+    public static Intent generateUploadCasePhotoIntent(Context context, String caseId, String filePath) {
+        Intent intent = new Intent(context, UploadService.class);
+        intent.setAction(UploadAction.CASE_PHOTO);
+        intent.putExtra(ExtraKey.CASE_ID, caseId);
+        intent.putExtra(ExtraKey.FILE_PATH, filePath);
+
+        return intent;
+    }
+
+    public static Intent generateUploadCaseFileIntent(Context context, String caseId, String filePath) {
+        Intent intent = new Intent(context, UploadService.class);
+        intent.setAction(UploadAction.CASE_FILE);
+        intent.putExtra(ExtraKey.CASE_ID, caseId);
+        intent.putExtra(ExtraKey.FILE_PATH, filePath);
+
+        return intent;
+    }
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      */
@@ -118,6 +139,12 @@ public class UploadService extends IntentService {
 
         } else if (UploadAction.TASK_CHECK_ITEM.equals(action)) {
             uploadTaskCheckItem(intent);
+
+        } else if (UploadAction.CASE_PHOTO.equals(action)) {
+            uploadCasePhoto(intent);
+
+        } else if (UploadAction.CASE_FILE.equals(action)) {
+            uploadCaseFile(intent);
         }
     }
 
@@ -321,5 +348,107 @@ public class UploadService extends IntentService {
         }
 
         Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+    }
+
+    private void uploadCasePhoto(Intent intent) {
+        int notificationId = Utils.generateNotificationId();
+
+        String caseId = intent.getStringExtra(ExtraKey.CASE_ID);
+        String filePath = intent.getStringExtra(ExtraKey.FILE_PATH);
+
+        Intent broadcastIntent = new Intent(UploadAction.UPLOAD_COMPLETED);
+        broadcastIntent.putExtra(ExtraKey.FROM_ACTION, UploadAction.CASE_FILE);
+
+        NotificationCompat.Builder builder
+                = NotificationUtils.generateUploadNotificationBuilder(this,
+                WorkingData.getInstance(this).getCaseById(caseId).name, getString(R.string.uploading_file));
+        mNotificationManager.notify(notificationId, builder.build());
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-user-id", WorkingData.getUserId());
+        headers.put("x-auth-token", WorkingData.getAuthToken());
+        headers.put("cd", caseId);
+
+        try {
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.CASE_UPLOAD_IMAGE, null);
+            String responseString = RestfulUtils.restfulPostFileRequest(urlString, headers, filePath);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+                if (jsonObject.getString("status").equals("success")) {
+                    NotificationUtils.uploadSuccessfully(builder, getString(R.string.complete_uploading_file));
+                    mNotificationManager.notify(notificationId, builder.build());
+
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.complete_uploading_file));
+
+                    broadcastIntent.putExtra(ExtraKey.UPLOAD_SUCCESSFUL, true);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+
+                    return;
+                }
+            }
+        }  catch (JSONException e) {
+            e.printStackTrace();
+
+            NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
+            mNotificationManager.notify(notificationId, builder.build());
+
+            return;
+        }
+
+        NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
+        mNotificationManager.notify(notificationId, builder.build());
+    }
+
+    private void uploadCaseFile(Intent intent) {
+        int notificationId = Utils.generateNotificationId();
+
+        String caseId = intent.getStringExtra(ExtraKey.CASE_ID);
+        String filePath = intent.getStringExtra(ExtraKey.FILE_PATH);
+
+        Intent broadcastIntent = new Intent(UploadAction.UPLOAD_COMPLETED);
+        broadcastIntent.putExtra(ExtraKey.FROM_ACTION, UploadAction.CASE_FILE);
+
+        NotificationCompat.Builder builder
+                = NotificationUtils.generateUploadNotificationBuilder(this,
+                WorkingData.getInstance(this).getCaseById(caseId).name, getString(R.string.uploading_file));
+        mNotificationManager.notify(notificationId, builder.build());
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-user-id", WorkingData.getUserId());
+        headers.put("x-auth-token", WorkingData.getAuthToken());
+        headers.put("cd", caseId);
+
+        try {
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.CASE_UPLOAD_FILE, null);
+            String responseString = RestfulUtils.restfulPostFileRequest(urlString, headers, filePath);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+                if (jsonObject.getString("status").equals("success")) {
+                    NotificationUtils.uploadSuccessfully(builder, getString(R.string.complete_uploading_file));
+                    mNotificationManager.notify(notificationId, builder.build());
+
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.complete_uploading_file));
+
+                    broadcastIntent.putExtra(ExtraKey.UPLOAD_SUCCESSFUL, true);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+
+                    return;
+                }
+            }
+        }  catch (JSONException e) {
+            e.printStackTrace();
+
+            NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
+            mNotificationManager.notify(notificationId, builder.build());
+
+            return;
+        }
+
+        NotificationUtils.uploadFailed(builder, getString(R.string.upload_failed));
+        mNotificationManager.notify(notificationId, builder.build());
     }
 }

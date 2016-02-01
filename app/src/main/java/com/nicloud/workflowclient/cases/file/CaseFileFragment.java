@@ -28,8 +28,10 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.FileCompletedReceiver;
+import com.nicloud.workflowclient.backgroundtask.receiver.UploadCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.FileService;
-import com.nicloud.workflowclient.cases.discussion.LoadPromptDiscussionReceiver;
+import com.nicloud.workflowclient.backgroundtask.service.TaskService;
+import com.nicloud.workflowclient.backgroundtask.service.UploadService;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.cases.main.OnSetCaseId;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
@@ -48,7 +50,8 @@ import java.util.List;
  * Created by logicmelody on 2016/1/25.
  */
 public class CaseFileFragment extends Fragment implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor>, OnSetCaseId, FileCompletedReceiver.OnLoadFileCompletedListener {
+        LoaderManager.LoaderCallbacks<Cursor>, OnSetCaseId, FileCompletedReceiver.OnLoadFileCompletedListener,
+        UploadCompletedReceiver.OnUploadCompletedListener {
 
     private static final String TAG = "CaseFileFragment";
 
@@ -103,6 +106,7 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
 
     private TextView mNoFileText;
 
+    private UploadCompletedReceiver mUploadCompletedReceiver;
     private FileCompletedReceiver mFileCompletedReceiver;
 
     private List<FileItem> mFileListData = new ArrayList<>();
@@ -156,15 +160,20 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
         super.onStart();
         IntentFilter intentFilter = new IntentFilter(FileCompletedReceiver.ACTION_LOAD_FILES_COMPLETED);
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mFileCompletedReceiver, intentFilter);
+
+        IntentFilter intentFilter2 = new IntentFilter(UploadService.UploadAction.UPLOAD_COMPLETED);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mUploadCompletedReceiver, intentFilter2);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mFileCompletedReceiver);
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUploadCompletedReceiver);
     }
 
     private void initialize() {
+        mUploadCompletedReceiver = new UploadCompletedReceiver(this);
         mFileCompletedReceiver = new FileCompletedReceiver(this);
         mCaseId = getArguments().getString(CaseFragment.EXTRA_CASE_ID);
         mSelectionArgs = new String[] {mCaseId};
@@ -329,9 +338,7 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
 
     private void syncingPhotoActivity() {
         String realPath = mCurrentPhotoPath.substring(mCurrentPhotoPath.indexOf(':') + 1);
-
-        //mContext.startService(UploadService.generateUploadTaskPhotoIntent(mContext, mTaskId, realPath));
-
+        mContext.startService(UploadService.generateUploadCasePhotoIntent(mContext, mCaseId, realPath));
         mCurrentPhotoPath = null;
     }
 
@@ -352,10 +359,10 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
 
     private void syncingFileActivity() {
         if (Utils.isImage(mCurrentFilePath)) {
-            //mContext.startService(UploadService.generateUploadTaskPhotoIntent(mContext, mTaskId, mCurrentFilePath));
+            mContext.startService(UploadService.generateUploadCasePhotoIntent(mContext, mCaseId, mCurrentFilePath));
 
         } else {
-            //mContext.startService(UploadService.generateUploadTaskFileIntent(mContext, mTaskId, mCurrentFilePath));
+            mContext.startService(UploadService.generateUploadCaseFileIntent(mContext, mCaseId, mCurrentFilePath));
         }
 
         mCurrentFilePath = null;
@@ -407,5 +414,14 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onLoadFileCompleted(Intent intent) {
         mFileSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onUploadCompletedListener(Intent intent) {
+        boolean isUploadSuccessful = intent.getBooleanExtra(UploadService.ExtraKey.UPLOAD_SUCCESSFUL, false);
+
+        if (isUploadSuccessful) {
+            mContext.startService(FileService.generateLoadCaseFilesIntent(mContext, mCaseId));
+        }
     }
 }

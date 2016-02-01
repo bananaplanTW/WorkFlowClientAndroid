@@ -40,6 +40,8 @@ public class LoadingDataUtils {
             public static final String MESSAGES = "/api/chatting/employee";
 
             public static final String CASE_FILES = "/api/case-attachment";
+            public static final String CASE_UPLOAD_FILE = "/api/case-attachment/file";
+            public static final String CASE_UPLOAD_IMAGE = "/api/case-attachment/image";
 
             public static final String DISCUSSION = "/api/case-message";
             public static final String SEND_DISCUSSION_MESSAGE = "/api/case-message/text";
