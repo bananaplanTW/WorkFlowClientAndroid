@@ -43,12 +43,17 @@ public class LoadingWorkerAvatar implements LoadingDrawableAsyncTask.OnFinishLoa
 
     @Override
     public void onFinishLoadingData() {
-        mAvatar.setImageDrawable(mLoadingDrawableAsyncTask.getResult());
-        mWorker.avatar = mAvatar.getDrawable();
+        if (mAvatar != null) {
+            mAvatar.setImageDrawable(mLoadingDrawableAsyncTask.getResult());
+        }
+
+        mWorker.avatar = mLoadingDrawableAsyncTask.getResult();
     }
 
     @Override
     public void onFailLoadingData(boolean isFailCausedByInternet) {
+        if (mAvatar == null) return;
+
         if (mWorker.avatar == null) {
             mAvatar.setImageResource(mDefaultWorkerIconId);
         } else {

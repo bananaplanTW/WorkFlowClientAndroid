@@ -165,7 +165,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onLoggedIn() {
-        loadingLoginWorker();
+        loadLoginWorker();
     }
 
     private void goToMainActivity() {
@@ -197,10 +197,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //ParseUtils.registerLoginWorkerToParse(WorkingData.getInstance(mContext).getLoginWorker().id);
         ParsePush.subscribeInBackground("user_" + WorkingData.getUserId());
 
-        loadingLoginWorker();
+        loadLoginWorker();
     }
 
-    private void loadingLoginWorker() {
+    private void loadLoginWorker() {
         LoadingLoginWorkerCommand loadingLoginWorkerCommand = new LoadingLoginWorkerCommand(this, this);
         loadingLoginWorkerCommand.execute();
     }

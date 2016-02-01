@@ -1,8 +1,10 @@
 package com.nicloud.workflowclient.tasklist.main;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +13,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.List;
@@ -159,8 +163,22 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             taskVH.ownerContainer.setVisibility(View.VISIBLE);
 
             // Owner avatar
-            if (worker != null && worker.avatar != null) {
-                taskVH.ownerAvatar.setImageDrawable(worker.avatar);
+            if (worker != null) {
+                if (worker.avatar != null) {
+                    taskVH.ownerAvatar.setImageDrawable(worker.avatar);
+
+                } else {
+                    taskVH.ownerAvatar.setImageResource(R.drawable.ic_worker_black);
+
+                    if (!TextUtils.isEmpty(worker.avatarUrl)) {
+                        Uri.Builder avatarBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+                        avatarBuilder.path(worker.avatarUrl);
+                        Uri avatarUri = avatarBuilder.build();
+
+                        new LoadingWorkerAvatar(mContext, avatarUri, taskVH.ownerAvatar,
+                                worker, R.drawable.selector_message_menu_worker_avatar).execute();
+                    }
+                }
 
             } else {
                 taskVH.ownerAvatar.setImageResource(R.drawable.ic_worker_black);

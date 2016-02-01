@@ -6,8 +6,6 @@ import android.util.Log;
 import com.nicloud.workflowclient.data.data.data.Case;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
-import com.nicloud.workflowclient.utility.utils.RestfulUtils;
-import com.nicloud.workflowclient.utility.utils.JsonUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

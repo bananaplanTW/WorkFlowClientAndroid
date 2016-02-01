@@ -3,6 +3,7 @@ package com.nicloud.workflowclient.main;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +23,10 @@ import android.view.View;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
+import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
+import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkers;
 import com.nicloud.workflowclient.data.data.data.Worker;
+import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
@@ -32,6 +37,7 @@ import com.nicloud.workflowclient.backgroundtask.receiver.ActionCompletedReceive
 import com.nicloud.workflowclient.backgroundtask.service.ActionService;
 import com.nicloud.workflowclient.tasklist.my.MyTaskListFragment;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
+import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 
@@ -42,7 +48,8 @@ import com.nicloud.workflowclient.utility.utils.Utils;
  * @since 2015.05.28
  *
  */
-public class UIController implements View.OnClickListener, ActionCompletedReceiver.OnServerActionCompletedListener {
+public class UIController implements View.OnClickListener, ActionCompletedReceiver.OnServerActionCompletedListener,
+        LoadingWorkers.OnFinishLoadingWorkersListener {
 
     private static final String TAG = "UIController";
 
@@ -181,11 +188,17 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     private void initialize() {
         mFragmentManager = mMainActivity.getSupportFragmentManager();
         mActionCompletedReceiver = new ActionCompletedReceiver(this);
+
+        loadWorkers();
         findViews();
         setupViews();
         setupActionbar();
         setupDrawer();
         setupFragments();
+    }
+
+    private void loadWorkers() {
+        new LoadingWorkers(mMainActivity, this).execute();
     }
 
     private void findViews() {
@@ -361,5 +374,24 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
                 Utils.showInternetConnectionWeakToast(mMainActivity);
             }
         }
+    }
+
+    @Override
+    public void onFinishLoadingWorkers() {
+        for (Worker worker : WorkingData.getInstance(mMainActivity).getWorkers()) {
+            if (!TextUtils.isEmpty(worker.avatarUrl)) {
+                Uri.Builder avatarBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+                avatarBuilder.path(worker.avatarUrl);
+                Uri avatarUri = avatarBuilder.build();
+
+                new LoadingWorkerAvatar(mMainActivity, avatarUri, null,
+                        worker, R.drawable.selector_message_menu_worker_avatar).execute();
+            }
+        }
+    }
+
+    @Override
+    public void onFailLoadingWorkers(boolean isFailCausedByInternet) {
+
     }
 }

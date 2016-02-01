@@ -53,12 +53,16 @@ public class LoadingWorkers extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onCancelled(Void aVoid) {
         //super.onCancelled(aVoid);
+        if (mOnFinishLoadingWorkersListener == null) return;
+
         mOnFinishLoadingWorkersListener.onFailLoadingWorkers(isFailCausedByInternet);
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        if (mOnFinishLoadingWorkersListener == null) return;
+
         mOnFinishLoadingWorkersListener.onFinishLoadingWorkers();
     }
 }
