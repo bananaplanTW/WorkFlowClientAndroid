@@ -3,7 +3,6 @@ package com.nicloud.workflowclient.utility.utils;
 import android.content.Context;
 import android.util.Log;
 
-import com.nicloud.workflowclient.data.data.data.Case;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 
@@ -24,7 +23,7 @@ public class LoadingDataUtils {
 
     private static final String TAG = "LoadDataUtils";
 
-    public static String sBaseUrl = "http://52.26.71.101";
+    public static String sBaseUrl = "http://10.1.1.59:3000";
 
     public static final class WorkingDataUrl {
 
@@ -37,6 +36,8 @@ public class LoadingDataUtils {
             public static final String TASKS = "/api/tasks";
             public static final String CHECK_TASK = "/api/v2/check-task-todo";
             public static final String MESSAGES = "/api/chatting/employee";
+
+            public static final String CREATE_TASK = "/api/task";
 
             public static final String CREATE_CASE = "/api/case";
             public static final String LOAD_CASES = "/api/cases";

@@ -27,6 +27,7 @@ import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
 import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkers;
 import com.nicloud.workflowclient.data.data.data.Worker;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.dialog.CreateTaskActivity;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
@@ -134,6 +135,10 @@ public class UIController implements View.OnClickListener, GeneralCompletedRecei
                     return true;
 
                 case R.id.action_settings:
+                    return true;
+
+                case R.id.action_create_task:
+                    mMainActivity.startActivity(CreateTaskActivity.generateCreateTaskIntent(mMainActivity));
                     return true;
 
                 default:

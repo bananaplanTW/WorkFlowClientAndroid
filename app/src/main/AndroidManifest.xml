@@ -58,7 +58,11 @@
             android:name=".messagechat.MessageChatActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".mainmenu.CreateCaseActivity"
+        <activity android:name=".dialog.CreateCaseActivity"
+            android:theme="@style/AppDialogTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".dialog.CreateTaskActivity"
             android:theme="@style/AppDialogTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>

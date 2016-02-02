@@ -42,7 +42,7 @@ public class UserLoggingInCommand implements IWorkerActionCommand, PostRequestAs
     @Override
     public void execute() {
         HashMap<String, String> bodies = new HashMap<>();
-        bodies.put("username", mUsername);
+        bodies.put("email", mUsername);
         bodies.put("password", mPassword);
         bodies.put("companyAccount", mCompanyAccount);
 

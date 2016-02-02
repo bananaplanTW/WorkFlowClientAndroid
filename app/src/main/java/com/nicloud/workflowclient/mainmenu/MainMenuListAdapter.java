@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.dialog.CreateCaseActivity;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment.OnClickMainMenuItemListener;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.mainmenu;
+package com.nicloud.workflowclient.dialog;
 
 import android.content.Context;
 import android.content.Intent;

@@ -17,16 +17,23 @@
     <include layout="@layout/horizontal_divider" />
 
     <RelativeLayout
-        android:id="@+id/create_case_container"
+        android:id="@+id/create_task_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/create_container_padding">
 
         <EditText
-            android:id="@+id/create_case_box"
+            android:id="@+id/create_task_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_input_case_name"/>
+            android:hint="@string/hint_input_task_name"/>
+
+        <Spinner
+            android:id="@+id/case_spinner"
+            android:layout_width="@dimen/case_spinner_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/case_spinner_margin_top"
+            android:layout_below="@+id/create_task_name"/>
 
     </RelativeLayout>
 

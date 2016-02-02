@@ -12,6 +12,7 @@ import android.util.Log;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.Case;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
+import com.nicloud.workflowclient.tasklist.main.Task;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.utility.utils.RestfulUtils;
@@ -40,12 +41,14 @@ public class GeneralService extends IntentService {
         public static final String COMPLETE_TASK = "general_server_action_complete_task";
         public static final String LOAD_CASES = "general_server_action_load_cases";
         public static final String CREATE_CASE = "general_server_action_create_case";
+        public static final String CREATE_TASK = "general_server_action_create_task";
     }
 
     public static class ExtraKey {
         public static final String TASK_ID = "extra_task_id";
         public static final String TASK_NAME = "extra_task_name";
         public static final String CASE_NAME = "extra_case_name";
+        public static final String CASE_ID = "extra_case_id";
         public static final String WORKER_ID = "extra_worker_id";
         public static final String ACTION_SUCCESSFUL = "extra_action_successful";
 
@@ -94,6 +97,15 @@ public class GeneralService extends IntentService {
         return intent;
     }
 
+    public static Intent generateCreateTaskIntent(Context context, String taskName, String caseId) {
+        Intent intent = new Intent(context, GeneralService.class);
+        intent.setAction(Action.CREATE_TASK);
+        intent.putExtra(ExtraKey.TASK_NAME, taskName);
+        intent.putExtra(ExtraKey.CASE_ID, caseId);
+
+        return intent;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
@@ -109,6 +121,9 @@ public class GeneralService extends IntentService {
 
         } else if(Action.CREATE_CASE.equals(action)) {
             createCase(intent);
+
+        } else if(Action.CREATE_TASK.equals(action)) {
+            createTask(intent);
         }
     }
 
@@ -337,6 +352,36 @@ public class GeneralService extends IntentService {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
                     startService(generateLoadCasesIntent(this));
+                    return;
+                }
+            }
+        }  catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    private void createTask(Intent intent) {
+        String taskName = intent.getStringExtra(ExtraKey.TASK_NAME);
+        String caseId = intent.getStringExtra(ExtraKey.CASE_ID);
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-user-id", WorkingData.getUserId());
+        headers.put("x-auth-token", WorkingData.getAuthToken());
+
+        HashMap<String, String> bodies = new HashMap<>();
+        bodies.put("cd", caseId);
+        bodies.put("tname", taskName);
+
+        try {
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.CREATE_TASK, null);
+            String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+                if (jsonObject.getString("status").equals("success")) {
+                    DbUtils.insertTaskToDb(this, Task.retrieveTaskFromJson(jsonObject.getJSONObject("result")));
                     return;
                 }
             }

@@ -5,10 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.nicloud.workflowclient.data.data.data.Case;
+import com.nicloud.workflowclient.detailedtask.checklist.CheckItem;
 import com.nicloud.workflowclient.tasklist.main.Task;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by logicmelody on 2016/1/30.
@@ -149,5 +151,70 @@ public class DbUtils {
         }
 
         return aCase;
+    }
+
+    public static void insertTaskToDb(Context context, Task task) {
+        context.getContentResolver().insert(WorkFlowContract.Task.CONTENT_URI, convertTaskToContentValues(task));
+    }
+
+    public static void updateTaskToDb(Context context, Task task) {
+        String selection =  WorkFlowContract.Task.TASK_ID + " = ?";
+        String[] selectionArgs = new String[] {task.id};
+
+        context.getContentResolver().update(WorkFlowContract.Task.CONTENT_URI,
+                convertTaskToContentValues(task), selection, selectionArgs);
+    }
+
+    public static void deleteTaskFromDb(Context context, String taskId) {
+        String selection =  WorkFlowContract.Task.TASK_ID + " = ?";
+        String[] selectionArgs = new String[] {taskId};
+
+        context.getContentResolver().delete(WorkFlowContract.Task.CONTENT_URI, selection, selectionArgs);
+    }
+
+    public static void insertCheckListToDb(Context context, List<CheckItem> checkList) {
+        for (CheckItem checkItem : checkList) {
+            context.getContentResolver().insert(WorkFlowContract.CheckList.CONTENT_URI,
+                    convertCheckItemToContentValues(checkItem));
+        }
+    }
+
+    public static void updateCheckListToDb(Context context, String taskId, List<CheckItem> checkList) {
+        deleteCheckListFromDb(context, taskId);
+        insertCheckListToDb(context, checkList);
+    }
+
+    public static void deleteCheckListFromDb(Context context, String taskId) {
+        String selection =  WorkFlowContract.CheckList.TASK_ID + " = ?";
+        String[] selectionArgs = new String[] {taskId};
+
+        context.getContentResolver().delete(WorkFlowContract.CheckList.CONTENT_URI, selection, selectionArgs);
+    }
+
+    public static ContentValues convertTaskToContentValues(Task task) {
+        ContentValues values = new ContentValues();
+
+        values.put(WorkFlowContract.Task.TASK_ID, task.id);
+        values.put(WorkFlowContract.Task.TASK_DESCRIPTION, task.description);
+        values.put(WorkFlowContract.Task.TASK_NAME, task.name);
+        values.put(WorkFlowContract.Task.CASE_ID, task.caseId);
+        values.put(WorkFlowContract.Task.CASE_NAME, task.caseName);
+        values.put(WorkFlowContract.Task.WORKER_ID, task.workerId);
+        values.put(WorkFlowContract.Task.DUE_DATE, task.dueDate.getTime());
+        values.put(WorkFlowContract.Task.UPDATED_TIME, task.lastUpdatedTime);
+        values.put(WorkFlowContract.Task.STATUS, task.status);
+
+        return values;
+    }
+
+    public static ContentValues convertCheckItemToContentValues(CheckItem checkItem) {
+        ContentValues values = new ContentValues();
+
+        values.put(WorkFlowContract.CheckList.CHECK_NAME, checkItem.name);
+        values.put(WorkFlowContract.CheckList.IS_CHECKED, checkItem.isChecked);
+        values.put(WorkFlowContract.CheckList.TASK_ID, checkItem.taskId);
+        values.put(WorkFlowContract.CheckList.POSITION, checkItem.position);
+
+        return values;
     }
 }

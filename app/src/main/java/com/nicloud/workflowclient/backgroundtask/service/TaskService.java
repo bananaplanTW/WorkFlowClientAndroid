@@ -1,7 +1,6 @@
 package com.nicloud.workflowclient.backgroundtask.service;
 
 import android.app.IntentService;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,8 +9,8 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
+import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
-import com.nicloud.workflowclient.detailedtask.checklist.CheckItem;
 import com.nicloud.workflowclient.tasklist.main.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.utility.utils.RestfulUtils;
@@ -189,8 +188,8 @@ public class TaskService extends IntentService {
 
                 Task task = Task.retrieveTaskFromJson(taskJson);
 
-                updateTaskToDb(task);
-                updateCheckListToDb(task.id, task.checkList);
+                DbUtils.updateTaskToDb(this, task);
+                DbUtils.updateCheckListToDb(this, task.id, task.checkList);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -336,14 +335,14 @@ public class TaskService extends IntentService {
     private void insertAndUpdateTasksToDb(Map<String, TaskInDb> tasksFromDbMap, List<Task> tasksFromServer) {
         for (Task task : tasksFromServer) {
             if (!tasksFromDbMap.containsKey(task.id)) {
-                insertTaskToDb(task);
-                insertCheckListToDb(task.checkList);
+                DbUtils.insertTaskToDb(this, task);
+                DbUtils.insertCheckListToDb(this, task.checkList);
 
             } else {
                 if (task.lastUpdatedTime <= tasksFromDbMap.get(task.id).lastUpdatedTime) continue;
 
-                updateTaskToDb(task);
-                updateCheckListToDb(task.id, task.checkList);
+                DbUtils.updateTaskToDb(this, task);
+                DbUtils.updateCheckListToDb(this, task.id, task.checkList);
             }
         }
     }
@@ -351,74 +350,9 @@ public class TaskService extends IntentService {
     private void deleteTasksFromDb(Map<String, Task> tasksFromServerMap, ArrayList<TaskInDb> tasksFromDb) {
         for (TaskInDb taskInDb : tasksFromDb) {
             if (!tasksFromServerMap.containsKey(taskInDb.taskId)) {
-                deleteTaskFromDb(taskInDb.taskId);
-                deleteCheckListFromDb(taskInDb.taskId);
+                DbUtils.deleteTaskFromDb(this, taskInDb.taskId);
+                DbUtils.deleteCheckListFromDb(this, taskInDb.taskId);
             }
         }
-    }
-
-    private void insertTaskToDb(Task task) {
-        getContentResolver().insert(WorkFlowContract.Task.CONTENT_URI, convertTaskToContentValues(task));
-    }
-
-    private void updateTaskToDb(Task task) {
-        String selection =  WorkFlowContract.Task.TASK_ID + " = ?";
-        String[] selectionArgs = new String[] {task.id};
-
-        getContentResolver().update(WorkFlowContract.Task.CONTENT_URI,
-                convertTaskToContentValues(task), selection, selectionArgs);
-    }
-
-    private void deleteTaskFromDb(String taskId) {
-        String selection =  WorkFlowContract.Task.TASK_ID + " = ?";
-        String[] selectionArgs = new String[] {taskId};
-
-        getContentResolver().delete(WorkFlowContract.Task.CONTENT_URI, selection, selectionArgs);
-    }
-
-    private void insertCheckListToDb(List<CheckItem> checkList) {
-        for (CheckItem checkItem : checkList) {
-            getContentResolver().insert(WorkFlowContract.CheckList.CONTENT_URI,
-                                        convertCheckItemToContentValues(checkItem));
-        }
-    }
-
-    private void updateCheckListToDb(String taskId, List<CheckItem> checkList) {
-        deleteCheckListFromDb(taskId);
-        insertCheckListToDb(checkList);
-    }
-
-    private void deleteCheckListFromDb(String taskId) {
-        String selection =  WorkFlowContract.CheckList.TASK_ID + " = ?";
-        String[] selectionArgs = new String[] {taskId};
-
-        getContentResolver().delete(WorkFlowContract.CheckList.CONTENT_URI, selection, selectionArgs);
-    }
-
-    private ContentValues convertTaskToContentValues(Task task) {
-        ContentValues values = new ContentValues();
-
-        values.put(WorkFlowContract.Task.TASK_ID, task.id);
-        values.put(WorkFlowContract.Task.TASK_DESCRIPTION, task.description);
-        values.put(WorkFlowContract.Task.TASK_NAME, task.name);
-        values.put(WorkFlowContract.Task.CASE_ID, task.caseId);
-        values.put(WorkFlowContract.Task.CASE_NAME, task.caseName);
-        values.put(WorkFlowContract.Task.WORKER_ID, task.workerId);
-        values.put(WorkFlowContract.Task.DUE_DATE, task.dueDate.getTime());
-        values.put(WorkFlowContract.Task.UPDATED_TIME, task.lastUpdatedTime);
-        values.put(WorkFlowContract.Task.STATUS, task.status);
-
-        return values;
-    }
-
-    private ContentValues convertCheckItemToContentValues(CheckItem checkItem) {
-        ContentValues values = new ContentValues();
-
-        values.put(WorkFlowContract.CheckList.CHECK_NAME, checkItem.name);
-        values.put(WorkFlowContract.CheckList.IS_CHECKED, checkItem.isChecked);
-        values.put(WorkFlowContract.CheckList.TASK_ID, checkItem.taskId);
-        values.put(WorkFlowContract.CheckList.POSITION, checkItem.position);
-
-        return values;
     }
 }
