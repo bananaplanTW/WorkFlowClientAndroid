@@ -260,6 +260,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                Utils.hideSoftKeyboard(this);
                 finish();
                 return true;
 

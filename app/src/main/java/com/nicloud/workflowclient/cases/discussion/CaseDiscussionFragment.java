@@ -111,6 +111,9 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
     @Override
     public void setCaseId(String caseId) {
+        mDiscussionData.clear();
+        mDiscussionAdapter.notifyDataSetChanged();
+
         mCaseId = caseId;
 
         if (mSelectionArgs == null) {
@@ -280,7 +283,8 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
     }
 
     private boolean isDiscussionListScrollToTop() {
-        return mDiscussionListLayoutManager.getChildAt(0).getTop() == 0 &&
+        return mDiscussionListLayoutManager.getChildAt(0) != null &&
+               mDiscussionListLayoutManager.getChildAt(0).getTop() == 0 &&
                mDiscussionListLayoutManager.findFirstVisibleItemPosition() == 0;
     }
 
@@ -342,7 +346,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
         try {
             cursor = mContext.getContentResolver().query(WorkFlowContract.Discussion.CONTENT_URI,
                     mProjection, mSelection, mSelectionArgs, mSortOrder);
-            if (cursor != null) {
+            if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToLast();
                 lastMessageDate = cursor.getLong(CREATED_TIME);
             }
@@ -381,7 +385,7 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
     private void sendMessage() {
         String message = mDiscussionBox.getText().toString();
-        if (TextUtils.isEmpty(message)) return;
+        if (TextUtils.isEmpty(message.trim())) return;
 
         mDiscussionBox.setText(null);
 

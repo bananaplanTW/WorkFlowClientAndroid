@@ -152,7 +152,7 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.On
 
     private void addTextLog() {
         String editContent = mTextLogBox.getText().toString();
-        if (TextUtils.isEmpty(editContent)) return;
+        if (TextUtils.isEmpty(editContent.trim())) return;
 
         mContext.startService(UploadService.generateUploadTaskTextIntent(mContext, mTaskId, editContent));
         mTextLogBox.setText("");

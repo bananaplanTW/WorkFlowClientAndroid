@@ -31,7 +31,8 @@
             android:layout_below="@+id/task_description_title"
             android:layout_marginTop="@dimen/task_info_content_margin_top"
             android:textColor="@color/task_info_text_color"
-            android:background="@null" />
+            android:background="@null"
+            android:focusable="false"/>
 
     </RelativeLayout>
 
@@ -61,8 +62,7 @@
             android:textColor="@color/task_info_text_color"
             android:drawableLeft="@drawable/ic_due_date"
             android:drawablePadding="@dimen/task_info_due_date_drawable_padding"
-            android:text="2016/04/05"
-            android:background="@drawable/task_due_date_background"/>
+            android:background="@drawable/task_due_date_background" />
 
     </LinearLayout>
 

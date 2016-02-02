@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 public class CreateCaseActivity extends AppCompatActivity {
 
@@ -67,14 +68,17 @@ public class CreateCaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                Utils.hideSoftKeyboard(this);
                 finish();
                 return true;
 
             case R.id.action_cancel:
+                Utils.hideSoftKeyboard(this);
                 finish();
                 return true;
 
             case R.id.action_ok:
+                Utils.hideSoftKeyboard(this);
                 addCase();
                 finish();
 
@@ -86,7 +90,7 @@ public class CreateCaseActivity extends AppCompatActivity {
 
     private void addCase() {
         String caseName = mCreateCaseBox.getText().toString();
-        if (TextUtils.isEmpty(caseName)) return;
+        if (TextUtils.isEmpty(caseName.trim())) return;
 
         startService(GeneralService.generateCreateCaseIntent(this, caseName));
     }

@@ -158,6 +158,7 @@ public class UIController implements View.OnClickListener, GeneralCompletedRecei
     }
 
     public void onClickMainMenuItem(MainMenuItem item) {
+        Utils.hideSoftKeyboard(mMainActivity);
         mClickedMainMenuItem = item;
         closeLeftDrawer();
     }

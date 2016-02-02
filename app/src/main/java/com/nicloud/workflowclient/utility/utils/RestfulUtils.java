@@ -152,7 +152,8 @@ public class RestfulUtils {
         String responseString = "";
 
         String mimeType = Utils.getMimeType(filePath);
-Log.d(TAG, "uploading file mimeType : " + mimeType);
+        Log.d(TAG, "uploading file mimeType : " + mimeType);
+
         File f = new File(filePath);
         Request.Builder builder = new Request.Builder();
         builder.header("Content-Type", mimeType)

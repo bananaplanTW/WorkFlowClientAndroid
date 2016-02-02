@@ -116,6 +116,9 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void setCaseId(String caseId) {
+        mFileListData.clear();
+        mFileListAdapter.notifyDataSetChanged();
+
         mCaseId = caseId;
 
         if (mSelectionArgs == null) {
@@ -376,7 +379,10 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if (cursor == null || cursor.getCount() == 0) return;
+        if (cursor == null) {
+            setNoFileTextVisibility();
+            return;
+        }
 
         setFileListData(cursor);
     }

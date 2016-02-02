@@ -78,7 +78,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
 
     private void setupViews() {
         mCompleteTaskButton.setOnClickListener(this);
-        mTaskDueDate.setOnClickListener(this);
+        //mTaskDueDate.setOnClickListener(this);
     }
 
     private void setTaskInfo() {

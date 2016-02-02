@@ -165,7 +165,7 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh, View.
         switch (v.getId()) {
             case R.id.add_check_item_button:
                 String checkItem = mAddCheckItemBox.getText().toString();
-                if (TextUtils.isEmpty(checkItem)) return;
+                if (TextUtils.isEmpty(checkItem.trim())) return;
 
                 mContext.startService(UploadService.generateUploadTaskCheckItemIntent(mContext, mTaskId, checkItem));
                 mAddCheckItemBox.setText("");
@@ -181,7 +181,10 @@ public class CheckListFragment extends Fragment implements OnSwipeRefresh, View.
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if (cursor == null || cursor.getCount() == 0) return;
+        if (cursor == null) {
+            setNoCheckItemTextVisibility();
+            return;
+        }
 
         setCheckListData(cursor);
     }

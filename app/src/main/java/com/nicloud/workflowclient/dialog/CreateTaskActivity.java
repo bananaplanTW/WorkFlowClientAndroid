@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,14 +186,17 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                Utils.hideSoftKeyboard(this);
                 finish();
                 return true;
 
             case R.id.action_cancel:
+                Utils.hideSoftKeyboard(this);
                 finish();
                 return true;
 
             case R.id.action_ok:
+                Utils.hideSoftKeyboard(this);
                 addTask();
                 finish();
 
@@ -206,7 +210,7 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
         String taskName = mCreateTaskName.getText().toString();
         String caseId = ((CaseSpinnerItem) mCaseSpinner.getSelectedItem()).id;
 
-        if (TextUtils.isEmpty(taskName) || TextUtils.isEmpty(caseId)) return;
+        if (TextUtils.isEmpty(taskName.trim()) || TextUtils.isEmpty(caseId)) return;
 
         startService(GeneralService.generateCreateTaskIntent(this, taskName, caseId));
     }

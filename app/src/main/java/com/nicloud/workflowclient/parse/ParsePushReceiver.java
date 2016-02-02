@@ -3,6 +3,7 @@ package com.nicloud.workflowclient.parse;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.cases.discussion.LoadPromptDiscussionReceiver;
@@ -16,6 +17,8 @@ import org.json.JSONObject;
  * Created by logicmelody on 2015/12/3.
  */
 public class ParsePushReceiver extends ParsePushBroadcastReceiver {
+
+    private static final String TAG = "ParsePushReceiver";
 
     public static final class PushType {
         public static final String MESSAGE = "message";
@@ -40,10 +43,14 @@ public class ParsePushReceiver extends ParsePushBroadcastReceiver {
             String type = json.getString(JsonKey.TYPE);
 
             if (PushType.MESSAGE.equals(type)) {
+                Log.d(TAG, "Get message push");
+
                 intent.setAction(LoadPromptMessageReceiver.ACTION_LOAD_PROMPT_MESSAGE);
                 intent.putExtra(LoadPromptMessageReceiver.EXTRA_SENDER_ID, json.getString(JsonKey.SENDER_ID));
 
             } else if (PushType.DISCUSSION.equals(type)) {
+                Log.d(TAG, "Get discussion push");
+
                 intent.setAction(LoadPromptDiscussionReceiver.ACTION_LOAD_PROMPT_DISCUSSION);
                 intent.putExtra(LoadPromptDiscussionReceiver.EXTRA_CASE_ID, json.getString(JsonKey.CASE_ID));
             }

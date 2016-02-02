@@ -23,8 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/task_list_no_task"
-        android:textSize="@dimen/empty_text_size"
-        android:visibility="gone"/>
+        android:textSize="@dimen/empty_text_size" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

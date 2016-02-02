@@ -79,13 +79,13 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
 
     private RecyclerView mTaskList;
     private LinearLayoutManager mTaskListManager;
-    private TaskListAdapter mTaskListAdapter;
+    protected TaskListAdapter mTaskListAdapter;
 
     private TextView mNoTaskText;
 
     private TaskCompletedReceiver mTaskCompletedReceiver;
 
-    private List<TaskListItem> mTaskDataSet = new ArrayList<>();
+    protected List<TaskListItem> mTaskDataSet = new ArrayList<>();
 
     private boolean mNeedRefresh = false;
 
@@ -270,7 +270,8 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if (cursor == null || cursor.getCount() == 0) {
+        if (cursor == null) {
+            setNoTaskTextVisibility();
             return;
         }
 
@@ -319,7 +320,12 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
         TaskListItem previousTaskItem = null;
         for (int i = 0 ; i < mTaskDataSet.size() ; i++) {
             TaskListItem taskItem = mTaskDataSet.get(i);
+
             if (i == 0) {
+                if (mTaskDataSet.size() == 1) {
+                    taskItem.showDueDateUnderline = true;
+                }
+
                 taskItem.showDueDate = true;
                 previousTaskItem = taskItem;
                 continue;

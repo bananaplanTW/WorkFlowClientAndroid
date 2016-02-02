@@ -25,6 +25,9 @@ public class CaseTaskListFragment extends TaskListFragmentBase implements OnSetC
 
     @Override
     public void setCaseId(String caseId) {
+        mTaskDataSet.clear();
+        mTaskListAdapter.notifyDataSetChanged();
+
         mCaseId = caseId;
 
         if (mSelectionArgs == null) {
