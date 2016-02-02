@@ -3,6 +3,8 @@
     android:id="@+id/case_name"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/case_spinner_item_padding_left_right"
+    android:paddingRight="@dimen/case_spinner_item_padding_left_right"
     android:minHeight="@dimen/case_spinner_item_min_height"
     android:gravity="center_vertical"
     android:textSize="@dimen/case_spinner_item_text_size"/>
