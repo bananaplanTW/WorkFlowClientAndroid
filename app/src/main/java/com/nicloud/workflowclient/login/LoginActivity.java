@@ -33,13 +33,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private SharedPreferences mSharedPreferences;
 
     private LinearLayout mLoginViewContainer;
+    private View mLoginLogoContainer;
 
     private EditText mCompanyAccountEditText;
     private EditText mAccountEditText;
     private EditText mPasswordEditText;
     private Button mLoginButton;
 
-    private ImageView mNiCloudImage;
     private View mNICContainer;
     private Button mNICRetryButton;
 
@@ -70,8 +70,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void findViews () {
-        mNiCloudImage = (ImageView) findViewById(R.id.login_nicloud_image);
         mLoginViewContainer = (LinearLayout) findViewById(R.id.login_container);
+        mLoginLogoContainer = findViewById(R.id.login_logo_container);
         mCompanyAccountEditText = (EditText) findViewById(R.id.login_company_account);
         mAccountEditText = (EditText) findViewById(R.id.login_account_edit_text);
         mPasswordEditText = (EditText) findViewById(R.id.login_password_edit_text);
@@ -152,14 +152,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void showNiCloudImage(boolean isDisplayed) {
         if (isDisplayed) {
             mNICContainer.startAnimation(MainApplication.sFadeOutAnimation);
-            mNiCloudImage.startAnimation(MainApplication.sFadeInAnimation);
+            mLoginLogoContainer.startAnimation(MainApplication.sFadeInAnimation);
             mNICContainer.setVisibility(View.GONE);
-            mNiCloudImage.setVisibility(View.VISIBLE);
+            mLoginLogoContainer.setVisibility(View.VISIBLE);
         } else {
             mNICContainer.startAnimation(MainApplication.sFadeInAnimation);
-            mNiCloudImage.startAnimation(MainApplication.sFadeOutAnimation);
+            mLoginLogoContainer.startAnimation(MainApplication.sFadeOutAnimation);
             mNICContainer.setVisibility(View.VISIBLE);
-            mNiCloudImage.setVisibility(View.GONE);
+            mLoginLogoContainer.setVisibility(View.GONE);
         }
     }
 

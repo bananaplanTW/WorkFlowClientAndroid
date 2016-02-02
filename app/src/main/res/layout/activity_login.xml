@@ -13,15 +13,36 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
-    <ImageView
-        android:id="@+id/login_nicloud_image"
+    <LinearLayout
+        android:id="@+id/login_logo_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/nicloud"
-        android:layout_marginBottom="@dimen/login_nicloud_image_margin_bottom"
-        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/login_container"
         android:layout_centerInParent="true"
-        android:layout_above="@+id/login_container"/>
+        android:layout_marginBottom="@dimen/login_nicetodo_image_margin_bottom"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/login_nicetodo_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/nicetodo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/login_nicetodo_margin_top"
+            android:textSize="@dimen/login_nicetodo_description_text_size"
+            android:text="@string/nicetodo_description" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/login_nicetodo_description_text_size"
+            android:text="@string/nicetodo"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/login_container"

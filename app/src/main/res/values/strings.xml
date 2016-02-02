@@ -1,6 +1,9 @@
 <resources>
 
-    <string name="app_name" translatable="false">nicloud</string>
+    <string name="app_name" translatable="false">Nicetodo</string>
+    <string name="nicetodo" translatable="false">nice todo</string>
+    <string name="nicetodo_description">規劃更有效率，生活更加美好</string>
+
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
     <string name="action_message">Message</string>
