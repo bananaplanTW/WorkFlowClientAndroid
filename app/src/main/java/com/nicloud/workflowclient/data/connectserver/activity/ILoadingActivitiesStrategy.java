@@ -8,7 +8,8 @@ import org.json.JSONArray;
 public interface ILoadingActivitiesStrategy {
     enum ActivityCategory {
         WORKER, TASK, WARNING, NONE
-    };
+    }
+
     JSONArray load();
     ActivityCategory getCategory();
 }

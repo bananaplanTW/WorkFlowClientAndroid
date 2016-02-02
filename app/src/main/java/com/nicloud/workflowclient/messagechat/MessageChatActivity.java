@@ -263,13 +263,8 @@ public class MessageChatActivity extends AppCompatActivity implements View.OnCli
 
         // if keyboard doesn't change, handle the key press
         res = result.getResult();
-        if (res == InputMethodManager.RESULT_UNCHANGED_SHOWN ||
-                res == InputMethodManager.RESULT_UNCHANGED_HIDDEN) {
-
-            return true;
-        } else {
-            return false;
-        }
+        return res == InputMethodManager.RESULT_UNCHANGED_SHOWN ||
+                res == InputMethodManager.RESULT_UNCHANGED_HIDDEN;
     }
 
     private void setupActionBar() {

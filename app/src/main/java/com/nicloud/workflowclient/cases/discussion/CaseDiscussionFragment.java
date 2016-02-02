@@ -246,13 +246,8 @@ public class CaseDiscussionFragment extends Fragment implements View.OnClickList
 
         // if keyboard doesn't change, handle the key press
         res = result.getResult();
-        if (res == InputMethodManager.RESULT_UNCHANGED_SHOWN ||
-                res == InputMethodManager.RESULT_UNCHANGED_HIDDEN) {
-
-            return true;
-        } else {
-            return false;
-        }
+        return res == InputMethodManager.RESULT_UNCHANGED_SHOWN ||
+                res == InputMethodManager.RESULT_UNCHANGED_HIDDEN;
     }
 
     private void setupDiscussionList() {
