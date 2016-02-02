@@ -16,4 +16,18 @@
 
     <include layout="@layout/horizontal_divider" />
 
+    <RelativeLayout
+        android:id="@+id/create_case_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/create_case_container_padding">
+
+        <EditText
+            android:id="@+id/create_case_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_input_case_name"/>
+
+    </RelativeLayout>
+
 </LinearLayout>

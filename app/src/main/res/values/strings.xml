@@ -138,5 +138,6 @@
 
     <!-- Create case -->
     <string name="create_case">Create case</string>
+    <string name="hint_input_case_name">Input case name</string>
 
 </resources>

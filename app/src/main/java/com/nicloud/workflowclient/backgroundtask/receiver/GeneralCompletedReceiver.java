@@ -7,7 +7,7 @@ import android.content.Intent;
 /**
  * Created by logicmelody on 2015/12/10.
  */
-public class ActionCompletedReceiver extends BroadcastReceiver {
+public class GeneralCompletedReceiver extends BroadcastReceiver {
 
     public interface OnServerActionCompletedListener {
         void onServerActionCompleted(Intent intent);
@@ -16,7 +16,7 @@ public class ActionCompletedReceiver extends BroadcastReceiver {
     private OnServerActionCompletedListener mOnServerActionCompletedListener;
 
 
-    public ActionCompletedReceiver(OnServerActionCompletedListener listener) {
+    public GeneralCompletedReceiver(OnServerActionCompletedListener listener) {
         mOnServerActionCompletedListener = listener;
     }
 

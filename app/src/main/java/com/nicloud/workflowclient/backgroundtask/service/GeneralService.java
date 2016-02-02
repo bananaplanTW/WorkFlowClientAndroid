@@ -39,11 +39,13 @@ public class GeneralService extends IntentService {
         public static final String CHECK_ITEM = "general_service_action_check_item";
         public static final String COMPLETE_TASK = "general_server_action_complete_task";
         public static final String LOAD_CASES = "general_server_action_load_cases";
+        public static final String CREATE_CASE = "general_server_action_create_case";
     }
 
     public static class ExtraKey {
         public static final String TASK_ID = "extra_task_id";
         public static final String TASK_NAME = "extra_task_name";
+        public static final String CASE_NAME = "extra_case_name";
         public static final String WORKER_ID = "extra_worker_id";
         public static final String ACTION_SUCCESSFUL = "extra_action_successful";
 
@@ -83,6 +85,15 @@ public class GeneralService extends IntentService {
         return intent;
     }
 
+
+    public static Intent generateCreateCaseIntent(Context context, String caseName) {
+        Intent intent = new Intent(context, GeneralService.class);
+        intent.setAction(Action.CREATE_CASE);
+        intent.putExtra(ExtraKey.CASE_NAME, caseName);
+
+        return intent;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
@@ -95,6 +106,9 @@ public class GeneralService extends IntentService {
 
         } else if(Action.LOAD_CASES.equals(action)) {
             loadCases(intent);
+
+        } else if(Action.CREATE_CASE.equals(action)) {
+            createCase(intent);
         }
     }
 
@@ -181,7 +195,7 @@ public class GeneralService extends IntentService {
                 headers.put("x-auth-token", WorkingData.getAuthToken());
 
                 String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
-                        LoadingDataUtils.WorkingDataUrl.EndPoints.CASES, null);
+                        LoadingDataUtils.WorkingDataUrl.EndPoints.LOAD_CASES, null);
                 String caseJsonListString =
                         RestfulUtils.restfulGetRequest(urlString, headers);
                 JSONArray caseJsonList = new JSONObject(caseJsonListString).getJSONArray("result");
@@ -303,4 +317,32 @@ public class GeneralService extends IntentService {
         return values;
     }
 
+    private void createCase(Intent intent) {
+        String caseName = intent.getStringExtra(ExtraKey.CASE_NAME);
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-user-id", WorkingData.getUserId());
+        headers.put("x-auth-token", WorkingData.getAuthToken());
+        headers.put("cname", caseName);
+
+        HashMap<String, String> bodies = new HashMap<>();
+        bodies.put("cname", caseName);
+
+        try {
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.CREATE_CASE, null);
+            String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+                if (jsonObject.getString("status").equals("success")) {
+                    startService(generateLoadCasesIntent(this));
+                    return;
+                }
+            }
+        }  catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
 }

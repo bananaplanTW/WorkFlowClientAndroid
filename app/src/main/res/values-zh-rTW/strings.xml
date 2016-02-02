@@ -123,5 +123,6 @@
 
     <!-- Create case -->
     <string name="create_case">新增案件</string>
+    <string name="hint_input_case_name">輸入案件名稱</string>
 
 </resources>

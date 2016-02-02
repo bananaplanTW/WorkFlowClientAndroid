@@ -154,4 +154,7 @@
     <dimen name="discussion_item_time_margin_left">10dp</dimen>
     <dimen name="discussion_item_time_text_size">14dp</dimen>
 
+    <!-- Create case -->
+    <dimen name="create_case_container_padding">30dp</dimen>
+
 </resources>

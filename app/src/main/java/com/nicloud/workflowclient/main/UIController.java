@@ -34,7 +34,7 @@ import com.nicloud.workflowclient.mainmenu.MainMenuListAdapter;
 import com.nicloud.workflowclient.messagechat.MessageChatActivity;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;
 import com.nicloud.workflowclient.provider.debug.AndroidDatabaseManager;
-import com.nicloud.workflowclient.backgroundtask.receiver.ActionCompletedReceiver;
+import com.nicloud.workflowclient.backgroundtask.receiver.GeneralCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.tasklist.my.MyTaskListFragment;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
@@ -49,7 +49,7 @@ import com.nicloud.workflowclient.utility.utils.Utils;
  * @since 2015.05.28
  *
  */
-public class UIController implements View.OnClickListener, ActionCompletedReceiver.OnServerActionCompletedListener,
+public class UIController implements View.OnClickListener, GeneralCompletedReceiver.OnServerActionCompletedListener,
         LoadingWorkers.OnFinishLoadingWorkersListener {
 
     private static final String TAG = "UIController";
@@ -80,7 +80,7 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
     private MainMenuItem mClickedMainMenuItem;
     private Worker mClickedWorker;
 
-    private ActionCompletedReceiver mActionCompletedReceiver;
+    private GeneralCompletedReceiver mGeneralCompletedReceiver;
 
 
     public UIController(AppCompatActivity activity) {
@@ -107,11 +107,11 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
 
     public void onStart() {
         IntentFilter intentFilter = new IntentFilter(GeneralService.Action.COMPLETE_TASK);
-        LocalBroadcastManager.getInstance(mMainActivity).registerReceiver(mActionCompletedReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(mMainActivity).registerReceiver(mGeneralCompletedReceiver, intentFilter);
     }
 
     public void onStop() {
-        LocalBroadcastManager.getInstance(mMainActivity).unregisterReceiver(mActionCompletedReceiver);
+        LocalBroadcastManager.getInstance(mMainActivity).unregisterReceiver(mGeneralCompletedReceiver);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -188,7 +188,7 @@ public class UIController implements View.OnClickListener, ActionCompletedReceiv
 
     private void initialize() {
         mFragmentManager = mMainActivity.getSupportFragmentManager();
-        mActionCompletedReceiver = new ActionCompletedReceiver(this);
+        mGeneralCompletedReceiver = new GeneralCompletedReceiver(this);
         mClickedMainMenuItem = new MainMenuItem(MainMenuFragment.MainMenuItemType.MY_TASKS,
                                                 mMainActivity.getString(R.string.main_menu_my_tasks),
                                                 null, MainMenuListAdapter.ItemViewType.ITEM, true);
