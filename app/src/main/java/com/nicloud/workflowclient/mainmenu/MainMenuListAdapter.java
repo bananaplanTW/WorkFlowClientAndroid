@@ -8,10 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.dialog.CreateCaseActivity;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment.OnClickMainMenuItemListener;
+import com.nicloud.workflowclient.utility.utils.DbUtils;
 
 import java.util.List;
 
@@ -72,7 +75,14 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             createCaseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mContext.startActivity(CreateCaseActivity.generateCreateCaseIntent(mContext));
+                    if (WorkingData.Membership.BASIC.equals(WorkingData.getMembership()) &&
+                        DbUtils.getCaseCount(mContext) >= 3) {
+                        Toast.makeText(mContext, mContext.getString(R.string.basic_membership_case_beyond_3),
+                                       Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        mContext.startActivity(CreateCaseActivity.generateCreateCaseIntent(mContext));
+                    }
                 }
             });
         }

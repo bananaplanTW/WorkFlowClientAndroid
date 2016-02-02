@@ -13,6 +13,11 @@ public final class WorkingData {
 
     private static final String TAG = "WorkingData";
 
+    public static final class Membership {
+        public static final String BASIC = "Basic";
+        public static final String Premium = "Premium";
+    }
+
     public static final String SHARED_PREFERENCE_KEY = "workflow";
     public static final String COMPANY_ACCOUNT = "company_account";
     public static final String USER_ID = "userId";
@@ -24,6 +29,7 @@ public final class WorkingData {
 
     private static String sUserId;
     private static String sAuthToken;
+    private static String sMembership;
 
     private Worker mLoginWorker;
 
@@ -62,12 +68,20 @@ public final class WorkingData {
         sAuthToken = authToken;
     }
 
+    public static void setMembership(String membership) {
+        sMembership = membership;
+    }
+
     public static String getUserId () {
         return sUserId;
     }
 
     public static String getAuthToken() {
         return sAuthToken;
+    }
+
+    public static String getMembership() {
+        return sMembership;
     }
 
     public void setLoginWorker(Worker worker) {

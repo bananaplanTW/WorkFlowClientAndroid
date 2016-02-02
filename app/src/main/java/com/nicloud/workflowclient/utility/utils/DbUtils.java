@@ -217,4 +217,29 @@ public class DbUtils {
 
         return values;
     }
+
+    public static int getCaseCount(Context context) {
+        String[] projection = new String[] {
+                WorkFlowContract.Case._ID,
+        };
+
+        Cursor cursor = null;
+        int caseCount = 0;
+
+        try {
+            cursor = context.getContentResolver().query(WorkFlowContract.Case.CONTENT_URI,
+                    projection, null, null, null);
+
+            if (cursor != null && cursor.getCount() != 0) {
+                caseCount = cursor.getCount();
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return caseCount;
+    }
 }

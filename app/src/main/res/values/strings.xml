@@ -39,6 +39,8 @@
     <string name="parse_nicloud_application_id" translatable="false">ympLENaIwwMAb4kEGhbodL0HhOnCnzyS8XC1voKE</string>
     <string name="parse_nicloud_application_client_key" translatable="false">q3j2FwlBY8pyS33yg0T7DsQ4JWK2LcFcdbtDGjl6</string>
 
+    <string name="basic_membership_case_beyond_3">Basic account can only have 3 cases</string>
+
     <!-- Main -->
     <string name="task_list_no_task">No task</string>
     <string name="task_card_no_due_date">No due date</string>
@@ -49,9 +51,9 @@
 
     <!-- Main menu -->
     <string name="main_menu_my_tasks">My tasks</string>
+    <string name="main_menu_cases">My cases</string>
 
     <!-- Message menu -->
-    <string name="main_menu_cases">Cases</string>
     <string name="message_menu_messages">Messages</string>
 
     <!-- Login -->

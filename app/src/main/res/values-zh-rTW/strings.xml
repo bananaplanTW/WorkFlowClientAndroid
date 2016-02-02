@@ -27,15 +27,17 @@
     <string name="date_format_mm_dd">%1$s月%2$s日</string>
     <string name="complete_task">已完成工作: %1$s</string>
 
+    <string name="basic_membership_case_beyond_3">免費帳戶最多擁有三個進行中的計畫</string>
+
     <!-- Main -->
     <string name="task_list_no_task">無工作</string>
     <string name="task_card_no_due_date">無設定期限</string>
 
     <!-- Main menu -->
     <string name="main_menu_my_tasks">我的工作</string>
+    <string name="main_menu_cases">我的計畫</string>
 
     <!-- Message menu -->
-    <string name="main_menu_cases">公司計畫</string>
     <string name="message_menu_messages">訊息</string>
 
     <!-- Login -->

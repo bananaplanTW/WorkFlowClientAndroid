@@ -23,7 +23,7 @@ public class LoadingDataUtils {
 
     private static final String TAG = "LoadDataUtils";
 
-    public static String sBaseUrl = "http://10.1.1.59:3000";
+    public static String sBaseUrl = "http://52.26.71.101";
 
     public static final class WorkingDataUrl {
 

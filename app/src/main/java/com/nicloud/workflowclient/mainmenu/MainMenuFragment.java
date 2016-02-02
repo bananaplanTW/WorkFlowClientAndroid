@@ -112,6 +112,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
         findViews();
         loadWorkerAvatar();
         setupWorkerViews();
+        initMainMenuListData();
         setupMainMenuList();
     }
 
@@ -152,6 +153,20 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
         mWorkerDepartment.setText(WorkingData.getInstance(mContext).getLoginWorker().departmentName);
 
         mLogoutButton.setOnClickListener(this);
+    }
+
+    private void initMainMenuListData() {
+        mDataSet.clear();
+
+        mDataSet.add(new MainMenuItem(MainMenuItemType.MY_TASKS,
+                mContext.getString(R.string.main_menu_my_tasks),
+                null, MainMenuListAdapter.ItemViewType.ITEM, true));
+
+        mDataSet.add(new MainMenuItem(-1, "", null, MainMenuListAdapter.ItemViewType.EMPTY, false));
+
+        mDataSet.add(new MainMenuItem(MainMenuItemType.CASE,
+                mContext.getString(R.string.main_menu_cases),
+                null, MainMenuListAdapter.ItemViewType.CASE_TITLE, false));
     }
 
     private void setupMainMenuList() {
@@ -195,17 +210,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
     }
 
     private void setMainMenuListData(Cursor cursor) {
-        mDataSet.clear();
-
-        mDataSet.add(new MainMenuItem(MainMenuItemType.MY_TASKS,
-                mContext.getString(R.string.main_menu_my_tasks),
-                null, MainMenuListAdapter.ItemViewType.ITEM, true));
-
-        mDataSet.add(new MainMenuItem(-1, "", null, MainMenuListAdapter.ItemViewType.EMPTY, false));
-
-        mDataSet.add(new MainMenuItem(MainMenuItemType.CASE,
-                mContext.getString(R.string.main_menu_cases),
-                null, MainMenuListAdapter.ItemViewType.CASE_TITLE, false));
+        initMainMenuListData();
 
         while (cursor.moveToNext()) {
             int id = cursor.getInt(ID);
