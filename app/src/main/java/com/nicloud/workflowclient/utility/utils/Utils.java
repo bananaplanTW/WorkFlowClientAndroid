@@ -279,9 +279,15 @@ public class Utils {
     public static String getMimeType(String url) {
         String type = null;
         String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+
         if (extension != null) {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
+
+        if (type == null) {
+            type = "application/file";
+        }
+
         return type;
     }
 
