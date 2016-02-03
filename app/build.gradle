@@ -8,8 +8,8 @@ android {
         applicationId "com.nicloud.workflowclient"
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 8
-        versionName "2.0.160202"
+        versionCode 9
+        versionName "2.0.160203"
     }
     buildTypes {
         release {
