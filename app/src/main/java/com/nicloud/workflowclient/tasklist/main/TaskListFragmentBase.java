@@ -312,7 +312,7 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
                     return -((int) (taskItem1.task.lastUpdatedTime - taskItem2.task.lastUpdatedTime));
 
                 } else {
-                    return (int) (taskItem1.task.dueDate.getTime() - taskItem2.task.dueDate.getTime());
+                    return 0;
                 }
             }
         });
