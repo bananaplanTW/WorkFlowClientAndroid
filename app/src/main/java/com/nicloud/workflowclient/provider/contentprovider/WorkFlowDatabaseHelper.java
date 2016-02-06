@@ -14,6 +14,7 @@ import com.nicloud.workflowclient.provider.database.DiscussionTable;
 import com.nicloud.workflowclient.provider.database.FileTable;
 import com.nicloud.workflowclient.provider.database.MessageTable;
 import com.nicloud.workflowclient.provider.database.TaskTable;
+import com.nicloud.workflowclient.provider.database.TaskTextLogTable;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 public class WorkFlowDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "workflow.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     private static WorkFlowDatabaseHelper sWorkFlowDatabaseHelper;
 
@@ -53,6 +54,7 @@ public class WorkFlowDatabaseHelper extends SQLiteOpenHelper {
         db.delete(WorkFlowContract.CheckList.TABLE_NAME, null, null);
         db.delete(WorkFlowContract.File.TABLE_NAME, null, null);
         db.delete(WorkFlowContract.Case.TABLE_NAME, null, null);
+        db.delete(WorkFlowContract.TaskTextLog.TABLE_NAME, null, null);
     }
 
     @Override
@@ -63,16 +65,17 @@ public class WorkFlowDatabaseHelper extends SQLiteOpenHelper {
         CheckListTable.onCreate(db);
         FileTable.onCreate(db);
         CaseTable.onCreate(db);
+        TaskTextLogTable.onCreate(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        MessageTable.onUpgrade(db, oldVersion, newVersion);
-        DiscussionTable.onUpgrade(db, oldVersion, newVersion);
-        TaskTable.onUpgrade(db, oldVersion, newVersion);
-        CheckListTable.onUpgrade(db, oldVersion, newVersion);
-        FileTable.onUpgrade(db, oldVersion, newVersion);
-        CaseTable.onUpgrade(db, oldVersion, newVersion);
+        if (newVersion <= oldVersion) return;
+        int version = oldVersion;
+
+        if (version < 2) {
+            TaskTextLogTable.onCreate(db);
+        }
     }
 
     public ArrayList<Cursor> getData(String Query){

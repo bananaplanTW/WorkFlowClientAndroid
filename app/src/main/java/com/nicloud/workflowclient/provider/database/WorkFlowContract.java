@@ -72,6 +72,20 @@ public class WorkFlowContract {
         public static final String STATUS = "status";
     }
 
+    public static final class TaskTextLog implements BaseColumns {
+
+        public static final String TABLE_NAME = "tasktextlog";
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_NAME);
+
+        // DB columns
+        public static final String TASK_ID = "task_id";
+        public static final String WORKER_ID = "worker_id";
+        public static final String WORKER_NAME = "worker_name";
+        public static final String WORKER_AVATAR_URL = "worker_avatar_url";
+        public static final String CREATED_TIME = "created_time";
+        public static final String CONTENT = "content";
+    }
+
     public static final class CheckList implements BaseColumns {
 
         public static final String TABLE_NAME = "checklist";
