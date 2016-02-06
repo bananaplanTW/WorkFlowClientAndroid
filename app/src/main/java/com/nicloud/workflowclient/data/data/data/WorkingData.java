@@ -33,7 +33,6 @@ public final class WorkingData {
 
     private Worker mLoginWorker;
 
-    // TODO: Implement DB
     private List<Worker> mWorkers = new ArrayList<>();
 
     private boolean mHasLoadedTasks = false;

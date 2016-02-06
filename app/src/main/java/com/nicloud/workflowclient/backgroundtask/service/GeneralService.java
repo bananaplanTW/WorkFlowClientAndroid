@@ -12,7 +12,7 @@ import android.util.Log;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.data.Case;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
-import com.nicloud.workflowclient.tasklist.main.Task;
+import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.utility.utils.RestfulUtils;

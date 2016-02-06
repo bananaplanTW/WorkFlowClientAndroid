@@ -21,7 +21,7 @@ import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
-import com.nicloud.workflowclient.tasklist.main.Task;
+import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
 import com.nicloud.workflowclient.detailedtask.filelog.FileLogFragment;
 import com.nicloud.workflowclient.detailedtask.taskinfo.TaskInfoFragment;
@@ -279,24 +279,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         mDetailedTaskPagerAdapter.notifyDataSetChanged();
     }
 
-    private void setTaskLogData(ArrayList<BaseData> logData) {
-        mTextDataSet.clear();
-        mFileDataSet.clear();
-
-        for (BaseData data : logData) {
-            switch (data.type) {
-                case RECORD:
-                    mTextDataSet.add(data);
-                    break;
-
-                case PHOTO:
-                case FILE:
-                    mFileDataSet.add(data);
-                    break;
-            }
-        }
-    }
-
     @Override
     public void onRefreshDetailedTask() {
         loadTaskActivities(false);
@@ -355,16 +337,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     @Override
     public void onLoadTaskCompleted(Intent intent) {
-        String from = intent.getStringExtra(TaskCompletedReceiver.EXTRA_FROM);
-
-        if (TaskCompletedReceiver.From.LOAD_TASK_ACTIVITIES.equals(from)) {
-            ArrayList<BaseData> activities =
-                    intent.getParcelableArrayListExtra(TaskService.ExtraKey.ARRAYLIST_TASK_ACTIVITIES);
-            if (activities == null) return;
-
-            setTaskLogData(activities);
-        }
-
         updateDetailedTaskData();
         ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
     }

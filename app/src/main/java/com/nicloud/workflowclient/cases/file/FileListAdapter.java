@@ -11,10 +11,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
-import com.nicloud.workflowclient.cases.discussion.DiscussionItem;
-import com.nicloud.workflowclient.data.connectserver.activity.LoadingPhotoDataCommand;
-import com.nicloud.workflowclient.data.data.activity.FileData;
-import com.nicloud.workflowclient.data.data.activity.PhotoData;
+import com.nicloud.workflowclient.data.data.data.File;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.DisplayImageActivity;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
@@ -30,7 +27,7 @@ public class FileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Context mContext;
 
-    private List<FileItem> mFileListData;
+    private List<File> mFileListData;
 
 
     private class FileItemViewHolder extends RecyclerView.ViewHolder {
@@ -50,7 +47,7 @@ public class FileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public FileListAdapter(Context context, List<FileItem> data) {
+    public FileListAdapter(Context context, List<File> data) {
         mContext = context;
         mFileListData = data;
     }
@@ -66,44 +63,44 @@ public class FileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private void onBindFile(FileItemViewHolder holder, int position) {
-        final FileItem fileItem = mFileListData.get(position);
-        final Uri.Builder fileBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon().path(fileItem.fileUrl);
-        String fileInformation = fileItem.ownerName + " " +
-                Utils.timestamp2Date(new Date(fileItem.createdTime), Utils.DATE_FORMAT_YMD_HM_AMPM);
+        final File file = mFileListData.get(position);
+        final Uri.Builder fileBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon().path(file.fileUrl);
+        String fileInformation = file.ownerName + " " +
+                Utils.timestamp2Date(new Date(file.createdTime), Utils.DATE_FORMAT_YMD_HM_AMPM);
 
-        holder.fileName.setText(fileItem.fileName);
+        holder.fileName.setText(file.fileName);
         holder.fileInformation.setText(fileInformation);
 
         // File
-        if (WorkFlowContract.File.Type.FILE.equals(fileItem.fileType)) {
+        if (WorkFlowContract.File.Type.FILE.equals(file.fileType)) {
             holder.fileImage.setImageResource(R.drawable.ic_file);
 
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.downloadFile(mContext, fileBuilder.build().toString(), fileItem.fileName);
+                    Utils.downloadFile(mContext, fileBuilder.build().toString(), file.fileName);
                 }
             });
 
         // Image
-        } else if (WorkFlowContract.File.Type.IMAGE.equals(fileItem.fileType)) {
-            if (fileItem.fileThumbnail != null) {
-                holder.fileImage.setImageDrawable(fileItem.fileThumbnail);
+        } else if (WorkFlowContract.File.Type.IMAGE.equals(file.fileType)) {
+            if (file.fileThumbnail != null) {
+                holder.fileImage.setImageDrawable(file.fileThumbnail);
 
             } else {
                 holder.fileImage.setImageResource(R.drawable.ic_photo);
 
                 Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
-                imageBuilder.path(fileItem.fileThumbUrl);
+                imageBuilder.path(file.fileThumbUrl);
 
-                new LoadImageTask(mContext, imageBuilder.build(), holder.fileImage, fileItem.fileThumbnail).execute();
+                new LoadImageTask(mContext, imageBuilder.build(), holder.fileImage, file.fileThumbnail).execute();
             }
 
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mContext.startActivity(DisplayImageActivity
-                            .launchDisplayImageActivity(mContext, fileItem.fileName,
+                            .launchDisplayImageActivity(mContext, file.fileName,
                                                         fileBuilder.build().toString()));
                 }
             });

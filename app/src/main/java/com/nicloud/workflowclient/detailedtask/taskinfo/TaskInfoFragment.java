@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
-import com.nicloud.workflowclient.tasklist.main.Task;
+import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.main.OnSwipeRefresh;
 import com.nicloud.workflowclient.dialog.DatePickerFragment;

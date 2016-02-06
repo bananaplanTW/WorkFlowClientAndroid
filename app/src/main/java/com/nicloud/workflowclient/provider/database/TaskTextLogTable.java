@@ -11,11 +11,13 @@ public class TaskTextLogTable {
             + WorkFlowContract.TaskTextLog.TABLE_NAME
             + "("
             + WorkFlowContract.TaskTextLog._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + WorkFlowContract.TaskTextLog.TASK_TEXT_LOG_ID + " TEXT NOT NULL, "
             + WorkFlowContract.TaskTextLog.TASK_ID + " TEXT NOT NULL, "
-            + WorkFlowContract.TaskTextLog.WORKER_ID + " TEXT NOT NULL, "
-            + WorkFlowContract.TaskTextLog.WORKER_NAME + " TEXT NOT NULL, "
-            + WorkFlowContract.TaskTextLog.WORKER_AVATAR_URL + " TEXT, "
+            + WorkFlowContract.TaskTextLog.OWNER_ID + " TEXT NOT NULL, "
+            + WorkFlowContract.TaskTextLog.OWNER_NAME + " TEXT NOT NULL, "
+            + WorkFlowContract.TaskTextLog.OWNER_AVATAR_URL + " TEXT, "
             + WorkFlowContract.TaskTextLog.CREATED_TIME + " INTEGER NOT NULL, "
+            + WorkFlowContract.TaskTextLog.UPDATED_TIME + " INTEGER NOT NULL, "
             + WorkFlowContract.TaskTextLog.CONTENT + " TEXT NOT NULL"
             + ");";
 

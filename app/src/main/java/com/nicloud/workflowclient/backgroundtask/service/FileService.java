@@ -10,10 +10,10 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.FileCompletedReceiver;
-import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
-import com.nicloud.workflowclient.cases.file.FileItem;
+import com.nicloud.workflowclient.data.data.data.File;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
+import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.JsonUtils;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.utility.utils.RestfulUtils;
@@ -108,9 +108,9 @@ public class FileService extends IntentService {
 
                 if (fileJsonList != null) {
                     ArrayList<FileInDb> filesFromDb = new ArrayList<>();
-                    ArrayList<FileItem> filesFromServer = new ArrayList<>();
+                    ArrayList<File> filesFromServer = new ArrayList<>();
                     Map<String, FileInDb> filesFromDbMap = new HashMap<>();
-                    Map<String, FileItem> filesFromServerMap = new HashMap<>();
+                    Map<String, File> filesFromServerMap = new HashMap<>();
 
                     getCaseFilesFromDb(caseId, filesFromDb, filesFromDbMap);
                     getFilesFromServer(fileJsonList, filesFromServer, filesFromServerMap);
@@ -165,14 +165,14 @@ public class FileService extends IntentService {
     }
 
     private void getFilesFromServer(JSONArray jsonList,
-                                    ArrayList<FileItem> fileList, Map<String, FileItem> fileMap) {
+                                    ArrayList<File> fileList, Map<String, File> fileMap) {
         for (int i = 0 ; i < jsonList.length() ; i++) {
             try {
                 JSONObject jsonObject = jsonList.getJSONObject(i);
-                FileItem fileItem = FileItem.retrieveFileItemFromJson(jsonObject);
+                File file = File.retrieveCaseFileFromJson(jsonObject);
 
-                fileList.add(fileItem);
-                fileMap.put(fileItem.fileId, fileItem);
+                fileList.add(file);
+                fileMap.put(file.fileId, file);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -180,61 +180,24 @@ public class FileService extends IntentService {
         }
     }
 
-    private void insertAndUpdateFilesToDb(Map<String, FileInDb> filesFromDbMap, List<FileItem> filesFromServer) {
-        for (FileItem fileItem : filesFromServer) {
-            if (!filesFromDbMap.containsKey(fileItem.fileId)) {
-                insertFileToDb(fileItem);
+    private void insertAndUpdateFilesToDb(Map<String, FileInDb> filesFromDbMap, List<File> filesFromServer) {
+        for (File file : filesFromServer) {
+            if (!filesFromDbMap.containsKey(file.fileId)) {
+                DbUtils.insertFileToDb(this, file);
 
             } else {
-                if (fileItem.updatedTime <= filesFromDbMap.get(fileItem.fileId).lastUpdatedTime) continue;
+                if (file.updatedTime <= filesFromDbMap.get(file.fileId).lastUpdatedTime) continue;
 
-                updateFileToDb(fileItem);
+                DbUtils.updateFileToDb(this, file);
             }
         }
     }
 
-    private void deleteFilesFromDb(Map<String, FileItem> filesFromServerMap, ArrayList<FileInDb> filesFromDb) {
+    private void deleteFilesFromDb(Map<String, File> filesFromServerMap, ArrayList<FileInDb> filesFromDb) {
         for (FileInDb fileInDb : filesFromDb) {
             if (!filesFromServerMap.containsKey(fileInDb.fileId)) {
-                deleteFileFromDb(fileInDb.fileId);
+                DbUtils.deleteFileFromDb(this, fileInDb.fileId);
             }
         }
-    }
-
-    private void insertFileToDb(FileItem fileItem) {
-        getContentResolver().insert(WorkFlowContract.File.CONTENT_URI, convertFileToContentValues(fileItem));
-    }
-
-    private void updateFileToDb(FileItem fileItem) {
-        String selection =  WorkFlowContract.File.FILE_ID + " = ?";
-        String[] selectionArgs = new String[] {fileItem.fileId};
-
-        getContentResolver().update(WorkFlowContract.File.CONTENT_URI,
-                convertFileToContentValues(fileItem), selection, selectionArgs);
-    }
-
-    private void deleteFileFromDb(String fileId) {
-        String selection =  WorkFlowContract.File.FILE_ID + " = ?";
-        String[] selectionArgs = new String[] {fileId};
-
-        getContentResolver().delete(WorkFlowContract.File.CONTENT_URI, selection, selectionArgs);
-    }
-
-    private ContentValues convertFileToContentValues(FileItem fileItem) {
-        ContentValues values = new ContentValues();
-
-        values.put(WorkFlowContract.File.FILE_ID, fileItem.fileId);
-        values.put(WorkFlowContract.File.FILE_NAME, fileItem.fileName);
-        values.put(WorkFlowContract.File.FILE_TYPE, fileItem.fileType);
-        values.put(WorkFlowContract.File.FILE_URL, fileItem.fileUrl);
-        values.put(WorkFlowContract.File.FILE_THUMB_URL, fileItem.fileThumbUrl);
-        values.put(WorkFlowContract.File.OWNER_ID, fileItem.ownerId);
-        values.put(WorkFlowContract.File.OWNER_NAME, fileItem.ownerName);
-        values.put(WorkFlowContract.File.CASE_ID, fileItem.caseId);
-        values.put(WorkFlowContract.File.TASK_ID, fileItem.taskId);
-        values.put(WorkFlowContract.File.CREATED_TIME, fileItem.createdTime);
-        values.put(WorkFlowContract.File.UPDATED_TIME, fileItem.updatedTime);
-
-        return values;
     }
 }

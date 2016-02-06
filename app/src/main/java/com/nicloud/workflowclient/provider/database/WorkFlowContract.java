@@ -78,11 +78,13 @@ public class WorkFlowContract {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, TABLE_NAME);
 
         // DB columns
+        public static final String TASK_TEXT_LOG_ID = "task_text_log_id";
         public static final String TASK_ID = "task_id";
-        public static final String WORKER_ID = "worker_id";
-        public static final String WORKER_NAME = "worker_name";
-        public static final String WORKER_AVATAR_URL = "worker_avatar_url";
+        public static final String OWNER_ID = "owner_id";
+        public static final String OWNER_NAME = "owner_name";
+        public static final String OWNER_AVATAR_URL = "owner_avatar_url";
         public static final String CREATED_TIME = "created_time";
+        public static final String UPDATED_TIME = "updated_time";
         public static final String CONTENT = "content";
     }
 

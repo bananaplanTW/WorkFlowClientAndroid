@@ -30,15 +30,14 @@ import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.FileCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.receiver.UploadCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.FileService;
-import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.cases.main.OnSetCaseId;
+import com.nicloud.workflowclient.data.data.data.File;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -109,7 +108,7 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
     private UploadCompletedReceiver mUploadCompletedReceiver;
     private FileCompletedReceiver mFileCompletedReceiver;
 
-    private List<FileItem> mFileListData = new ArrayList<>();
+    private List<File> mFileListData = new ArrayList<>();
 
     private String mCaseId;
 
@@ -253,7 +252,7 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
             Log.d(TAG, "No Activity to handle ACTION_IMAGE_CAPTURE intent");
         }
 
-        File photoFile = null;
+        java.io.File photoFile = null;
 
         try {
             photoFile = createImageFile();
@@ -269,11 +268,11 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    private File createImageFile() throws IOException {
+    private java.io.File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = new File(storageDir + "/" + timeStamp + ".jpg");
+        java.io.File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        java.io.File image = new java.io.File(storageDir + "/" + timeStamp + ".jpg");
 
         if (!image.createNewFile()) throw new IOException();
 
@@ -319,7 +318,7 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
 
     private void onPhotoCaptured() {
         // compress photo
-        File photoFile = new File(mCurrentPhotoPath.replace("file:", ""));
+        java.io.File photoFile = new java.io.File(mCurrentPhotoPath.replace("file:", ""));
         Bitmap bitmap = Utils.scaleBitmap(mContext, photoFile.getAbsolutePath());
         if (bitmap == null) return;
 
@@ -331,7 +330,7 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
         if (!TextUtils.isEmpty(mCurrentPhotoPath)) {  // trigger media scanner
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 
-            File f = new File(mCurrentPhotoPath);
+            java.io.File f = new java.io.File(mCurrentPhotoPath);
             Uri contentUri = Uri.fromFile(f);
 
             mediaScanIntent.setData(contentUri);
@@ -403,7 +402,7 @@ public class CaseFileFragment extends Fragment implements View.OnClickListener,
             long createdTime = cursor.getLong(CREATED_TIME);
             long updatedTime = cursor.getLong(UPDATED_TIME);
 
-            mFileListData.add(new FileItem(fileId, fileName, fileType, fileUrl, fileThumbUrl,
+            mFileListData.add(new File(fileId, fileName, fileType, fileUrl, fileThumbUrl,
                                            ownerId, ownerName, caseId, taskId,
                                            createdTime, updatedTime));
         }

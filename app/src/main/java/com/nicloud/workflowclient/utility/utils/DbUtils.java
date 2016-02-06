@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.nicloud.workflowclient.data.data.data.Case;
+import com.nicloud.workflowclient.data.data.data.File;
+import com.nicloud.workflowclient.data.data.data.TaskTextLog;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckItem;
-import com.nicloud.workflowclient.tasklist.main.Task;
+import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 
 import java.util.Date;
@@ -100,15 +102,29 @@ public class DbUtils {
         return task;
     }
 
-    public static void setCheckItem(Context context, String taskId, int position, boolean isChecked) {
-        String selection =  WorkFlowContract.CheckList.TASK_ID + " = ? AND " +
-                            WorkFlowContract.CheckList.POSITION + " = ?";
-        String[] selectionArgs = new String[] {taskId, String.valueOf(position)};
+    public static int getCaseCount(Context context) {
+        String[] projection = new String[] {
+                WorkFlowContract.Case._ID,
+        };
 
-        ContentValues values = new ContentValues();
-        values.put(WorkFlowContract.CheckList.IS_CHECKED, isChecked);
+        Cursor cursor = null;
+        int caseCount = 0;
 
-        context.getContentResolver().update(WorkFlowContract.CheckList.CONTENT_URI, values, selection, selectionArgs);
+        try {
+            cursor = context.getContentResolver().query(WorkFlowContract.Case.CONTENT_URI,
+                    projection, null, null, null);
+
+            if (cursor != null && cursor.getCount() != 0) {
+                caseCount = cursor.getCount();
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return caseCount;
     }
 
     public static Case getCaseById(Context context, String caseId) {
@@ -153,23 +169,22 @@ public class DbUtils {
         return aCase;
     }
 
+
+    public static void setCheckItem(Context context, String taskId, int position, boolean isChecked) {
+        String selection =  WorkFlowContract.CheckList.TASK_ID + " = ? AND " +
+                WorkFlowContract.CheckList.POSITION + " = ?";
+        String[] selectionArgs = new String[] {taskId, String.valueOf(position)};
+
+        ContentValues values = new ContentValues();
+        values.put(WorkFlowContract.CheckList.IS_CHECKED, isChecked);
+
+        context.getContentResolver().update(WorkFlowContract.CheckList.CONTENT_URI, values, selection, selectionArgs);
+    }
+
+
+    // Insert
     public static void insertTaskToDb(Context context, Task task) {
         context.getContentResolver().insert(WorkFlowContract.Task.CONTENT_URI, convertTaskToContentValues(task));
-    }
-
-    public static void updateTaskToDb(Context context, Task task) {
-        String selection =  WorkFlowContract.Task.TASK_ID + " = ?";
-        String[] selectionArgs = new String[] {task.id};
-
-        context.getContentResolver().update(WorkFlowContract.Task.CONTENT_URI,
-                convertTaskToContentValues(task), selection, selectionArgs);
-    }
-
-    public static void deleteTaskFromDb(Context context, String taskId) {
-        String selection =  WorkFlowContract.Task.TASK_ID + " = ?";
-        String[] selectionArgs = new String[] {taskId};
-
-        context.getContentResolver().delete(WorkFlowContract.Task.CONTENT_URI, selection, selectionArgs);
     }
 
     public static void insertCheckListToDb(Context context, List<CheckItem> checkList) {
@@ -179,9 +194,45 @@ public class DbUtils {
         }
     }
 
+    public static void insertTaskTextLogToDb(Context context, TaskTextLog taskTextLog) {
+        context.getContentResolver().insert(WorkFlowContract.TaskTextLog.CONTENT_URI,
+                convertTaskTextLogToContentValues(taskTextLog));
+    }
+
+    public static void insertFileToDb(Context context, File file) {
+        context.getContentResolver().insert(WorkFlowContract.File.CONTENT_URI, convertFileToContentValues(file));
+    }
+
+
+    // Update
+    public static void updateTaskToDb(Context context, Task task) {
+        String selection =  WorkFlowContract.Task.TASK_ID + " = ?";
+        String[] selectionArgs = new String[] {task.id};
+
+        context.getContentResolver().update(WorkFlowContract.Task.CONTENT_URI,
+                convertTaskToContentValues(task), selection, selectionArgs);
+    }
+
     public static void updateCheckListToDb(Context context, String taskId, List<CheckItem> checkList) {
         deleteCheckListFromDb(context, taskId);
         insertCheckListToDb(context, checkList);
+    }
+
+    public static void updateFileToDb(Context context, File file) {
+        String selection =  WorkFlowContract.File.FILE_ID + " = ?";
+        String[] selectionArgs = new String[] {file.fileId};
+
+        context.getContentResolver().update(WorkFlowContract.File.CONTENT_URI,
+                convertFileToContentValues(file), selection, selectionArgs);
+    }
+
+
+    // Delete
+    public static void deleteTaskFromDb(Context context, String taskId) {
+        String selection =  WorkFlowContract.Task.TASK_ID + " = ?";
+        String[] selectionArgs = new String[] {taskId};
+
+        context.getContentResolver().delete(WorkFlowContract.Task.CONTENT_URI, selection, selectionArgs);
     }
 
     public static void deleteCheckListFromDb(Context context, String taskId) {
@@ -189,6 +240,47 @@ public class DbUtils {
         String[] selectionArgs = new String[] {taskId};
 
         context.getContentResolver().delete(WorkFlowContract.CheckList.CONTENT_URI, selection, selectionArgs);
+    }
+
+    public static void deleteTaskTextLogFromDb(Context context, String taskId) {
+        String selection =  WorkFlowContract.TaskTextLog.TASK_ID + " = ?";
+        String[] selectionArgs = new String[] {taskId};
+
+        context.getContentResolver().delete(WorkFlowContract.TaskTextLog.CONTENT_URI, selection, selectionArgs);
+    }
+
+    public static void deleteTaskFileFromDb(Context context, String taskId) {
+        String selection =  WorkFlowContract.File.TASK_ID + " = ?";
+        String[] selectionArgs = new String[] {taskId};
+
+        context.getContentResolver().delete(WorkFlowContract.File.CONTENT_URI, selection, selectionArgs);
+    }
+
+    public static void deleteFileFromDb(Context context, String fileId) {
+        String selection =  WorkFlowContract.File.FILE_ID + " = ?";
+        String[] selectionArgs = new String[] {fileId};
+
+        context.getContentResolver().delete(WorkFlowContract.File.CONTENT_URI, selection, selectionArgs);
+    }
+
+
+    // ContentValues
+    public static ContentValues convertFileToContentValues(File file) {
+        ContentValues values = new ContentValues();
+
+        values.put(WorkFlowContract.File.FILE_ID, file.fileId);
+        values.put(WorkFlowContract.File.FILE_NAME, file.fileName);
+        values.put(WorkFlowContract.File.FILE_TYPE, file.fileType);
+        values.put(WorkFlowContract.File.FILE_URL, file.fileUrl);
+        values.put(WorkFlowContract.File.FILE_THUMB_URL, file.fileThumbUrl);
+        values.put(WorkFlowContract.File.OWNER_ID, file.ownerId);
+        values.put(WorkFlowContract.File.OWNER_NAME, file.ownerName);
+        values.put(WorkFlowContract.File.CASE_ID, file.caseId);
+        values.put(WorkFlowContract.File.TASK_ID, file.taskId);
+        values.put(WorkFlowContract.File.CREATED_TIME, file.createdTime);
+        values.put(WorkFlowContract.File.UPDATED_TIME, file.updatedTime);
+
+        return values;
     }
 
     public static ContentValues convertTaskToContentValues(Task task) {
@@ -218,28 +310,18 @@ public class DbUtils {
         return values;
     }
 
-    public static int getCaseCount(Context context) {
-        String[] projection = new String[] {
-                WorkFlowContract.Case._ID,
-        };
+    private static ContentValues convertTaskTextLogToContentValues(TaskTextLog taskTextLog) {
+        ContentValues values = new ContentValues();
 
-        Cursor cursor = null;
-        int caseCount = 0;
+        values.put(WorkFlowContract.TaskTextLog.TASK_TEXT_LOG_ID, taskTextLog.taskTextLogId);
+        values.put(WorkFlowContract.TaskTextLog.TASK_ID, taskTextLog.taskId);
+        values.put(WorkFlowContract.TaskTextLog.OWNER_ID, taskTextLog.ownerId);
+        values.put(WorkFlowContract.TaskTextLog.OWNER_NAME, taskTextLog.ownerName);
+        values.put(WorkFlowContract.TaskTextLog.OWNER_AVATAR_URL, taskTextLog.ownerAvatarUrl);
+        values.put(WorkFlowContract.TaskTextLog.CREATED_TIME, taskTextLog.createdTime);
+        values.put(WorkFlowContract.TaskTextLog.UPDATED_TIME, taskTextLog.updatedTime);
+        values.put(WorkFlowContract.TaskTextLog.CONTENT, taskTextLog.content);
 
-        try {
-            cursor = context.getContentResolver().query(WorkFlowContract.Case.CONTENT_URI,
-                    projection, null, null, null);
-
-            if (cursor != null && cursor.getCount() != 0) {
-                caseCount = cursor.getCount();
-            }
-
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return caseCount;
+        return values;
     }
 }

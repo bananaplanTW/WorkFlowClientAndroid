@@ -9,11 +9,11 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
-import com.nicloud.workflowclient.data.data.activity.ActivityDataFactory;
-import com.nicloud.workflowclient.data.data.activity.BaseData;
+import com.nicloud.workflowclient.data.data.data.File;
+import com.nicloud.workflowclient.data.data.data.TaskTextLog;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
-import com.nicloud.workflowclient.tasklist.main.Task;
+import com.nicloud.workflowclient.data.data.data.Task;
 import com.nicloud.workflowclient.data.data.data.WorkingData;
 import com.nicloud.workflowclient.utility.utils.RestfulUtils;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
@@ -278,7 +278,6 @@ public class TaskService extends IntentService {
         int limit = intent.getIntExtra(ExtraKey.INT_TASK_ACTIVITIES_LIMIT, TASK_ACTIVITIES_LIMIT);
 
         Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
-        broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_TASK_ACTIVITIES);
 
         boolean isFirstLoadTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
         if (isFirstLoadTasks) {
@@ -300,8 +299,12 @@ public class TaskService extends IntentService {
 
                 JSONObject responseJSON = new JSONObject(responseJSONString);
                 if (responseJSON.getString("status").equals("success")) {
-                    broadcastIntent.putExtra(ExtraKey.ARRAYLIST_TASK_ACTIVITIES,
-                                             parseActivityJSONArray(responseJSON.getJSONArray("result")));
+                    ArrayList<TaskTextLog> taskTextLogList = new ArrayList<>();
+                    ArrayList<File> taskFileList = new ArrayList<>();
+                    retrieveTextLogAndFile(taskId, responseJSON.getJSONArray("result"), taskTextLogList, taskFileList);
+
+                    updateTaskTextLogsInDb(taskId, taskTextLogList);
+                    updateTaskFilesInDb(taskId, taskFileList);
                 }
 
             } catch (JSONException e) {
@@ -317,24 +320,43 @@ public class TaskService extends IntentService {
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
     }
 
-    private ArrayList<BaseData> parseActivityJSONArray(JSONArray activities) {
-        ArrayList<BaseData> parsedActivities = new ArrayList<>();
+    private void retrieveTextLogAndFile(String taskId, JSONArray jsonArray, ArrayList<TaskTextLog> taskTextLogList,
+                                        ArrayList<File> taskFileList) throws JSONException {
+        for (int i = 0 ; i < jsonArray.length() ; i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            String type = jsonObject.getString("type");
 
-        int length = activities.length();
+            if ("comment".equals(type)) {
+                taskTextLogList.add(TaskTextLog.retrieveTaskTextLogFromJson(taskId, jsonObject));
 
-        try {
-            for (int i = 0; i < length; i++) {
-                JSONObject activity = activities.getJSONObject(i);
-                BaseData activityData = ActivityDataFactory.genData(activity, this);
-                if (activityData != null) {
-                    parsedActivities.add(activityData);
-                }
+            } else if ("attachment".equals(type)) {
+                taskFileList.add(File.retrieveTaskFileFromJson(taskId, jsonObject));
             }
-            return parsedActivities;
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-        return null;
+    }
+
+    private void updateTaskTextLogsInDb(String taskId, ArrayList<TaskTextLog> taskTextLogList) {
+        deleteTaskTextLogs(taskId);
+
+        for (int i = 0 ; i < taskTextLogList.size() ; i++) {
+            DbUtils.insertTaskTextLogToDb(this, taskTextLogList.get(i));
+        }
+    }
+
+    private void updateTaskFilesInDb(String taskId, ArrayList<File> taskFileList) {
+        deleteTaskFiles(taskId);
+
+        for (int i = 0 ; i < taskFileList.size() ; i++) {
+            DbUtils.insertFileToDb(this, taskFileList.get(i));
+        }
+    }
+
+    private void deleteTaskTextLogs(String taskId) {
+        DbUtils.deleteTaskTextLogFromDb(this, taskId);
+    }
+
+    private void deleteTaskFiles(String taskId) {
+        DbUtils.deleteTaskFileFromDb(this, taskId);
     }
 
     private void getMyTasksFromDb(String workerId, ArrayList<TaskInDb> taskList, Map<String, TaskInDb> taskMap) {

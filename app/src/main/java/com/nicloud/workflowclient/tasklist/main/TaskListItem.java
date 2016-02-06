@@ -1,5 +1,7 @@
 package com.nicloud.workflowclient.tasklist.main;
 
+import com.nicloud.workflowclient.data.data.data.Task;
+
 /**
  * Created by logicmelody on 2016/1/29.
  */

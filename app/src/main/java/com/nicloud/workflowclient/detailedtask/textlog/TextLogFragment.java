@@ -1,9 +1,13 @@
 package com.nicloud.workflowclient.detailedtask.textlog;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,10 +20,12 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
+import com.nicloud.workflowclient.data.data.data.TaskTextLog;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.main.OnRefreshDetailedTask;
 import com.nicloud.workflowclient.detailedtask.main.OnSwipeRefresh;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
+import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -28,9 +34,37 @@ import java.util.List;
 /**
  * Created by logicmelody on 2016/1/11.
  */
-public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.OnClickListener {
+public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String EXTRA_TEXT_LOG = "extra_text_log";
+
+    private static final int LOADER_ID = 843;
+
+    private static final String[] mProjection = new String[] {
+            WorkFlowContract.TaskTextLog._ID,
+            WorkFlowContract.TaskTextLog.TASK_TEXT_LOG_ID,
+            WorkFlowContract.TaskTextLog.TASK_ID,
+            WorkFlowContract.TaskTextLog.OWNER_ID,
+            WorkFlowContract.TaskTextLog.OWNER_NAME,
+            WorkFlowContract.TaskTextLog.OWNER_AVATAR_URL,
+            WorkFlowContract.TaskTextLog.CREATED_TIME,
+            WorkFlowContract.TaskTextLog.UPDATED_TIME,
+            WorkFlowContract.TaskTextLog.CONTENT
+    };
+    private static final int ID = 0;
+    private static final int TASK_TEXT_LOG_ID = 1;
+    private static final int TASK_ID = 2;
+    private static final int OWNER_ID = 3;
+    private static final int OWNER_NAME = 4;
+    private static final int OWNER_AVATAR_URL = 5;
+    private static final int CREATED_TIME = 6;
+    private static final int UPDATED_TIME = 7;
+    private static final int CONTENT = 8;
+
+    private static String mSelection = WorkFlowContract.TaskTextLog.TASK_ID + " = ?";
+    private static String[] mSelectionArgs;
+    private static final String mSortOrder = WorkFlowContract.TaskTextLog.CREATED_TIME + " DESC";
 
     private Context mContext;
 
@@ -39,7 +73,7 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.On
     private RecyclerView mTextLogList;
     private LinearLayoutManager mTextLogListLayoutManager;
     private TextLogAdapter mTextLogAdapter;
-    private List<BaseData> mTextDataSet = new ArrayList<>();
+    private List<TaskTextLog> mTextDataSet = new ArrayList<>();
 
     private EditText mTextLogBox;
     private TextView mAddTextLogButton;
@@ -67,14 +101,14 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.On
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
-        ArrayList<BaseData> dataSet = getArguments().getParcelableArrayList(EXTRA_TEXT_LOG);
-        mTextDataSet.clear();
-        mTextDataSet.addAll(dataSet);
         initialize();
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     private void initialize() {
+        mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
+        mSelectionArgs = new String[] {mTaskId};
+
         findViews();
         setupViews();
         setupSwipeRefreshLayout();
@@ -129,11 +163,6 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.On
 
     @Override
     public void swapData(List<BaseData> dataSet) {
-        mTextDataSet.clear();
-        mTextDataSet.addAll(dataSet);
-        mTextLogAdapter.notifyDataSetChanged();
-
-        setNoTextLogVisibility();
     }
 
     @Override
@@ -156,5 +185,40 @@ public class TextLogFragment extends Fragment implements OnSwipeRefresh, View.On
 
         mContext.startService(UploadService.generateUploadTaskTextIntent(mContext, mTaskId, editContent));
         mTextLogBox.setText("");
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(mContext, WorkFlowContract.TaskTextLog.CONTENT_URI,
+                                mProjection, mSelection, mSelectionArgs, mSortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null) return;
+
+        mTextDataSet.clear();
+
+        while (cursor.moveToNext()) {
+            String taskTextLogId = cursor.getString(TASK_TEXT_LOG_ID);
+            String taskId = cursor.getString(TASK_ID);
+            String ownerId = cursor.getString(OWNER_ID);
+            String ownerName = cursor.getString(OWNER_NAME);
+            String ownerAvatarUrl = cursor.getString(OWNER_AVATAR_URL);
+            long createdTime = cursor.getLong(CREATED_TIME);
+            long updatedTime = cursor.getLong(UPDATED_TIME);
+            String content = cursor.getString(CONTENT);
+
+            mTextDataSet.add(new TaskTextLog(taskTextLogId, taskId, ownerId, ownerName, ownerAvatarUrl,
+                                             createdTime, updatedTime, content));
+        }
+
+        mTextLogAdapter.notifyDataSetChanged();
+        setNoTextLogVisibility();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

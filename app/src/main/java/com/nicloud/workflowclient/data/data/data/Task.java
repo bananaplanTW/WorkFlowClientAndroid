@@ -1,7 +1,6 @@
-package com.nicloud.workflowclient.tasklist.main;
+package com.nicloud.workflowclient.data.data.data;
 
 import com.nicloud.workflowclient.detailedtask.checklist.CheckItem;
-import com.nicloud.workflowclient.data.data.data.IdData;
 import com.nicloud.workflowclient.utility.utils.JsonUtils;
 
 import org.json.JSONArray;
