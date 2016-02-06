@@ -272,8 +272,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     private void updateDetailedTaskData() {
         mTaskInfoFragment.swapData(null);
-        mCheckListFragment.swapData(null);
-        mTextLogFragment.swapData(mTextDataSet);
         mFileLogFragment.swapData(mFileDataSet);
 
         mDetailedTaskPagerAdapter.notifyDataSetChanged();

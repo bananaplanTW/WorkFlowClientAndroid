@@ -3,6 +3,7 @@ package com.nicloud.workflowclient.detailedtask.filelog;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.connectserver.activity.LoadingPhotoDataCommand;
-import com.nicloud.workflowclient.data.data.activity.BaseData;
-import com.nicloud.workflowclient.data.data.activity.FileData;
-import com.nicloud.workflowclient.data.data.activity.PhotoData;
+import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
+import com.nicloud.workflowclient.data.data.data.File;
+import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.DisplayImageActivity;
+import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.Date;
@@ -27,7 +28,7 @@ public class FileLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private Context mContext;
 
-    private List<BaseData> mFileLogData;
+    private List<File> mFileLogData;
 
 
     private class FileLogItemViewHolder extends RecyclerView.ViewHolder {
@@ -47,7 +48,7 @@ public class FileLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public FileLogListAdapter(Context context, List<BaseData> data) {
+    public FileLogListAdapter(Context context, List<File> data) {
         mContext = context;
         mFileLogData = data;
     }
@@ -59,60 +60,58 @@ public class FileLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (mFileLogData.get(position).type) {
-            case PHOTO:
-                onBindPhotoLog((FileLogItemViewHolder) holder, position);
-                break;
+        FileLogItemViewHolder vh = (FileLogItemViewHolder) holder;
 
-            case FILE:
-                onBindFileLog((FileLogItemViewHolder) holder, position);
-                break;
+        String type = mFileLogData.get(position).fileType;
+        File file = mFileLogData.get(position);
+        Uri.Builder fileBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon().path(file.fileUrl);
+        String fileInformation = file.ownerName + " " +
+                Utils.timestamp2Date(new Date(file.createdTime), Utils.DATE_FORMAT_YMD_HM_AMPM);
+
+        vh.fileName.setText(file.fileName);
+        vh.fileInformation.setText(fileInformation);
+
+        if (WorkFlowContract.File.Type.IMAGE.equals(type)) {
+            onBindImageLog((FileLogItemViewHolder) holder, file, fileBuilder.build().toString());
+
+        } else if (WorkFlowContract.File.Type.FILE.equals(type)) {
+            onBindFileLog((FileLogItemViewHolder) holder, file, fileBuilder.build().toString());
         }
     }
 
-    private void onBindPhotoLog(FileLogItemViewHolder holder, int position) {
-        final PhotoData photoData = (PhotoData) mFileLogData.get(position);
-        String fileInformation = photoData.uploaderName + " " +
-                Utils.timestamp2Date(new Date(photoData.time), Utils.DATE_FORMAT_YMD_HM_AMPM);
-
-        holder.fileName.setText(photoData.fileName);
-        holder.fileInformation.setText(fileInformation);
-
-        if (photoData.photo != null) {
-            holder.fileImage.setImageBitmap(photoData.photo);
+    private void onBindImageLog(FileLogItemViewHolder holder, final File file, final String fileUrl) {
+        if (file.fileThumbnail != null) {
+            holder.fileImage.setImageDrawable(file.fileThumbnail);
 
         } else {
-            holder.fileImage.setImageResource(R.drawable.ic_file);
+            holder.fileImage.setImageResource(R.drawable.ic_photo);
 
-            LoadingPhotoDataCommand loadingPhotoDataCommand
-                    = new LoadingPhotoDataCommand(mContext, photoData.photoUri, photoData, holder.fileImage);
-            loadingPhotoDataCommand.execute();
+            if (file.fileThumbUrl != null) {
+                Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+                imageBuilder.path(file.fileThumbUrl);
+
+                new LoadImageTask(mContext, imageBuilder.build(), holder.fileImage, file.fileThumbnail).execute();
+            }
         }
 
-        if (Uri.EMPTY != photoData.filePath) {
+        if (!TextUtils.isEmpty(file.fileUrl)) {
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mContext.startActivity(DisplayImageActivity
-                            .launchDisplayImageActivity(mContext, photoData.fileName, photoData.filePath.toString()));
+                            .launchDisplayImageActivity(mContext, file.fileName, fileUrl));
                 }
             });
         }
     }
 
-    private void onBindFileLog(FileLogItemViewHolder holder, int position) {
-        final FileData fileData = (FileData) mFileLogData.get(position);
-        String fileInformation = fileData.uploaderName + " " +
-                Utils.timestamp2Date(new Date(fileData.time), Utils.DATE_FORMAT_YMD_HM_AMPM);
-
+    private void onBindFileLog(FileLogItemViewHolder holder, final File file, final String fileUrl) {
         holder.fileImage.setImageResource(R.drawable.ic_file);
-        holder.fileName.setText(fileData.fileName);
-        holder.fileInformation.setText(fileInformation);
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.downloadFile(mContext, fileData.filePath.toString(), fileData.fileName);
+                Utils.downloadFile(mContext, fileUrl, file.fileName);
             }
         });
     }

@@ -3,6 +3,7 @@ package com.nicloud.workflowclient.detailedtask.filelog;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,14 +26,15 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
+import com.nicloud.workflowclient.data.data.data.File;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.main.OnRefreshDetailedTask;
 import com.nicloud.workflowclient.detailedtask.main.OnSwipeRefresh;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
+import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -40,7 +45,8 @@ import java.util.List;
 /**
  * Created by logicmelody on 2016/1/12.
  */
-public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.OnClickListener {
+public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = "FileLogFragment";
 
@@ -49,6 +55,39 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
     private static final int REQUEST_IMAGE_CAPTURE = 10001;
     private static final int REQUEST_PICK_FILE = 10002;
 
+    private static final int LOADER_ID = 803;
+
+    private static final String[] mProjection = new String[] {
+            WorkFlowContract.File._ID,
+            WorkFlowContract.File.FILE_ID,
+            WorkFlowContract.File.FILE_NAME,
+            WorkFlowContract.File.FILE_TYPE,
+            WorkFlowContract.File.FILE_URL,
+            WorkFlowContract.File.FILE_THUMB_URL,
+            WorkFlowContract.File.OWNER_ID,
+            WorkFlowContract.File.OWNER_NAME,
+            WorkFlowContract.File.CASE_ID,
+            WorkFlowContract.File.TASK_ID,
+            WorkFlowContract.File.CREATED_TIME,
+            WorkFlowContract.File.UPDATED_TIME
+    };
+    private static final int ID = 0;
+    private static final int FILE_ID = 1;
+    private static final int FILE_NAME = 2;
+    private static final int FILE_TYPE = 3;
+    private static final int FILE_URL = 4;
+    private static final int FILE_THUMB_URL = 5;
+    private static final int OWNER_ID = 6;
+    private static final int OWNER_NAME = 7;
+    private static final int CASE_ID = 8;
+    private static final int TASK_ID = 9;
+    private static final int CREATED_TIME = 10;
+    private static final int UPDATED_TIME = 11;
+
+    private static final String mSelection = WorkFlowContract.File.TASK_ID + " = ?";
+    private static String[] mSelectionArgs;
+    private static final String mSortOrder = WorkFlowContract.File.CREATED_TIME + " DESC";
+
     private Context mContext;
 
     private SwipeRefreshLayout mFileLogSwipeRefreshLayout;
@@ -56,7 +95,7 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
     private RecyclerView mFileLogList;
     private LinearLayoutManager mFileLogListLayoutManager;
     private FileLogListAdapter mFileLogListAdapter;
-    private List<BaseData> mFileLogData = new ArrayList<>();
+    private List<File> mFileLogData = new ArrayList<>();
 
     private TextView mAddFileButton;
     private TextView mAddPhotoButton;
@@ -87,14 +126,14 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
-        ArrayList<BaseData> dataSet = getArguments().getParcelableArrayList(EXTRA_FILE_LOG);
-        mFileLogData.clear();
-        mFileLogData.addAll(dataSet);
         initialize();
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     private void initialize() {
+        mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
+        mSelectionArgs = new String[] {mTaskId};
+
         findViews();
         setupViews();
         setupSwipeRefreshLayout();
@@ -150,11 +189,6 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
 
     @Override
     public void swapData(List<BaseData> dataSet) {
-        mFileLogData.clear();
-        mFileLogData.addAll(dataSet);
-        mFileLogListAdapter.notifyDataSetChanged();
-
-        setNoFileTextVisibility();
     }
 
     @Override
@@ -181,7 +215,7 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
             Log.d(TAG, "No Activity to handle ACTION_IMAGE_CAPTURE intent");
         }
 
-        File photoFile = null;
+        java.io.File photoFile = null;
 
         try {
             photoFile = createImageFile();
@@ -197,11 +231,11 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
         }
     }
 
-    private File createImageFile() throws IOException {
+    private java.io.File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = new File(storageDir + "/" + timeStamp + ".jpg");
+        java.io.File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        java.io.File image = new java.io.File(storageDir + "/" + timeStamp + ".jpg");
 
         if (!image.createNewFile()) throw new IOException();
 
@@ -246,7 +280,7 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
 
     private void onPhotoCaptured() {
         // compress photo
-        File photoFile = new File(mCurrentPhotoPath.replace("file:", ""));
+        java.io.File photoFile = new java.io.File(mCurrentPhotoPath.replace("file:", ""));
         Bitmap bitmap = Utils.scaleBitmap(mContext, photoFile.getAbsolutePath());
         if (bitmap == null) return;
 
@@ -258,7 +292,7 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
         if (!TextUtils.isEmpty(mCurrentPhotoPath)) {  // trigger media scanner
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 
-            File f = new File(mCurrentPhotoPath);
+            java.io.File f = new java.io.File(mCurrentPhotoPath);
             Uri contentUri = Uri.fromFile(f);
 
             mediaScanIntent.setData(contentUri);
@@ -309,5 +343,44 @@ public class FileLogFragment extends Fragment implements OnSwipeRefresh, View.On
         }
 
         mCurrentFilePath = null;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(mContext, WorkFlowContract.File.CONTENT_URI,
+                                mProjection, mSelection, mSelectionArgs, mSortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null) return;
+
+        mFileLogData.clear();
+
+        while (cursor.moveToNext()) {
+            String fileId = cursor.getString(FILE_ID);
+            String fileName = cursor.getString(FILE_NAME);
+            String fileType = cursor.getString(FILE_TYPE);
+            String fileUrl = cursor.getString(FILE_URL);
+            String fileThumbUrl = cursor.getString(FILE_THUMB_URL);
+            String ownerId = cursor.getString(OWNER_ID);
+            String ownerName = cursor.getString(OWNER_NAME);
+            String caseId = cursor.getString(CASE_ID);
+            String taskId = cursor.getString(TASK_ID);
+            long createdTime = cursor.getLong(CREATED_TIME);
+            long updatedTime = cursor.getLong(UPDATED_TIME);
+
+            mFileLogData.add(new File(fileId, fileName, fileType, fileUrl, fileThumbUrl,
+                                      ownerId, ownerName, caseId, taskId,
+                                      createdTime, updatedTime));
+        }
+
+        mFileLogListAdapter.notifyDataSetChanged();
+        setNoFileTextVisibility();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

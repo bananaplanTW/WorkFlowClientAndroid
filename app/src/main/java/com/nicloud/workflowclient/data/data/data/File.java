@@ -2,6 +2,7 @@ package com.nicloud.workflowclient.data.data.data;
 
 import android.graphics.drawable.Drawable;
 
+import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.utils.JsonUtils;
 
 import org.json.JSONException;
@@ -68,10 +69,10 @@ public class File {
         String fileType = jsonObject.getString("contentType");
 
         String fileUrl = null;
-        if ("image".equals(fileType)) {
+        if (WorkFlowContract.File.Type.IMAGE.equals(fileType)) {
             fileUrl = JsonUtils.getStringFromJson(jsonObject, "imageUrl");
 
-        } else if ("file".equals(fileType)) {
+        } else if (WorkFlowContract.File.Type.FILE.equals(fileType)) {
             fileUrl = JsonUtils.getStringFromJson(jsonObject, "fileUrl");
         }
 
