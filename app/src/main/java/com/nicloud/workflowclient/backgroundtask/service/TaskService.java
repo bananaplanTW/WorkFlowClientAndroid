@@ -9,6 +9,8 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
+import com.nicloud.workflowclient.data.data.activity.ActivityDataFactory;
+import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.tasklist.main.Task;
@@ -35,16 +37,21 @@ public class TaskService extends IntentService {
 
     private static final String TAG = "TaskService";
 
+    public static final int TASK_ACTIVITIES_LIMIT = 15;
+
     public static final class Action {
         public static final String LOAD_MY_TASKS = "task_service_load_my_tasks";
         public static final String LOAD_TASK_BY_ID = "task_service_load_task_by_id";
         public static final String LOAD_CASE_TASKS = "task_service_load_case_tasks";
+        public static final String LOAD_TASK_ACTIVITIES = "task_service_load_task_activities";
     }
 
     public static final class ExtraKey {
         public static final String BOOLEAN_FIRST_LOAD_TASKS = "extra_first_load_my_tasks";
         public static final String STRING_TASK_ID = "extra_task_id";
         public static final String STRING_CASE_ID = "extra_case_id";
+        public static final String INT_TASK_ACTIVITIES_LIMIT = "extra_task_activities_limit";
+        public static final String ARRAYLIST_TASK_ACTIVITIES = "extra_task_activities";
     }
 
     private static final String[] mProjection = new String[] {
@@ -99,6 +106,17 @@ public class TaskService extends IntentService {
         return intent;
     }
 
+    public static Intent generateLoadTaskActivitiesIntent(Context context, String taskId, int limit,
+                                                          boolean isFirstLoad) {
+        Intent intent = new Intent(context, TaskService.class);
+        intent.setAction(Action.LOAD_TASK_ACTIVITIES);
+        intent.putExtra(ExtraKey.STRING_TASK_ID, taskId);
+        intent.putExtra(ExtraKey.INT_TASK_ACTIVITIES_LIMIT, limit);
+        intent.putExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, isFirstLoad);
+
+        return intent;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
@@ -111,6 +129,9 @@ public class TaskService extends IntentService {
 
         } else if (Action.LOAD_CASE_TASKS.equals(action)) {
             loadCaseTasks(intent);
+
+        } else if (Action.LOAD_TASK_ACTIVITIES.equals(action)) {
+            loadTaskActivities(intent);
         }
     }
 
@@ -118,10 +139,10 @@ public class TaskService extends IntentService {
         Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
         boolean isFirstLoadTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
         if (isFirstLoadTasks) {
-            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_FIRST);
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE, TaskCompletedReceiver.From.LOAD_FIRST);
 
         } else {
-            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_NORMAL);
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE, TaskCompletedReceiver.From.LOAD_NORMAL);
         }
 
         if (RestfulUtils.isConnectToInternet(this)) {
@@ -164,13 +185,12 @@ public class TaskService extends IntentService {
         String taskId = intent.getStringExtra(ExtraKey.STRING_TASK_ID);
 
         Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
-        broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.DETAILED_TASK);
         boolean isFirstLoadMyTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
         if (isFirstLoadMyTasks) {
-            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_FIRST);
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE, TaskCompletedReceiver.From.LOAD_FIRST);
 
         } else {
-            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_NORMAL);
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE, TaskCompletedReceiver.From.LOAD_NORMAL);
         }
 
         if (RestfulUtils.isConnectToInternet(this)) {
@@ -210,10 +230,10 @@ public class TaskService extends IntentService {
         Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
         boolean isFirstLoadTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
         if (isFirstLoadTasks) {
-            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_FIRST);
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE, TaskCompletedReceiver.From.LOAD_FIRST);
 
         } else {
-            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_NORMAL);
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE, TaskCompletedReceiver.From.LOAD_NORMAL);
         }
 
         if (RestfulUtils.isConnectToInternet(this)) {
@@ -251,6 +271,70 @@ public class TaskService extends IntentService {
         }
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+    }
+
+    private void loadTaskActivities(Intent intent) {
+        String taskId = intent.getStringExtra(ExtraKey.STRING_TASK_ID);
+        int limit = intent.getIntExtra(ExtraKey.INT_TASK_ACTIVITIES_LIMIT, TASK_ACTIVITIES_LIMIT);
+
+        Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
+        broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_TASK_ACTIVITIES);
+
+        boolean isFirstLoadTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
+        if (isFirstLoadTasks) {
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE, TaskCompletedReceiver.From.LOAD_FIRST);
+
+        } else {
+            broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE, TaskCompletedReceiver.From.LOAD_NORMAL);
+        }
+
+        if (RestfulUtils.isConnectToInternet(this)) {
+            try {
+                HashMap<String, String> queries = new HashMap<>();
+                queries.put("taskId", taskId);
+                queries.put("limit", String.valueOf(limit));
+
+                String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                        LoadingDataUtils.WorkingDataUrl.EndPoints.TASK_ACTIVITIES, queries);
+                String responseJSONString = RestfulUtils.getJsonStringFromUrl(urlString);
+
+                JSONObject responseJSON = new JSONObject(responseJSONString);
+                if (responseJSON.getString("status").equals("success")) {
+                    broadcastIntent.putExtra(ExtraKey.ARRAYLIST_TASK_ACTIVITIES,
+                                             parseActivityJSONArray(responseJSON.getJSONArray("result")));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            }
+
+        } else {
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+        }
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+    }
+
+    private ArrayList<BaseData> parseActivityJSONArray(JSONArray activities) {
+        ArrayList<BaseData> parsedActivities = new ArrayList<>();
+
+        int length = activities.length();
+
+        try {
+            for (int i = 0; i < length; i++) {
+                JSONObject activity = activities.getJSONObject(i);
+                BaseData activityData = ActivityDataFactory.genData(activity, this);
+                if (activityData != null) {
+                    parsedActivities.add(activityData);
+                }
+            }
+            return parsedActivities;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void getMyTasksFromDb(String workerId, ArrayList<TaskInDb> taskList, Map<String, TaskInDb> taskMap) {

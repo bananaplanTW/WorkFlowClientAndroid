@@ -20,10 +20,6 @@ import android.widget.TextView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.TaskService;
-import com.nicloud.workflowclient.data.connectserver.activity.ILoadingActivitiesStrategy;
-import com.nicloud.workflowclient.data.connectserver.activity.LoadingActivitiesAsyncTask;
-import com.nicloud.workflowclient.data.connectserver.activity.LoadingTaskActivitiesStrategy;
-import com.nicloud.workflowclient.data.data.activity.ActivityDataFactory;
 import com.nicloud.workflowclient.data.data.activity.BaseData;
 import com.nicloud.workflowclient.tasklist.main.Task;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
@@ -38,22 +34,17 @@ import com.nicloud.workflowclient.utility.MainTabContentFactory;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class DetailedTaskActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
-        LoadingActivitiesAsyncTask.OnFinishLoadingDataListener, OnRefreshDetailedTask,
-        UploadCompletedReceiver.OnUploadCompletedListener, DisplayDialogFragment.OnDialogActionListener,
-        ViewPager.OnPageChangeListener, TaskCompletedReceiver.OnLoadTaskCompletedListener {
+        OnRefreshDetailedTask, UploadCompletedReceiver.OnUploadCompletedListener,
+        DisplayDialogFragment.OnDialogActionListener, ViewPager.OnPageChangeListener,
+        TaskCompletedReceiver.OnLoadTaskCompletedListener {
 
     public static final String EXTRA_TASK_ID = "DetailedTaskActivity_extra_task_id";
 
     private static final int REQUEST_ADD_LOG = 32;
-    private static final int TASK_LOG_LIMIT = 15;
 
     private static final class FragmentPosition {
         public static final int TASK_INFO = 0;
@@ -85,8 +76,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private ActionBar mActionBar;
     private Toolbar mToolbar;
 
-    private UploadCompletedReceiver mUploadCompletedReceiver;
-
     private TextView mTaskName;
     private TextView mCaseName;
 
@@ -95,6 +84,9 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private ViewPager mDetailedTaskViewPager;
     private DetailedTaskPagerAdapter mDetailedTaskPagerAdapter;
     private List<Fragment> mFragmentList = new ArrayList<>();
+
+    private UploadCompletedReceiver mUploadCompletedReceiver;
+    private TaskCompletedReceiver mTaskCompletedReceiver;
 
     private Task mTask;
 
@@ -114,18 +106,25 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_task);
         initialize();
+        loadTaskActivities(true);
+    }
+
+    private void loadTaskActivities(boolean isFirstLoad) {
+        startService(TaskService.
+                generateLoadTaskActivitiesIntent(this, mTask.id, TaskService.TASK_ACTIVITIES_LIMIT, isFirstLoad));
     }
 
     private void initialize() {
         mFragmentManager = getSupportFragmentManager();
         mTask = DbUtils.getTaskById(this, getIntent().getStringExtra(EXTRA_TASK_ID));
         mUploadCompletedReceiver = new UploadCompletedReceiver(this);
+        mTaskCompletedReceiver = new TaskCompletedReceiver(this);
+
         findViews();
         setupActionBar();
         setupTabs();
         setupFragments();
         setupViewPager();
-        loadTaskActivities();
     }
 
     @Override
@@ -133,12 +132,16 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         super.onStart();
         IntentFilter intentFilter = new IntentFilter(UploadService.UploadAction.UPLOAD_COMPLETED);
         LocalBroadcastManager.getInstance(this).registerReceiver(mUploadCompletedReceiver, intentFilter);
+
+        IntentFilter intentFilter2 = new IntentFilter(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mTaskCompletedReceiver, intentFilter2);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mUploadCompletedReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mTaskCompletedReceiver);
     }
 
     private void findViews() {
@@ -245,15 +248,8 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         mDetailedTaskPagerAdapter = new DetailedTaskPagerAdapter(mFragmentManager, this, mFragmentList);
 
         mDetailedTaskViewPager.setAdapter(mDetailedTaskPagerAdapter);
+        mDetailedTaskViewPager.setOffscreenPageLimit(3);
         mDetailedTaskViewPager.setOnPageChangeListener(this);
-    }
-
-    private void loadTaskActivities() {
-        LoadingTaskActivitiesStrategy loadingTaskActivitiesStrategy =
-                new LoadingTaskActivitiesStrategy(mTask.id, TASK_LOG_LIMIT);
-        LoadingActivitiesAsyncTask loadingWorkerActivitiesTask =
-                new LoadingActivitiesAsyncTask(this, mTask.id, this, loadingTaskActivitiesStrategy);
-        loadingWorkerActivitiesTask.execute();
     }
 
     @Override
@@ -274,33 +270,11 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         mDetailedTaskViewPager.setCurrentItem(mDetailedTaskTabHost.getCurrentTab());
     }
 
-    @Override
-    public void onFinishLoadingData(String id, ILoadingActivitiesStrategy.ActivityCategory category, JSONArray activities) {
-        if (activities == null) return;
-
-        setTaskLogData(parseActivityJSONArray(activities));
-        updateListAccordingToTab();
-        ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
-    }
-
-    private void updateListAccordingToTab() {
-        switch (mDetailedTaskTabHost.getCurrentTab()) {
-            case FragmentPosition.TASK_INFO:
-                mTaskInfoFragment.swapData(null);
-                break;
-
-            case FragmentPosition.CHECK:
-                mCheckListFragment.swapData(null);
-                break;
-
-            case FragmentPosition.TEXT:
-                mTextLogFragment.swapData(mTextDataSet);
-                break;
-
-            case FragmentPosition.FILE:
-                mFileLogFragment.swapData(mFileDataSet);
-                break;
-        }
+    private void updateDetailedTaskData() {
+        mTaskInfoFragment.swapData(null);
+        mCheckListFragment.swapData(null);
+        mTextLogFragment.swapData(mTextDataSet);
+        mFileLogFragment.swapData(mFileDataSet);
 
         mDetailedTaskPagerAdapter.notifyDataSetChanged();
     }
@@ -324,46 +298,12 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     }
 
     @Override
-    public void onFailLoadingData(boolean isFailCausedByInternet) {
-        Utils.showInternetConnectionWeakToast(this);
-        ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
-    }
-
-    private ArrayList<BaseData> parseActivityJSONArray(JSONArray activities) {
-        ArrayList<BaseData> parsedActivities = new ArrayList<>();
-
-        int length = activities.length();
-
-        try {
-            for (int i = 0; i < length; i++) {
-                JSONObject activity = activities.getJSONObject(i);
-                BaseData activityData = ActivityDataFactory.genData(activity, this);
-                if (activityData != null) {
-                    parsedActivities.add(activityData);
-                }
-            }
-            return parsedActivities;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_ADD_LOG:
-                if (RESULT_OK != resultCode) return;
-                loadTaskActivities();
-
-                break;
-        }
-    }
-
-    @Override
     public void onRefreshDetailedTask() {
-        loadTaskActivities();
+        loadTaskActivities(false);
+        loadTaskById();
+    }
+
+    private void loadTaskById() {
         startService(TaskService.generateLoadTaskByIdIntent(this, mTask.id));
     }
 
@@ -374,10 +314,10 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
         if ((UploadService.UploadAction.TASK_TEXT.equals(fromAction) ||
              UploadService.UploadAction.TASK_FILE.equals(fromAction)) && isUploadSuccessful) {
-            loadTaskActivities();
+            loadTaskActivities(false);
 
         } else if (UploadService.UploadAction.TASK_CHECK_ITEM.equals(fromAction) && isUploadSuccessful) {
-            startService(TaskService.generateLoadTaskByIdIntent(this, mTask.id));
+            loadTaskById();
         }
     }
 
@@ -415,7 +355,17 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     @Override
     public void onLoadTaskCompleted(Intent intent) {
-        updateListAccordingToTab();
+        String from = intent.getStringExtra(TaskCompletedReceiver.EXTRA_FROM);
+
+        if (TaskCompletedReceiver.From.LOAD_TASK_ACTIVITIES.equals(from)) {
+            ArrayList<BaseData> activities =
+                    intent.getParcelableArrayListExtra(TaskService.ExtraKey.ARRAYLIST_TASK_ACTIVITIES);
+            if (activities == null) return;
+
+            setTaskLogData(activities);
+        }
+
+        updateDetailedTaskData();
         ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
     }
 }

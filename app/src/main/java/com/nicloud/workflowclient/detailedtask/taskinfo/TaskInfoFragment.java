@@ -41,6 +41,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
     private TextView mTaskDueDate;
     private TextView mCompleteTaskButton;
 
+    private String mTaskId;
     private Task mTask;
 
 
@@ -59,8 +60,8 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String taskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
-        mTask = DbUtils.getTaskById(mContext, taskId);
+        mTaskId = getArguments().getString(DetailedTaskActivity.EXTRA_TASK_ID);
+        mTask = DbUtils.getTaskById(mContext, mTaskId);
         initialize();
     }
 
@@ -97,6 +98,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
 
     @Override
     public void swapData(List<BaseData> dataSet) {
+        mTask = DbUtils.getTaskById(mContext, mTaskId);
         setTaskInfo();
     }
 

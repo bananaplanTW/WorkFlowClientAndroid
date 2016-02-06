@@ -353,7 +353,7 @@ abstract public class TaskListFragmentBase extends Fragment implements View.OnCl
 
     @Override
     public void onLoadTaskCompleted(Intent intent) {
-        String from = intent.getStringExtra(TaskCompletedReceiver.EXTRA_FROM);
+        String from = intent.getStringExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE);
 
         if (TaskCompletedReceiver.From.LOAD_FIRST.equals(from)) {
             forceHideRefreshSpinner();
