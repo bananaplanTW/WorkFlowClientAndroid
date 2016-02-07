@@ -25,8 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.connectserver.tasklog.DownloadFileFromURLCommand;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.backgroundtask.asyntask.tasklog.DownloadFileFromURLCommand;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 

@@ -1,6 +1,6 @@
 package com.nicloud.workflowclient.messagemenu;
 
-import com.nicloud.workflowclient.data.data.data.Worker;
+import com.nicloud.workflowclient.data.data.Worker;
 
 /**
  * Created by logicmelody on 2015/12/23.

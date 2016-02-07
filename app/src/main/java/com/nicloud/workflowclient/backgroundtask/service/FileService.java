@@ -1,7 +1,6 @@
 package com.nicloud.workflowclient.backgroundtask.service;
 
 import android.app.IntentService;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,8 +9,8 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.FileCompletedReceiver;
-import com.nicloud.workflowclient.data.data.data.File;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.data.data.File;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.JsonUtils;

@@ -11,9 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkers;
-import com.nicloud.workflowclient.data.data.data.Worker;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.backgroundtask.asyntask.worker.LoadingWorkers;
+import com.nicloud.workflowclient.data.data.Worker;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;

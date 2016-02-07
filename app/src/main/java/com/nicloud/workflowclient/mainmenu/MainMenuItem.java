@@ -1,6 +1,6 @@
 package com.nicloud.workflowclient.mainmenu;
 
-import com.nicloud.workflowclient.data.data.data.Case;
+import com.nicloud.workflowclient.data.data.Case;
 
 /**
  * Created by logicmelody on 2015/12/23.

@@ -13,7 +13,7 @@ import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.backgroundtask.receiver.CaseDiscussionCompletedReceiver;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.utility.utils.RestfulUtils;
 import com.nicloud.workflowclient.utility.utils.URLUtils;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;

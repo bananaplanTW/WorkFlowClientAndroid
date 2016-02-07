@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
-import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
-import com.nicloud.workflowclient.data.data.data.Worker;
+import com.nicloud.workflowclient.backgroundtask.asyntask.worker.LoadingWorkerAvatar;
+import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment.OnClickMessageMenuWorkerListener;
 
 import java.util.List;

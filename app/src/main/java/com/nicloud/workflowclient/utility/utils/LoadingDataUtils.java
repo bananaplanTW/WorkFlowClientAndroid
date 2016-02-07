@@ -3,8 +3,8 @@ package com.nicloud.workflowclient.utility.utils;
 import android.content.Context;
 import android.util.Log;
 
-import com.nicloud.workflowclient.data.data.data.Worker;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.data.data.Worker;
+import com.nicloud.workflowclient.main.WorkingData;
 
 import org.json.JSONArray;
 import org.json.JSONException;

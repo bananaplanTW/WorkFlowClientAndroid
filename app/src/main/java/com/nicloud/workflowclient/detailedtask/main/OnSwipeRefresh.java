@@ -1,6 +1,6 @@
 package com.nicloud.workflowclient.detailedtask.main;
 
-import com.nicloud.workflowclient.data.data.activity.BaseData;
+import com.nicloud.workflowclient.data.activity.BaseData;
 
 import java.util.List;
 

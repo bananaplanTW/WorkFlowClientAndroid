@@ -33,7 +33,7 @@ import com.nicloud.workflowclient.backgroundtask.service.FileService;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.cases.main.OnSetCaseId;
-import com.nicloud.workflowclient.data.data.data.File;
+import com.nicloud.workflowclient.data.data.File;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.DividerItemDecoration;
 import com.nicloud.workflowclient.utility.utils.Utils;

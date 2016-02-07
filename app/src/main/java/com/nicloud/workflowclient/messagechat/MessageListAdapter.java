@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.List;

@@ -2,12 +2,9 @@ package com.nicloud.workflowclient.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-
-import com.nicloud.workflowclient.data.connectserver.worker.CheckInOutCommand;
 
 /**
  * Use this class to display each dialog,

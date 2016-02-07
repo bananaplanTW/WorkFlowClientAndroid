@@ -4,11 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.nicloud.workflowclient.data.data.data.Case;
-import com.nicloud.workflowclient.data.data.data.File;
-import com.nicloud.workflowclient.data.data.data.TaskTextLog;
+import com.nicloud.workflowclient.data.data.Case;
+import com.nicloud.workflowclient.data.data.File;
+import com.nicloud.workflowclient.data.data.TaskTextLog;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckItem;
-import com.nicloud.workflowclient.data.data.data.Task;
+import com.nicloud.workflowclient.data.data.Task;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 
 import java.util.Date;

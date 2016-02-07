@@ -11,12 +11,9 @@ import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
-import com.nicloud.workflowclient.data.connectserver.activity.LoadingActivityUserIconCommand;
-import com.nicloud.workflowclient.data.data.activity.BaseData;
-import com.nicloud.workflowclient.data.data.activity.RecordData;
-import com.nicloud.workflowclient.data.data.data.TaskTextLog;
-import com.nicloud.workflowclient.data.data.data.Worker;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.data.data.TaskTextLog;
+import com.nicloud.workflowclient.data.data.Worker;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 

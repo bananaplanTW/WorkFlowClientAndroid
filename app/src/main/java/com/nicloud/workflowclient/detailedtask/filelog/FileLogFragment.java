@@ -25,8 +25,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.data.activity.BaseData;
-import com.nicloud.workflowclient.data.data.data.File;
+import com.nicloud.workflowclient.data.activity.BaseData;
+import com.nicloud.workflowclient.data.data.File;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.main.OnRefreshDetailedTask;
 import com.nicloud.workflowclient.detailedtask.main.OnSwipeRefresh;

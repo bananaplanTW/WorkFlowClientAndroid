@@ -1,7 +1,7 @@
 package com.nicloud.workflowclient.tasklist.my;
 
 import com.nicloud.workflowclient.backgroundtask.service.TaskService;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.tasklist.main.TaskListAdapter;
 import com.nicloud.workflowclient.tasklist.main.TaskListFragmentBase;

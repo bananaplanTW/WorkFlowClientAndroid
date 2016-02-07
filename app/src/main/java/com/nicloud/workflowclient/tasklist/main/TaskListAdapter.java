@@ -13,10 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.connectserver.worker.LoadingWorkerAvatar;
-import com.nicloud.workflowclient.data.data.data.Task;
-import com.nicloud.workflowclient.data.data.data.Worker;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.backgroundtask.asyntask.worker.LoadingWorkerAvatar;
+import com.nicloud.workflowclient.data.data.Task;
+import com.nicloud.workflowclient.data.data.Worker;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;

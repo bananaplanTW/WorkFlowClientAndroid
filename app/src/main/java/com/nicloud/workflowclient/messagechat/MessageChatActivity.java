@@ -25,7 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.data.data.data.WorkingData;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.backgroundtask.receiver.MessageCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.MessageService;
