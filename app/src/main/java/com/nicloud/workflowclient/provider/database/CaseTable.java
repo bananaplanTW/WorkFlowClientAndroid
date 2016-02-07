@@ -2,6 +2,8 @@ package com.nicloud.workflowclient.provider.database;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.nicloud.workflowclient.provider.contentprovider.WorkFlowDatabaseHelper;
+
 /**
  * Created by logicmelody on 2016/01/07.
  */
@@ -23,7 +25,16 @@ public class CaseTable {
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        database.execSQL("DROP TABLE IF EXISTS " + WorkFlowContract.Case.TABLE_NAME);
-        onCreate(database);
+        int version = oldVersion;
+
+        if (version < WorkFlowDatabaseHelper.DbVersion.VERSION_3) {
+            String updateDb = "ALTER TABLE " + WorkFlowContract.Case.TABLE_NAME +
+                              " ADD COLUMN " + WorkFlowContract.Case.OWNER_ID + " TEXT NOT NULL DEFAULT '';";
+            String updateDb2 = "ALTER TABLE " + WorkFlowContract.Case.TABLE_NAME +
+                               " ADD COLUMN " + WorkFlowContract.Case.DESCRIPTION + " TEXT;";
+
+            database.execSQL(updateDb);
+            database.execSQL(updateDb2);
+        }
     }
 }

@@ -132,6 +132,8 @@ public class WorkFlowContract {
         // DB columns
         public static final String CASE_ID = "case_id";
         public static final String CASE_NAME = "case_name";
+        public static final String OWNER_ID = "owner_id";
+        public static final String DESCRIPTION = "description";
         public static final String IS_COMPLETED = "is_completed";
         public static final String UPDATED_TIME = "updated_time";
     }

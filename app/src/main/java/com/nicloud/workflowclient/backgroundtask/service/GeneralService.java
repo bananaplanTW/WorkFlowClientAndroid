@@ -287,7 +287,7 @@ public class GeneralService extends IntentService {
                 insertCaseToDb(aCase);
 
             } else {
-                if (aCase.lastUpdatedTime <= casesFromDbMap.get(aCase.id).updatedTime) continue;
+                //if (aCase.lastUpdatedTime <= casesFromDbMap.get(aCase.id).updatedTime) continue;
 
                 updateCaseToDb(aCase);
             }
@@ -326,6 +326,8 @@ public class GeneralService extends IntentService {
 
         values.put(WorkFlowContract.Case.CASE_ID, aCase.id);
         values.put(WorkFlowContract.Case.CASE_NAME, aCase.name);
+        values.put(WorkFlowContract.Case.OWNER_ID, aCase.ownerId);
+        values.put(WorkFlowContract.Case.DESCRIPTION, aCase.description);
         values.put(WorkFlowContract.Case.IS_COMPLETED, aCase.isCompleted);
         values.put(WorkFlowContract.Case.UPDATED_TIME, aCase.lastUpdatedTime);
 

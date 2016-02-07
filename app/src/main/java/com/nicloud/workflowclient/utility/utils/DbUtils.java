@@ -132,14 +132,18 @@ public class DbUtils {
                 WorkFlowContract.Case._ID,
                 WorkFlowContract.Case.CASE_ID,
                 WorkFlowContract.Case.CASE_NAME,
+                WorkFlowContract.Case.OWNER_ID,
+                WorkFlowContract.Case.DESCRIPTION,
                 WorkFlowContract.Case.IS_COMPLETED,
                 WorkFlowContract.Case.UPDATED_TIME
         };
         int ID = 0;
         int CASE_ID = 1;
         int CASE_NAME = 2;
-        int IS_COMPLETED = 3;
-        int UPDATED_TIME = 4;
+        int OWNER_ID = 3;
+        int DESCRIPTION = 4;
+        int IS_COMPLETED = 5;
+        int UPDATED_TIME = 6;
 
         String selection = WorkFlowContract.Case.CASE_ID + " = ?";
         String[] selectionArgs = new String[] {caseId};
@@ -156,6 +160,8 @@ public class DbUtils {
 
                 aCase = new Case(cursor.getString(CASE_ID),
                                  cursor.getString(CASE_NAME),
+                                 cursor.getString(OWNER_ID),
+                                 cursor.getString(DESCRIPTION),
                                  cursor.getInt(IS_COMPLETED) == 1,
                                  cursor.getLong(UPDATED_TIME));
             }
