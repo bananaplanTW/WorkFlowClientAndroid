@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.backgroundtask.receiver.UploadCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.utility.MainTabContentFactory;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
@@ -78,6 +80,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     private TextView mTaskName;
     private TextView mCaseName;
+    private ImageView mOwner;
 
     private TabHost mDetailedTaskTabHost;
 
@@ -122,6 +125,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
         findViews();
         setupActionBar();
+        setupViews();
         setupTabs();
         setupFragments();
         setupViewPager();
@@ -148,6 +152,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
         mTaskName = (TextView) findViewById(R.id.detailed_task_task_name);
         mCaseName = (TextView) findViewById(R.id.detailed_task_case_name);
+        mOwner = (ImageView) findViewById(R.id.detailed_task_owner);
         mDetailedTaskTabHost = (TabHost) findViewById(R.id.detailed_task_tab_host);
         mDetailedTaskViewPager = (ViewPager) findViewById(R.id.detailed_task_viewpager);
     }
@@ -160,9 +165,13 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
             mActionBar.setDisplayShowTitleEnabled(false);
             mActionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
 
+    private void setupViews() {
         mTaskName.setText(mTask.name);
         mCaseName.setText(mTask.caseName);
+        Utils.setWorkerAvatarImage(this, WorkingData.getInstance(this).getWorkerById(mTask.workerId),
+                                   mOwner, R.drawable.ic_worker_black);
     }
 
     private void setupTabs() {

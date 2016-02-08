@@ -21,11 +21,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
 import com.nicloud.workflowclient.backgroundtask.asyntask.tasklog.DownloadFileFromURLCommand;
+import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
@@ -475,5 +478,26 @@ public class Utils {
     public static void showCompleteTaskToast(Context context, String taskName) {
         Toast.makeText(context, String.format(context.getString(R.string.complete_task), taskName),
                 Toast.LENGTH_SHORT).show();
+    }
+
+    public static void setWorkerAvatarImage(Context context, Worker worker,
+                                            ImageView workerAvatar, int defaultAvatarId) {
+        if (worker != null && worker.avatar != null) {
+            workerAvatar.setImageDrawable(worker.avatar);
+
+        } else {
+            if (worker == null) {
+
+            } else {
+                workerAvatar.setImageResource(defaultAvatarId);
+
+                if (!TextUtils.isEmpty(worker.avatarUrl)) {
+                    Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+                    imageBuilder.path(worker.avatarUrl);
+
+                    new LoadImageTask(context, imageBuilder.build(), workerAvatar, worker.avatar).execute();
+                }
+            }
+        }
     }
 }
