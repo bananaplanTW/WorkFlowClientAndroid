@@ -2,10 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/task_info_padding_left_right"
-    android:paddingRight="@dimen/task_info_padding_left_right"
-    android:paddingTop="@dimen/task_info_padding_top_bottom"
-    android:paddingBottom="@dimen/task_info_padding_top_bottom">
+    android:padding="@dimen/task_info_padding">
 
     <RelativeLayout
         android:id="@+id/task_description_container"
@@ -41,6 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/task_description_container"
+        android:layout_marginTop="@dimen/task_info_due_date_container_margin_top"
         android:orientation="vertical">
 
         <TextView

@@ -15,6 +15,8 @@ public class CaseTable {
             + WorkFlowContract.Case._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + WorkFlowContract.Case.CASE_ID + " TEXT NOT NULL, "
             + WorkFlowContract.Case.CASE_NAME + " TEXT NOT NULL, "
+            + WorkFlowContract.Case.OWNER_ID + " TEXT NOT NULL, "
+            + WorkFlowContract.Case.DESCRIPTION + " TEXT, "
             + WorkFlowContract.Case.IS_COMPLETED + " INTEGER NOT NULL, "
             + WorkFlowContract.Case.UPDATED_TIME + " INTEGER NOT NULL"
             + ");";
