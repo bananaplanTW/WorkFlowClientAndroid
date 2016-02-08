@@ -107,16 +107,10 @@ public class MessageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void onBindOtherViewHolder(OtherViewHolder holder, MessageItem messageItem) {
-        Drawable avatar = WorkingData.getInstance(mContext).getWorkerById(messageItem.senderId).avatar;
-
         holder.messageContent.setText(messageItem.content);
 
-        if (avatar == null) {
-            holder.workerAvatar.setImageResource(R.drawable.ic_worker_black);
-
-        } else {
-            holder.workerAvatar.setImageDrawable(avatar);
-        }
+        Utils.setWorkerAvatarImage(mContext, WorkingData.getInstance(mContext).getWorkerById(messageItem.senderId),
+                                   holder.workerAvatar, R.drawable.ic_worker_black);
     }
 
     @Override

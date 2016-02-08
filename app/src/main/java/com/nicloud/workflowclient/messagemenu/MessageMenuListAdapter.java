@@ -16,6 +16,7 @@ import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.backgroundtask.asyntask.worker.LoadingWorkerAvatar;
 import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment.OnClickMessageMenuWorkerListener;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.List;
 
@@ -147,17 +148,8 @@ public class MessageMenuListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         holder.worker.setText(messageMenuItem.worker.name);
         holder.view.setSelected(messageMenuItem.isSelected);
 
-        if (TextUtils.isEmpty(worker.avatarUrl)) {
-            holder.workerAvatar.setImageResource(R.drawable.selector_message_menu_worker_avatar);
-
-        } else {
-            Uri.Builder avatarBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
-            avatarBuilder.path(worker.avatarUrl);
-            Uri avatarUri = avatarBuilder.build();
-
-            new LoadingWorkerAvatar(mContext, avatarUri, holder.workerAvatar,
-                    worker, R.drawable.selector_message_menu_worker_avatar).execute();
-        }
+        Utils.setWorkerAvatarImage(mContext, worker, holder.workerAvatar,
+                                   R.drawable.selector_message_menu_worker_avatar);
     }
 
     @Override

@@ -134,12 +134,7 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         String type = mDiscussionData.get(position).type;
 
         // Worker avatar
-        if (worker != null && worker.avatar != null) {
-            baseVH.workerAvatar.setImageDrawable(worker.avatar);
-
-        } else {
-            baseVH.workerAvatar.setImageResource(R.drawable.ic_worker_black);
-        }
+        Utils.setWorkerAvatarImage(mContext, worker, baseVH.workerAvatar, R.drawable.ic_worker_black);
 
         // Worker name
         baseVH.workerName.setText(mDiscussionData.get(position).workerName);
@@ -175,11 +170,7 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         } else {
             imageVH.thumbnail.setImageDrawable(null);
-
-            Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
-            imageBuilder.path(item.fileUri);
-
-            new LoadImageTask(mContext, imageBuilder.build(), imageVH.thumbnail, item.fileThumb).execute();
+            new LoadImageTask(mContext, item.fileUri, imageVH.thumbnail, item.fileThumb).execute();
         }
     }
 

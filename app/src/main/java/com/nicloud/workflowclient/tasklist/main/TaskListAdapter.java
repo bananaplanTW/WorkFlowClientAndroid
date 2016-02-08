@@ -162,28 +162,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         } else {
             taskVH.ownerContainer.setVisibility(View.VISIBLE);
-
-            // Owner avatar
-            if (worker != null) {
-                if (worker.avatar != null) {
-                    taskVH.ownerAvatar.setImageDrawable(worker.avatar);
-
-                } else {
-                    taskVH.ownerAvatar.setImageResource(R.drawable.ic_worker_black);
-
-                    if (!TextUtils.isEmpty(worker.avatarUrl)) {
-                        Uri.Builder avatarBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
-                        avatarBuilder.path(worker.avatarUrl);
-                        Uri avatarUri = avatarBuilder.build();
-
-                        new LoadingWorkerAvatar(mContext, avatarUri, taskVH.ownerAvatar,
-                                worker, R.drawable.selector_message_menu_worker_avatar).execute();
-                    }
-                }
-
-            } else {
-                taskVH.ownerAvatar.setImageResource(R.drawable.ic_worker_black);
-            }
+            Utils.setWorkerAvatarImage(mContext, worker, taskVH.ownerAvatar, R.drawable.ic_worker_black);
         }
     }
 

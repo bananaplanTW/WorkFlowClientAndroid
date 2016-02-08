@@ -89,11 +89,7 @@ public class FileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             } else {
                 holder.fileImage.setImageResource(R.drawable.ic_photo);
-
-                Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
-                imageBuilder.path(file.fileThumbUrl);
-
-                new LoadImageTask(mContext, imageBuilder.build(), holder.fileImage, file.fileThumbnail).execute();
+                new LoadImageTask(mContext, file.fileThumbUrl, holder.fileImage, file.fileThumbnail).execute();
             }
 
             holder.view.setOnClickListener(new View.OnClickListener() {

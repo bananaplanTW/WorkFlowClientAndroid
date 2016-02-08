@@ -487,15 +487,13 @@ public class Utils {
 
         } else {
             if (worker == null) {
+                workerAvatar.setImageDrawable(null);
 
             } else {
                 workerAvatar.setImageResource(defaultAvatarId);
 
                 if (!TextUtils.isEmpty(worker.avatarUrl)) {
-                    Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
-                    imageBuilder.path(worker.avatarUrl);
-
-                    new LoadImageTask(context, imageBuilder.build(), workerAvatar, worker.avatar).execute();
+                    new LoadImageTask(context, worker.avatarUrl, workerAvatar, worker.avatar).execute();
                 }
             }
         }

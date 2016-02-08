@@ -30,6 +30,7 @@ import com.nicloud.workflowclient.data.data.Case;
 import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.login.LoginActivity;
 import com.nicloud.workflowclient.provider.contentprovider.WorkFlowDatabaseHelper;
+import com.nicloud.workflowclient.utility.utils.Utils;
 import com.parse.ParsePush;
 
 import java.util.ArrayList;
@@ -129,27 +130,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
     }
 
     private void loadWorkerAvatar() {
-        Drawable avatar = WorkingData.getInstance(mContext).getLoginWorker().avatar;
-        String s = WorkingData.getInstance(mContext).getLoginWorker().avatarUrl;
-
-        if (TextUtils.isEmpty(s)) {
-            if (avatar == null) {
-                mWorkerAvatar.setImageResource(R.drawable.ic_worker_white);
-            } else {
-                mWorkerAvatar.setImageDrawable(avatar);
-            }
-
-            return;
-        }
-
-        Uri.Builder avatarBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
-        avatarBuilder.path(s);
-        Uri avatarUri = avatarBuilder.build();
-
-        LoadingWorkerAvatar loadingWorkerAvatar
-                = new LoadingWorkerAvatar(mContext, avatarUri, mWorkerAvatar,
-                WorkingData.getInstance(mContext).getLoginWorker(), R.drawable.ic_worker_white);
-        loadingWorkerAvatar.execute();
+        Utils.setWorkerAvatarImage(mContext, WorkingData.getInstance(mContext).getLoginWorker(),
+                                   mWorkerAvatar, R.drawable.ic_worker_white);
     }
 
     private void setupWorkerViews() {

@@ -62,20 +62,7 @@ public class TextLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Worker owner = WorkingData.getInstance(mContext).getWorkerById(taskTextLog.ownerId);
         TextLogItemViewHolder vh = (TextLogItemViewHolder) holder;
 
-        if (owner != null && owner.avatar != null) {
-            vh.icon.setImageDrawable(owner.avatar);
-
-        } else {
-            vh.icon.setImageResource(R.drawable.ic_worker_black);
-
-            if (taskTextLog.ownerAvatarUrl != null) {
-                Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
-                imageBuilder.path(taskTextLog.ownerAvatarUrl);
-
-                new LoadImageTask(mContext, imageBuilder.build(), vh.icon, owner.avatar).execute();
-            }
-        }
-
+        Utils.setWorkerAvatarImage(mContext, owner, vh.icon, R.drawable.ic_worker_black);
         vh.userName.setText(taskTextLog.ownerName);
         vh.description.setText(taskTextLog.content);
         vh.timeStamp.setText(Utils.timestamp2Date(new Date(taskTextLog.createdTime), Utils.DATE_FORMAT_YMD_HM_AMPM));

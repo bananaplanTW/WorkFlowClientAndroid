@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.utility.utils.RestfulUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
@@ -32,11 +33,14 @@ public class LoadImageTask extends AsyncTask<Void, Void, Drawable> {
     private Drawable mDrawable;
 
 
-    public LoadImageTask(Context context, Uri uri, ImageView imageView, Drawable drawable) {
+    public LoadImageTask(Context context, String imageUri, ImageView imageView, Drawable drawable) {
+        Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
+        imageBuilder.path(imageUri);
+
         mContext = context;
-        mUri = uri;
         mImageView = imageView;
         mDrawable = drawable;
+        mUri = imageBuilder.build();
     }
 
     @Override
