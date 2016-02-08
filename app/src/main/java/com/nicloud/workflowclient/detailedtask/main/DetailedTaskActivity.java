@@ -31,6 +31,7 @@ import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
 import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.backgroundtask.receiver.UploadCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.UploadService;
+import com.nicloud.workflowclient.dialog.chooseworker.ChooseWorkerActivity;
 import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.utility.MainTabContentFactory;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
@@ -42,7 +43,7 @@ import java.util.List;
 public class DetailedTaskActivity extends AppCompatActivity implements TabHost.OnTabChangeListener,
         OnRefreshDetailedTask, UploadCompletedReceiver.OnUploadCompletedListener,
         DisplayDialogFragment.OnDialogActionListener, ViewPager.OnPageChangeListener,
-        TaskCompletedReceiver.OnLoadTaskCompletedListener {
+        TaskCompletedReceiver.OnLoadTaskCompletedListener, View.OnClickListener {
 
     public static final String EXTRA_TASK_ID = "DetailedTaskActivity_extra_task_id";
 
@@ -172,6 +173,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         mCaseName.setText(mTask.caseName);
         Utils.setWorkerAvatarImage(this, WorkingData.getInstance(this).getWorkerById(mTask.workerId),
                                    mOwner, R.drawable.ic_worker_black);
+        mOwner.setOnClickListener(this);
     }
 
     private void setupTabs() {
@@ -346,5 +348,14 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     public void onLoadTaskCompleted(Intent intent) {
         updateDetailedTaskData();
         ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.detailed_task_owner:
+                startActivity(ChooseWorkerActivity.generateChooseWorkerIntent(this, mTask.workerId));
+                break;
+        }
     }
 }

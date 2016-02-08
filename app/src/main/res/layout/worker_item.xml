@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/choose_worker_item_min_height"
+    android:paddingLeft="@dimen/choose_worker_item_padding_left_right"
+    android:paddingRight="@dimen/choose_worker_item_padding_left_right"
+    android:background="?selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/worker_avatar"
+        android:layout_width="@dimen/worker_avatar_width_height"
+        android:layout_height="@dimen/worker_avatar_width_height"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:id="@+id/worker_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/choose_worker_item_name_margin_left"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/worker_avatar"
+        android:textSize="@dimen/choose_worker_item_name_text_size"/>
+
+    <ImageView
+        android:id="@+id/is_chosen_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_ok"
+        android:visibility="gone"/>
+
+</RelativeLayout>

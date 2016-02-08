@@ -20,6 +20,7 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
         <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="android:background">@color/color_primary</item>
         <item name="colorControlNormal">@color/action_bar_up_button_color</item>
         <item name="colorControlHighlight">@color/action_bar_menu_item_color_control_highlight</item>
         <item name="actionMenuTextColor">@color/action_bar_menu_item_text_color</item>
@@ -34,6 +35,7 @@
     <style name="AppDialogTheme" parent="Theme.AppCompat.Light.DialogWhenLarge">
     </style>
     <style name="AppDialogTheme.NoActionBar">
+        <item name="android:windowBackground">@color/main_window_background_color</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

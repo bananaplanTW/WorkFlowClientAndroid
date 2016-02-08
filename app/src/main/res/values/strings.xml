@@ -149,4 +149,7 @@
     <string name="hint_input_task_name">Input task name</string>
     <string name="hint_please_choose_case">Please choose a case</string>
 
+    <!-- Choose worker -->
+    <string name="choose_worker_title">Please choose a worker</string>
+
 </resources>

@@ -165,4 +165,10 @@
     <dimen name="case_spinner_item_text_size">18dp</dimen>
     <dimen name="case_spinner_item_padding_left_right">5dp</dimen>
 
+    <!-- Choose worker -->
+    <dimen name="choose_worker_item_min_height">60dp</dimen>
+    <dimen name="choose_worker_item_padding_left_right">15dp</dimen>
+    <dimen name="choose_worker_item_name_margin_left">10dp</dimen>
+    <dimen name="choose_worker_item_name_text_size">18dp</dimen>
+
 </resources>

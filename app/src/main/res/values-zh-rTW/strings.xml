@@ -133,4 +133,7 @@
     <string name="hint_input_task_name">輸入工作名稱</string>
     <string name="hint_please_choose_case">請選擇案件</string>
 
+    <!-- Choose worker -->
+    <string name="choose_worker_title">請選擇負責人</string>
+
 </resources>

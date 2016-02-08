@@ -66,9 +66,8 @@
             android:theme="@style/AppDialogTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity
-            android:name=".provider.debug.AndroidDatabaseManager"
-            android:theme="@style/Theme.AppCompat.Light"
+        <activity android:name=".dialog.chooseworker.ChooseWorkerActivity"
+            android:theme="@style/AppDialogTheme.NoActionBar"
             android:screenOrientation="portrait" />
 
         <service
@@ -121,6 +120,11 @@
             android:multiprocess="false"
             android:readPermission="com.nicloud.workflowclient.provider.permission.READ"
             android:writePermission="com.nicloud.workflowclient.provider.permission.WRITE" />
+
+        <activity
+            android:name=".provider.debug.AndroidDatabaseManager"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
