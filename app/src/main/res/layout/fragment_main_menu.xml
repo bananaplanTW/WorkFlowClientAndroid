@@ -10,7 +10,7 @@
         android:padding="@dimen/drawer_menu_list_padding"
         android:gravity="center_vertical">
 
-        <ImageView
+        <com.pkmmte.view.CircularImageView
             android:id="@+id/main_menu_worker_avatar"
             android:layout_width="@dimen/main_menu_worker_avatar_width_height"
             android:layout_height="@dimen/main_menu_worker_avatar_width_height"

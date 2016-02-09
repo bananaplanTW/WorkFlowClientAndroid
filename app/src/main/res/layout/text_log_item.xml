@@ -5,7 +5,7 @@
     android:minHeight="@dimen/log_item_min_height"
     android:padding="@dimen/log_item_padding" >
 
-    <ImageView
+    <com.pkmmte.view.CircularImageView
         android:id="@+id/log_icon"
         android:layout_width="@dimen/worker_avatar_width_height"
         android:layout_height="@dimen/worker_avatar_width_height"

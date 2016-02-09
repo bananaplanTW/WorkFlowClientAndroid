@@ -45,7 +45,7 @@
 
             </LinearLayout>
 
-            <ImageView
+            <com.pkmmte.view.CircularImageView
                 android:id="@+id/detailed_task_owner"
                 android:layout_width="@dimen/worker_avatar_width_height"
                 android:layout_height="@dimen/worker_avatar_width_height"

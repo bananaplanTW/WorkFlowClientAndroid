@@ -8,7 +8,7 @@
     android:orientation="horizontal"
     android:background="@drawable/drawer_menu_item_background">
 
-    <ImageView
+    <com.pkmmte.view.CircularImageView
         android:id="@+id/message_menu_worker_avatar"
         android:layout_width="@dimen/message_menu_worker_avatar_width_height"
         android:layout_height="@dimen/message_menu_worker_avatar_width_height" />

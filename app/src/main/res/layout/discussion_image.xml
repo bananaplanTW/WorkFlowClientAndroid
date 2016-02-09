@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/discussion_item_padding">
 
-    <ImageView
+    <com.pkmmte.view.CircularImageView
         android:id="@+id/discussion_item_worker_avatar"
         android:layout_width="@dimen/worker_avatar_width_height"
         android:layout_height="@dimen/worker_avatar_width_height"

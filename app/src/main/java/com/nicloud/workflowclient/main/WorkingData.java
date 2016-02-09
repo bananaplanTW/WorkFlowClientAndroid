@@ -3,6 +3,7 @@ package com.nicloud.workflowclient.main;
 import android.content.Context;
 
 import com.nicloud.workflowclient.data.data.Worker;
+import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,10 +103,6 @@ public final class WorkingData {
     }
 
     public Worker getWorkerById(String workerId) {
-        if (getUserId().equals(workerId)) {
-            return mLoginWorker;
-        }
-
         for (Worker worker : mWorkers) {
             if (worker.id.equals(workerId)) return worker;
         }
