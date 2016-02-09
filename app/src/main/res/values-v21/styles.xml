@@ -2,7 +2,12 @@
 
     <!-- Main application theme. -->
     <style name="AppTheme" parent="BaseAppTheme">
+        <item name="android:colorAccent">@color/color_accent</item>
         <item name="android:statusBarColor">@color/color_primary_dark</item>
+    </style>
+
+    <style name="AppDialogTheme" parent="@style/BaseAppDialogTheme">
+        <item name="android:colorAccent">@color/color_accent</item>
     </style>
 
 </resources>

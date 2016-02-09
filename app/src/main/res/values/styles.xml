@@ -6,18 +6,17 @@
         <item name="colorPrimary">@color/color_primary</item>
         <!-- Status bar color -->
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
-        <item name="android:colorAccent">@color/color_accent</item>
         <item name="android:windowBackground">@color/main_window_background_color</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-
     <!-- Main application theme. -->
     <style name="AppTheme" parent="BaseAppTheme">
     </style>
-
     <style name="AppTheme.WhiteBackground">
         <item name="android:windowBackground">@android:color/white</item>
     </style>
+
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
         <!-- Customize color of navigation drawer icon and back arrow -->
         <item name="android:background">@color/color_primary</item>
@@ -32,10 +31,18 @@
     </style>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AppDialogTheme" parent="Theme.AppCompat.Light.DialogWhenLarge">
+
+    <style name="BaseAppDialogTheme" parent="Theme.AppCompat.Light.DialogWhenLarge">
+        <!-- Action bar color -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <!-- Status bar color -->
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="android:windowBackground">@color/main_window_background_color</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <style name="AppDialogTheme" parent="@style/BaseAppDialogTheme">
     </style>
     <style name="AppDialogTheme.NoActionBar">
-        <item name="android:windowBackground">@color/main_window_background_color</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
