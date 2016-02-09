@@ -232,6 +232,16 @@ public class DbUtils {
                 convertFileToContentValues(file), selection, selectionArgs);
     }
 
+    public static void updateTaskOwner(Context context, String taskId, String ownerId) {
+        String selection =  WorkFlowContract.Task.TASK_ID + " = ?";
+        String[] selectionArgs = new String[] {taskId};
+
+        ContentValues values = new ContentValues();
+        values.put(WorkFlowContract.Task.WORKER_ID, ownerId);
+
+        context.getContentResolver().update(WorkFlowContract.Task.CONTENT_URI, values, selection, selectionArgs);
+    }
+
 
     // Delete
     public static void deleteTaskFromDb(Context context, String taskId) {
@@ -316,7 +326,7 @@ public class DbUtils {
         return values;
     }
 
-    private static ContentValues convertTaskTextLogToContentValues(TaskTextLog taskTextLog) {
+    public static ContentValues convertTaskTextLogToContentValues(TaskTextLog taskTextLog) {
         ContentValues values = new ContentValues();
 
         values.put(WorkFlowContract.TaskTextLog.TASK_TEXT_LOG_ID, taskTextLog.taskTextLogId);

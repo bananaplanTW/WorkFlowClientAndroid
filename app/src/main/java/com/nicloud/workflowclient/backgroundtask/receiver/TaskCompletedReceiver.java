@@ -17,7 +17,11 @@ public class TaskCompletedReceiver extends BroadcastReceiver {
     public static final class From {
         public static final String LOAD_FIRST = "from_my_task_first";
         public static final String LOAD_NORMAL = "from_my_task";
+        public static final String LOAD_MY_TASKS = "from_load_my_tasks";
+        public static final String LOAD_CASE_TASKS = "from_load_case_tasks";
+        public static final String LOAD_TASK_BY_ID = "from_load_task_by_id";
         public static final String LOAD_TASK_ACTIVITIES = "from_load_task_activities";
+        public static final String ASSIGN_TASK_TO_WORKER = "from_assign_task_to_worker";
     }
 
     public interface OnLoadTaskCompletedListener {

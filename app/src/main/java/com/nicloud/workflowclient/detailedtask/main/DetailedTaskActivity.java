@@ -23,6 +23,7 @@ import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.TaskService;
 import com.nicloud.workflowclient.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.Task;
+import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckListFragment;
 import com.nicloud.workflowclient.detailedtask.filelog.FileLogFragment;
 import com.nicloud.workflowclient.detailedtask.taskinfo.TaskInfoFragment;
@@ -46,8 +47,6 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
         TaskCompletedReceiver.OnLoadTaskCompletedListener, View.OnClickListener {
 
     public static final String EXTRA_TASK_ID = "DetailedTaskActivity_extra_task_id";
-
-    private static final int REQUEST_ADD_LOG = 32;
 
     private static final class FragmentPosition {
         public static final int TASK_INFO = 0;
@@ -93,6 +92,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private TaskCompletedReceiver mTaskCompletedReceiver;
 
     private Task mTask;
+    private Worker mWorker;
 
     private ArrayList<BaseData> mTextDataSet = new ArrayList<>();
     private ArrayList<BaseData> mFileDataSet = new ArrayList<>();
@@ -121,6 +121,7 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private void initialize() {
         mFragmentManager = getSupportFragmentManager();
         mTask = DbUtils.getTaskById(this, getIntent().getStringExtra(EXTRA_TASK_ID));
+        mWorker = WorkingData.getInstance(this).getWorkerById(mTask.workerId);
         mUploadCompletedReceiver = new UploadCompletedReceiver(this);
         mTaskCompletedReceiver = new TaskCompletedReceiver(this);
 
@@ -171,9 +172,18 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
     private void setupViews() {
         mTaskName.setText(mTask.name);
         mCaseName.setText(mTask.caseName);
-        Utils.setWorkerAvatarImage(this, WorkingData.getInstance(this).getWorkerById(mTask.workerId),
-                                   mOwner, R.drawable.ic_worker_black);
         mOwner.setOnClickListener(this);
+
+        setAssignWorkerButton();
+    }
+
+    private void setAssignWorkerButton() {
+        if (mWorker != null) {
+            Utils.setWorkerAvatarImage(this, mWorker, mOwner, R.drawable.ic_worker_black);
+
+        } else {
+            mOwner.setImageResource(R.drawable.ic_assign_worker);
+        }
     }
 
     private void setupTabs() {
@@ -346,15 +356,25 @@ public class DetailedTaskActivity extends AppCompatActivity implements TabHost.O
 
     @Override
     public void onLoadTaskCompleted(Intent intent) {
-        updateDetailedTaskData();
-        ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
+        String from = intent.getStringExtra(TaskCompletedReceiver.EXTRA_FROM);
+
+        if (TaskCompletedReceiver.From.LOAD_TASK_BY_ID.equals(from) ||
+            TaskCompletedReceiver.From.LOAD_TASK_ACTIVITIES.equals(from)) {
+            updateDetailedTaskData();
+            ((OnSwipeRefresh) mFragmentList.get(mDetailedTaskTabHost.getCurrentTab())).setSwipeRefreshLayout(false);
+
+        } else if (TaskCompletedReceiver.From.ASSIGN_TASK_TO_WORKER.equals(from)) {
+            mTask = DbUtils.getTaskById(this, mTask.id);
+            mWorker = WorkingData.getInstance(this).getWorkerById(mTask.workerId);
+            setAssignWorkerButton();
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.detailed_task_owner:
-                startActivity(ChooseWorkerActivity.generateChooseWorkerIntent(this, mTask.workerId));
+                startActivity(ChooseWorkerActivity.generateChooseWorkerIntent(this, mTask.id, mTask.workerId));
                 break;
         }
     }

@@ -185,7 +185,7 @@ public class FileService extends IntentService {
                 DbUtils.insertFileToDb(this, file);
 
             } else {
-                if (file.updatedTime <= filesFromDbMap.get(file.fileId).lastUpdatedTime) continue;
+                //if (file.updatedTime <= filesFromDbMap.get(file.fileId).lastUpdatedTime) continue;
 
                 DbUtils.updateFileToDb(this, file);
             }

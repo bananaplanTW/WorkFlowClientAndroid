@@ -44,12 +44,14 @@ public class TaskService extends IntentService {
         public static final String LOAD_TASK_BY_ID = "task_service_load_task_by_id";
         public static final String LOAD_CASE_TASKS = "task_service_load_case_tasks";
         public static final String LOAD_TASK_ACTIVITIES = "task_service_load_task_activities";
+        public static final String ASSIGN_TASK_TO_WORKER = "task_service_assign_task_to_worker";
     }
 
     public static final class ExtraKey {
         public static final String BOOLEAN_FIRST_LOAD_TASKS = "extra_first_load_my_tasks";
         public static final String STRING_TASK_ID = "extra_task_id";
         public static final String STRING_CASE_ID = "extra_case_id";
+        public static final String STRING_WORKER_ID = "extra_worker_id";
         public static final String INT_TASK_ACTIVITIES_LIMIT = "extra_task_activities_limit";
         public static final String ARRAYLIST_TASK_ACTIVITIES = "extra_task_activities";
     }
@@ -117,6 +119,15 @@ public class TaskService extends IntentService {
         return intent;
     }
 
+    public static Intent generateAssignTaskToWorkerIntent(Context context, String taskId, String workerId) {
+        Intent intent = new Intent(context, TaskService.class);
+        intent.setAction(Action.ASSIGN_TASK_TO_WORKER);
+        intent.putExtra(ExtraKey.STRING_TASK_ID, taskId);
+        intent.putExtra(ExtraKey.STRING_WORKER_ID, workerId);
+
+        return intent;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
@@ -132,11 +143,16 @@ public class TaskService extends IntentService {
 
         } else if (Action.LOAD_TASK_ACTIVITIES.equals(action)) {
             loadTaskActivities(intent);
+
+        } else if (Action.ASSIGN_TASK_TO_WORKER.equals(action)) {
+            assignTaskToWorker(intent);
         }
     }
 
     private void loadMyTasks(Intent intent) {
         Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
+        broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_MY_TASKS);
+
         boolean isFirstLoadTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
         if (isFirstLoadTasks) {
             broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE, TaskCompletedReceiver.From.LOAD_FIRST);
@@ -185,6 +201,8 @@ public class TaskService extends IntentService {
         String taskId = intent.getStringExtra(ExtraKey.STRING_TASK_ID);
 
         Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
+        broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_TASK_BY_ID);
+
         boolean isFirstLoadMyTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
         if (isFirstLoadMyTasks) {
             broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE, TaskCompletedReceiver.From.LOAD_FIRST);
@@ -228,6 +246,8 @@ public class TaskService extends IntentService {
         String caseId = intent.getStringExtra(ExtraKey.STRING_CASE_ID);
 
         Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
+        broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_CASE_TASKS);
+
         boolean isFirstLoadTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
         if (isFirstLoadTasks) {
             broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_LOAD_TYPE, TaskCompletedReceiver.From.LOAD_FIRST);
@@ -278,6 +298,7 @@ public class TaskService extends IntentService {
         int limit = intent.getIntExtra(ExtraKey.INT_TASK_ACTIVITIES_LIMIT, TASK_ACTIVITIES_LIMIT);
 
         Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
+        broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.LOAD_TASK_ACTIVITIES);
 
         boolean isFirstLoadTasks = intent.getBooleanExtra(ExtraKey.BOOLEAN_FIRST_LOAD_TASKS, true);
         if (isFirstLoadTasks) {
@@ -316,6 +337,20 @@ public class TaskService extends IntentService {
         } else {
             Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
         }
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+    }
+
+    private void assignTaskToWorker(Intent intent) {
+        Intent broadcastIntent = new Intent(TaskCompletedReceiver.ACTION_LOAD_TASKS_COMPLETED);
+        broadcastIntent.putExtra(TaskCompletedReceiver.EXTRA_FROM, TaskCompletedReceiver.From.ASSIGN_TASK_TO_WORKER);
+
+        String taskId = intent.getStringExtra(ExtraKey.STRING_TASK_ID);
+        String workerId = intent.getStringExtra(ExtraKey.STRING_WORKER_ID);
+
+        // TODO: Use API to update data with server
+
+        DbUtils.updateTaskOwner(this, taskId, workerId);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
     }
@@ -445,7 +480,7 @@ public class TaskService extends IntentService {
                 DbUtils.insertCheckListToDb(this, task.checkList);
 
             } else {
-                if (task.lastUpdatedTime <= tasksFromDbMap.get(task.id).lastUpdatedTime) continue;
+                //if (task.lastUpdatedTime <= tasksFromDbMap.get(task.id).lastUpdatedTime) continue;
 
                 DbUtils.updateTaskToDb(this, task);
                 DbUtils.updateCheckListToDb(this, task.id, task.checkList);

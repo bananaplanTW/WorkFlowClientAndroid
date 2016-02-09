@@ -22,6 +22,7 @@ public class WorkerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private Context mContext;
 
     private List<ChooseWorkerItem> mDataSet;
+    private ChooseWorkerItem mSelectedChooseWorkerItem;
 
 
     private class WorkerViewHolder extends RecyclerView.ViewHolder {
@@ -36,12 +37,34 @@ public class WorkerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             workerAvatar = (ImageView) itemView.findViewById(R.id.worker_avatar);
             workerName = (TextView) itemView.findViewById(R.id.worker_name);
             isChosenIndicator = (ImageView) itemView.findViewById(R.id.is_chosen_indicator);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ChooseWorkerItem clickItem = mDataSet.get(getAdapterPosition());
+
+                    if (mSelectedChooseWorkerItem != null) {
+                        if (Utils.isSameId(clickItem.worker.id, mSelectedChooseWorkerItem.worker.id)) return;
+
+                        mSelectedChooseWorkerItem.isSelected = false;
+                    }
+
+                    clickItem.isSelected = true;
+                    mSelectedChooseWorkerItem = clickItem;
+
+                    notifyDataSetChanged();
+                }
+            });
         }
     }
 
     public WorkerListAdapter(Context context, List<ChooseWorkerItem> dataSet) {
         mContext = context;
         mDataSet = dataSet;
+    }
+
+    public ChooseWorkerItem getSelectedChooseWorkerItem() {
+        return mSelectedChooseWorkerItem;
     }
 
     @Override
@@ -56,7 +79,15 @@ public class WorkerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         Utils.setWorkerAvatarImage(mContext, mDataSet.get(position).worker,
                                    workerVH.workerAvatar, R.drawable.ic_worker_black);
         workerVH.workerName.setText(mDataSet.get(position).worker.name);
-        workerVH.isChosenIndicator.setVisibility(mDataSet.get(position).isChosen ? View.VISIBLE : View.GONE);
+
+        // Is selected
+        if (mDataSet.get(position).isSelected) {
+            workerVH.isChosenIndicator.setVisibility(View.VISIBLE);
+            mSelectedChooseWorkerItem = mDataSet.get(position);
+
+        } else {
+            workerVH.isChosenIndicator.setVisibility(View.GONE);
+        }
     }
 
     @Override
