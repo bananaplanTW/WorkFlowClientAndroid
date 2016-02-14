@@ -77,6 +77,8 @@
     <dimen name="case_tab_height">@dimen/tab_height</dimen>
     <dimen name="case_task_card_owner_avatar_width_height">30dp</dimen>
 
+    <!-- Case info -->
+
     <!-- Task info -->
     <dimen name="task_info_padding">20dp</dimen>
     <dimen name="task_info_title_text_size">18dp</dimen>

@@ -76,6 +76,7 @@
     <string name="check_list_no_task_text">No task</string>
 
     <!-- Case -->
+    <string name="case_tab_info">Info</string>
     <string name="case_tab_task">Task</string>
     <string name="case_tab_discussion">Discussion</string>
     <string name="case_tab_file">File</string>

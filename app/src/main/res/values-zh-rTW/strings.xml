@@ -60,6 +60,7 @@
     <string name="check_list_no_task_text">無代辦事項</string>
 
     <!-- Case -->
+    <string name="case_tab_info">計畫描述</string>
     <string name="case_tab_task">工作</string>
     <string name="case_tab_discussion">討論區</string>
     <string name="case_tab_file">檔案</string>

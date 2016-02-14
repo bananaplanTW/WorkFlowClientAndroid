@@ -14,6 +14,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.cases.caseinfo.CaseInfoFragment;
 import com.nicloud.workflowclient.cases.discussion.CaseDiscussionFragment;
 import com.nicloud.workflowclient.cases.file.CaseFileFragment;
 import com.nicloud.workflowclient.cases.tasklist.CaseTaskListFragment;
@@ -30,22 +31,26 @@ public class CaseFragment extends Fragment implements TabHost.OnTabChangeListene
     public static final String EXTRA_CASE_ID = "extra_case_id";
 
     private static final class FragmentTag {
+        public static final String INFO = "fragment_tag_info";
         public static final String TASK = "fragment_tag_task";
         public static final String DISCUSSION = "fragment_tag_discussion";
         public static final String FILE = "fragment_tag_file";
     }
 
     private static final class TabTag {
+        public static final String INFO = "tag_info";
         public static final String TASK = "tag_task";
         public static final String DISCUSSION = "tag_file_discussion";
         public static final String FILE = "tag_tab_file";
     }
 
     private static final class FragmentPosition {
-        public static final int SIZE = 3;
-        public static final int TASK = 0;
-        public static final int DISCUSSION = 1;
-        public static final int FILE = 2;
+        public static final int SIZE = 4;
+
+        public static final int INFO = 0;
+        public static final int TASK = 1;
+        public static final int DISCUSSION = 2;
+        public static final int FILE = 3;
     }
 
     private Context mContext;
@@ -104,6 +109,7 @@ public class CaseFragment extends Fragment implements TabHost.OnTabChangeListene
     private void setupTabs() {
         mCaseTabHost.setup();
 
+        addTab(TabTag.INFO);
         addTab(TabTag.TASK);
         addTab(TabTag.DISCUSSION);
         addTab(TabTag.FILE);
@@ -119,9 +125,11 @@ public class CaseFragment extends Fragment implements TabHost.OnTabChangeListene
     private View getTabView(String tag) {
         View tabView = LayoutInflater.from(mContext).inflate(R.layout.tab, null);
         TextView tabText = (TextView) tabView.findViewById(R.id.tab_text);
-
         String text = "";
-        if (TabTag.TASK.equals(tag)) {
+
+        if (TabTag.INFO.equals(tag)) {
+            text = getString(R.string.case_tab_info);
+        } else if (TabTag.TASK.equals(tag)) {
             text = getString(R.string.case_tab_task);
         } else if(TabTag.DISCUSSION.equals(tag)) {
             text = getString(R.string.case_tab_discussion);
@@ -135,38 +143,30 @@ public class CaseFragment extends Fragment implements TabHost.OnTabChangeListene
     }
 
     private void setupFragments() {
-        CaseTaskListFragment caseTaskListFragment;
-        CaseDiscussionFragment caseDiscussionFragment;
-        CaseFileFragment caseFileFragment;
+        mCaseFragmentList.add(generateSubCaseFragment(CaseInfoFragment.class, FragmentTag.INFO));
+        mCaseFragmentList.add(generateSubCaseFragment(CaseTaskListFragment.class, FragmentTag.TASK));
+        mCaseFragmentList.add(generateSubCaseFragment(CaseDiscussionFragment.class, FragmentTag.DISCUSSION));
+        mCaseFragmentList.add(generateSubCaseFragment(CaseFileFragment.class, FragmentTag.FILE));
+    }
 
-        caseTaskListFragment =
-                (CaseTaskListFragment) getChildFragmentManager().findFragmentByTag(FragmentTag.TASK);
-        if (caseTaskListFragment == null) {
-            caseTaskListFragment = new CaseTaskListFragment();
-        }
-
-        caseDiscussionFragment =
-                (CaseDiscussionFragment) getChildFragmentManager().findFragmentByTag(FragmentTag.DISCUSSION);
-        if (caseDiscussionFragment == null) {
-            caseDiscussionFragment = new CaseDiscussionFragment();
-        }
-
-        caseFileFragment =
-                (CaseFileFragment) getChildFragmentManager().findFragmentByTag(FragmentTag.FILE);
-        if (caseFileFragment == null) {
-            caseFileFragment = new CaseFileFragment();
-        }
-
+    private Fragment generateSubCaseFragment(Class<? extends Fragment> fragmentClass, String fragmentTag) {
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(fragmentTag);
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_CASE_ID, mCaseId);
 
-        caseTaskListFragment.setArguments(bundle);
-        caseDiscussionFragment.setArguments(bundle);
-        caseFileFragment.setArguments(bundle);
+        if (fragment == null) {
+            try {
+                fragment = fragmentClass.newInstance();
+            } catch (java.lang.InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
 
-        mCaseFragmentList.add(caseTaskListFragment);
-        mCaseFragmentList.add(caseDiscussionFragment);
-        mCaseFragmentList.add(caseFileFragment);
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
     private void setupCaseViewPager() {
