@@ -39,8 +39,10 @@ import java.net.URISyntaxException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -497,5 +499,33 @@ public class Utils {
                 }
             }
         }
+    }
+
+    public static String packStrings(List<String> stringList) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0 ; i < stringList.size() ; i++) {
+            sb.append(stringList.get(i));
+
+            if (i == stringList.size() - 1) break;
+
+            sb.append(":");
+        }
+
+        return sb.toString();
+    }
+
+    public static List<String> unpackStrings(String packedString) {
+        List<String> result = new ArrayList<>();
+
+        if (!TextUtils.isEmpty(packedString)) {
+            String[] stringArray = packedString.split(":");
+
+            for (String s : stringArray) {
+                result.add(s);
+            }
+        }
+
+        return result;
     }
 }

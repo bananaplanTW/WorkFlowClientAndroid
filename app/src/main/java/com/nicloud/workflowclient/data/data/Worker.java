@@ -17,6 +17,10 @@ public class Worker extends IdData {
     public Drawable avatar;
 
 
+    public Worker() {
+
+    }
+
     public Worker(
             String id,
             String name,

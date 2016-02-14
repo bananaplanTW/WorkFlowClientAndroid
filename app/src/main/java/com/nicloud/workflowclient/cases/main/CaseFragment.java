@@ -67,6 +67,7 @@ public class CaseFragment extends Fragment implements TabHost.OnTabChangeListene
     public void setCaseId(String caseId) {
         mCaseId = caseId;
 
+        ((OnSetCaseId) mCaseFragmentList.get(FragmentPosition.INFO)).setCaseId(mCaseId);
         ((OnSetCaseId) mCaseFragmentList.get(FragmentPosition.TASK)).setCaseId(mCaseId);
         ((OnSetCaseId) mCaseFragmentList.get(FragmentPosition.DISCUSSION)).setCaseId(mCaseId);
         ((OnSetCaseId) mCaseFragmentList.get(FragmentPosition.FILE)).setCaseId(mCaseId);
@@ -173,7 +174,7 @@ public class CaseFragment extends Fragment implements TabHost.OnTabChangeListene
         mCasePagerAdapter = new CasePagerAdapter(getChildFragmentManager(), mContext, mCaseFragmentList);
 
         mCaseViewPager.setAdapter(mCasePagerAdapter);
-        mCaseViewPager.setOffscreenPageLimit(2);
+        mCaseViewPager.setOffscreenPageLimit(3);
         mCaseViewPager.setOnPageChangeListener(this);
     }
 

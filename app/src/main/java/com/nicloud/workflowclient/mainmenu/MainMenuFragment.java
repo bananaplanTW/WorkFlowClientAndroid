@@ -58,6 +58,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
             WorkFlowContract.Case.CASE_ID,
             WorkFlowContract.Case.CASE_NAME,
             WorkFlowContract.Case.OWNER_ID,
+            WorkFlowContract.Case.WORKER_IDS,
             WorkFlowContract.Case.DESCRIPTION,
             WorkFlowContract.Case.IS_COMPLETED,
             WorkFlowContract.Case.UPDATED_TIME
@@ -66,9 +67,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
     private static final int CASE_ID = 1;
     private static final int CASE_NAME = 2;
     private static final int OWNER_ID = 3;
-    private static final int DESCRIPTION = 4;
-    private static final int IS_COMPLETED = 5;
-    private static final int UPDATED_TIME = 6;
+    private static final int WORKER_IDS = 4;
+    private static final int DESCRIPTION = 5;
+    private static final int IS_COMPLETED = 6;
+    private static final int UPDATED_TIME = 7;
 
     private static final String mSortOrder = WorkFlowContract.Case.CASE_NAME;
 
@@ -206,8 +208,10 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
             String description = cursor.getString(DESCRIPTION);
             boolean isCompleted = cursor.getInt(IS_COMPLETED) == 1;
             long updatedTime = cursor.getLong(UPDATED_TIME);
+            List<String> workerIdList = Utils.unpackStrings(cursor.getString(WORKER_IDS));
 
-            Case aCase = new Case(caseId, caseName, ownerId, description, isCompleted, updatedTime);
+
+            Case aCase = new Case(caseId, caseName, ownerId, workerIdList, description, isCompleted, updatedTime);
 
             mDataSet.add(new MainMenuItem(MainMenuItemType.CASE, caseName, aCase,
                                           MainMenuListAdapter.ItemViewType.CASE, false));

@@ -16,6 +16,7 @@ public class CaseTable {
             + WorkFlowContract.Case.CASE_ID + " TEXT NOT NULL, "
             + WorkFlowContract.Case.CASE_NAME + " TEXT NOT NULL, "
             + WorkFlowContract.Case.OWNER_ID + " TEXT NOT NULL, "
+            + WorkFlowContract.Case.WORKER_IDS + " TEXT, "
             + WorkFlowContract.Case.DESCRIPTION + " TEXT, "
             + WorkFlowContract.Case.IS_COMPLETED + " INTEGER NOT NULL, "
             + WorkFlowContract.Case.UPDATED_TIME + " INTEGER NOT NULL"
@@ -37,6 +38,13 @@ public class CaseTable {
 
             database.execSQL(updateDb);
             database.execSQL(updateDb2);
+        }
+
+        if (version < WorkFlowDatabaseHelper.DbVersion.VERSION_4) {
+            String updateDb = "ALTER TABLE " + WorkFlowContract.Case.TABLE_NAME +
+                    " ADD COLUMN " + WorkFlowContract.Case.WORKER_IDS + " TEXT;";
+
+            database.execSQL(updateDb);
         }
     }
 }

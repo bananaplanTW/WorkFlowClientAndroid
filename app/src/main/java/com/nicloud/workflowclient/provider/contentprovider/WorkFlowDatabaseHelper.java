@@ -25,11 +25,12 @@ import java.util.ArrayList;
 public class WorkFlowDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "workflow.db";
-    private static final int DB_VERSION = DbVersion.VERSION_3;
+    private static final int DB_VERSION = DbVersion.VERSION_4;
 
     public static final class DbVersion {
         public static final int VERSION_2 = 2;
         public static final int VERSION_3 = 3;
+        public static final int VERSION_4 = 4;
     }
 
     private static WorkFlowDatabaseHelper sWorkFlowDatabaseHelper;
@@ -86,6 +87,11 @@ public class WorkFlowDatabaseHelper extends SQLiteOpenHelper {
         if (version < DbVersion.VERSION_3) {
             CaseTable.onUpgrade(db, version, DB_VERSION);
             version = DbVersion.VERSION_3;
+        }
+
+        if (version < DbVersion.VERSION_4) {
+            CaseTable.onUpgrade(db, version, DB_VERSION);
+            version = DbVersion.VERSION_4;
         }
     }
 
