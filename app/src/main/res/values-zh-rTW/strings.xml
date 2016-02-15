@@ -65,6 +65,10 @@
     <string name="case_tab_discussion">討論區</string>
     <string name="case_tab_file">檔案</string>
 
+    <!-- Case info -->
+    <string name="case_info_description">計畫描述</string>
+    <string name="case_info_no_description">無計畫描述</string>
+
     <!-- Task info -->
     <string name="task_info_task_description">卡片描述</string>
     <string name="task_info_task_no_description">無卡片描述</string>

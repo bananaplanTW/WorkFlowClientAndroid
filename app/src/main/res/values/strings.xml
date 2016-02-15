@@ -81,6 +81,10 @@
     <string name="case_tab_discussion">Discussion</string>
     <string name="case_tab_file">File</string>
 
+    <!-- Case info -->
+    <string name="case_info_description">Case description</string>
+    <string name="case_info_no_description">No description</string>
+
     <!-- Task info -->
     <string name="task_info_task_description">Task description</string>
     <string name="task_info_task_no_description">No description</string>

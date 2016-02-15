@@ -78,6 +78,7 @@
     <dimen name="case_task_card_owner_avatar_width_height">30dp</dimen>
 
     <!-- Case info -->
+    <dimen name="case_description_margin_top">20dp</dimen>
 
     <!-- Task info -->
     <dimen name="task_info_padding">20dp</dimen>

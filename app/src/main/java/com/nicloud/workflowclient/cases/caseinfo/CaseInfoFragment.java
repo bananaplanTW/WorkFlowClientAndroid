@@ -10,9 +10,11 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
@@ -61,6 +63,8 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
     private LinearLayoutManager mWorkerAvatarListLayoutManager;
     private WorkerAvatarAdapter mWorkerAvatarAdapter;
 
+    private EditText mCaseDescription;
+
     private List<Worker> mWorkerListData = new ArrayList<>();
 
 
@@ -92,6 +96,7 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
 
     private void findViews() {
         mWorkerAvatarList = (RecyclerView) getView().findViewById(R.id.worker_avatar_list);
+        mCaseDescription = (EditText) getView().findViewById(R.id.case_description);
     }
 
     private void setupWorkerAvatarList() {
@@ -123,14 +128,15 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
                               cursor.getLong(UPDATED_TIME));
 
         setViews(aCase);
-        setWorkerAvatarData(aCase);
+        setWorkerAvatar(aCase);
     }
 
     private void setViews(Case aCase) {
-
+        mCaseDescription.setText(TextUtils.isEmpty(aCase.description) ?
+                                 getString(R.string.case_info_no_description) : aCase.description);
     }
 
-    private void setWorkerAvatarData(Case aCase) {
+    private void setWorkerAvatar(Case aCase) {
         mWorkerListData.clear();
 
         mWorkerListData.add(WorkingData.getInstance(mContext).getWorkerById(aCase.ownerId));
