@@ -27,7 +27,7 @@
 
     <!-- Main menu -->
     <color name="main_menu_worker_name_text_color">#FFFFFFFF</color>
-    <color name="main_menu_logout_button_text_color">#FF9D9D9D</color>
+    <color name="main_menu_logout_button_text_color">#FFFFFFFF</color>
     <color name="main_menu_case_uncompleted_text_color">#FFFFFFFF</color>
     <color name="main_menu_case_completed_text_color">#FF9D9D9D</color>
     <color name="main_menu_case_dot_color">#FFFFFFFF</color>

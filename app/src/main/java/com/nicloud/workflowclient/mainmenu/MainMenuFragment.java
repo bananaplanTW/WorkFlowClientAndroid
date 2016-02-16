@@ -19,12 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
+import com.nicloud.workflowclient.dialog.logout.LogoutDialogFragment;
+import com.nicloud.workflowclient.login.LoginActivity;
+import com.nicloud.workflowclient.provider.contentprovider.WorkFlowDatabaseHelper;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.data.data.Case;
 import com.nicloud.workflowclient.main.WorkingData;
-import com.nicloud.workflowclient.login.LoginActivity;
-import com.nicloud.workflowclient.provider.contentprovider.WorkFlowDatabaseHelper;
 import com.nicloud.workflowclient.utility.utils.Utils;
 import com.parse.ParsePush;
 
@@ -35,7 +35,10 @@ import java.util.List;
  * Created by logicmelody on 2015/12/21.
  */
 public class MainMenuFragment extends Fragment implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>, LogoutDialogFragment.OnLogoutListener {
+
+    private static final String FRAGMENT_TAG_MAIN_MENU = "fragment_tag_main_menu";
+    private static final int REQUEST_CODE_LOGOUT_DIALOG = 13;
 
     public interface OnClickMainMenuItemListener {
         void onClickMainMenuItem(MainMenuItem item);
@@ -163,17 +166,9 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_menu_logout:
-                ParsePush.unsubscribeInBackground("user_" + WorkingData.getUserId());
-                //ParseUtils.removeLoginWorkerToParse();
-
-                WorkFlowDatabaseHelper.deleteAllTablesData(mContext);
-                WorkingData.resetAccount();
-
-                SharedPreferences sharedPreferences = mContext.getSharedPreferences(WorkingData.SHARED_PREFERENCE_KEY, 0);
-                sharedPreferences.edit().remove(WorkingData.USER_ID).remove(WorkingData.AUTH_TOKEN).commit();
-
-                mContext.startActivity(new Intent(mContext, LoginActivity.class));
-                getActivity().finish();
+                LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment();
+                logoutDialogFragment.setTargetFragment(this, REQUEST_CODE_LOGOUT_DIALOG);
+                logoutDialogFragment.show(getFragmentManager(), FRAGMENT_TAG_MAIN_MENU);
 
                 break;
         }
@@ -216,6 +211,26 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    @Override
+    public void onLogoutYes() {
+        ParsePush.unsubscribeInBackground("user_" + WorkingData.getUserId());
+        //ParseUtils.removeLoginWorkerToParse();
+
+        WorkFlowDatabaseHelper.deleteAllTablesData(mContext);
+        WorkingData.resetAccount();
+
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(WorkingData.SHARED_PREFERENCE_KEY, 0);
+        sharedPreferences.edit().remove(WorkingData.USER_ID).remove(WorkingData.AUTH_TOKEN).commit();
+
+        mContext.startActivity(new Intent(mContext, LoginActivity.class));
+        getActivity().finish();
+    }
+
+    @Override
+    public void onLogoutNo() {
 
     }
 }

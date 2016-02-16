@@ -117,6 +117,7 @@
     <string name="dialog_check_in">Check in</string>
     <string name="dialog_check_out">Check out</string>
     <string name="dialog_complete_pause_task">Please complete or pause wip task first</string>
+    <string name="dialog_log_out">Logout?</string>
 
     <!-- Task status -->
     <string name="task_status_unclaimed">Not start</string>
