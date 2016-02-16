@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.Task;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
@@ -24,6 +25,7 @@ import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,6 +45,9 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
 
     private String mTaskId;
     private Task mTask;
+
+    private String mOriginalDescription;
+    private Date mOriginalDueDate;
 
 
     @Override
@@ -87,13 +92,33 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
             mTaskDescription.setHint(mContext.getString(R.string.task_info_task_no_description));
         } else {
             mTaskDescription.setText(mTask.description);
+            mOriginalDescription = mTask.description;
         }
 
         if (mTask.dueDate.getTime() == -1L) {
             mTaskDueDate.setText(mContext.getString(R.string.task_info_task_no_due_date));
         } else {
             mTaskDueDate.setText(Utils.timestamp2Date(mTask.dueDate, Utils.DATE_FORMAT_YMD));
+            mOriginalDueDate = mTask.dueDate;
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        updateTaskDescription();
+        updateTaskDueDate();
+    }
+
+    private void updateTaskDescription() {
+        String taskDescription = mTaskDescription.getText().toString();
+        if (mOriginalDescription.equals(taskDescription)) return;
+
+        mContext.startService(GeneralService.generateUpdateTaskDescriptionIntent(mContext, mTaskId, taskDescription));
+    }
+
+    private void updateTaskDueDate() {
+
     }
 
     @Override

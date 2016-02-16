@@ -42,11 +42,13 @@ public class GeneralService extends IntentService {
         public static final String LOAD_CASES_AND_WORKERS = "general_server_action_load_cases_and_workers";
         public static final String CREATE_CASE = "general_server_action_create_case";
         public static final String CREATE_TASK = "general_server_action_create_task";
+        public static final String UPDATE_TASK_DESCRIPTION = "general_server_action_update_task_description";
     }
 
     public static class ExtraKey {
         public static final String TASK_ID = "extra_task_id";
         public static final String TASK_NAME = "extra_task_name";
+        public static final String TASK_DESCRIPTION = "extra_task_description";
         public static final String CASE_NAME = "extra_case_name";
         public static final String CASE_ID = "extra_case_id";
         public static final String WORKER_ID = "extra_worker_id";
@@ -107,6 +109,15 @@ public class GeneralService extends IntentService {
         return intent;
     }
 
+    public static Intent generateUpdateTaskDescriptionIntent(Context context, String taskId, String taskDescription) {
+        Intent intent = new Intent(context, GeneralService.class);
+        intent.setAction(Action.UPDATE_TASK_DESCRIPTION);
+        intent.putExtra(ExtraKey.TASK_ID, taskId);
+        intent.putExtra(ExtraKey.TASK_DESCRIPTION, taskDescription);
+
+        return intent;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
@@ -114,17 +125,20 @@ public class GeneralService extends IntentService {
         if (Action.CHECK_ITEM.equals(action)) {
             checkItem(intent);
 
-        } else if(Action.COMPLETE_TASK.equals(action)) {
+        } else if (Action.COMPLETE_TASK.equals(action)) {
             completeTask(intent);
 
-        } else if(Action.LOAD_CASES_AND_WORKERS.equals(action)) {
+        } else if (Action.LOAD_CASES_AND_WORKERS.equals(action)) {
             loadCasesAndWorkers(intent);
 
-        } else if(Action.CREATE_CASE.equals(action)) {
+        } else if (Action.CREATE_CASE.equals(action)) {
             createCase(intent);
 
-        } else if(Action.CREATE_TASK.equals(action)) {
+        } else if (Action.CREATE_TASK.equals(action)) {
             createTask(intent);
+
+        } else if (Action.UPDATE_TASK_DESCRIPTION.equals(action)) {
+            updateTaskDescription(intent);
         }
     }
 
@@ -435,6 +449,36 @@ public class GeneralService extends IntentService {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
                     DbUtils.insertTaskToDb(this, Task.retrieveTaskFromJson(jsonObject.getJSONObject("result")));
+                    return;
+                }
+            }
+        }  catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    private void updateTaskDescription(Intent intent) {
+        String taskId = intent.getStringExtra(ExtraKey.TASK_ID);
+        String taskDescription = intent.getStringExtra(ExtraKey.TASK_DESCRIPTION);
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-user-id", WorkingData.getUserId());
+        headers.put("x-auth-token", WorkingData.getAuthToken());
+
+        HashMap<String, String> bodies = new HashMap<>();
+        bodies.put("td", taskId);
+        bodies.put("tdesc", taskDescription);
+
+        try {
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.UPDATE_TASK_DESCRIPTION, null);
+            String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+                if (jsonObject.getString("status").equals("success")) {
+                    DbUtils.updateTaskDescription(this,  taskId, taskDescription);
                     return;
                 }
             }

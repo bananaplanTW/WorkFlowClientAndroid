@@ -34,12 +34,17 @@ public class LoadingDataUtils {
         public static final class EndPoints {
             public static final String LOGIN_WORKER = "/api/self";
             public static final String WORKER = "/api/employee";
+            public static final String LOGIN_STATUS = "/api/login-status";
+            public static final String LOGIN = "/api/login";
+            public static final String CHECKIN_OUT = "/api/checkin-out/employee";
 
             public static final String TASKS = "/api/tasks";
             public static final String CHECK_TASK = "/api/v2/check-task-todo";
-            public static final String MESSAGES = "/api/chatting/employee";
-
             public static final String CREATE_TASK = "/api/task";
+            public static final String ADD_CHECK_ITEM_TO_TASK = "/api/v2/task-todo";
+            public static final String UPDATE_TASK_DESCRIPTION = "/api/v2/update-task-description";
+
+            public static final String MESSAGES = "/api/chatting/employee";
 
             public static final String CREATE_CASE = "/api/case";
             public static final String LOAD_CASES = "/api/cases";
@@ -60,12 +65,6 @@ public class LoadingDataUtils {
             public static final String COMMENT_IMAGE_ACTIVITY_TO_TASK = "/api/add-task-activity/image";
             public static final String COMMENT_FILE_ACTIVITY_TO_TASK = "/api/add-task-activity/file";
             public static final String COMMENT_TEXT_ACTIVITY_TO_TASK = "/api/add-task-activity/text";
-            public static final String ADD_CHECK_ITEM_TO_TASK = "/api/v2/task-todo";
-
-            public static final String LOGIN_STATUS = "/api/login-status";
-            public static final String LOGIN = "/api/login";
-
-            public static final String CHECKIN_OUT = "/api/checkin-out/employee";
         }
     }
 

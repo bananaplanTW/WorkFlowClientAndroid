@@ -38,7 +38,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, LogoutDialogFragment.OnLogoutListener {
 
     private static final String FRAGMENT_TAG_MAIN_MENU = "fragment_tag_main_menu";
-    private static final int REQUEST_CODE_LOGOUT_DIALOG = 13;
+    private static final int REQUEST_CODE_LOGOUT_DIALOG = 86;
 
     public interface OnClickMainMenuItemListener {
         void onClickMainMenuItem(MainMenuItem item);
