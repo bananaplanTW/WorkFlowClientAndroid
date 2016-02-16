@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
+import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImage;
 import com.nicloud.workflowclient.data.data.File;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.DisplayImageActivity;
@@ -89,7 +89,7 @@ public class FileListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             } else {
                 holder.fileImage.setImageResource(R.drawable.ic_photo);
-                new LoadImageTask(mContext, file.fileThumbUrl, holder.fileImage, file.fileThumbnail).execute();
+                new LoadImage(mContext, file.fileThumbUrl, holder.fileImage, file.fileThumbnail).execute();
             }
 
             holder.view.setOnClickListener(new View.OnClickListener() {

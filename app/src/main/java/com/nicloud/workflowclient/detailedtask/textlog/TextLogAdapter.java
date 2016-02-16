@@ -1,7 +1,6 @@
 package com.nicloud.workflowclient.detailedtask.textlog;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
 import com.nicloud.workflowclient.data.data.TaskTextLog;
 import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.main.WorkingData;
-import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.Date;

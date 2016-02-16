@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
+import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImage;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.main.WorkingData;
@@ -170,7 +170,7 @@ public class DiscussionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         } else {
             imageVH.thumbnail.setImageDrawable(null);
-            new LoadImageTask(mContext, item.fileUri, imageVH.thumbnail, item.fileThumb).execute();
+            new LoadImage(mContext, item.fileUri, imageVH.thumbnail, item.fileThumb).execute();
         }
     }
 

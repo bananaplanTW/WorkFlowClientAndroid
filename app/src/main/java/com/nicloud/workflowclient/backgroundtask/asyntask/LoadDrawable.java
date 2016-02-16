@@ -24,22 +24,20 @@ import java.net.URL;
 /**
  * Created by daz on 10/10/15.
  */
-public class LoadImageTask extends AsyncTask<Void, Void, Drawable> {
+public class LoadDrawable extends AsyncTask<Void, Void, Drawable> {
 
-    private Context mContext;
+    protected Context mContext;
 
     private Uri mUri;
     private ImageView mImageView;
-    private Drawable mDrawable;
 
 
-    public LoadImageTask(Context context, String imageUri, ImageView imageView, Drawable drawable) {
+    public LoadDrawable(Context context, String imageUri, ImageView imageView) {
         Uri.Builder imageBuilder = Uri.parse(LoadingDataUtils.sBaseUrl).buildUpon();
         imageBuilder.path(imageUri);
 
         mContext = context;
         mImageView = imageView;
-        mDrawable = drawable;
         mUri = imageBuilder.build();
     }
 
@@ -99,10 +97,10 @@ public class LoadImageTask extends AsyncTask<Void, Void, Drawable> {
         super.onCancelled();
 
     }
+
     @Override
     protected void onPostExecute(Drawable drawable) {
         super.onPostExecute(drawable);
         mImageView.setImageDrawable(drawable);
-        mDrawable = drawable;
     }
 }

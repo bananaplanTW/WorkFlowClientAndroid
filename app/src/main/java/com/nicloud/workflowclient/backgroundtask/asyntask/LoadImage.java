@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
-import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.utility.utils.RestfulUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
@@ -25,19 +24,19 @@ import java.net.URL;
 /**
  * Created by daz on 10/10/15.
  */
-public class LoadWorkerAvatar extends LoadDrawable {
+public class LoadImage extends LoadDrawable {
 
-    private String mWorkerId;
+    private Drawable mDrawable;
 
 
-    public LoadWorkerAvatar(Context context, String imageUri, ImageView imageView, String workerId) {
+    public LoadImage(Context context, String imageUri, ImageView imageView, Drawable drawable) {
         super(context, imageUri, imageView);
-        mWorkerId = workerId;
+        mDrawable = drawable;
     }
 
     @Override
     protected void onPostExecute(Drawable drawable) {
         super.onPostExecute(drawable);
-        WorkingData.getInstance(mContext).setWorkerAvatarDrawable(mWorkerId, drawable);
+        mDrawable = drawable;
     }
 }

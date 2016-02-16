@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
+import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImage;
 import com.nicloud.workflowclient.data.data.File;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.DisplayImageActivity;
@@ -87,7 +87,7 @@ public class FileLogListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.fileImage.setImageResource(R.drawable.ic_photo);
 
             if (file.fileThumbUrl != null) {
-                new LoadImageTask(mContext, file.fileThumbUrl, holder.fileImage, file.fileThumbnail).execute();
+                new LoadImage(mContext, file.fileThumbUrl, holder.fileImage, file.fileThumbnail).execute();
             }
         }
 

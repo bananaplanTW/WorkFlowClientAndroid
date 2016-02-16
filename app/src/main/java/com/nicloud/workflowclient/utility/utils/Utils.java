@@ -26,7 +26,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
 import com.nicloud.workflowclient.backgroundtask.asyntask.LoadWorkerAvatar;
 import com.nicloud.workflowclient.backgroundtask.asyntask.tasklog.DownloadFileFromURLCommand;
 import com.nicloud.workflowclient.data.data.Worker;
