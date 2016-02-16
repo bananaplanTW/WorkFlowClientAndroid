@@ -33,6 +33,8 @@ public class LoadingDataUtils {
 
         public static final class EndPoints {
             public static final String LOGIN_WORKER = "/api/self";
+            public static final String WORKER = "/api/employee";
+
             public static final String TASKS = "/api/tasks";
             public static final String CHECK_TASK = "/api/v2/check-task-todo";
             public static final String MESSAGES = "/api/chatting/employee";
@@ -92,7 +94,7 @@ public class LoadingDataUtils {
         }
     }
 
-    private static void addWorkerToWorkingData(Context context, JSONObject workerJson) {
+    public static void addWorkerToWorkingData(Context context, JSONObject workerJson) {
         try {
             String workerId = workerJson.getString("_id");
             long lastUpdatedTime = workerJson.getLong("updatedAt");
@@ -104,44 +106,14 @@ public class LoadingDataUtils {
             }
 
             if (workingDataHasWorker) {
-                WorkingData.getInstance(context).updateWorker(workerId, retrieveWorkerFromJson(context, workerJson));
+                WorkingData.getInstance(context).updateWorker(workerId, Worker.retrieveWorkerFromJson(workerJson));
             } else {
-                WorkingData.getInstance(context).addWorker(retrieveWorkerFromJson(context, workerJson));
+                WorkingData.getInstance(context).addWorker(Worker.retrieveWorkerFromJson(workerJson));
             }
 
         } catch (JSONException e) {
             Log.e(TAG, "Exception in addWorkerToWorkingData()");
             e.printStackTrace();
         }
-    }
-
-    public static Worker retrieveWorkerFromJson(Context context, JSONObject workerJson) {
-        try {
-            String id = workerJson.getString("_id");
-            String name = workerJson.getJSONObject("profile").getString("name");
-            String departmentId = JsonUtils.getStringFromJson(workerJson, "groupId");
-            String departmentName = JsonUtils.getStringFromJson(workerJson, "groupName");
-            String address = JsonUtils.getStringFromJson(workerJson, "address");
-            String phone = JsonUtils.getStringFromJson(workerJson, "phone");
-            String avatarUrl = JsonUtils.getStringFromJson(workerJson, "iconThumbUrl");
-
-            long lastUpdatedTime = workerJson.getLong("updatedAt");
-
-            return new Worker(
-                    id,
-                    name,
-                    departmentId,
-                    departmentName,
-                    address,
-                    phone,
-                    avatarUrl,
-                    lastUpdatedTime);
-
-        } catch (JSONException e) {
-            Log.e(TAG, "Exception in retrieveWorkerFromJson()");
-            e.printStackTrace();
-        }
-
-        return null;
     }
 }

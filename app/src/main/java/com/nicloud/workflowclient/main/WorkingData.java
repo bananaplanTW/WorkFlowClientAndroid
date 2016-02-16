@@ -1,6 +1,7 @@
 package com.nicloud.workflowclient.main;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 
 import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.utility.utils.Utils;
@@ -100,6 +101,13 @@ public final class WorkingData {
 
     public void updateWorker(String workerId, Worker worker) {
         getWorkerById(workerId).update(worker);
+    }
+
+    public void setWorkerAvatarDrawable(String workerId, Drawable avatar) {
+        Worker worker = getWorkerById(workerId);
+        if (worker == null) return;
+
+        worker.avatar = avatar;
     }
 
     public Worker getWorkerById(String workerId) {

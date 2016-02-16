@@ -11,6 +11,7 @@ import com.nicloud.workflowclient.detailedtask.checklist.CheckItem;
 import com.nicloud.workflowclient.data.data.Task;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -178,6 +179,53 @@ public class DbUtils {
         return aCase;
     }
 
+    public static List<Case> getCases(Context context) {
+        String[] projection = new String[] {
+                WorkFlowContract.Case._ID,
+                WorkFlowContract.Case.CASE_ID,
+                WorkFlowContract.Case.CASE_NAME,
+                WorkFlowContract.Case.OWNER_ID,
+                WorkFlowContract.Case.WORKER_IDS,
+                WorkFlowContract.Case.DESCRIPTION,
+                WorkFlowContract.Case.IS_COMPLETED,
+                WorkFlowContract.Case.UPDATED_TIME
+        };
+        int ID = 0;
+        int CASE_ID = 1;
+        int CASE_NAME = 2;
+        int OWNER_ID = 3;
+        int WORKER_IDS = 4;
+        int DESCRIPTION = 5;
+        int IS_COMPLETED = 6;
+        int UPDATED_TIME = 7;
+
+        List<Case> caseList = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = context.getContentResolver().query(WorkFlowContract.Case.CONTENT_URI,
+                    projection, null, null, null);
+
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    caseList.add(new Case(cursor.getString(CASE_ID),
+                            cursor.getString(CASE_NAME),
+                            cursor.getString(OWNER_ID),
+                            Utils.unpackStrings(cursor.getString(WORKER_IDS)),
+                            cursor.getString(DESCRIPTION),
+                            cursor.getInt(IS_COMPLETED) == 1,
+                            cursor.getLong(UPDATED_TIME)));
+                }
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return caseList;
+    }
 
     public static void setCheckItem(Context context, String taskId, int position, boolean isChecked) {
         String selection =  WorkFlowContract.CheckList.TASK_ID + " = ? AND " +

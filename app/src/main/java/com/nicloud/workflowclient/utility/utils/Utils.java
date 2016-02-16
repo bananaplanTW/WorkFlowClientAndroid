@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.asyntask.LoadImageTask;
+import com.nicloud.workflowclient.backgroundtask.asyntask.LoadWorkerAvatar;
 import com.nicloud.workflowclient.backgroundtask.asyntask.tasklog.DownloadFileFromURLCommand;
 import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.main.WorkingData;
@@ -495,7 +496,7 @@ public class Utils {
                 workerAvatar.setImageResource(defaultAvatarId);
 
                 if (!TextUtils.isEmpty(worker.avatarUrl)) {
-                    new LoadImageTask(context, worker.avatarUrl, workerAvatar, worker.avatar).execute();
+                    new LoadWorkerAvatar(context, worker.avatarUrl, workerAvatar, worker.id).execute();
                 }
             }
         }

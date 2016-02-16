@@ -265,6 +265,7 @@ public class TaskService extends IntentService {
                 String taskJsonString =
                         RestfulUtils.restfulGetRequest(getCaseTasksUrl(caseId), headers);
 
+
                 JSONArray taskJsonList = JsonUtils.getJsonArrayFromJson(new JSONObject(taskJsonString), "result");
 
                 if (taskJsonList != null) {

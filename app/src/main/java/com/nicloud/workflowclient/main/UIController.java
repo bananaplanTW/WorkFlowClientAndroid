@@ -197,17 +197,11 @@ public class UIController implements View.OnClickListener, GeneralCompletedRecei
         mClickedMainMenuItem = new MainMenuItem(MainMenuFragment.MainMenuItemType.MY_TASKS,
                                                 mMainActivity.getString(R.string.main_menu_my_tasks),
                                                 null, MainMenuListAdapter.ItemViewType.ITEM, true);
-
-        loadWorkers();
         findViews();
         setupViews();
         setupActionbar();
         setupDrawer();
         setupFragments();
-    }
-
-    private void loadWorkers() {
-        new LoadingWorkers(mMainActivity, this).execute();
     }
 
     private void findViews() {

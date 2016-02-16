@@ -39,7 +39,7 @@ public class GeneralService extends IntentService {
     public static class Action {
         public static final String CHECK_ITEM = "general_service_action_check_item";
         public static final String COMPLETE_TASK = "general_server_action_complete_task";
-        public static final String LOAD_CASES = "general_server_action_load_cases";
+        public static final String LOAD_CASES_AND_WORKERS = "general_server_action_load_cases_and_workers";
         public static final String CREATE_CASE = "general_server_action_create_case";
         public static final String CREATE_TASK = "general_server_action_create_task";
     }
@@ -50,6 +50,7 @@ public class GeneralService extends IntentService {
         public static final String CASE_NAME = "extra_case_name";
         public static final String CASE_ID = "extra_case_id";
         public static final String WORKER_ID = "extra_worker_id";
+        public static final String BOOLEAN_LOAD_WORKERS = "extra_load_workers";
         public static final String ACTION_SUCCESSFUL = "extra_action_successful";
 
         // Check item
@@ -81,13 +82,13 @@ public class GeneralService extends IntentService {
         mHandler = new Handler();
     }
 
-    public static Intent generateLoadCasesIntent(Context context) {
+    public static Intent generateLoadCasesAndWorkersIntent(Context context, boolean isLoadWorkers) {
         Intent intent = new Intent(context, GeneralService.class);
-        intent.setAction(Action.LOAD_CASES);
+        intent.setAction(Action.LOAD_CASES_AND_WORKERS);
+        intent.putExtra(ExtraKey.BOOLEAN_LOAD_WORKERS, isLoadWorkers);
 
         return intent;
     }
-
 
     public static Intent generateCreateCaseIntent(Context context, String caseName) {
         Intent intent = new Intent(context, GeneralService.class);
@@ -116,8 +117,8 @@ public class GeneralService extends IntentService {
         } else if(Action.COMPLETE_TASK.equals(action)) {
             completeTask(intent);
 
-        } else if(Action.LOAD_CASES.equals(action)) {
-            loadCases(intent);
+        } else if(Action.LOAD_CASES_AND_WORKERS.equals(action)) {
+            loadCasesAndWorkers(intent);
 
         } else if(Action.CREATE_CASE.equals(action)) {
             createCase(intent);
@@ -202,7 +203,15 @@ public class GeneralService extends IntentService {
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
     }
 
-    private void loadCases(Intent intent) {
+    private void loadCasesAndWorkers(Intent intent) {
+        loadCases();
+
+        if (intent.getBooleanExtra(ExtraKey.BOOLEAN_LOAD_WORKERS, false)) {
+            loadWorkers();
+        }
+    }
+
+    private void loadCases() {
         if (RestfulUtils.isConnectToInternet(this)) {
             try {
                 HashMap<String, String> headers = new HashMap<>();
@@ -226,6 +235,47 @@ public class GeneralService extends IntentService {
 
                     insertAndUpdateCasesToDb(casesFromDbMap, casesFromServer);
                     deleteCasesFromDb(casesFromServerMap, casesFromDb);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+            }
+
+        } else {
+            Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+        }
+    }
+
+    private void loadWorkers() {
+        for (Case aCase : DbUtils.getCases(this)) {
+            loadWorkerById(aCase.ownerId);
+
+            for (String workerId : aCase.workerIdList) {
+                loadWorkerById(workerId);
+            }
+        }
+    }
+
+    private void loadWorkerById(String workerId) {
+        if (RestfulUtils.isConnectToInternet(this)) {
+            try {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-user-id", WorkingData.getUserId());
+                headers.put("x-auth-token", WorkingData.getAuthToken());
+
+                HashMap<String, String> queries = new HashMap<>();
+                queries.put("employeeId", workerId);
+
+                String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                        LoadingDataUtils.WorkingDataUrl.EndPoints.WORKER, queries);
+                String workerJsonString =
+                        RestfulUtils.restfulGetRequest(urlString, headers);
+                JSONObject workerJson = new JSONObject(workerJsonString).getJSONObject("result");
+
+                if (workerJson != null) {
+                    if (WorkingData.getInstance(this).hasWorker(workerId)) return;
+                    LoadingDataUtils.addWorkerToWorkingData(this, workerJson);
                 }
 
             } catch (JSONException e) {
@@ -354,7 +404,7 @@ public class GeneralService extends IntentService {
             if (responseString != null) {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
-                    startService(generateLoadCasesIntent(this));
+                    startService(generateLoadCasesAndWorkersIntent(this, false));
                     return;
                 }
             }

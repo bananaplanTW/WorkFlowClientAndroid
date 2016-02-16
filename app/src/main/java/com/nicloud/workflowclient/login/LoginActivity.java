@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.backgroundtask.asyntask.worker.CheckLoggedInStatusCommand;
 import com.nicloud.workflowclient.backgroundtask.asyntask.worker.LoadingLoginWorkerCommand;
@@ -215,6 +216,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onLoadingLoginWorkerSuccessful() {
+        startService(GeneralService.generateLoadCasesAndWorkersIntent(this, true));
         goToMainActivity();
     }
 

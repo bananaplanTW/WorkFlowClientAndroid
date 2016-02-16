@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +12,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +21,6 @@ import android.widget.TextView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
-import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
-import com.nicloud.workflowclient.backgroundtask.asyntask.worker.LoadingWorkerAvatar;
 import com.nicloud.workflowclient.data.data.Case;
 import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.login.LoginActivity;
@@ -110,14 +105,13 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mContext.startService(GeneralService.generateLoadCasesIntent(mContext));
         initialize();
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     private void initialize() {
         findViews();
-        loadWorkerAvatar();
+        loadLoginWorkerAvatar();
         setupWorkerViews();
         initMainMenuListData();
         setupMainMenuList();
@@ -131,7 +125,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
         mMainMenuList = (RecyclerView) getView().findViewById(R.id.main_menu_list);
     }
 
-    private void loadWorkerAvatar() {
+    private void loadLoginWorkerAvatar() {
         Utils.setWorkerAvatarImage(mContext, WorkingData.getInstance(mContext).getLoginWorker(),
                                    mWorkerAvatar, R.drawable.ic_worker_white);
     }

@@ -2,6 +2,7 @@ package com.nicloud.workflowclient.backgroundtask.asyntask.worker;
 
 import android.content.Context;
 
+import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
 import com.nicloud.workflowclient.backgroundtask.asyntask.restful.GetRequestAsyncTask;
@@ -44,7 +45,7 @@ public class LoadingLoginWorkerCommand implements IWorkerActionCommand, GetReque
         JSONObject result = mGetRequestAsyncTask.getResult();
 
         if (result != null) {
-            WorkingData.getInstance(mContext).setLoginWorker(LoadingDataUtils.retrieveWorkerFromJson(mContext, result));
+            WorkingData.getInstance(mContext).setLoginWorker(Worker.retrieveWorkerFromJson(result));
 
             try {
                 WorkingData.setMembership(result.getString("membership"));

@@ -8,6 +8,7 @@ import java.util.Map;
  * Created by daz on 10/9/15.
  */
 public class URLUtils {
+
     public static String buildURLString(String baseURL, String endPoint, HashMap<String, String> queries) {
         String queryString = URLUtils.buildQueryString(queries);
         if (queryString.length() > 0) {
@@ -17,7 +18,7 @@ public class URLUtils {
         }
     }
 
-    public static String buildQueryString (HashMap<String, String> queries) {
+    public static String buildQueryString(HashMap<String, String> queries) {
         String queryString = "";
         if (queries != null) {
             Iterator iter = queries.entrySet().iterator();

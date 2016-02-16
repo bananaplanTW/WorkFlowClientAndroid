@@ -11,7 +11,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -132,7 +131,7 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_task);
-        startService(GeneralService.generateLoadCasesIntent(this));
+        startService(GeneralService.generateLoadCasesAndWorkersIntent(this, false));
         getLoaderManager().initLoader(LOADER_ID, null, this);
         initialize();
     }
