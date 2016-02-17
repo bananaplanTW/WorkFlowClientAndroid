@@ -42,8 +42,8 @@ public class LoadingDataUtils {
             public static final String CHECK_TASK = "/api/v2/check-task-todo";
             public static final String CREATE_TASK = "/api/task";
             public static final String ADD_CHECK_ITEM_TO_TASK = "/api/v2/task-todo";
-            public static final String UPDATE_TASK_DESCRIPTION = "/api/v2/update-task-description";
-            public static final String UPDATE_TASK_DUEDATE = "/api/v2/update-task-due-date";
+            public static final String TASK_UPDATE_DESCRIPTION = "/api/v2/update-task-description";
+            public static final String TASK_UPDATE_DUEDATE = "/api/v2/update-task-due-date";
 
             public static final String MESSAGES = "/api/chatting/employee";
 
@@ -52,6 +52,7 @@ public class LoadingDataUtils {
             public static final String CASE_FILES = "/api/case-attachment";
             public static final String CASE_UPLOAD_FILE = "/api/case-attachment/file";
             public static final String CASE_UPLOAD_IMAGE = "/api/case-attachment/image";
+            public static final String CASE_UPDATE_DESCRIPTION = "/api/v2/update-case-description";
 
             public static final String DISCUSSION = "/api/case-message";
             public static final String SEND_DISCUSSION_MESSAGE = "/api/case-message/text";

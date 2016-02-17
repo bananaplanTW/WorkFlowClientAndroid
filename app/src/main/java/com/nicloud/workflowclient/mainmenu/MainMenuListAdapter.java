@@ -131,6 +131,10 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         Log.d(TAG, "Current selected main menu item: " + clickedItem.mName);
     }
 
+    public MainMenuItem getCurrentSelectedItem() {
+        return mCurrentSelectedItem;
+    }
+
     public void clearSelectedMainMenuItem() {
         if (mCurrentSelectedItem == null) return;
 

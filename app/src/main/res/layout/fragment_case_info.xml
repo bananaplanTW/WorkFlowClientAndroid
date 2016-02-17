@@ -55,8 +55,7 @@
                 android:layout_below="@+id/case_description_title"
                 android:layout_marginTop="@dimen/task_info_content_margin_top"
                 android:textColor="@color/task_info_text_color"
-                android:background="@null"
-                android:focusable="false" />
+                android:background="@null" />
 
         </RelativeLayout>
 

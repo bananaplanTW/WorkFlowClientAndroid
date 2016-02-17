@@ -116,8 +116,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
         findViews();
         loadLoginWorkerAvatar();
         setupWorkerViews();
-        initMainMenuListData();
         setupMainMenuList();
+        initMainMenuListData();
     }
 
     private void findViews() {
@@ -145,13 +145,20 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
 
         mDataSet.add(new MainMenuItem(MainMenuItemType.MY_TASKS,
                 mContext.getString(R.string.main_menu_my_tasks),
-                null, MainMenuListAdapter.ItemViewType.ITEM, true));
+                null, MainMenuListAdapter.ItemViewType.ITEM, isSelectedMenuItem(null)));
 
         mDataSet.add(new MainMenuItem(-1, "", null, MainMenuListAdapter.ItemViewType.EMPTY, false));
 
         mDataSet.add(new MainMenuItem(MainMenuItemType.CASE,
                 mContext.getString(R.string.main_menu_cases),
                 null, MainMenuListAdapter.ItemViewType.CASE_TITLE, false));
+    }
+
+    private boolean isSelectedMenuItem(Case aCase) {
+        return mMainMenuListAdapter.getCurrentSelectedItem() == null ||
+               (aCase == null && mMainMenuListAdapter.getCurrentSelectedItem().mCase == null) ||
+               (aCase != null && mMainMenuListAdapter.getCurrentSelectedItem().mCase != null &&
+                       Utils.isSameId(aCase.id, mMainMenuListAdapter.getCurrentSelectedItem().mCase.id));
     }
 
     private void setupMainMenuList() {
@@ -203,7 +210,7 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener,
             Case aCase = new Case(caseId, caseName, ownerId, workerIdList, description, isCompleted, updatedTime);
 
             mDataSet.add(new MainMenuItem(MainMenuItemType.CASE, caseName, aCase,
-                                          MainMenuListAdapter.ItemViewType.CASE, false));
+                                          MainMenuListAdapter.ItemViewType.CASE, isSelectedMenuItem(aCase)));
         }
 
         mMainMenuListAdapter.notifyDataSetChanged();

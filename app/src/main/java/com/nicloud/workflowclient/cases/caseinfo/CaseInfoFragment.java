@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.cases.main.OnSetCaseId;
 import com.nicloud.workflowclient.data.data.Case;
@@ -68,6 +69,10 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
 
     private List<Worker> mWorkerListData = new ArrayList<>();
 
+    private String mCaseId;
+
+    private String mOriginalDescription;
+
 
     @Override
     public void onAttach(Context context) {
@@ -89,7 +94,8 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void initialize() {
-        mSelectionArgs = new String[] {getArguments().getString(CaseFragment.EXTRA_CASE_ID)};
+        mCaseId = getArguments().getString(CaseFragment.EXTRA_CASE_ID);
+        mSelectionArgs = new String[] {mCaseId};
 
         findViews();
         setupWorkerAvatarList();
@@ -106,6 +112,21 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
 
         mWorkerAvatarList.setLayoutManager(mWorkerAvatarListLayoutManager);
         mWorkerAvatarList.setAdapter(mWorkerAvatarAdapter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        updateCaseDescription();
+    }
+
+    private void updateCaseDescription() {
+        String currentDescription = TextUtils.isEmpty(mCaseDescription.getText().toString()) ?
+                                                      "" : mCaseDescription.getText().toString();
+        if (mOriginalDescription.equals(currentDescription)) return;
+
+        mContext.startService(
+                GeneralService.generateUpdateCaseDescriptionIntent(mContext, mCaseId, currentDescription));
     }
 
     @Override
@@ -128,13 +149,20 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
                               cursor.getInt(IS_COMPLETED) == 1,
                               cursor.getLong(UPDATED_TIME));
 
-        setViews(aCase);
+        setDescription(aCase);
         setWorkerAvatar(aCase);
     }
 
-    private void setViews(Case aCase) {
-        mCaseDescription.setText(TextUtils.isEmpty(aCase.description) ?
-                                 getString(R.string.case_info_no_description) : aCase.description);
+    private void setDescription(Case aCase) {
+        if (TextUtils.isEmpty(aCase.description)) {
+            mCaseDescription.setHint(getString(R.string.case_info_no_description));
+            mCaseDescription.setText("");
+            mOriginalDescription = "";
+
+        } else {
+            mCaseDescription.setText(aCase.description);
+            mOriginalDescription = aCase.description;
+        }
     }
 
     private void setWorkerAvatar(Case aCase) {
@@ -155,6 +183,9 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void setCaseId(String caseId) {
+        updateCaseDescription();
+        mCaseId = caseId;
+
         mWorkerListData.clear();
         mWorkerAvatarAdapter.notifyDataSetChanged();
 

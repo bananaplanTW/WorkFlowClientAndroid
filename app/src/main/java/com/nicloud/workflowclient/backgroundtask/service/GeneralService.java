@@ -45,6 +45,7 @@ public class GeneralService extends IntentService {
         public static final String CREATE_TASK = "general_server_action_create_task";
         public static final String UPDATE_TASK_DESCRIPTION = "general_server_action_update_task_description";
         public static final String UPDATE_TASK_DUEDATE = "general_server_action_update_task_duedate";
+        public static final String UPDATE_CASE_DESCRIPTION = "general_server_action_update_case_description";
     }
 
     public static class ExtraKey {
@@ -54,6 +55,7 @@ public class GeneralService extends IntentService {
         public static final String TASK_DUEDATE = "extra_task_duedate";
         public static final String CASE_NAME = "extra_case_name";
         public static final String CASE_ID = "extra_case_id";
+        public static final String CASE_DESCRIPTION = "extra_case_description";
         public static final String WORKER_ID = "extra_worker_id";
         public static final String BOOLEAN_LOAD_WORKERS = "extra_load_workers";
         public static final String ACTION_SUCCESSFUL = "extra_action_successful";
@@ -130,6 +132,15 @@ public class GeneralService extends IntentService {
         return intent;
     }
 
+    public static Intent generateUpdateCaseDescriptionIntent(Context context, String caseId, String caseDescription) {
+        Intent intent = new Intent(context, GeneralService.class);
+        intent.setAction(Action.UPDATE_CASE_DESCRIPTION);
+        intent.putExtra(ExtraKey.CASE_ID, caseId);
+        intent.putExtra(ExtraKey.CASE_DESCRIPTION, caseDescription);
+
+        return intent;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
@@ -154,6 +165,9 @@ public class GeneralService extends IntentService {
 
         } else if (Action.UPDATE_TASK_DUEDATE.equals(action)) {
             updateTaskDueDate(intent);
+
+        } else if (Action.UPDATE_CASE_DESCRIPTION.equals(action)) {
+            updateCaseDescription(intent);
         }
     }
 
@@ -497,7 +511,7 @@ public class GeneralService extends IntentService {
 
         try {
             String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
-                    LoadingDataUtils.WorkingDataUrl.EndPoints.UPDATE_TASK_DESCRIPTION, null);
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.TASK_UPDATE_DESCRIPTION, null);
             String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
 
             if (responseString != null) {
@@ -527,13 +541,44 @@ public class GeneralService extends IntentService {
 
         try {
             String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
-                    LoadingDataUtils.WorkingDataUrl.EndPoints.UPDATE_TASK_DUEDATE, null);
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.TASK_UPDATE_DUEDATE, null);
             String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
 
             if (responseString != null) {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
                     DbUtils.updateTaskDueDate(this,  taskId, taskDueDate);
+                    return;
+                }
+            }
+        }  catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    private void updateCaseDescription(Intent intent) {
+        String caseId = intent.getStringExtra(ExtraKey.CASE_ID);
+        String caseDescription = intent.getStringExtra(ExtraKey.CASE_DESCRIPTION);
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-user-id", WorkingData.getUserId());
+        headers.put("x-auth-token", WorkingData.getAuthToken());
+
+        HashMap<String, String> bodies = new HashMap<>();
+        bodies.put("cd", caseId);
+        bodies.put("cdesc", caseDescription);
+
+        try {
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.CASE_UPDATE_DESCRIPTION, null);
+            String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+
+                if (jsonObject.getString("status").equals("success")) {
+                    DbUtils.updateCaseDescription(this,  caseId, caseDescription);
                     return;
                 }
             }
