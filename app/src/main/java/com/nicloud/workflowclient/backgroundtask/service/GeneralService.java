@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.nicloud.workflowclient.R;
@@ -250,6 +251,11 @@ public class GeneralService extends IntentService {
                         LoadingDataUtils.WorkingDataUrl.EndPoints.LOAD_CASES, null);
                 String caseJsonListString =
                         RestfulUtils.restfulGetRequest(urlString, headers);
+                if (TextUtils.isEmpty(caseJsonListString)) {
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                    return;
+                }
+
                 JSONArray caseJsonList = new JSONObject(caseJsonListString).getJSONArray("result");
 
                 if (caseJsonList != null) {
@@ -299,6 +305,11 @@ public class GeneralService extends IntentService {
                         LoadingDataUtils.WorkingDataUrl.EndPoints.WORKER, queries);
                 String workerJsonString =
                         RestfulUtils.restfulGetRequest(urlString, headers);
+                if (TextUtils.isEmpty(workerJsonString)) {
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                    return;
+                }
+
                 JSONObject workerJson = new JSONObject(workerJsonString).getJSONObject("result");
 
                 if (workerJson != null) {

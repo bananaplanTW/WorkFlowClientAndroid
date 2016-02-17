@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.TaskCompletedReceiver;
@@ -169,6 +170,11 @@ public class TaskService extends IntentService {
 
                 String taskJsonString =
                         RestfulUtils.restfulGetRequest(getTasksByWorkerUrl(WorkingData.getUserId()), headers);
+                if (TextUtils.isEmpty(taskJsonString)) {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                    return;
+                }
 
                 JSONObject taskJson = new JSONObject(taskJsonString).getJSONObject("result");
                 JSONArray taskJsonList = JsonUtils.getJsonArrayFromJson(taskJson, "scheduledTasks");
@@ -219,6 +225,11 @@ public class TaskService extends IntentService {
 
                 String taskJsonString =
                         RestfulUtils.restfulGetRequest(getTaskByIdUrl(taskId), headers);
+                if (TextUtils.isEmpty(taskJsonString)) {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                    return;
+                }
 
                 JSONObject taskJson = new JSONObject(taskJsonString).getJSONObject("result");
 
@@ -264,7 +275,11 @@ public class TaskService extends IntentService {
 
                 String taskJsonString =
                         RestfulUtils.restfulGetRequest(getCaseTasksUrl(caseId), headers);
-
+                if (TextUtils.isEmpty(taskJsonString)) {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                    return;
+                }
 
                 JSONArray taskJsonList = JsonUtils.getJsonArrayFromJson(new JSONObject(taskJsonString), "result");
 
@@ -318,6 +333,11 @@ public class TaskService extends IntentService {
                 String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
                         LoadingDataUtils.WorkingDataUrl.EndPoints.TASK_ACTIVITIES, queries);
                 String responseJSONString = RestfulUtils.getJsonStringFromUrl(urlString);
+                if (TextUtils.isEmpty(responseJSONString)) {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                    return;
+                }
 
                 JSONObject responseJSON = new JSONObject(responseJSONString);
                 if (responseJSON.getString("status").equals("success")) {

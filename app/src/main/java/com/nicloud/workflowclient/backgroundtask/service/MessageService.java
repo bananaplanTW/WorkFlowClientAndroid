@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.utility.utils.LoadingDataUtils;
@@ -116,6 +117,10 @@ public class MessageService extends IntentService {
                 headers.put("x-auth-token", WorkingData.getAuthToken());
 
                 String messagesJsonString = RestfulUtils.restfulGetRequest(getMessagesUrlNormal(workerId), headers);
+                if (TextUtils.isEmpty(messagesJsonString)) {
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                    return;
+                }
 
                 JSONObject messagesJson = new JSONObject(messagesJsonString);
                 if (messagesJson.getString("status").equals("success")) {
@@ -155,6 +160,10 @@ public class MessageService extends IntentService {
 
                 String messagesJsonString
                         = RestfulUtils.restfulGetRequest(getMessagesUrlFrom(workerId, fromDateLong), headers);
+                if (TextUtils.isEmpty(messagesJsonString)) {
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                    return;
+                }
 
                 JSONObject messagesJson = new JSONObject(messagesJsonString);
                 if (messagesJson.getString("status").equals("success")) {
@@ -195,6 +204,10 @@ public class MessageService extends IntentService {
 
                 String messagesJsonString
                         = RestfulUtils.restfulGetRequest(getMessagesUrlBefore(workerId, beforeDateLong), headers);
+                if (TextUtils.isEmpty(messagesJsonString)) {
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                    return;
+                }
 
                 JSONObject messagesJson = new JSONObject(messagesJsonString);
                 if (messagesJson.getString("status").equals("success")) {

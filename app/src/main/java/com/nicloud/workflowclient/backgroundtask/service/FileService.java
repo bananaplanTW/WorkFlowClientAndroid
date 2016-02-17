@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.FileCompletedReceiver;
@@ -101,6 +102,11 @@ public class FileService extends IntentService {
 
                 String fileJsonString =
                         RestfulUtils.restfulGetRequest(getCaseFilesUrl(caseId), headers);
+                if (TextUtils.isEmpty(fileJsonString)) {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.no_internet_connection_information));
+                    return;
+                }
 
                 JSONObject fileJson = new JSONObject(fileJsonString);
                 JSONArray fileJsonList = JsonUtils.getJsonArrayFromJson(fileJson, "result");
