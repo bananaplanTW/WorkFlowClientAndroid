@@ -65,6 +65,8 @@ public class CaseFragment extends Fragment implements TabHost.OnTabChangeListene
 
 
     public void setCaseId(String caseId) {
+        if (caseId.equals(mCaseId)) return;
+
         mCaseId = caseId;
 
         ((OnSetCaseId) mCaseFragmentList.get(FragmentPosition.INFO)).setCaseId(mCaseId);
