@@ -26,6 +26,7 @@ import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -48,6 +49,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
 
     private String mOriginalDescription;
     private Date mOriginalDueDate;
+    private Date mCurrentDueDate;
 
 
     @Override
@@ -84,12 +86,13 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
 
     private void setupViews() {
         mCompleteTaskButton.setOnClickListener(this);
-        //mTaskDueDate.setOnClickListener(this);
+        mTaskDueDate.setOnClickListener(this);
     }
 
     private void setTaskInfo() {
         if (TextUtils.isEmpty(mTask.description)) {
             mTaskDescription.setHint(mContext.getString(R.string.task_info_task_no_description));
+            mOriginalDescription = "";
         } else {
             mTaskDescription.setText(mTask.description);
             mOriginalDescription = mTask.description;
@@ -100,6 +103,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
         } else {
             mTaskDueDate.setText(Utils.timestamp2Date(mTask.dueDate, Utils.DATE_FORMAT_YMD));
             mOriginalDueDate = mTask.dueDate;
+            mCurrentDueDate = mTask.dueDate;
         }
     }
 
@@ -111,14 +115,18 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
     }
 
     private void updateTaskDescription() {
-        String taskDescription = mTaskDescription.getText().toString();
+        String taskDescription =
+                TextUtils.isEmpty(mTaskDescription.getText().toString()) ? "" : mTaskDescription.getText().toString();
         if (mOriginalDescription.equals(taskDescription)) return;
 
         mContext.startService(GeneralService.generateUpdateTaskDescriptionIntent(mContext, mTaskId, taskDescription));
     }
 
     private void updateTaskDueDate() {
+        if (mCurrentDueDate == null || mCurrentDueDate.equals(mOriginalDueDate)) return;
 
+        mContext.startService(GeneralService.
+                generateUpdateTaskDueDateIntent(mContext, mTaskId, mCurrentDueDate.getTime()));
     }
 
     @Override
@@ -165,7 +173,8 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        mCurrentDueDate = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
         mTaskDueDate.setText(String.format(mContext.getString(R.string.date_format_yyyy_mm_dd),
-                String.valueOf(year), String.valueOf(monthOfYear), String.valueOf(dayOfMonth)));
+                String.valueOf(year), String.valueOf(monthOfYear+1), String.valueOf(dayOfMonth)));
     }
 }

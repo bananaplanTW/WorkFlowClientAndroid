@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.data.data.Case;
 import com.nicloud.workflowclient.data.data.File;
 import com.nicloud.workflowclient.data.data.TaskTextLog;
@@ -299,6 +300,16 @@ public class DbUtils {
 
         ContentValues values = new ContentValues();
         values.put(WorkFlowContract.Task.TASK_DESCRIPTION, taskDescription);
+
+        context.getContentResolver().update(WorkFlowContract.Task.CONTENT_URI, values, selection, selectionArgs);
+    }
+
+    public static void updateTaskDueDate(Context context, String taskId, long taskDueDate) {
+        String selection =  WorkFlowContract.Task.TASK_ID + " = ?";
+        String[] selectionArgs = new String[] {taskId};
+
+        ContentValues values = new ContentValues();
+        values.put(WorkFlowContract.Task.DUE_DATE, taskDueDate);
 
         context.getContentResolver().update(WorkFlowContract.Task.CONTENT_URI, values, selection, selectionArgs);
     }

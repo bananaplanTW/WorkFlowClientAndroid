@@ -43,6 +43,7 @@ public class LoadingDataUtils {
             public static final String CREATE_TASK = "/api/task";
             public static final String ADD_CHECK_ITEM_TO_TASK = "/api/v2/task-todo";
             public static final String UPDATE_TASK_DESCRIPTION = "/api/v2/update-task-description";
+            public static final String UPDATE_TASK_DUEDATE = "/api/v2/update-task-due-date";
 
             public static final String MESSAGES = "/api/chatting/employee";
 
