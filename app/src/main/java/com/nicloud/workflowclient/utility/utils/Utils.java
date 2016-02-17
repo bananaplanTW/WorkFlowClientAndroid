@@ -30,7 +30,7 @@ import com.nicloud.workflowclient.backgroundtask.asyntask.LoadWorkerAvatar;
 import com.nicloud.workflowclient.backgroundtask.asyntask.tasklog.DownloadFileFromURLCommand;
 import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.main.WorkingData;
-import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclient.dialog.fragment.DisplayDialogFragment;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 
 import java.io.File;

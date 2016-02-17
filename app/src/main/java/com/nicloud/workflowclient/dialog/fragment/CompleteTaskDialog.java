@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.dialog;
+package com.nicloud.workflowclient.dialog.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.dialog.DisplayDialogFragment.OnDialogActionListener;
 
 /**
  * Do not use this class directly, if you want to display the dialog, use DisplayDialogFragment.
@@ -21,12 +20,12 @@ public class CompleteTaskDialog extends Dialog implements View.OnClickListener {
     private TextView mOkButton;
     private TextView mCancelButton;
 
-    private OnDialogActionListener mOnDialogActionListener;
+    private DisplayDialogFragment.OnDialogActionListener mOnDialogActionListener;
 
     private String mCompletedTaskId;
 
 
-    public CompleteTaskDialog(Context context, String completedTaskId, OnDialogActionListener listener) {
+    public CompleteTaskDialog(Context context, String completedTaskId, DisplayDialogFragment.OnDialogActionListener listener) {
         super(context);
         mCompletedTaskId = completedTaskId;
         mOnDialogActionListener = listener;

@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.dialog.logout.LogoutDialogFragment;
+import com.nicloud.workflowclient.dialog.fragment.LogoutDialogFragment;
 import com.nicloud.workflowclient.login.LoginActivity;
 import com.nicloud.workflowclient.provider.contentprovider.WorkFlowDatabaseHelper;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;

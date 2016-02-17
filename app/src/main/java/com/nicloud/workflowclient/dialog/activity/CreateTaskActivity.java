@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.dialog;
+package com.nicloud.workflowclient.dialog.activity;
 
 import android.app.LoaderManager;
 import android.content.Context;
@@ -131,7 +131,7 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_task);
-        startService(GeneralService.generateLoadCasesAndWorkersIntent(this, false));
+        startService(GeneralService.generateLoadCasesAndWorkersIntent(this, true));
         getLoaderManager().initLoader(LOADER_ID, null, this);
         initialize();
     }

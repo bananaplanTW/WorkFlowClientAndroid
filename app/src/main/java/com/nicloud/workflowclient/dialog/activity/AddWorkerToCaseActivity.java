@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.dialog.chooseworker;
+package com.nicloud.workflowclient.dialog.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,46 +12,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.backgroundtask.service.TaskService;
+import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.data.data.Worker;
+import com.nicloud.workflowclient.workerlist.WorkerListAdapter;
 import com.nicloud.workflowclient.main.WorkingData;
-import com.nicloud.workflowclient.utility.DividerItemDecoration;
-import com.nicloud.workflowclient.utility.utils.Utils;
+import com.nicloud.workflowclient.workerlist.WorkerListItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChooseWorkerActivity extends AppCompatActivity {
+public class AddWorkerToCaseActivity extends AppCompatActivity {
 
-    public static final String EXTRA_TASK_ID = "ChooseWorkerActivity_extra_task_id";
-    public static final String EXTRA_OWNER_ID = "ChooseWorkerActivity_extra_owner_id";
+    public static final String EXTRA_CASE_ID = "AddWorkerToCaseActivity_extra_case_id";
 
     private RecyclerView mWorkerList;
     private LinearLayoutManager mWorkerListLayoutManager;
     private WorkerListAdapter mWorkerListAdapter;
 
-    private List<ChooseWorkerItem> mWorkerListData = new ArrayList<>();
+    private List<WorkerListItem> mWorkerListData = new ArrayList<>();
 
-    private String mTaskId;
-    private String mOwnerId;
-
-
-    public class ChooseWorkerItem {
-
-        public boolean isSelected = false;
-        public Worker worker;
+    private String mCaseId;
 
 
-        public ChooseWorkerItem(boolean isSelected, Worker worker) {
-            this.isSelected = isSelected;
-            this.worker = worker;
-        }
-    }
-
-    public static Intent generateChooseWorkerIntent(Context context, String taskId, String ownerId) {
-        Intent intent = new Intent(context, ChooseWorkerActivity.class);
-        intent.putExtra(EXTRA_TASK_ID, taskId);
-        intent.putExtra(EXTRA_OWNER_ID, ownerId);
+    public static Intent generateAddWorkerToCaseDialogIntent(Context context) {
+        Intent intent = new Intent(context, AddWorkerToCaseActivity.class);
 
         return intent;
     }
@@ -59,16 +43,13 @@ public class ChooseWorkerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_worker);
-
-        // Load worker
-
+        setContentView(R.layout.activity_add_worker_to_case);
+        startService(GeneralService.generateLoadCasesAndWorkersIntent(this, true));
         initialize();
     }
 
     private void initialize() {
-        mTaskId = getIntent().getStringExtra(EXTRA_TASK_ID);
-        mOwnerId = getIntent().getStringExtra(EXTRA_OWNER_ID);
+        mCaseId = getIntent().getStringExtra(EXTRA_CASE_ID);
 
         findViews();
         setupActionBar();
@@ -87,7 +68,7 @@ public class ChooseWorkerActivity extends AppCompatActivity {
         if (actionBar == null) return;
 
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(getString(R.string.choose_worker_title));
+        actionBar.setTitle(getString(R.string.add_worker_to_case_title));
     }
 
     private void setupWorkerList() {
@@ -95,21 +76,18 @@ public class ChooseWorkerActivity extends AppCompatActivity {
         mWorkerListAdapter = new WorkerListAdapter(this, mWorkerListData);
         mWorkerListLayoutManager = new LinearLayoutManager(this);
 
-        mWorkerList.addItemDecoration(new DividerItemDecoration(
-                getResources().getDrawable(R.drawable.list_divider), false, true, false, 0));
         mWorkerList.setLayoutManager(mWorkerListLayoutManager);
         mWorkerList.setAdapter(mWorkerListAdapter);
     }
 
     private void setWorkerListData() {
         for (Worker worker : WorkingData.getInstance(this).getWorkers()) {
-            mWorkerListData.add(new ChooseWorkerItem(Utils.isSameId(worker.id, mOwnerId), worker));
+            mWorkerListData.add(new WorkerListItem(false, worker));
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_choose_worker, menu);
         return true;
     }
 
@@ -122,15 +100,5 @@ public class ChooseWorkerActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy() {
-        ChooseWorkerItem selectedItem = mWorkerListAdapter.getSelectedChooseWorkerItem();
-        if (selectedItem != null && !Utils.isSameId(selectedItem.worker.id, mOwnerId)) {
-            startService(TaskService.generateAssignTaskToWorkerIntent(this, mTaskId, selectedItem.worker.id));
-        }
-
-        super.onDestroy();
     }
 }

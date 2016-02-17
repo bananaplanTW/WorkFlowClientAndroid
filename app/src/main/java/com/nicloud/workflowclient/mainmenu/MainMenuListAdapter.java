@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.main.WorkingData;
-import com.nicloud.workflowclient.dialog.CreateCaseActivity;
+import com.nicloud.workflowclient.dialog.activity.CreateCaseActivity;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment.OnClickMainMenuItemListener;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
 

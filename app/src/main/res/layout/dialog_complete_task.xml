@@ -33,6 +33,7 @@
 
         <TextView style="@style/DialogButtonStyle.Green"
             android:id="@+id/complete_task_dialog_ok_button"
+            android:layout_marginLeft="@dimen/dialog_button_margin_left_right"
             android:text="@string/complete" />
 
     </LinearLayout>

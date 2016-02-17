@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.Worker;
+import com.nicloud.workflowclient.dialog.activity.AddWorkerToCaseActivity;
 import com.nicloud.workflowclient.utility.utils.Utils;
 import com.pkmmte.view.CircularImageView;
 
@@ -30,6 +31,13 @@ public class WorkerAvatarAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public WorkerAvatarViewHolder(View itemView) {
             super(itemView);
             avatar = (CircularImageView) itemView.findViewById(R.id.worker_avatar);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(AddWorkerToCaseActivity.generateAddWorkerToCaseDialogIntent(mContext));
+                }
+            });
         }
     }
 

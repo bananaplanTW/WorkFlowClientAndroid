@@ -15,9 +15,6 @@
 
     <include layout="@layout/horizontal_divider" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/worker_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <include layout="@layout/worker_list" />
 
 </LinearLayout>

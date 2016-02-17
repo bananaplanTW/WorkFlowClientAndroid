@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.Worker;
-import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclient.dialog.fragment.DisplayDialogFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuFragment;
 import com.nicloud.workflowclient.mainmenu.MainMenuItem;
 import com.nicloud.workflowclient.messagemenu.MessageMenuFragment;

@@ -68,6 +68,7 @@
     <!-- Case info -->
     <string name="case_info_description">計畫描述</string>
     <string name="case_info_no_description">無計畫描述</string>
+    <string name="case_info_worker_avatar_list_title">參與人</string>
 
     <!-- Task info -->
     <string name="task_info_task_description">卡片描述</string>
@@ -141,5 +142,8 @@
 
     <!-- Choose worker -->
     <string name="choose_worker_title">請選擇負責人</string>
+
+    <!-- Add worker to case -->
+    <string name="add_worker_to_case_title">新增參與人</string>
 
 </resources>

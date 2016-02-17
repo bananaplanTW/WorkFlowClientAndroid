@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:titleTextAppearance="@style/AppTheme.Toolbar.Title" />
+
+    <include layout="@layout/horizontal_divider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/create_container_padding"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/worker_email_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="Please input email"/>
+
+        <TextView
+            android:id="@+id/add_worker_button"
+            style="@style/DialogButtonStyle.Green"
+            android:layout_gravity="right"
+            android:text="Add"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="@dimen/task_info_title_text_size"
+            android:textStyle="bold"
+            android:textColor="@color/task_info_text_color"
+            android:text="@string/case_info_worker_avatar_list_title"/>
+
+        <include layout="@layout/worker_list" />
+
+    </LinearLayout>
+
+</LinearLayout>

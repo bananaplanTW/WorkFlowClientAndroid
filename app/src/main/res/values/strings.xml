@@ -84,6 +84,7 @@
     <!-- Case info -->
     <string name="case_info_description">Case description</string>
     <string name="case_info_no_description">No description</string>
+    <string name="case_info_worker_avatar_list_title">Participate workers</string>
 
     <!-- Task info -->
     <string name="task_info_task_description">Task description</string>
@@ -157,5 +158,8 @@
 
     <!-- Choose worker -->
     <string name="choose_worker_title">Please choose a worker</string>
+
+    <!-- Add worker to case -->
+    <string name="add_worker_to_case_title">Add participated worker</string>
 
 </resources>

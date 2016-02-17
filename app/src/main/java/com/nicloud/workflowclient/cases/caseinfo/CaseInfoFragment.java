@@ -31,7 +31,8 @@ import java.util.List;
 /**
  * Created by logicmelody on 2016/2/14.
  */
-public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnSetCaseId {
+public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        OnSetCaseId {
 
     private static final String[] mProjection = new String[] {
             WorkFlowContract.Case._ID,

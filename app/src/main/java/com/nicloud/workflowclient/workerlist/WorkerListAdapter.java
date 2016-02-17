@@ -1,4 +1,4 @@
-package com.nicloud.workflowclient.dialog.chooseworker;
+package com.nicloud.workflowclient.workerlist;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
-import com.nicloud.workflowclient.dialog.chooseworker.ChooseWorkerActivity.ChooseWorkerItem;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.List;
@@ -21,8 +20,8 @@ public class WorkerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private Context mContext;
 
-    private List<ChooseWorkerItem> mDataSet;
-    private ChooseWorkerItem mSelectedChooseWorkerItem;
+    private List<WorkerListItem> mDataSet;
+    private WorkerListItem mSelectedWorkerListItem;
 
 
     private class WorkerViewHolder extends RecyclerView.ViewHolder {
@@ -41,16 +40,16 @@ public class WorkerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ChooseWorkerItem clickItem = mDataSet.get(getAdapterPosition());
+                    WorkerListItem clickItem = mDataSet.get(getAdapterPosition());
 
-                    if (mSelectedChooseWorkerItem != null) {
-                        if (Utils.isSameId(clickItem.worker.id, mSelectedChooseWorkerItem.worker.id)) return;
+                    if (mSelectedWorkerListItem != null) {
+                        if (Utils.isSameId(clickItem.worker.id, mSelectedWorkerListItem.worker.id)) return;
 
-                        mSelectedChooseWorkerItem.isSelected = false;
+                        mSelectedWorkerListItem.isSelected = false;
                     }
 
                     clickItem.isSelected = true;
-                    mSelectedChooseWorkerItem = clickItem;
+                    mSelectedWorkerListItem = clickItem;
 
                     notifyDataSetChanged();
                 }
@@ -58,13 +57,13 @@ public class WorkerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public WorkerListAdapter(Context context, List<ChooseWorkerItem> dataSet) {
+    public WorkerListAdapter(Context context, List<WorkerListItem> dataSet) {
         mContext = context;
         mDataSet = dataSet;
     }
 
-    public ChooseWorkerItem getSelectedChooseWorkerItem() {
-        return mSelectedChooseWorkerItem;
+    public WorkerListItem getSelectedChooseWorkerItem() {
+        return mSelectedWorkerListItem;
     }
 
     @Override
@@ -83,7 +82,7 @@ public class WorkerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         // Is selected
         if (mDataSet.get(position).isSelected) {
             workerVH.isChosenIndicator.setVisibility(View.VISIBLE);
-            mSelectedChooseWorkerItem = mDataSet.get(position);
+            mSelectedWorkerListItem = mDataSet.get(position);
 
         } else {
             workerVH.isChosenIndicator.setVisibility(View.GONE);

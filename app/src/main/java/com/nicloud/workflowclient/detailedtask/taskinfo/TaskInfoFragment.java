@@ -19,8 +19,8 @@ import com.nicloud.workflowclient.data.activity.BaseData;
 import com.nicloud.workflowclient.data.data.Task;
 import com.nicloud.workflowclient.detailedtask.main.DetailedTaskActivity;
 import com.nicloud.workflowclient.detailedtask.main.OnSwipeRefresh;
-import com.nicloud.workflowclient.dialog.DatePickerFragment;
-import com.nicloud.workflowclient.dialog.DisplayDialogFragment;
+import com.nicloud.workflowclient.dialog.fragment.DatePickerFragment;
+import com.nicloud.workflowclient.dialog.fragment.DisplayDialogFragment;
 import com.nicloud.workflowclient.utility.utils.DbUtils;
 import com.nicloud.workflowclient.utility.utils.Utils;
 

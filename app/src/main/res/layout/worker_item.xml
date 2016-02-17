@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/choose_worker_item_padding_left_right"
     android:background="?selectableItemBackground">
 
-    <ImageView
+    <com.pkmmte.view.CircularImageView
         android:id="@+id/worker_avatar"
         android:layout_width="@dimen/worker_avatar_width_height"
         android:layout_height="@dimen/worker_avatar_width_height"

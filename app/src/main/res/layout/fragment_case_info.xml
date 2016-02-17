@@ -5,11 +5,28 @@
     android:padding="@dimen/task_info_padding"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/worker_avatar_list"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/worker_avatar_width_height"
-        android:scrollbars="horizontal" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/worker_avatar_list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/task_info_title_text_size"
+            android:textStyle="bold"
+            android:textColor="@color/task_info_text_color"
+            android:text="@string/case_info_worker_avatar_list_title"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/worker_avatar_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/worker_avatar_width_height"
+            android:layout_below="@+id/worker_avatar_list_title"
+            android:layout_marginTop="@dimen/task_info_content_margin_top"
+            android:scrollbars="horizontal" />
+
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
