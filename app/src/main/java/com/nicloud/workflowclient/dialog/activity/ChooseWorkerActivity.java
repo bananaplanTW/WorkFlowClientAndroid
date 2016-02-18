@@ -74,7 +74,7 @@ public class ChooseWorkerActivity extends AppCompatActivity {
         if (actionBar == null) return;
 
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(getString(R.string.choose_worker_title));
+        actionBar.setTitle(getString(R.string.hint_choose_worker));
     }
 
     private void setupWorkerList() {

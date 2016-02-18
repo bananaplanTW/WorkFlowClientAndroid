@@ -34,6 +34,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/create_task_item_margin_top" />
 
+        <Spinner
+            android:id="@+id/worker_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/create_task_item_margin_top" />
+
         <TextView
             android:id="@+id/create_task_due_date"
             style="@style/DueDatePicker"

@@ -158,7 +158,7 @@
     <string name="hint_please_pick_due_date">Please pick a due date</string>
 
     <!-- Choose worker -->
-    <string name="choose_worker_title">Please choose a worker</string>
+    <string name="hint_choose_worker">Please choose a worker</string>
 
     <!-- Add worker to case -->
     <string name="add_worker_to_case_title">Add participated worker</string>

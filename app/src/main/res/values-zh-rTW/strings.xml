@@ -142,7 +142,7 @@
     <string name="hint_please_pick_due_date">請選擇到期日</string>
 
     <!-- Choose worker -->
-    <string name="choose_worker_title">請選擇負責人</string>
+    <string name="hint_choose_worker">請選擇負責人</string>
 
     <!-- Add worker to case -->
     <string name="add_worker_to_case_title">新增參與人</string>

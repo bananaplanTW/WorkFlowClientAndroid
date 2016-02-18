@@ -17,21 +17,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
+import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.dialog.fragment.DatePickerFragment;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -55,10 +56,13 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
     private Spinner mCaseSpinner;
     private CaseSpinnerAdapter mCaseSpinnerAdapter;
 
-    private String mSelectedCaseId;
+    private Spinner mWorkerSpinner;
+    private WorkerSpinnerAdapter mWorkerSpinnerAdapter;
+
     private long mPickedDueDate = -1L;
 
     private List<CaseSpinnerItem> mCaseSpinnerData = new ArrayList<>();
+    private List<Worker> mWorkerSpinnerDate = new ArrayList<>();
 
 
     private class CaseSpinnerItem {
@@ -131,6 +135,67 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
         }
     }
 
+    private class WorkerSpinnerAdapter extends ArrayAdapter<Worker> {
+
+        private Context mContext;
+        private List<Worker> mDataSet;
+
+
+        private class ViewHolder {
+
+            public ImageView avatar;
+            public TextView name;
+
+            public ViewHolder(View v) {
+                avatar = (ImageView) v.findViewById(R.id.worker_avatar);
+                name = (TextView) v.findViewById(R.id.worker_name);
+            }
+        }
+
+        public WorkerSpinnerAdapter(Context context, int resource, List<Worker> data) {
+            super(context, resource, data);
+            mContext = context;
+            mDataSet = data;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getViewAndDropDownView(position, convertView, parent);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getViewAndDropDownView(position, convertView, parent);
+        }
+
+        private View getViewAndDropDownView(int position, View convertView, ViewGroup parent) {
+            Worker worker = mDataSet.get(position);
+            View view = convertView;
+            ViewHolder holder;
+
+            if (view == null) {
+                view = LayoutInflater.from(mContext).inflate(R.layout.worker_item, parent, false);
+                view.setPadding(0 ,0 ,0 ,0);
+                holder = new ViewHolder(view);
+                view.setTag(holder);
+            } else {
+                holder = (ViewHolder) view.getTag();
+            }
+
+            if (TextUtils.isEmpty(worker.id)) {
+                holder.name.setText(getString(R.string.hint_choose_worker));
+                holder.avatar.setImageResource(R.drawable.ic_worker_black);
+
+            } else {
+                holder.name.setText(worker.name);
+                Utils.setWorkerAvatarImage(CreateTaskActivity.this, worker,
+                                           holder.avatar, R.drawable.ic_worker_black);
+            }
+
+            return view;
+        }
+    }
+
     public static Intent generateCreateTaskIntent(Context context) {
         Intent intent = new Intent(context, CreateTaskActivity.class);
 
@@ -151,11 +216,13 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
         setupViews();
         setupActionBar();
         setupCaseSpinner();
+        setupWorkerSpinner();
     }
 
     private void findViews() {
         mCreateTaskName = (EditText) findViewById(R.id.create_task_name);
         mCaseSpinner = (Spinner) findViewById(R.id.case_spinner);
+        mWorkerSpinner = (Spinner) findViewById(R.id.worker_spinner);
         mCreateTaskDueDate = (TextView) findViewById(R.id.create_task_due_date);
     }
 
@@ -176,19 +243,12 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
 
     private void setupCaseSpinner() {
         mCaseSpinnerAdapter = new CaseSpinnerAdapter(this, R.layout.case_spinner_item, mCaseSpinnerData);
-
         mCaseSpinner.setAdapter(mCaseSpinnerAdapter);
-        mCaseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    }
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+    private void setupWorkerSpinner() {
+        mWorkerSpinnerAdapter = new WorkerSpinnerAdapter(this, R.layout.worker_item, mWorkerSpinnerDate);
+        mWorkerSpinner.setAdapter(mWorkerSpinnerAdapter);
     }
 
     @Override
@@ -224,6 +284,7 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
     private void addTask() {
         String taskName = mCreateTaskName.getText().toString();
         String caseId = ((CaseSpinnerItem) mCaseSpinner.getSelectedItem()).id;
+        String workerId = ((Worker) mWorkerSpinner.getSelectedItem()).id;
 
         if (TextUtils.isEmpty(taskName.trim()) || TextUtils.isEmpty(caseId)) return;
 
@@ -240,13 +301,13 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
         if (cursor == null || cursor.getCount() == 0) return;
 
         setCaseData(cursor);
+        setWorkerData();
     }
 
     private void setCaseData(Cursor cursor) {
         mCaseSpinnerData.clear();
 
         mCaseSpinnerData.add(new CaseSpinnerItem(getString(R.string.hint_please_choose_case), ""));
-
         while (cursor.moveToNext()) {
             String caseName = cursor.getString(CASE_NAME);
             String caseId = cursor.getString(CASE_ID);
@@ -255,6 +316,17 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
         }
 
         mCaseSpinnerAdapter.notifyDataSetChanged();
+    }
+
+    private void setWorkerData() {
+        mWorkerSpinnerDate.clear();
+
+        mWorkerSpinnerDate.add(new Worker());
+        for (Worker worker : WorkingData.getInstance(this).getWorkers()) {
+            mWorkerSpinnerDate.add(worker);
+        }
+
+        mWorkerSpinnerAdapter.notifyDataSetChanged();
     }
 
     @Override
