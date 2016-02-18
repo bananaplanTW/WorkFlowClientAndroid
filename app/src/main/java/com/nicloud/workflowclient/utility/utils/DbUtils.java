@@ -10,6 +10,7 @@ import com.nicloud.workflowclient.data.data.File;
 import com.nicloud.workflowclient.data.data.TaskTextLog;
 import com.nicloud.workflowclient.detailedtask.checklist.CheckItem;
 import com.nicloud.workflowclient.data.data.Task;
+import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 
 import java.util.ArrayList;
@@ -104,17 +105,19 @@ public class DbUtils {
         return task;
     }
 
-    public static int getCaseCount(Context context) {
+    public static int getMyCaseCount(Context context) {
         String[] projection = new String[] {
                 WorkFlowContract.Case._ID,
         };
+        String selection = WorkFlowContract.Case.OWNER_ID + " = ?";
+        String[] selectionArgs = new String[] {WorkingData.getUserId()};
 
         Cursor cursor = null;
         int caseCount = 0;
 
         try {
             cursor = context.getContentResolver().query(WorkFlowContract.Case.CONTENT_URI,
-                    projection, null, null, null);
+                    projection, selection, selectionArgs, null);
 
             if (cursor != null && cursor.getCount() != 0) {
                 caseCount = cursor.getCount();

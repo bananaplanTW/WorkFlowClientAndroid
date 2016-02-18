@@ -76,7 +76,7 @@ public class MainMenuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     if (WorkingData.Membership.BASIC.equals(WorkingData.getMembership()) &&
-                        DbUtils.getCaseCount(mContext) >= 3) {
+                        DbUtils.getMyCaseCount(mContext) >= 3) {
                         Toast.makeText(mContext, mContext.getString(R.string.basic_membership_case_beyond_3),
                                        Toast.LENGTH_SHORT).show();
 
