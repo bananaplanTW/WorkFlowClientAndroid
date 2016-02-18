@@ -31,13 +31,6 @@ public class WorkerAvatarAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public WorkerAvatarViewHolder(View itemView) {
             super(itemView);
             avatar = (CircularImageView) itemView.findViewById(R.id.worker_avatar);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mContext.startActivity(AddWorkerToCaseActivity.generateAddWorkerToCaseDialogIntent(mContext));
-                }
-            });
         }
     }
 

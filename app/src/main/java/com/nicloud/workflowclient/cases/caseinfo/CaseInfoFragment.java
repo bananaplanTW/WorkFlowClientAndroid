@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
@@ -22,6 +23,7 @@ import com.nicloud.workflowclient.cases.main.CaseFragment;
 import com.nicloud.workflowclient.cases.main.OnSetCaseId;
 import com.nicloud.workflowclient.data.data.Case;
 import com.nicloud.workflowclient.data.data.Worker;
+import com.nicloud.workflowclient.dialog.activity.AddWorkerToCaseActivity;
 import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.utils.Utils;
@@ -33,7 +35,7 @@ import java.util.List;
  * Created by logicmelody on 2016/2/14.
  */
 public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        OnSetCaseId {
+        OnSetCaseId, View.OnClickListener {
 
     private static final String[] mProjection = new String[] {
             WorkFlowContract.Case._ID,
@@ -66,6 +68,7 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
     private WorkerAvatarAdapter mWorkerAvatarAdapter;
 
     private EditText mCaseDescription;
+    private ImageView mAddWorkerButton;
 
     private List<Worker> mWorkerListData = new ArrayList<>();
 
@@ -98,12 +101,18 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
         mSelectionArgs = new String[] {mCaseId};
 
         findViews();
+        setupViews();
         setupWorkerAvatarList();
     }
 
     private void findViews() {
         mWorkerAvatarList = (RecyclerView) getView().findViewById(R.id.worker_avatar_list);
         mCaseDescription = (EditText) getView().findViewById(R.id.case_description);
+        mAddWorkerButton = (ImageView) getView().findViewById(R.id.add_worker_button);
+    }
+
+    private void setupViews() {
+        mAddWorkerButton.setOnClickListener(this);
     }
 
     private void setupWorkerAvatarList() {
@@ -150,6 +159,7 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
                               cursor.getLong(UPDATED_TIME));
 
         setDescription(aCase);
+        setAddWorkerVisibility(aCase);
         setWorkerAvatar(aCase);
     }
 
@@ -163,6 +173,11 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
             mCaseDescription.setText(aCase.description);
             mOriginalDescription = aCase.description;
         }
+    }
+
+    private void setAddWorkerVisibility(Case aCase) {
+        mAddWorkerButton.setVisibility(Utils.isSameId(WorkingData.getUserId(), aCase.ownerId) ?
+                                       View.VISIBLE : View.GONE);
     }
 
     private void setWorkerAvatar(Case aCase) {
@@ -196,5 +211,15 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
         }
 
         getLoaderManager().restartLoader(LOADER_ID, null, this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.add_worker_button:
+                mContext.startActivity(AddWorkerToCaseActivity.generateAddWorkerToCaseDialogIntent(mContext));
+
+                break;
+        }
     }
 }

@@ -18,11 +18,23 @@
             android:textColor="@color/task_info_text_color"
             android:text="@string/case_info_worker_avatar_list_title"/>
 
+        <ImageView
+            android:id="@+id/add_worker_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/worker_avatar_list_title"
+            android:layout_alignTop="@+id/worker_avatar_list"
+            android:layout_alignBottom="@+id/worker_avatar_list"
+            android:src="@drawable/ic_add_worker"
+            android:background="?selectableItemBackgroundBorderless"
+            android:visibility="gone"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/worker_avatar_list"
             android:layout_width="match_parent"
             android:layout_height="@dimen/worker_avatar_width_height"
             android:layout_below="@+id/worker_avatar_list_title"
+            android:layout_toRightOf="@+id/add_worker_button"
             android:layout_marginTop="@dimen/task_info_content_margin_top"
             android:scrollbars="horizontal" />
 
