@@ -1,5 +1,6 @@
 package com.nicloud.workflowclient.dialog.activity;
 
+import android.app.DatePickerDialog;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -18,19 +19,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
+import com.nicloud.workflowclient.dialog.fragment.DatePickerFragment;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.utility.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
-public class CreateTaskActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class CreateTaskActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+        View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     private static final int LOADER_ID = 923;
 
@@ -44,9 +50,13 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
     private static final String mSortOrder = WorkFlowContract.Case.CASE_NAME;
 
     private EditText mCreateTaskName;
+    private TextView mCreateTaskDueDate;
 
     private Spinner mCaseSpinner;
     private CaseSpinnerAdapter mCaseSpinnerAdapter;
+
+    private String mSelectedCaseId;
+    private long mPickedDueDate = -1L;
 
     private List<CaseSpinnerItem> mCaseSpinnerData = new ArrayList<>();
 
@@ -138,6 +148,7 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
 
     private void initialize() {
         findViews();
+        setupViews();
         setupActionBar();
         setupCaseSpinner();
     }
@@ -145,6 +156,11 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
     private void findViews() {
         mCreateTaskName = (EditText) findViewById(R.id.create_task_name);
         mCaseSpinner = (Spinner) findViewById(R.id.case_spinner);
+        mCreateTaskDueDate = (TextView) findViewById(R.id.create_task_due_date);
+    }
+
+    private void setupViews() {
+        mCreateTaskDueDate.setOnClickListener(this);
     }
 
     private void setupActionBar() {
@@ -244,5 +260,27 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.create_task_due_date:
+                showDatePicker();
+
+                break;
+        }
+    }
+
+    private void showDatePicker() {
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.show(getSupportFragmentManager(), DatePickerFragment.TAG_FRAGMENT_DATE_PICKER);
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        mPickedDueDate = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime().getTime();
+        mCreateTaskDueDate.setText(String.format(getString(R.string.date_format_yyyy_mm_dd),
+                                   String.valueOf(year), String.valueOf(monthOfYear+1), String.valueOf(dayOfMonth)));
     }
 }

@@ -105,4 +105,15 @@
         <item name="android:background">@drawable/add_log_button_background</item>
     </style>
 
+    <style name="DueDatePicker">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/due_date_picker_padding</item>
+        <item name="android:textSize">@dimen/due_date_picker_text_size</item>
+        <item name="android:textColor">@color/due_date_picker_text_color</item>
+        <item name="android:background">@drawable/due_date_picker_background</item>
+        <item name="android:drawableLeft">@drawable/ic_due_date</item>
+        <item name="android:drawablePadding">@dimen/due_date_picker_drawable_padding</item>
+    </style>
+
 </resources>

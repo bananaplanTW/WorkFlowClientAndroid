@@ -51,15 +51,8 @@
 
         <TextView
             android:id="@+id/task_due_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/task_info_due_date_padding"
-            android:layout_below="@+id/task_due_date_title"
-            android:layout_marginTop="@dimen/task_info_content_margin_top"
-            android:textColor="@color/task_info_text_color"
-            android:drawableLeft="@drawable/ic_due_date"
-            android:drawablePadding="@dimen/task_info_due_date_drawable_padding"
-            android:background="@drawable/task_due_date_background" />
+            style="@style/DueDatePicker"
+            android:layout_marginTop="@dimen/task_info_content_margin_top" />
 
     </LinearLayout>
 

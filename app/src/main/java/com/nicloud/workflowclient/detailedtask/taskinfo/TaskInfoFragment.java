@@ -35,7 +35,6 @@ import java.util.List;
 public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.OnClickListener,
         DatePickerDialog.OnDateSetListener {
 
-    private static final String TAG_FRAGMENT_DATE_PICKER = "tag_fragment_date_picker";
     private static final int DIALOG_REQUEST_FROM_TASK_INFO = 13;
 
     private Context mContext;
@@ -168,7 +167,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
             datePickerFragment.setArguments(bundle);
         }
 
-        datePickerFragment.show(getChildFragmentManager(), TAG_FRAGMENT_DATE_PICKER);
+        datePickerFragment.show(getChildFragmentManager(), DatePickerFragment.TAG_FRAGMENT_DATE_PICKER);
     }
 
     @Override

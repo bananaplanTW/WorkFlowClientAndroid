@@ -13,11 +13,13 @@ import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment {
 
-    private OnDateSetListener mOnDateSetListener;
+    public static final String TAG_FRAGMENT_DATE_PICKER = "tag_fragment_date_picker";
 
     public static final String EXTRA_DATE_YEAR = "extra_date_year";
     public static final String EXTRA_DATE_MONTH = "extra_date_month";
     public static final String EXTRA_DATE_DAY = "extra_date_day";
+
+    private OnDateSetListener mOnDateSetListener;
 
 
     @Override

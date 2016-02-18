@@ -95,4 +95,7 @@
     <color name="discussion_item_time_text_color">#FF8D8D8E</color>
     <color name="discussion_item_content_text_color">#FF000000</color>
 
+    <!-- Due date picker -->
+    <color name="due_date_picker_text_color">#FF696969</color>
+
 </resources>

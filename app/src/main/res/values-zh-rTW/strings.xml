@@ -139,6 +139,7 @@
     <string name="hint_input_case_name">輸入案件名稱</string>
     <string name="hint_input_task_name">輸入工作名稱</string>
     <string name="hint_please_choose_case">請選擇案件</string>
+    <string name="hint_please_pick_due_date">請選擇到期日</string>
 
     <!-- Choose worker -->
     <string name="choose_worker_title">請選擇負責人</string>

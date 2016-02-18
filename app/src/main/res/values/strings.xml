@@ -155,6 +155,7 @@
     <string name="hint_input_case_name">Input case name</string>
     <string name="hint_input_task_name">Input task name</string>
     <string name="hint_please_choose_case">Please choose a case</string>
+    <string name="hint_please_pick_due_date">Please pick a due date</string>
 
     <!-- Choose worker -->
     <string name="choose_worker_title">Please choose a worker</string>

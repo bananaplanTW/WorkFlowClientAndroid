@@ -15,11 +15,12 @@
 
     <include layout="@layout/horizontal_divider" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/create_task_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/create_container_padding">
+        android:padding="@dimen/create_container_padding"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/create_task_name"
@@ -31,9 +32,14 @@
             android:id="@+id/case_spinner"
             android:layout_width="@dimen/case_spinner_width"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/case_spinner_margin_top"
-            android:layout_below="@+id/create_task_name"/>
+            android:layout_marginTop="@dimen/create_task_item_margin_top" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/create_task_due_date"
+            style="@style/DueDatePicker"
+            android:layout_marginTop="@dimen/create_task_item_margin_top"
+            android:text="@string/hint_please_pick_due_date" />
+
+    </LinearLayout>
 
 </LinearLayout>
