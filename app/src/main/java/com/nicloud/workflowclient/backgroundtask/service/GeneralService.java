@@ -111,11 +111,14 @@ public class GeneralService extends IntentService {
         return intent;
     }
 
-    public static Intent generateCreateTaskIntent(Context context, String taskName, String caseId) {
+    public static Intent generateCreateTaskIntent(Context context, String taskName,
+                                                  String caseId, String workerId, long dueDate) {
         Intent intent = new Intent(context, GeneralService.class);
         intent.setAction(Action.CREATE_TASK);
         intent.putExtra(ExtraKey.TASK_NAME, taskName);
         intent.putExtra(ExtraKey.CASE_ID, caseId);
+        intent.putExtra(ExtraKey.WORKER_ID, workerId);
+        intent.putExtra(ExtraKey.TASK_DUEDATE, dueDate);
 
         return intent;
     }
@@ -483,6 +486,8 @@ public class GeneralService extends IntentService {
     private void createTask(Intent intent) {
         String taskName = intent.getStringExtra(ExtraKey.TASK_NAME);
         String caseId = intent.getStringExtra(ExtraKey.CASE_ID);
+        String workerId = intent.getStringExtra(ExtraKey.WORKER_ID);
+        long dueDate = intent.getLongExtra(ExtraKey.TASK_DUEDATE, -1L);
 
         HashMap<String, String> headers = new HashMap<>();
         headers.put("x-user-id", WorkingData.getUserId());
@@ -491,6 +496,12 @@ public class GeneralService extends IntentService {
         HashMap<String, String> bodies = new HashMap<>();
         bodies.put("cd", caseId);
         bodies.put("tname", taskName);
+        if (!TextUtils.isEmpty(workerId)) {
+            bodies.put("ed", workerId);
+        }
+        if (dueDate != -1L) {
+            bodies.put("dueDate", String.valueOf(dueDate));
+        }
 
         try {
             String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,

@@ -155,7 +155,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
     private void showDatePicker() {
         DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.setTargetFragment(this, DIALOG_REQUEST_FROM_TASK_INFO);
-        if (mTask.dueDate != null) {
+        if (mTask.dueDate.getTime() > -1L) {
             Bundle bundle = new Bundle();
             Calendar c = Calendar.getInstance();
             c.setTime(mTask.dueDate);

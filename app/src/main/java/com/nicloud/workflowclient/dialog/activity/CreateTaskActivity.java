@@ -288,7 +288,7 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
 
         if (TextUtils.isEmpty(taskName.trim()) || TextUtils.isEmpty(caseId)) return;
 
-        startService(GeneralService.generateCreateTaskIntent(this, taskName, caseId));
+        startService(GeneralService.generateCreateTaskIntent(this, taskName, caseId, workerId, mPickedDueDate));
     }
 
     @Override
