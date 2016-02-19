@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.backgroundtask.receiver.GeneralCompletedReceiver;
 import com.nicloud.workflowclient.data.data.Case;
 import com.nicloud.workflowclient.provider.database.WorkFlowContract;
 import com.nicloud.workflowclient.data.data.Task;
@@ -46,6 +47,7 @@ public class GeneralService extends IntentService {
         public static final String UPDATE_TASK_DESCRIPTION = "general_server_action_update_task_description";
         public static final String UPDATE_TASK_DUEDATE = "general_server_action_update_task_duedate";
         public static final String UPDATE_CASE_DESCRIPTION = "general_server_action_update_case_description";
+        public static final String ADD_WORKER_TO_CASE = "general_server_action_add_worker_to_case";
     }
 
     public static class ExtraKey {
@@ -53,11 +55,15 @@ public class GeneralService extends IntentService {
         public static final String TASK_NAME = "extra_task_name";
         public static final String TASK_DESCRIPTION = "extra_task_description";
         public static final String TASK_DUEDATE = "extra_task_duedate";
+
         public static final String CASE_NAME = "extra_case_name";
         public static final String CASE_ID = "extra_case_id";
         public static final String CASE_DESCRIPTION = "extra_case_description";
+
         public static final String WORKER_ID = "extra_worker_id";
+        public static final String WORKER_EMAIL = "extra_worker_email";
         public static final String BOOLEAN_LOAD_WORKERS = "extra_load_workers";
+
         public static final String ACTION_SUCCESSFUL = "extra_action_successful";
 
         // Check item
@@ -141,6 +147,15 @@ public class GeneralService extends IntentService {
         return intent;
     }
 
+    public static Intent generateAddWorkerToCaseIntent(Context context, String caseId, String workerEmail) {
+        Intent intent = new Intent(context, GeneralService.class);
+        intent.setAction(Action.ADD_WORKER_TO_CASE);
+        intent.putExtra(ExtraKey.CASE_ID, caseId);
+        intent.putExtra(ExtraKey.WORKER_EMAIL, workerEmail);
+
+        return intent;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
@@ -168,6 +183,9 @@ public class GeneralService extends IntentService {
 
         } else if (Action.UPDATE_CASE_DESCRIPTION.equals(action)) {
             updateCaseDescription(intent);
+
+        } else if (Action.ADD_WORKER_TO_CASE.equals(action)) {
+            addWorkerToCase(intent);
         }
     }
 
@@ -194,14 +212,11 @@ public class GeneralService extends IntentService {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
                     DbUtils.setCheckItem(this, taskId, position, checked);
-                    return;
                 }
             }
         }  catch (JSONException e) {
             Log.e(TAG, "Exception in checkitem() in ActionService");
             e.printStackTrace();
-
-            return;
         }
     }
 
@@ -458,12 +473,10 @@ public class GeneralService extends IntentService {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
                     startService(generateLoadCasesAndWorkersIntent(this, false));
-                    return;
                 }
             }
         }  catch (JSONException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -488,12 +501,10 @@ public class GeneralService extends IntentService {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
                     DbUtils.insertTaskToDb(this, Task.retrieveTaskFromJson(jsonObject.getJSONObject("result")));
-                    return;
                 }
             }
         }  catch (JSONException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -518,12 +529,10 @@ public class GeneralService extends IntentService {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
                     DbUtils.updateTaskDescription(this,  taskId, taskDescription);
-                    return;
                 }
             }
         }  catch (JSONException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -548,12 +557,10 @@ public class GeneralService extends IntentService {
                 JSONObject jsonObject = new JSONObject(responseString);
                 if (jsonObject.getString("status").equals("success")) {
                     DbUtils.updateTaskDueDate(this,  taskId, taskDueDate);
-                    return;
                 }
             }
         }  catch (JSONException e) {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -579,12 +586,53 @@ public class GeneralService extends IntentService {
 
                 if (jsonObject.getString("status").equals("success")) {
                     DbUtils.updateCaseDescription(this,  caseId, caseDescription);
-                    return;
                 }
             }
         }  catch (JSONException e) {
             e.printStackTrace();
-            return;
         }
+    }
+
+    private void addWorkerToCase(Intent intent) {
+        Intent broadcastIntent = new Intent(GeneralCompletedReceiver.ACTION_GENERAL_COMPLETED);
+
+        String caseId = intent.getStringExtra(ExtraKey.CASE_ID);
+        String workerEmail = intent.getStringExtra(ExtraKey.WORKER_EMAIL);
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-user-id", WorkingData.getUserId());
+        headers.put("x-auth-token", WorkingData.getAuthToken());
+
+        HashMap<String, String> bodies = new HashMap<>();
+        bodies.put("cd", caseId);
+        bodies.put("email", workerEmail);
+
+        try {
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.ADD_WORKER_TO_CASE, null);
+            String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+
+                if (jsonObject.getString("status").equals("success")) {
+                    String workerId = jsonObject.getJSONObject("result").getString("employeeId");
+                    Case aCase = DbUtils.getCaseById(this, caseId);
+                    aCase.workerIdList.add(workerId);
+
+                    loadWorkerById(workerId);
+                    DbUtils.updateCaseWorkers(this, caseId, Utils.packStrings(aCase.workerIdList));
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.add_user_successfully));
+
+                } else {
+                    Utils.showToastInNonUiThread(mHandler, this, getString(R.string.can_not_find_user));
+                }
+            }
+        }  catch (JSONException e) {
+            e.printStackTrace();
+            LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+        }
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
     }
 }

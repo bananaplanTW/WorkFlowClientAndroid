@@ -162,5 +162,8 @@
 
     <!-- Add worker to case -->
     <string name="add_worker_to_case_title">Add participated worker</string>
+    <string name="can_not_find_user">There is no such user</string>
+    <string name="add_user_successfully">Add worker successfully</string>
+    <string name="add_worker_button_text">Add</string>
 
 </resources>

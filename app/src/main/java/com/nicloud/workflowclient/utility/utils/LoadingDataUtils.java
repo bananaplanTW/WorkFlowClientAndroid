@@ -33,10 +33,12 @@ public class LoadingDataUtils {
 
         public static final class EndPoints {
             public static final String LOGIN_WORKER = "/api/self";
-            public static final String WORKER = "/api/employee";
             public static final String LOGIN_STATUS = "/api/login-status";
             public static final String LOGIN = "/api/login";
             public static final String CHECKIN_OUT = "/api/checkin-out/employee";
+
+            public static final String WORKER = "/api/employee";
+            public static final String ADD_WORKER_TO_CASE = "/api/v2/add-employee-to-case";
 
             public static final String TASKS = "/api/tasks";
             public static final String CHECK_TASK = "/api/v2/check-task-todo";

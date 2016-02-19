@@ -28,16 +28,31 @@
             android:inputType="textEmailAddress"
             android:hint="Please input email"/>
 
-        <TextView
-            android:id="@+id/add_worker_button"
-            style="@style/DialogButtonStyle.Green"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="Add"/>
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:id="@+id/add_worker_progress_bar"
+                android:layout_width="@dimen/add_worker_progress_bar_width_height"
+                android:layout_height="@dimen/add_worker_progress_bar_width_height"
+                android:layout_centerInParent="true"
+                android:visibility="invisible"/>
+
+            <TextView
+                android:id="@+id/add_worker_button"
+                style="@style/DialogButtonStyle.Green"
+                android:layout_centerInParent="true"
+                android:text="@string/add_worker_button_text"/>
+
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/add_worker_case_worker_margin_top"
             android:textSize="@dimen/task_info_title_text_size"
             android:textStyle="bold"
             android:textColor="@color/task_info_text_color"

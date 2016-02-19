@@ -327,6 +327,16 @@ public class DbUtils {
         context.getContentResolver().update(WorkFlowContract.Case.CONTENT_URI, values, selection, selectionArgs);
     }
 
+    public static void updateCaseWorkers(Context context, String caseId, String workerListString) {
+        String selection =  WorkFlowContract.Case.CASE_ID + " = ?";
+        String[] selectionArgs = new String[] {caseId};
+
+        ContentValues values = new ContentValues();
+        values.put(WorkFlowContract.Case.WORKER_IDS, workerListString);
+
+        context.getContentResolver().update(WorkFlowContract.Case.CONTENT_URI, values, selection, selectionArgs);
+    }
+
 
     // Delete
     public static void deleteTaskFromDb(Context context, String taskId) {

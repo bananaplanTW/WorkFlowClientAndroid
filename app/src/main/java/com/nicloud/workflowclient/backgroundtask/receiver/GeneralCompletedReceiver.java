@@ -9,19 +9,21 @@ import android.content.Intent;
  */
 public class GeneralCompletedReceiver extends BroadcastReceiver {
 
-    public interface OnServerActionCompletedListener {
-        void onServerActionCompleted(Intent intent);
+    public static final String ACTION_GENERAL_COMPLETED = "action_general_completed";
+
+    public interface OnGeneralCompletedListener {
+        void onGeneralCompleted(Intent intent);
     }
 
-    private OnServerActionCompletedListener mOnServerActionCompletedListener;
+    private OnGeneralCompletedListener mOnGeneralCompletedListener;
 
 
-    public GeneralCompletedReceiver(OnServerActionCompletedListener listener) {
-        mOnServerActionCompletedListener = listener;
+    public GeneralCompletedReceiver(OnGeneralCompletedListener listener) {
+        mOnGeneralCompletedListener = listener;
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        mOnServerActionCompletedListener.onServerActionCompleted(intent);
+        mOnGeneralCompletedListener.onGeneralCompleted(intent);
     }
 }

@@ -217,7 +217,7 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_worker_button:
-                mContext.startActivity(AddWorkerToCaseActivity.generateAddWorkerToCaseDialogIntent(mContext));
+                mContext.startActivity(AddWorkerToCaseActivity.generateAddWorkerToCaseDialogIntent(mContext, mCaseId));
 
                 break;
         }

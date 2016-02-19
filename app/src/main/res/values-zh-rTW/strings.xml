@@ -146,5 +146,8 @@
 
     <!-- Add worker to case -->
     <string name="add_worker_to_case_title">新增參與人</string>
+    <string name="can_not_find_user">無此使用者</string>
+    <string name="add_user_successfully">新增參與人成功</string>
+    <string name="add_worker_button_text">新增</string>
 
 </resources>

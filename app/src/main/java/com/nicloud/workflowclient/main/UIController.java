@@ -49,7 +49,7 @@ import com.nicloud.workflowclient.utility.utils.Utils;
  * @since 2015.05.28
  *
  */
-public class UIController implements View.OnClickListener, GeneralCompletedReceiver.OnServerActionCompletedListener,
+public class UIController implements View.OnClickListener, GeneralCompletedReceiver.OnGeneralCompletedListener,
         LoadingWorkers.OnFinishLoadingWorkersListener {
 
     private static final String TAG = "UIController";
@@ -362,7 +362,7 @@ public class UIController implements View.OnClickListener, GeneralCompletedRecei
     }
 
     @Override
-    public void onServerActionCompleted(Intent intent) {
+    public void onGeneralCompleted(Intent intent) {
         String action = intent.getAction();
         String taskName = intent.getStringExtra(GeneralService.ExtraKey.TASK_NAME);
         boolean isActionSuccessful = intent.getBooleanExtra(GeneralService.ExtraKey.ACTION_SUCCESSFUL, false);

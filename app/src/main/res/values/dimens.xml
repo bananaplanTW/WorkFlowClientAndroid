@@ -177,4 +177,9 @@
     <dimen name="due_date_picker_text_size">15dp</dimen>
     <dimen name="due_date_picker_drawable_padding">3dp</dimen>
 
+    <!-- Add worker to case -->
+    <dimen name="add_worker_progress_bar_width_height">30dp</dimen>
+    <dimen name="add_worker_button_margin_left">10dp</dimen>
+    <dimen name="add_worker_case_worker_margin_top">20dp</dimen>
+
 </resources>
