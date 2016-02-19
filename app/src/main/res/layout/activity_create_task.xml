@@ -40,11 +40,28 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/create_task_item_margin_top" />
 
-        <TextView
-            android:id="@+id/create_task_due_date"
-            style="@style/DueDatePicker"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/create_task_item_margin_top"
-            android:text="@string/hint_please_pick_due_date" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/create_task_due_date"
+                style="@style/DueDatePicker"
+                android:text="@string/hint_please_pick_due_date" />
+
+            <ImageView
+                android:id="@+id/remove_due_date_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/remove_due_date_margin_left"
+                android:src="@drawable/ic_remove_due_date"
+                android:background="?selectableItemBackgroundBorderless"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

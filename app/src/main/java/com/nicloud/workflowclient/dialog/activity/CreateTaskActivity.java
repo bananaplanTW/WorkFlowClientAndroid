@@ -52,6 +52,7 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
 
     private EditText mCreateTaskName;
     private TextView mCreateTaskDueDate;
+    private ImageView mRemoveDueDateButton;
 
     private Spinner mCaseSpinner;
     private CaseSpinnerAdapter mCaseSpinnerAdapter;
@@ -224,10 +225,12 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
         mCaseSpinner = (Spinner) findViewById(R.id.case_spinner);
         mWorkerSpinner = (Spinner) findViewById(R.id.worker_spinner);
         mCreateTaskDueDate = (TextView) findViewById(R.id.create_task_due_date);
+        mRemoveDueDateButton = (ImageView) findViewById(R.id.remove_due_date_button);
     }
 
     private void setupViews() {
         mCreateTaskDueDate.setOnClickListener(this);
+        mRemoveDueDateButton.setOnClickListener(this);
     }
 
     private void setupActionBar() {
@@ -341,7 +344,18 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
                 showDatePicker();
 
                 break;
+
+            case R.id.remove_due_date_button:
+                mPickedDueDate = -1L;
+                mCreateTaskDueDate.setText(getString(R.string.hint_please_pick_due_date));
+                setRemoveDueDateButtonVisibility();
+
+                break;
         }
+    }
+
+    private void setRemoveDueDateButtonVisibility() {
+        mRemoveDueDateButton.setVisibility(mPickedDueDate == -1L ? View.GONE : View.VISIBLE);
     }
 
     private void showDatePicker() {
@@ -352,6 +366,7 @@ public class CreateTaskActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         mPickedDueDate = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime().getTime();
+        setRemoveDueDateButtonVisibility();
         mCreateTaskDueDate.setText(String.format(getString(R.string.date_format_yyyy_mm_dd),
                                    String.valueOf(year), String.valueOf(monthOfYear+1), String.valueOf(dayOfMonth)));
     }
