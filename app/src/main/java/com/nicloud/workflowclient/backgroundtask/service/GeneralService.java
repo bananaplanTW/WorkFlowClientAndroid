@@ -616,6 +616,8 @@ public class GeneralService extends IntentService {
                 JSONObject jsonObject = new JSONObject(responseString);
 
                 if (jsonObject.getString("status").equals("success")) {
+                    broadcastIntent.putExtra(ExtraKey.ACTION_SUCCESSFUL, true);
+
                     String workerId = jsonObject.getJSONObject("result").getString("employeeId");
                     Case aCase = DbUtils.getCaseById(this, caseId);
                     aCase.workerIdList.add(workerId);
@@ -625,11 +627,14 @@ public class GeneralService extends IntentService {
                     Utils.showToastInNonUiThread(mHandler, this, getString(R.string.add_user_successfully));
 
                 } else {
+                    broadcastIntent.putExtra(ExtraKey.ACTION_SUCCESSFUL, false);
                     Utils.showToastInNonUiThread(mHandler, this, getString(R.string.can_not_find_user));
                 }
             }
         }  catch (JSONException e) {
             e.printStackTrace();
+            Utils.showInternetConnectionWeakToast(this);
+            broadcastIntent.putExtra(ExtraKey.ACTION_SUCCESSFUL, false);
             LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
         }
 

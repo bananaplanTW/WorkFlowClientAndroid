@@ -183,7 +183,6 @@ public class CaseInfoFragment extends Fragment implements LoaderManager.LoaderCa
     private void setWorkerAvatar(Case aCase) {
         mWorkerListData.clear();
 
-        mWorkerListData.add(WorkingData.getInstance(mContext).getWorkerById(aCase.ownerId));
         for (String workerId : aCase.workerIdList) {
             mWorkerListData.add(WorkingData.getInstance(mContext).getWorkerById(workerId));
         }

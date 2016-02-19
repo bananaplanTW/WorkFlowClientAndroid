@@ -42,6 +42,7 @@ public class Case extends IdData {
         boolean isCompleted = caseJson.getBoolean("completed");
         long updatedAt = caseJson.getLong("updatedAt");
 
+        workerIdList.add(ownerId);
         if (workerIdListJson != null) {
             for (int i = 0 ; i < workerIdListJson.length() ; i++) {
                 workerIdList.add(workerIdListJson.getString(i));

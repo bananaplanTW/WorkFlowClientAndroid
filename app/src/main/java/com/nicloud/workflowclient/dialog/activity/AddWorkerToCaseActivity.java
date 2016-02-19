@@ -3,7 +3,11 @@ package com.nicloud.workflowclient.dialog.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,8 +25,9 @@ import android.widget.TextView;
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.backgroundtask.receiver.GeneralCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
-import com.nicloud.workflowclient.data.data.Worker;
 import com.nicloud.workflowclient.main.MainApplication;
+import com.nicloud.workflowclient.provider.database.WorkFlowContract;
+import com.nicloud.workflowclient.utility.utils.Utils;
 import com.nicloud.workflowclient.workerlist.WorkerListAdapter;
 import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.workerlist.WorkerListItem;
@@ -31,9 +36,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddWorkerToCaseActivity extends AppCompatActivity implements View.OnClickListener,
-        GeneralCompletedReceiver.OnGeneralCompletedListener {
+        GeneralCompletedReceiver.OnGeneralCompletedListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String EXTRA_CASE_ID = "AddWorkerToCaseActivity_extra_case_id";
+
+    private static final int LOADER_ID = 66;
+
+    private static final String[] mProjection = {
+            WorkFlowContract.Case.WORKER_IDS
+    };
+    private static final int WORKER_IDS = 0;
+
+    private static final String mSelection = WorkFlowContract.Case.CASE_ID + " = ?";
+    private static String[] mSelectionArgs;
+
 
     private RecyclerView mWorkerList;
     private WorkerListAdapter mWorkerListAdapter;
@@ -62,11 +78,13 @@ public class AddWorkerToCaseActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_add_worker_to_case);
         startService(GeneralService.generateLoadCasesAndWorkersIntent(this, true));
         initialize();
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     private void initialize() {
         mCaseId = getIntent().getStringExtra(EXTRA_CASE_ID);
         mGeneralCompletedReceiver = new GeneralCompletedReceiver(this);
+        mSelectionArgs = new String[] {mCaseId};
 
         findViews();
         setupViews();
@@ -97,17 +115,10 @@ public class AddWorkerToCaseActivity extends AppCompatActivity implements View.O
     }
 
     private void setupWorkerList() {
-        setWorkerListData();
         mWorkerListAdapter = new WorkerListAdapter(this, mWorkerListData);
 
         mWorkerList.setLayoutManager(new LinearLayoutManager(this));
         mWorkerList.setAdapter(mWorkerListAdapter);
-    }
-
-    private void setWorkerListData() {
-        for (Worker worker : WorkingData.getInstance(this).getWorkers()) {
-            mWorkerListData.add(new WorkerListItem(false, worker));
-        }
     }
 
     @Override
@@ -175,5 +186,37 @@ public class AddWorkerToCaseActivity extends AppCompatActivity implements View.O
     @Override
     public void onGeneralCompleted(Intent intent) {
         setAddingWorker(false);
+
+        if (intent.getBooleanExtra(GeneralService.ExtraKey.ACTION_SUCCESSFUL, false)) {
+            mWorkerEmailBox.setText("");
+        }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this, WorkFlowContract.Case.CONTENT_URI,
+                                mProjection, mSelection, mSelectionArgs, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || cursor.getCount() == 0) return;
+
+        mWorkerListData.clear();
+        cursor.moveToFirst();
+
+        List<String> mWorkerList = Utils.unpackStrings(cursor.getString(WORKER_IDS));
+        for (String workerId : mWorkerList) {
+            if (!WorkingData.getInstance(this).hasWorker(workerId)) continue;
+
+            mWorkerListData.add(new WorkerListItem(false, WorkingData.getInstance(this).getWorkerById(workerId)));
+        }
+
+        mWorkerListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
