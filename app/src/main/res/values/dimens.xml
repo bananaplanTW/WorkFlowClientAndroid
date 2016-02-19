@@ -90,6 +90,7 @@
     <dimen name="task_info_complete_task_button_corner_radius">5dp</dimen>
     <dimen name="task_info_complete_task_button_padding_left_right">20dp</dimen>
     <dimen name="task_info_complete_task_button_padding_top_bottom">8dp</dimen>
+    <dimen name="remove_due_date_margin_left">5dp</dimen>
 
     <!-- Check list -->
     <dimen name="check_list_item_padding">10dp</dimen>

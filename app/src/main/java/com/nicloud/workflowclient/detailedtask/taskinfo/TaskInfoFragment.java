@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nicloud.workflowclient.R;
@@ -42,13 +43,14 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
     private EditText mTaskDescription;
     private TextView mTaskDueDate;
     private TextView mCompleteTaskButton;
+    private ImageView mRemoveDueDateButton;
 
     private String mTaskId;
     private Task mTask;
 
     private String mOriginalDescription;
-    private Date mOriginalDueDate;
-    private Date mCurrentDueDate;
+    private Date mOriginalDueDate = new Date();
+    private Date mCurrentDueDate = new Date();
 
 
     @Override
@@ -73,19 +75,16 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
 
     private void initialize() {
         findViews();
-        setupViews();
         setTaskInfo();
+        setupViews();
+        setRemoveDueDateButtonVisibility();
     }
 
     private void findViews() {
         mTaskDescription = (EditText) getView().findViewById(R.id.task_description);
         mTaskDueDate = (TextView) getView().findViewById(R.id.task_due_date);
         mCompleteTaskButton = (TextView) getView().findViewById(R.id.complete_task_button);
-    }
-
-    private void setupViews() {
-        mCompleteTaskButton.setOnClickListener(this);
-        mTaskDueDate.setOnClickListener(this);
+        mRemoveDueDateButton = (ImageView) getView().findViewById(R.id.remove_due_date_button);
     }
 
     private void setTaskInfo() {
@@ -99,11 +98,23 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
 
         if (mTask.dueDate.getTime() == -1L) {
             mTaskDueDate.setText(mContext.getString(R.string.task_info_task_no_due_date));
+            mOriginalDueDate.setTime(-1L);
+            mCurrentDueDate.setTime(-1L);
         } else {
             mTaskDueDate.setText(Utils.timestamp2Date(mTask.dueDate, Utils.DATE_FORMAT_YMD));
-            mOriginalDueDate = mTask.dueDate;
-            mCurrentDueDate = mTask.dueDate;
+            mOriginalDueDate.setTime(mTask.dueDate.getTime());
+            mCurrentDueDate.setTime(mTask.dueDate.getTime());
         }
+    }
+
+    private void setupViews() {
+        mCompleteTaskButton.setOnClickListener(this);
+        mTaskDueDate.setOnClickListener(this);
+        mRemoveDueDateButton.setOnClickListener(this);
+    }
+
+    private void setRemoveDueDateButtonVisibility() {
+        mRemoveDueDateButton.setVisibility(mCurrentDueDate.getTime() == -1L ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -122,7 +133,7 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
     }
 
     private void updateTaskDueDate() {
-        if (mCurrentDueDate == null || mCurrentDueDate.equals(mOriginalDueDate)) return;
+        if (mCurrentDueDate.equals(mOriginalDueDate)) return;
 
         mContext.startService(GeneralService.
                 generateUpdateTaskDueDateIntent(mContext, mTaskId, mCurrentDueDate.getTime()));
@@ -149,6 +160,13 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
             case R.id.complete_task_button:
                 Utils.showDialog(getFragmentManager(), DisplayDialogFragment.DialogType.COMPLETE_TASK, mTask.id);
                 break;
+
+            case R.id.remove_due_date_button:
+                mCurrentDueDate.setTime(-1L);
+                setRemoveDueDateButtonVisibility();
+                mTaskDueDate.setText(mContext.getString(R.string.task_info_task_no_due_date));
+
+                break;
         }
     }
 
@@ -172,7 +190,8 @@ public class TaskInfoFragment extends Fragment implements OnSwipeRefresh, View.O
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        mCurrentDueDate = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
+        mCurrentDueDate.setTime(new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime().getTime());
+        setRemoveDueDateButtonVisibility();
         mTaskDueDate.setText(String.format(mContext.getString(R.string.date_format_yyyy_mm_dd),
                 String.valueOf(year), String.valueOf(monthOfYear+1), String.valueOf(dayOfMonth)));
     }

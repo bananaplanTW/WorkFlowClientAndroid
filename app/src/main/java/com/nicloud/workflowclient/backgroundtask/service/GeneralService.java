@@ -549,7 +549,7 @@ public class GeneralService extends IntentService {
 
     private void updateTaskDueDate(Intent intent) {
         String taskId = intent.getStringExtra(ExtraKey.TASK_ID);
-        long taskDueDate = intent.getLongExtra(ExtraKey.TASK_DUEDATE, 0L);
+        long taskDueDate = intent.getLongExtra(ExtraKey.TASK_DUEDATE, -1L);
 
         HashMap<String, String> headers = new HashMap<>();
         headers.put("x-user-id", WorkingData.getUserId());
