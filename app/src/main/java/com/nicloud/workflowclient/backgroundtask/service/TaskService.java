@@ -369,11 +369,30 @@ public class TaskService extends IntentService {
         String taskId = intent.getStringExtra(ExtraKey.STRING_TASK_ID);
         String workerId = intent.getStringExtra(ExtraKey.STRING_WORKER_ID);
 
-        // TODO: Use API to update data with server
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-user-id", WorkingData.getUserId());
+        headers.put("x-auth-token", WorkingData.getAuthToken());
 
-        DbUtils.updateTaskOwner(this, taskId, workerId);
+        HashMap<String, String> bodies = new HashMap<>();
+        bodies.put("ed", workerId);
+        bodies.put("td", taskId);
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+        try {
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.ASSIGN_TASK_TO_WORKER, null);
+            String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+
+                if (jsonObject.getString("status").equals("success")) {
+                    DbUtils.updateTaskOwner(this, taskId, workerId);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+                }
+            }
+        }  catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void retrieveTextLogAndFile(String taskId, JSONArray jsonArray, ArrayList<TaskTextLog> taskTextLogList,
