@@ -62,6 +62,10 @@
     <string name="login_password">Password</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
+    <string name="all_register">Register</string>
+    <string name="all_send">Send</string>
+    <string name="all_password_again">Please type password again</string>
+    <string name="all_name">Name</string>
 
     <!-- Detailed task -->
     <string name="detailed_task_tab_task_info">Task information</string>

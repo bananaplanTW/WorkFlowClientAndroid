@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
@@ -38,7 +41,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText mCompanyAccountEditText;
     private EditText mAccountEditText;
     private EditText mPasswordEditText;
-    private Button mLoginButton;
+    private EditText mPasswordAgainEditText;
+    private EditText mUserNameEditText;
+
+    private Button mLeftButton;
+    private Button mRightButton;
 
     private View mNICContainer;
     private Button mNICRetryButton;
@@ -46,6 +53,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private String mCompanyAccount;
     private String mUserId;
     private String mAuthToken;
+
+    private boolean mIsRegister = false;
 
 
     @Override
@@ -75,23 +84,39 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mCompanyAccountEditText = (EditText) findViewById(R.id.login_company_account);
         mAccountEditText = (EditText) findViewById(R.id.login_account_edit_text);
         mPasswordEditText = (EditText) findViewById(R.id.login_password_edit_text);
-        mLoginButton = (Button) findViewById(R.id.login_button);
+        mPasswordAgainEditText = (EditText) findViewById(R.id.edit_text_login_password_again);
+        mUserNameEditText = (EditText) findViewById(R.id.edit_text_login_user_name);
+        mLeftButton = (Button) findViewById(R.id.left_button);
+        mRightButton = (Button) findViewById(R.id.right_button);
         mNICContainer = findViewById(R.id.no_internet_connection_container);
         mNICRetryButton = (Button) findViewById(R.id.no_internet_connection_retry_button);
     }
 
     private void setupViews () {
         mCompanyAccountEditText.setText(mCompanyAccount);
-        mLoginButton.setOnClickListener(this);
+        mLeftButton.setOnClickListener(this);
+        mRightButton.setOnClickListener(this);
         mNICRetryButton.setOnClickListener(this);
     }
 
     private void hideAllViews () {
         mLoginViewContainer.setVisibility(View.GONE);
+
+        RelativeLayout.LayoutParams layoutParams =
+                (RelativeLayout.LayoutParams) mLoginLogoContainer.getLayoutParams();
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
+        mLoginLogoContainer.setLayoutParams(layoutParams);
     }
 
     private void showAllViews () {
         mLoginViewContainer.setVisibility(View.VISIBLE);
+
+        RelativeLayout.LayoutParams layoutParams =
+                (RelativeLayout.LayoutParams) mLoginLogoContainer.getLayoutParams();
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+
+        mLoginLogoContainer.setLayoutParams(layoutParams);
     }
 
     @Override
@@ -129,16 +154,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.login_button:
-                //LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccountEditText.getText().toString();
-                String companyAccount = mCompanyAccountEditText.getText().toString();
-                String username = mAccountEditText.getText().toString();
-                String password = mPasswordEditText.getText().toString();
+            case R.id.left_button:
+                onClickLeftButton();
+                break;
 
-                UserLoggingInCommand userLoggingInCommand
-                        = new UserLoggingInCommand(this, companyAccount, username, password, this);
-                userLoggingInCommand.execute();
-
+            case R.id.right_button:
+                onClickRightButton();
                 break;
 
             case R.id.no_internet_connection_retry_button:
@@ -146,6 +167,60 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 checkLoggedInStatus();
 
                 break;
+        }
+    }
+
+    private void onClickLeftButton() {
+        // Cancel
+        if (mIsRegister) {
+            setLoginContainerPart2Visibility(false);
+
+            mLeftButton.setText(getString(R.string.login));
+            mRightButton.setText(getString(R.string.all_register));
+
+            mIsRegister = false;
+
+        // Login
+        } else {
+            //LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccountEditText.getText().toString();
+            String companyAccount = mCompanyAccountEditText.getText().toString();
+            String username = mAccountEditText.getText().toString();
+            String password = mPasswordEditText.getText().toString();
+
+            UserLoggingInCommand userLoggingInCommand
+                    = new UserLoggingInCommand(this, companyAccount, username, password, this);
+            userLoggingInCommand.execute();
+        }
+    }
+
+    private void onClickRightButton() {
+        // Send
+        if (mIsRegister) {
+
+
+        // Register
+        } else {
+            setLoginContainerPart2Visibility(true);
+
+            mLeftButton.setText(getString(R.string.cancel));
+            mRightButton.setText(getString(R.string.all_send));
+
+            mIsRegister = true;
+        }
+    }
+
+    private void setLoginContainerPart2Visibility(boolean isVisible) {
+        if (isVisible) {
+            mPasswordAgainEditText.startAnimation(MainApplication.sFadeInAnimation);
+            mUserNameEditText.startAnimation(MainApplication.sFadeInAnimation);
+            mPasswordAgainEditText.setVisibility(View.VISIBLE);
+            mUserNameEditText.setVisibility(View.VISIBLE);
+
+        } else {
+            mPasswordAgainEditText.startAnimation(MainApplication.sFadeOutAnimation);
+            mUserNameEditText.startAnimation(MainApplication.sFadeOutAnimation);
+            mPasswordAgainEditText.setVisibility(View.GONE);
+            mUserNameEditText.setVisibility(View.GONE);
         }
     }
 

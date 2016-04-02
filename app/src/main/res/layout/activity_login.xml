@@ -17,7 +17,6 @@
         android:id="@+id/login_logo_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/login_container"
         android:layout_centerInParent="true"
         android:layout_marginBottom="@dimen/login_nicetodo_image_margin_bottom"
         android:gravity="center_horizontal"
@@ -48,7 +47,7 @@
         android:id="@+id/login_container"
         android:layout_width="@dimen/login_container_width"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/login_logo_container"
         android:layout_centerHorizontal="true"
         android:background="@drawable/login_container_background"
         android:padding="@dimen/login_container_padding"
@@ -56,15 +55,15 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/login_company_account"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/login_edit_text_height"
                 android:inputType="textEmailAddress"
-                android:hint="@string/login_company_account"/>
+                android:hint="@string/login_company_account"
+                android:visibility="gone"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -94,11 +93,53 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edit_text_login_password_again"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_edit_text_height"
+                android:inputType="textPassword"
+                android:hint="@string/all_password_again"
+                android:visibility="gone"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edit_text_login_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_edit_text_height"
+                android:inputType="text"
+                android:hint="@string/all_name"
+                android:visibility="gone"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/left_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/login"/>
+
+            <Button
+                android:id="@+id/right_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="@string/all_register"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

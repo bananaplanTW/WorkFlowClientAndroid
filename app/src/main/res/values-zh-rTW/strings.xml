@@ -46,6 +46,10 @@
     <string name="login_password">密碼</string>
     <string name="login">登入</string>
     <string name="logout">登出</string>
+    <string name="all_register">註冊</string>
+    <string name="all_send">送出</string>
+    <string name="all_password_again">請再次輸入密碼</string>
+    <string name="all_name">姓名</string>
 
     <!-- Detailed task -->
     <string name="detailed_task_tab_task_info">工作描述</string>
