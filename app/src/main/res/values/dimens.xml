@@ -124,7 +124,7 @@
     <dimen name="dialog_check_in_out_height">280dp</dimen>
     <dimen name="dialog_padding">20dp</dimen>
     <dimen name="dialog_description_padding_top_bottom">20dp</dimen>
-    <dimen name="dialog_complete_task_description_text_size">23dp</dimen>
+    <dimen name="dialog_complete_task_description_text_size">18dp</dimen>
     <dimen name="dialog_choose_task_description_text_size">15dp</dimen>
     <dimen name="dialog_button_width">96dp</dimen>
     <dimen name="dialog_button_height">38dp</dimen>
