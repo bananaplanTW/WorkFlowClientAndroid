@@ -1,8 +1,10 @@
 package com.nicloud.workflowclient.login;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
+import com.nicloud.workflowclient.backgroundtask.receiver.GeneralCompletedReceiver;
 import com.nicloud.workflowclient.backgroundtask.service.GeneralService;
 import com.nicloud.workflowclient.main.WorkingData;
 import com.nicloud.workflowclient.backgroundtask.asyntask.worker.CheckLoggedInStatusCommand;
@@ -24,7 +27,8 @@ import com.parse.ParsePush;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
         CheckLoggedInStatusCommand.OnFinishCheckingLoggedInStatusListener,
-        UserLoggingInCommand.OnFinishLoggedInListener, LoadingLoginWorkerCommand.OnLoadingLoginWorker {
+        UserLoggingInCommand.OnFinishLoggedInListener, LoadingLoginWorkerCommand.OnLoadingLoginWorker,
+        GeneralCompletedReceiver.OnGeneralCompletedListener{
 
     private static final String TAG = "LoginActivity";
 
@@ -47,6 +51,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private View mNICContainer;
     private Button mNICRetryButton;
 
+    private GeneralCompletedReceiver mGeneralCompletedReceiver;
+
     private String mCompanyAccount;
     private String mUserId;
     private String mAuthToken;
@@ -62,6 +68,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initialize() {
+        mGeneralCompletedReceiver = new GeneralCompletedReceiver(this);
         getSharedPreferences();
         findViews();
         setupViews();
@@ -113,8 +120,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccount;
         WorkingData.setUserId(mUserId);
         WorkingData.setAuthToken(mAuthToken);
-
         checkLoggedInStatus();
+
+        IntentFilter intentFilter = new IntentFilter(GeneralCompletedReceiver.ACTION_GENERAL_COMPLETED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mGeneralCompletedReceiver, intentFilter);
     }
 
     private void checkLoggedInStatus() {
@@ -130,6 +139,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         CheckLoggedInStatusCommand checkLoggedInStatusCommand = new CheckLoggedInStatusCommand(this, this);
         checkLoggedInStatusCommand.execute();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGeneralCompletedReceiver);
     }
 
     @Override
@@ -170,14 +185,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // Login
         } else {
             //LoadingDataUtils.sBaseUrl = "http://" + mCompanyAccountEditText.getText().toString();
-            String companyAccount = mCompanyAccountEditText.getText().toString();
-            String username = mAccountEditText.getText().toString();
-            String password = mPasswordEditText.getText().toString();
 
-            UserLoggingInCommand userLoggingInCommand
-                    = new UserLoggingInCommand(this, companyAccount, username, password, this);
-            userLoggingInCommand.execute();
+            login();
         }
+    }
+
+    private void login() {
+        String companyAccount = mCompanyAccountEditText.getText().toString();
+        String account = mAccountEditText.getText().toString();
+        String password = mPasswordEditText.getText().toString();
+
+        UserLoggingInCommand userLoggingInCommand
+                = new UserLoggingInCommand(this, companyAccount, account, password, this);
+        userLoggingInCommand.execute();
     }
 
     private void onClickRightButton() {
@@ -327,5 +347,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onLoadingLoginWorkerFailed(boolean isFailCausedByInternet) {
         showNiCloudImage(false);
+    }
+
+    @Override
+    public void onGeneralCompleted(Intent intent) {
+        login();
     }
 }

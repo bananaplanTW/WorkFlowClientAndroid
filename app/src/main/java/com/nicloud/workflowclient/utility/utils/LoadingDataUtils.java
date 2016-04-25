@@ -36,6 +36,7 @@ public class LoadingDataUtils {
             public static final String LOGIN_STATUS = "/api/login-status";
             public static final String LOGIN = "/api/login";
             public static final String CHECKIN_OUT = "/api/checkin-out/employee";
+            public static final String REGISTER_USER = "/api/signup";
 
             public static final String WORKER = "/api/employee";
             public static final String ADD_WORKER_TO_CASE = "/api/v2/add-employee-to-case";

@@ -671,9 +671,40 @@ public class GeneralService extends IntentService {
     }
 
     private void registerUser(Intent intent) {
+        Intent broadcastIntent = new Intent(GeneralCompletedReceiver.ACTION_GENERAL_COMPLETED);
+
         String email = intent.getStringExtra(ExtraKey.REGISTER_USER_EMAIL);
         String password = intent.getStringExtra(ExtraKey.REGISTER_USER_PASSWORD);
         String name = intent.getStringExtra(ExtraKey.REGISTER_USER_NAME);
 
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("x-user-id", WorkingData.getUserId());
+        headers.put("x-auth-token", WorkingData.getAuthToken());
+
+        HashMap<String, String> bodies = new HashMap<>();
+        bodies.put("name", name);
+        bodies.put("email", email);
+        bodies.put("password", password);
+
+        try {
+            String urlString = URLUtils.buildURLString(LoadingDataUtils.sBaseUrl,
+                    LoadingDataUtils.WorkingDataUrl.EndPoints.REGISTER_USER, null);
+            String responseString = RestfulUtils.restfulPostRequest(urlString, headers, bodies);
+
+            if (responseString != null) {
+                JSONObject jsonObject = new JSONObject(responseString);
+
+                if (jsonObject.getString("status").equals("success")) {
+                    broadcastIntent.putExtra(ExtraKey.ACTION_SUCCESSFUL, true);
+                }
+            }
+        }  catch (JSONException e) {
+            e.printStackTrace();
+            Utils.showInternetConnectionWeakToast(this);
+            broadcastIntent.putExtra(ExtraKey.ACTION_SUCCESSFUL, false);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+        }
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
     }
 }
