@@ -6,12 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.nicloud.workflowclient.R;
@@ -35,7 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private SharedPreferences mSharedPreferences;
 
-    private LinearLayout mLoginViewContainer;
+    private ScrollView mLoginContainer;
     private View mLoginLogoContainer;
 
     private EditText mCompanyAccountEditText;
@@ -79,7 +76,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void findViews () {
-        mLoginViewContainer = (LinearLayout) findViewById(R.id.login_container);
+        mLoginContainer = (ScrollView) findViewById(R.id.login_container);
         mLoginLogoContainer = findViewById(R.id.login_logo_container);
         mCompanyAccountEditText = (EditText) findViewById(R.id.login_company_account);
         mAccountEditText = (EditText) findViewById(R.id.login_account_edit_text);
@@ -100,23 +97,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void hideAllViews () {
-        mLoginViewContainer.setVisibility(View.GONE);
-
-        RelativeLayout.LayoutParams layoutParams =
-                (RelativeLayout.LayoutParams) mLoginLogoContainer.getLayoutParams();
-        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-
-        mLoginLogoContainer.setLayoutParams(layoutParams);
+        mLoginLogoContainer.setVisibility(View.VISIBLE);
+        mLoginContainer.setVisibility(View.GONE);
     }
 
     private void showAllViews () {
-        mLoginViewContainer.setVisibility(View.VISIBLE);
-
-        RelativeLayout.LayoutParams layoutParams =
-                (RelativeLayout.LayoutParams) mLoginLogoContainer.getLayoutParams();
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-
-        mLoginLogoContainer.setLayoutParams(layoutParams);
+        mLoginLogoContainer.setVisibility(View.GONE);
+        mLoginContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
