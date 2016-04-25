@@ -111,7 +111,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/login_edit_text_height"
                         android:inputType="textEmailAddress"
-                        android:hint="@string/login_account"/>
+                        android:hint="@string/login_account" />
 
                 </android.support.design.widget.TextInputLayout>
 

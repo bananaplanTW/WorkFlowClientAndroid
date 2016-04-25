@@ -183,7 +183,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void onClickRightButton() {
         // Send
         if (mIsRegister) {
+            String account = mAccountEditText.getText().toString();
+            String password = mPasswordEditText.getText().toString();
+            String passwordAgain = mPasswordAgainEditText.getText().toString();
+            String name = mUserNameEditText.getText().toString();
 
+            if (checkRegisterInfo(account, password, passwordAgain, name)) {
+                startService(GeneralService.generateRegisterUserIntent(this, account, password, name));
+            }
 
         // Register
         } else {
@@ -194,6 +201,41 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             mIsRegister = true;
         }
+    }
+
+    private boolean checkRegisterInfo(String account, String password, String passwordAgain, String name) {
+        boolean infoCorrect = true;
+
+        // Account
+        if (TextUtils.isEmpty(account)) {
+            infoCorrect = false;
+            mAccountEditText.setError(getString(R.string.all_account_error_empty));
+        }
+        if (!account.contains("@")) {
+            infoCorrect = false;
+            mAccountEditText.setError(getString(R.string.all_account_error_format_incorrect));
+        }
+
+        // Password and password again
+        if (TextUtils.isEmpty(password)) {
+            infoCorrect = false;
+            mPasswordEditText.setError(getString(R.string.all_password_error_empty));
+        }
+        if (TextUtils.isEmpty(passwordAgain)) {
+            infoCorrect = false;
+            mPasswordAgainEditText.setError(getString(R.string.all_password_error_empty));
+        }
+        if (!password.equals(passwordAgain)) {
+            mPasswordEditText.setError(getString(R.string.all_password_error_not_match));
+        }
+
+        // Name
+        if (TextUtils.isEmpty(name)) {
+            infoCorrect = false;
+            mUserNameEditText.setError(getString(R.string.all_name_error_empty));
+        }
+
+        return infoCorrect;
     }
 
     private void setLoginContainerPart2Visibility(boolean isVisible) {

@@ -48,6 +48,7 @@ public class GeneralService extends IntentService {
         public static final String UPDATE_TASK_DUEDATE = "general_server_action_update_task_duedate";
         public static final String UPDATE_CASE_DESCRIPTION = "general_server_action_update_case_description";
         public static final String ADD_WORKER_TO_CASE = "general_server_action_add_worker_to_case";
+        public static final String REGISTER_USER = "general_server_action_register_user";
     }
 
     public static class ExtraKey {
@@ -63,6 +64,10 @@ public class GeneralService extends IntentService {
         public static final String WORKER_ID = "extra_worker_id";
         public static final String WORKER_EMAIL = "extra_worker_email";
         public static final String BOOLEAN_LOAD_WORKERS = "extra_load_workers";
+
+        public static final String REGISTER_USER_EMAIL = "extra_register_user_email";
+        public static final String REGISTER_USER_PASSWORD = "extra_register_user_password";
+        public static final String REGISTER_USER_NAME = "extra_register_user_name";
 
         public static final String ACTION_SUCCESSFUL = "extra_action_successful";
 
@@ -159,6 +164,16 @@ public class GeneralService extends IntentService {
         return intent;
     }
 
+    public static Intent generateRegisterUserIntent(Context context, String email, String password, String name) {
+        Intent intent = new Intent(context, GeneralService.class);
+        intent.setAction(Action.REGISTER_USER);
+        intent.putExtra(ExtraKey.REGISTER_USER_EMAIL, email);
+        intent.putExtra(ExtraKey.REGISTER_USER_PASSWORD, password);
+        intent.putExtra(ExtraKey.REGISTER_USER_NAME, name);
+
+        return intent;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
@@ -189,6 +204,9 @@ public class GeneralService extends IntentService {
 
         } else if (Action.ADD_WORKER_TO_CASE.equals(action)) {
             addWorkerToCase(intent);
+
+        } else if (Action.REGISTER_USER.equals(action)) {
+            registerUser(intent);
         }
     }
 
@@ -650,5 +668,12 @@ public class GeneralService extends IntentService {
         }
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+    }
+
+    private void registerUser(Intent intent) {
+        String email = intent.getStringExtra(ExtraKey.REGISTER_USER_EMAIL);
+        String password = intent.getStringExtra(ExtraKey.REGISTER_USER_PASSWORD);
+        String name = intent.getStringExtra(ExtraKey.REGISTER_USER_NAME);
+
     }
 }

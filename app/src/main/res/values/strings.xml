@@ -58,7 +58,7 @@
 
     <!-- Login -->
     <string name="login_company_account">Company account</string>
-    <string name="login_account">Account</string>
+    <string name="login_account">Email</string>
     <string name="login_password">Password</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
@@ -66,6 +66,11 @@
     <string name="all_send">Send</string>
     <string name="all_password_again">Please type password again</string>
     <string name="all_name">Name</string>
+    <string name="all_account_error_empty">You need to enter an email</string>
+    <string name="all_account_error_format_incorrect">Email format is not correct</string>
+    <string name="all_password_error_empty">You need to enter a password</string>
+    <string name="all_password_error_not_match">Your password and confirmation password do not match</string>
+    <string name="all_name_error_empty">You need to enter a name</string>
 
     <!-- Detailed task -->
     <string name="detailed_task_tab_task_info">Task information</string>
