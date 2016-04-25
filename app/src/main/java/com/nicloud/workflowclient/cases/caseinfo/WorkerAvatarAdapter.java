@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 
 import com.nicloud.workflowclient.R;
 import com.nicloud.workflowclient.data.data.Worker;
-import com.nicloud.workflowclient.dialog.activity.AddWorkerToCaseActivity;
 import com.nicloud.workflowclient.utility.utils.Utils;
-import com.pkmmte.view.CircularImageView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.List;
 
@@ -26,11 +25,11 @@ public class WorkerAvatarAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private class WorkerAvatarViewHolder extends RecyclerView.ViewHolder {
 
-        public CircularImageView avatar;
+        public CircleImageView avatar;
 
         public WorkerAvatarViewHolder(View itemView) {
             super(itemView);
-            avatar = (CircularImageView) itemView.findViewById(R.id.worker_avatar);
+            avatar = (CircleImageView) itemView.findViewById(R.id.worker_avatar);
         }
     }
 

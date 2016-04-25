@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.pkmmte.view.CircularImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/log_icon"
         android:layout_width="@dimen/worker_avatar_width_height"
         android:layout_height="@dimen/worker_avatar_width_height"

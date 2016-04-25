@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.pkmmte.view.CircularImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<de.hdodenhof.circleimageview.CircleImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/worker_avatar"
     android:layout_width="@dimen/worker_avatar_width_height"
     android:layout_height="@dimen/worker_avatar_width_height" />

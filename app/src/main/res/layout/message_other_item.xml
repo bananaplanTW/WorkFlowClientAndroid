@@ -7,7 +7,7 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <com.pkmmte.view.CircularImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/worker_avatar"
         android:layout_width="@dimen/worker_avatar_width_height"
         android:layout_height="@dimen/worker_avatar_width_height" />

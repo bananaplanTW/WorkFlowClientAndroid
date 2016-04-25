@@ -29,5 +29,5 @@ dependencies {
     compile 'com.parse:parse-android:1.+'
     compile files('libs/okhttp-2.5.0.jar')
     compile files('libs/okio-1.6.0.jar')
-    compile project(':circularimageview')
+    compile 'de.hdodenhof:circleimageview:2.0.0'
 }
